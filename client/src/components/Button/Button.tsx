@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { ButtonType } from './type';
 
-const ButtonWrapper = styled.div`
-  width: fit-content;
-`;
+
 const ButtonStyle = styled.button<ButtonType>`
   width: 100%;
   border: none;
@@ -21,13 +19,11 @@ const ButtonStyle = styled.button<ButtonType>`
   }
 `;
 
-const Button = ({ value, type, width }: ButtonType) => {
+const Button = ({ value, type, width, onClick }: ButtonType) => {
   return (
-    <ButtonWrapper>
-      <ButtonStyle width={width} type={type}>
-        {value}
-      </ButtonStyle>
-    </ButtonWrapper>
+    <ButtonStyle width={width} type={type} onClick={onClick}>
+      {value}
+    </ButtonStyle>
   );
 };
 
