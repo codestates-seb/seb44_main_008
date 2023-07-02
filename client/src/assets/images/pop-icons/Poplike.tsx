@@ -1,4 +1,4 @@
-import { ReactComponent as PopFill } from '../../assets/images/pop-icons/pop-fill.svg';
+import { ReactComponent as PopFill } from './pop-fill.svg';
 
 const Poplike = () => {
   return (

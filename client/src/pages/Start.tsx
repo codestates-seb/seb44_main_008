@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import Input from '../components/Input/Input';
+import Common from '../components/Mypage-common/Common';
 
 const Start = () => {
   const [email, setEmail] = useState<string>('');
@@ -8,14 +9,14 @@ const Start = () => {
   const isValid = true;
   return (
     <div>
-      Start
-      <Footer />
-      <Input
+      <Common />
+      {/* <Input
         value={email}
         onChange={e => setEmail(e.target.value)}
         placeholder={placeholder}
         isvalid={isValid}
-      />
+      /> */}
+      <Footer />
     </div>
   );
 };
