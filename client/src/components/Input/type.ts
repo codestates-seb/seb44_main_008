@@ -12,4 +12,5 @@ export interface Props
   onChange?: (e: InputChangeEvent) => void;
   placeholder?: Placeholder;
   isvalid?: boolean | string;
+  width?: number | string;
 }

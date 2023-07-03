@@ -12,8 +12,10 @@ const InputCoverStyled = styled.div`
 `;
 
 const InputStyled = styled.input<Props>`
+  background-color: var(--main-dark-color);
+  color: var(--ghost-color);
   position: relative;
-  width: 25rem;
+  width: ${({ width }) => (width ? width : '25rem')};
   border: none;
   padding: 0.7rem;
   font-size: large;
@@ -26,7 +28,13 @@ const InputStyled = styled.input<Props>`
       : '2px solid var(--theme-color)'};
 `;
 
-const Input = ({ value = '', onChange, placeholder, isvalid }: Props) => {
+const Input = ({
+  value = '',
+  onChange,
+  placeholder,
+  isvalid,
+  width,
+}: Props) => {
   const [inputValue, setInputValue] = useState<InputValue>(value);
 
   const changeHandler = (e: InputChangeEvent) => {
@@ -42,6 +50,7 @@ const Input = ({ value = '', onChange, placeholder, isvalid }: Props) => {
           onChange={changeHandler}
           placeholder={placeholder}
           isvalid={isvalid!.toString()}
+          width={width}
         />
       </InputCoverStyled>
     </StyleSheetManager>
