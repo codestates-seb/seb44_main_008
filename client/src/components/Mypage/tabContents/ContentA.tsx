@@ -1,5 +1,14 @@
 import { styled } from 'styled-components';
 import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
+import { useState } from 'react';
+import Pagenation from '../Pagenation';
+
+interface postsType {
+  id: number;
+  postTitle: string;
+  postAuthor: string;
+  movieTitle: string;
+}
 
 const DUMMY_DATA = [
   {
@@ -29,6 +38,16 @@ const DUMMY_DATA = [
 ];
 
 const ContentA = () => {
+  const [page, setPage] = useState(1);
+  const limit = 5;
+  const offset = (page - 1) * limit;
+
+  const postData = (posts: postsType[]) => {
+    if (posts) {
+      let result = posts.slice(offset, offset + limit);
+      return result;
+    }
+  };
   return (
     <>
       {DUMMY_DATA.map(item => (
@@ -43,6 +62,7 @@ const ContentA = () => {
           </ListTail>
         </ListOnce>
       ))}
+      <Pagenation />
     </>
   );
 };
