@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import Input from '../components/Input/Input';
 import Common from '../components/Mypage-common/Common';
+import Header from '../components/Header/Header';
 
 const Start = () => {
   const [email, setEmail] = useState<string>('');
@@ -9,6 +10,7 @@ const Start = () => {
   const isValid = true;
   return (
     <div>
+      <Header />
       <Common />
       {/* <Input
         value={email}

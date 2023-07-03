@@ -42,6 +42,7 @@ const Common = (): JSX.Element => {
 
 const TotalContainer = styled.div`
   background-color: var(--main-dark-color);
+  padding-top: 8rem;
 `;
 
 const TopContainer = styled.div`
