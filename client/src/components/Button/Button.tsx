@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { ButtonType } from './type';
 
+
 const ButtonStyle = styled.button<ButtonType>`
   width: 100%;
   border: none;
