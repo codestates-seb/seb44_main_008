@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
 import Start from '../pages/Start';
 import Signup from '../pages/Signup';
 import Login from '../pages/Login';
@@ -11,10 +14,19 @@ import Editmypage from '../pages/Editmypage';
 import Editpassword from '../pages/Editpassword';
 
 const Routers = () => {
+  const hideNavbar = ['/', '/start'];
+
+  const [isLayout, setIsLayout] = useState(
+    hideNavbar.includes(window.location.pathname),
+  );
+  useEffect(() => {
+    setIsLayout(hideNavbar.includes(window.location.pathname));
+  }, []);
   return (
     <BrowserRouter>
+      {!isLayout && <Header />}
       <Routes>
-        <Route path="/" element={<Start />} />
+        <Route path="/start" element={<Start />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/main" element={<Main />} />
@@ -25,6 +37,7 @@ const Routers = () => {
         <Route path="/editmy" element={<Editmypage />} />
         <Route path="/editpass" element={<Editpassword />} />
       </Routes>
+      {!isLayout && <Footer />}
     </BrowserRouter>
   );
 };
