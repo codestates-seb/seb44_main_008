@@ -68,7 +68,7 @@ public class UserController {
 //    }
 
     @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
-    public ResponseEntity patchUser(@PathVariable ("user-id}") @Positive long UserId,
+    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long UserId,
                                     @Valid @RequestBody UserDto.Patch userPatchDto) {
         User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
 
@@ -78,8 +78,8 @@ public class UserController {
         );
     }
 
-    @PatchMapping("/password") // 비밀번호 수정
-    public ResponseEntity patchUserPassword(@Positive long userId,
+    @PatchMapping("/{user-id}/password") // 비밀번호 수정
+    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
                                             @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
         User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
 
@@ -89,25 +89,25 @@ public class UserController {
         );
     }
 
-    @DeleteMapping // 회원 삭제
-    public ResponseEntity deleteUser(@Positive long userId) {
+    @DeleteMapping("/{user-id}") // 회원 삭제
+    public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId) {
         userService.deleteUser(userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/reviewBoards/{review-id}") // 게시글 찜 등록
-    public ResponseEntity postUserWish() {
-        return null;
-    }
-
-    @PostMapping("/groups/{group-id}") // 팟 참여 기능
-    public ResponseEntity postUserParticipation() {
+    public ResponseEntity postUserWish(@PathVariable("review-id") @Positive long reviewId) {
         return null;
     }
 
     @DeleteMapping("/reviewBoards/{review-id}") // 게시글 찜 해제
     public ResponseEntity deleteReviewWish() {
+        return null;
+    }
+
+    @PostMapping("/groups/{group-id}") // 팟 참여 기능
+    public ResponseEntity postUserParticipation() {
         return null;
     }
 
