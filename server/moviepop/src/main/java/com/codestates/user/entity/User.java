@@ -3,13 +3,16 @@ package com.codestates.user.entity;
 import com.codestates.audit.Auditable;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.utils.CustomBeanUtils;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -61,8 +64,12 @@ public class User extends Auditable {
 //    private Tag tag;
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
-//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
-//    private ReviewBoard reviewBoard;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private ReviewBoard reviewBoard;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
 //    private Comment comment;
 
