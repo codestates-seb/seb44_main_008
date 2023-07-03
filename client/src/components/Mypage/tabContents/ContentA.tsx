@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
 import { useState } from 'react';
 import Pagenation from '../Pagenation';
+import avatar from '../../../assets/images/user-info/userAvatar.svg';
 
 interface postsType {
   id: number;
@@ -54,9 +55,12 @@ const ContentA = () => {
         <ListOnce key={item.id}>
           <ListHead>
             <p className="title">{item.postTitle}</p>
-            <p className="author">{item.postAuthor}</p>
+            <AuthorInfo>
+              <img src={avatar} alt="사용자 이미지" />
+              <p className="author">{item.postAuthor}</p>
+            </AuthorInfo>
           </ListHead>
-          <ListBody>{item.movieTitle}</ListBody>
+          <ListBody>Movie Title : {item.movieTitle}</ListBody>
           <ListTail>
             <img src={Poplike} alt="좋아요 버튼" />
           </ListTail>
@@ -67,7 +71,8 @@ const ContentA = () => {
   );
 };
 
-const ListOnce = styled.div`
+const ListOnce = styled.button`
+  width: 100%;
   background-color: var(--ghost-color);
   margin-bottom: 2.4rem;
   padding: 1rem;
@@ -82,14 +87,32 @@ const ListHead = styled.div`
   .title {
     font-size: 1.15rem;
     margin-bottom: 0.6rem;
+    color: var(--white-color);
+  }
+`;
+const AuthorInfo = styled.div`
+  display: flex;
+  align-items: center;
+  img {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    margin-right: 0.7rem;
   }
   .author {
+    color: var(--white-color);
+    opacity: 0.7;
     font-size: 0.8rem;
+    justify-content: start;
   }
 `;
 const ListBody = styled.div`
-  width: 10rem;
-  font-size: 0.8rem;
+  display: flex;
+  width: 20rem;
+  font-size: 1rem;
+  color: var(--main-dark-color);
+  justify-content: flex-start;
+  opacity: 0.8;
 `;
 const ListTail = styled.div`
   img {
