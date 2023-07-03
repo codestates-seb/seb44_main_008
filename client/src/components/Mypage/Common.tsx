@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-import UserAvat from '../../assets/images/user-info/UserAvat';
 import Button from '../Button/Button';
+import UserAva from '@/assets/images/user-info/userAvatar.svg';
 
 const Common = (): JSX.Element => {
   return (
@@ -9,7 +9,7 @@ const Common = (): JSX.Element => {
         <TopContainer>
           <UserTopContainer>
             <User>
-              <UserAvat />
+              <img src={UserAva} alt="사용자 이미지" />
               <span>홍길동님</span>
             </User>
             <Button value={'회원 정보 수정'} type="variant" />
@@ -65,6 +65,11 @@ const User = styled.div`
     margin-left: 3rem;
     text-align: center;
     font-size: 1.4rem;
+  }
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
   }
 `;
 const BotContainer = styled.div`
