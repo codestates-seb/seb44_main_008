@@ -50,9 +50,27 @@ const MypageMain = () => {
   );
 };
 
-const StyledContainer = styled.div``;
-const StyledInnerContainer = styled.div``;
-const TabList = styled.div``;
+const StyledContainer = styled.div`
+  background: var(--main-dark-color);
+  color: var(--white-color);
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+`;
+const StyledInnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 5rem;
+  align-items: flex-start;
+  margin: 0 auto;
+  width: 43rem;
+`;
+const TabList = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2.2rem;
+`;
 const StyledContent = styled.section``;
 
 export default MypageMain;
