@@ -5,6 +5,7 @@ import com.codestates.reviewBoard.dto.ReviewBoardDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
 import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RequestMapping("/reviewBoards")
 @RestController
 @Validated
 public class ReviewBoardController {
+    private final static String REVIEWBOARD_DEFAULT_URI = "/reviewBoards";
     private final ReviewBoardService reviewBoardService;
     private final ReviewBoardMapper mapper;
 
@@ -30,8 +33,8 @@ public class ReviewBoardController {
     @PostMapping
     public ResponseEntity postReviewBoard(@Valid @RequestBody ReviewBoardDto.Post post) {
         ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(mapper.PostToReviewBoard(post));
-        ReviewBoardDto.Response response = mapper.reviewBoardToResponse(reviewBoard);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        URI location = UriComponent.createUri(REVIEWBOARD_DEFAULT_URI, reviewBoard.getReviewBoardId());
+        return new ResponseEntity<>(location, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{review-id}")
