@@ -57,13 +57,14 @@ public class User extends Auditable {
         }
     }
 
-//    @OneToMany
-//    @JoinColumn(name = "tag_id")
+//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
 //    private Tag tag;
-//
-//    @OneToMany
-//    @JoinColumn(name = "group_id")
+//    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
+//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
+//    private ReviewBoard reviewBoard;
+//    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+//    private Comment comment;
 
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
