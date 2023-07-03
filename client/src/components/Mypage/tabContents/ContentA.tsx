@@ -30,12 +30,12 @@ const DUMMY_DATA = [
 
 const ContentA = () => {
   return (
-    <TotalContainer>
+    <>
       {DUMMY_DATA.map(item => (
         <ListOnce key={item.id}>
           <ListHead>
-            {item.postTitle}
-            {item.postAuthor}
+            <p className="title">{item.postTitle}</p>
+            <p className="author">{item.postAuthor}</p>
           </ListHead>
           <ListBody>{item.movieTitle}</ListBody>
           <ListTail>
@@ -43,14 +43,34 @@ const ContentA = () => {
           </ListTail>
         </ListOnce>
       ))}
-    </TotalContainer>
+    </>
   );
 };
 
-const TotalContainer = styled.div``;
-const ListOnce = styled.div``;
-const ListHead = styled.div``;
-const ListBody = styled.div``;
+const ListOnce = styled.div`
+  background-color: var(--ghost-color);
+  margin-bottom: 2.4rem;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const ListHead = styled.div`
+  display: flex;
+  flex-direction: column;
+  .title {
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+  }
+  .author {
+    font-size: 0.8rem;
+  }
+`;
+const ListBody = styled.div`
+  width: 10rem;
+  font-size: 0.8rem;
+`;
 const ListTail = styled.div``;
 
 export default ContentA;

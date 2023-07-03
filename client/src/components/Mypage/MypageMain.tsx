@@ -34,12 +34,14 @@ const MypageMain = () => {
                 value={title}
                 onClick={() => setActiveTab(idx)}
                 type="variant"
+                width="8.5rem"
               />
             ) : (
               <Button
                 key={idx}
                 value={title}
                 onClick={() => setActiveTab(idx)}
+                width="8.5rem"
               />
             ),
           )}
@@ -71,6 +73,8 @@ const TabList = styled.div`
   justify-content: space-between;
   padding-bottom: 2.2rem;
 `;
-const StyledContent = styled.section``;
+const StyledContent = styled.section`
+  width: 100%;
+`;
 
 export default MypageMain;
