@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import Poplike from '../../../assets/images/pop-icons/Poplike';
+import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
 
 const DUMMY_DATA = [
   {
@@ -39,7 +39,7 @@ const ContentA = () => {
           </ListHead>
           <ListBody>{item.movieTitle}</ListBody>
           <ListTail>
-            <Poplike />
+            <img src={Poplike} alt="좋아요 버튼" />
           </ListTail>
         </ListOnce>
       ))}
@@ -71,6 +71,12 @@ const ListBody = styled.div`
   width: 10rem;
   font-size: 0.8rem;
 `;
-const ListTail = styled.div``;
+const ListTail = styled.div`
+  img {
+    width: 1.4rem;
+    height: 1.4rem;
+    cursor: pointer;
+  }
+`;
 
 export default ContentA;
