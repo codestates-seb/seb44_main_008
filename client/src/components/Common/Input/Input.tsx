@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { InputChangeEvent, InputValue, Props } from './type';
 import { useState } from 'react';
-import '../../root.css';
+import '../../../root.css';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
