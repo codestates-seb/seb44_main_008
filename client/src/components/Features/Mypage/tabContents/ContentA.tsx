@@ -52,34 +52,45 @@ const ContentA = () => {
   return (
     <>
       {DUMMY_DATA.map(item => (
-        <ListOnce key={item.id}>
-          <ListHead>
-            <p className="title">{item.postTitle}</p>
-            <AuthorInfo>
-              <img src={avatar} alt="사용자 이미지" />
-              <p className="author">{item.postAuthor}</p>
-            </AuthorInfo>
-          </ListHead>
-          <ListBody>Movie Title : {item.movieTitle}</ListBody>
-          <ListTail>
-            <img src={Poplike} alt="좋아요 버튼" />
-          </ListTail>
-        </ListOnce>
+        <ListContainer key={item.id}>
+          <ListOnce>
+            <ListHead>
+              <p className="title">{item.postTitle}</p>
+              <AuthorInfo>
+                <img src={avatar} alt="사용자 이미지" />
+                <p className="author">{item.postAuthor}</p>
+              </AuthorInfo>
+            </ListHead>
+            <ListBody>Movie Title : {item.movieTitle}</ListBody>
+            <ListTail>
+              <img src={Poplike} alt="좋아요 버튼" />
+            </ListTail>
+          </ListOnce>
+        </ListContainer>
       ))}
       <Pagenation />
     </>
   );
 };
 
+const ListContainer = styled.div`
+  :hover {
+    background-color: var(--main-gray-color);
+  }
+`;
+
 const ListOnce = styled.button`
   width: 100%;
   background-color: var(--ghost-color);
   margin-bottom: 2.4rem;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  :hover {
+    background-color: var(--main-gray-color);
+  }
 `;
 const ListHead = styled.div`
   display: flex;
@@ -110,7 +121,7 @@ const ListBody = styled.div`
   display: flex;
   width: 20rem;
   font-size: 1rem;
-  color: var(--main-dark-color);
+  color: var(--footer-icon-color);
   justify-content: flex-start;
   opacity: 0.8;
 `;
