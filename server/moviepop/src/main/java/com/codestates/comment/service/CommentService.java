@@ -4,6 +4,8 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.reviewBoard.service.ReviewBoardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,12 +18,22 @@ import java.util.Optional;
 @Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final ReviewBoardService reviewBoardService;
 
-    public CommentService(CommentRepository commentRepository) {
+//    public CommentService(CommentRepository commentRepository) {
+//        this.commentRepository = commentRepository;
+//    }
+
+
+    public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService) {
         this.commentRepository = commentRepository;
+        this.reviewBoardService = reviewBoardService;
     }
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(long reviewId, Comment comment) {
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        comment.setReviewBoard(reviewBoard);
+
         return commentRepository.save(comment);
     }
 
