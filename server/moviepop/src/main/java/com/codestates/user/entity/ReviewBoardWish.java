@@ -1,7 +1,6 @@
 package com.codestates.user.entity;
 
 import com.codestates.reviewBoard.entity.ReviewBoard;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
