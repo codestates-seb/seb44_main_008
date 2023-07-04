@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Allcontens = () => {
+const Allcontents = () => {
   return <div>Allcontens</div>;
 };
 
-export default Allcontens;
+export default Allcontents;

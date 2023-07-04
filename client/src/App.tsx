@@ -1,4 +1,4 @@
-import Routers from './components/Routers';
+import Routers from './pages/Router/Routers';
 
 const App = () => {
   return <Routers />;
