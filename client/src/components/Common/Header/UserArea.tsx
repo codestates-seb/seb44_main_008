@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RootState } from '../../redux/store/store';
+import { RootState } from '../../../redux/store/store';
 import styled from 'styled-components';
-import HashBtn from '../HashBtn/HashBtn';
 
 const UserAreaWrap = styled.div`
   display: flex;
@@ -134,7 +133,7 @@ const UserArea = () => {
               {hashArray.map((hashItem, idx) => {
                 return (
                   <li key={idx}>
-                    <HashBtn value={hashItem} type="search" />
+                    <button value={hashItem} />
                   </li>
                 );
               })}
