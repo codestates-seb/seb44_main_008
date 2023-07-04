@@ -87,4 +87,12 @@ public class User extends Auditable {
     public void addReviewBoardWish(ReviewBoardWish reviewBoardWish) {
         this.reviewBoardWishes.add(reviewBoardWish);
     }
+
+    public void deleteReviewBoard(long reviewBoardId) {
+        this.reviewBoards.remove(reviewBoardId);
+    }
+
+    public void deletereviewBoardWish(long reviewBoardWishId) {
+        this.reviewBoardWishes.remove(reviewBoardWishId);
+    }
 }
