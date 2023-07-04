@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @NoArgsConstructor
@@ -65,7 +64,7 @@ public class User extends Auditable {
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private ReviewBoard reviewBoard;
+    private List<ReviewBoard> reviewBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
@@ -79,5 +78,13 @@ public class User extends Auditable {
 
     public static void checkExistEmail (User targetUser) {
         if(targetUser != null) throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+    }
+
+    public void addReviewBoard(ReviewBoard reviewBoard) {
+        this.reviewBoards.add(reviewBoard);
+    }
+
+    public void addReviewBoardWish(ReviewBoardWish reviewBoardWish) {
+        this.reviewBoardWishes.add(reviewBoardWish);
     }
 }
