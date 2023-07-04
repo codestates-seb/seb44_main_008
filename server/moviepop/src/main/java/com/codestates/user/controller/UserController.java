@@ -1,9 +1,13 @@
 package com.codestates.user.controller;
 
 import com.codestates.dto.ResponseDto;
+import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
+import com.codestates.reviewBoard.service.ReviewBoardService;
 import com.codestates.user.dto.UserDto;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
+import com.codestates.user.service.ReviewBoardWishService;
 import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +30,9 @@ public class UserController {
 
     private final static String USER_DEFAULT_URI = "/users";
     private final UserService userService;
+    private final ReviewBoardService reviewBoardService;
     private final UserMapper userMapper;
+    private final ReviewBoardMapper reviewBoardMapper;
 //    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
@@ -96,14 +102,23 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/reviewBoards/{review-id}") // 게시글 찜 등록
-    public ResponseEntity postUserWish(@PathVariable("review-id") @Positive long reviewId) {
-        return null;
+    @PostMapping("/{user-id}/reviewBoards/{review-id}") // 게시글 찜 등록
+    public ResponseEntity postUserWish(@PathVariable("user-id") @Positive long userId,
+                                       @PathVariable("review-id") @Positive long reviewId) {
+        userService.createReviewBoardWish(userId, reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
+                HttpStatus.OK
+        );
     }
 
     @DeleteMapping("/reviewBoards/{review-id}") // 게시글 찜 해제
-    public ResponseEntity deleteReviewWish() {
-        return null;
+    public ResponseEntity deleteReviewWish(@PathVariable("user-id") @Positive long userId,
+                                           @PathVariable("review-id") @Positive long reviewId) {
+        userService.deleteReviewBoardWish(userId, reviewId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/groups/{group-id}") // 팟 참여 기능
