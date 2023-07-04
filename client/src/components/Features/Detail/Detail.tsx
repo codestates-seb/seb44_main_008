@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Popunlike from '../../assets/images/pop-icons/Popunlike';
-import UserAvat from '../../assets/images/user-info/UserAvat';
+import Popunlike from '../../Common/PopIcons/Popunlike';
+import UserAvat from '@/assets/images/user-info/userAvatar.png';
 
 const DetailSection = styled.div`
   h4 {

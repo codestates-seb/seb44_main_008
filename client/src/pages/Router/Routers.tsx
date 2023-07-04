@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Common/Header/Header';
+import Footer from '../../components/Common/Footer/Footer';
 import Start from '../Start/Start';
 import Signup from '../Account/Signup';
 import Login from '../Account/Login';
