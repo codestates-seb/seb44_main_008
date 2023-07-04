@@ -17,12 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ReviewBoardWishRepository reviewBoardWishRepository;
     private final CustomBeanUtils<User> beanUtils;
     private final ReviewBoardWishService reviewBoardWishService;
     private final ReviewBoardService reviewBoardService;
 
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService) {
+    public UserService(UserRepository userRepository, ReviewBoardWishRepository reviewBoardWishRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService) {
         this.userRepository = userRepository;
+        this.reviewBoardWishRepository = reviewBoardWishRepository;
         this.beanUtils = beanUtils;
         this.reviewBoardWishService = reviewBoardWishService;
         this.reviewBoardService = reviewBoardService;
@@ -92,9 +94,9 @@ public class UserService {
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        ReviewBoardWishRepository.
+        ReviewBoardWish reviewBoardWish = reviewBoardWishRepository.findByReviewBoardIdAndUserId(reviewBoardId, userId);
 
         user.deleteReviewBoard(reviewBoardId);
-        user.deletereviewBoardWish(reviewBoardWishId);
+        user.deletereviewBoardWish(reviewBoardWish.getReviewBoardWishId());
     }
 }
