@@ -1,8 +1,10 @@
 import { styled } from 'styled-components';
 import Button from '../../Common/Button/Button';
 import UserAva from '@/assets/images/user-info/userAvatar.png';
+import { useNavigate } from 'react-router-dom';
 
 const Common = (): JSX.Element => {
+  const navigate = useNavigate();
   return (
     <>
       <TotalContainer>
@@ -12,7 +14,13 @@ const Common = (): JSX.Element => {
               <img src={UserAva} alt="사용자 이미지" />
               <span>홍길동님</span>
             </User>
-            <Button value={'회원 정보 수정'} type="variant" />
+            <Button
+              value={'회원 정보 수정'}
+              type="variant"
+              onClick={() => {
+                navigate('/mypage/edit');
+              }}
+            />
           </UserTopContainer>
         </TopContainer>
         <BotContainer>

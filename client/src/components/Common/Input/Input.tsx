@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { InputChangeEvent, InputValue, Props } from './type';
 import { useState } from 'react';
-import '../../root.css';
+import '../../../root.css';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
@@ -13,7 +13,7 @@ const InputCoverStyled = styled.div`
 
 const InputStyled = styled.input<Props>`
   background-color: var(--main-dark-color);
-  color: var(--ghost-color);
+  color: var(--white-color);
   position: relative;
   width: ${({ width }) => (width ? width : '25rem')};
   border: none;
