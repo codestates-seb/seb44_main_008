@@ -1,4 +1,4 @@
-import { ReactComponent as PopEmpty } from './pop-empty.svg';
+import { ReactComponent as PopEmpty } from '@/assets/images/pop-icons/pop-empty.svg';
 import styled from 'styled-components';
 
 const PopButton = styled.button`

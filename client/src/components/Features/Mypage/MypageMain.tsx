@@ -3,8 +3,8 @@ import Element0 from './tabContents/ContentA';
 import Element1 from './tabContents/ContentB';
 import Element2 from './tabContents/ContentC';
 import Element3 from './tabContents/ContentD';
-import Button from '../Button/Button';
 import { useState } from 'react';
+import Button from '../../Common/Button/Button';
 
 const tabTitle: string[] = [
   '찜한 게시글',
