@@ -5,6 +5,8 @@ import com.codestates.reviewBoard.dto.ReviewBoardDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
 import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.user.entity.User;
+import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,18 +26,21 @@ public class ReviewBoardController {
     private final static String REVIEWBOARD_DEFAULT_URI = "/reviewBoards";
     private final ReviewBoardService reviewBoardService;
     private final ReviewBoardMapper mapper;
+    private final UserService userService;
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper) {
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity postReviewBoard(@Positive long userId,
+    @PostMapping("/{user-id}")
+    public ResponseEntity postReviewBoard(@PathVariable("user-id") @Positive long userId,
                                           @Valid @RequestBody ReviewBoardDto.Post post) {
-        ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(userId, mapper.PostToReviewBoard(post));
+        User user = userService.findUser(userId);
+        ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(user, mapper.PostToReviewBoard(post));
         URI location = UriComponent.createUri(REVIEWBOARD_DEFAULT_URI, reviewBoard.getReviewBoardId());
-        return new ResponseEntity<>(location, HttpStatus.CREATED);
+        return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{review-id}")
@@ -64,8 +69,8 @@ public class ReviewBoardController {
     }
 
     @DeleteMapping("/{review-id}")
-    public ResponseEntity deleteReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
-        reviewBoardService.deleteReviewBoard(reviewId);
+    public ResponseEntity deleteReviewBoard(@Positive long userId, @PathVariable("review-id") @Positive long reviewId) {
+        reviewBoardService.deleteReviewBoard(userId,reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

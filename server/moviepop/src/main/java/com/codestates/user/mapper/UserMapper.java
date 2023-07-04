@@ -13,4 +13,6 @@ public interface UserMapper {
     UserDto.Response userToUserBriefResponseDto(User user);
 
     UserResponseDto userToUserResponseDto(User user);
+
+    //default UserResponseDto
 }

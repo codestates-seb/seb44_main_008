@@ -2,11 +2,13 @@ package com.codestates.utils;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.stereotype.Component;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+@Component
 public class CustomBeanUtils<T> {
     public T copyNonNullProperties(T source
                                     , T destination

@@ -5,15 +5,14 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.repository.ReviewBoardRepository;
 import com.codestates.user.entity.User;
-import com.codestates.user.service.UserService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -21,17 +20,15 @@ import java.util.Optional;
 public class ReviewBoardService {
 
     private final ReviewBoardRepository reviewBoardRepository;
-    private final UserService userService;
 
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, UserService userService) {
+
+    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository) {
         this.reviewBoardRepository = reviewBoardRepository;
-        this.userService = userService;
     }
 
-    public ReviewBoard createReviewBoard(long userId, ReviewBoard reviewBoard) {
-        User user = userService.findUser(userId);
+    public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
 
-        reviewBoard.setUser(user);
+        user.addReviewBoard(reviewBoard);
 
         return reviewBoardRepository.save(reviewBoard);
     }
@@ -52,6 +49,7 @@ public class ReviewBoardService {
     }
 
     public ReviewBoard findReviewBoard(long reviewId) {
+
         return findReviewBoardById(reviewId);
     }
 
@@ -60,8 +58,11 @@ public class ReviewBoardService {
                 Sort.by("reviewId").descending()));
     }
 
-    public void deleteReviewBoard(long reviewId) {
+    public void deleteReviewBoard(long userId,long reviewId) {
         ReviewBoard reviewBoard = findReviewBoardById(reviewId);
+        if(reviewBoard.getUser().getUserId() != userId) {
+            throw new IllegalArgumentException("오류코드 만들어야함");
+        }
         reviewBoardRepository.delete(reviewBoard);
     }
 

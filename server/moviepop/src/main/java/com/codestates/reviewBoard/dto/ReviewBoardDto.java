@@ -1,5 +1,6 @@
 package com.codestates.reviewBoard.dto;
 
+import com.codestates.user.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +47,8 @@ public class ReviewBoardDto {
         private String review;
         private int likes;
         private LocalDateTime date;
+
+        private List<UserDto.ReviewBoardResponse> reviewBoardResponses;
         //추후 추가
     }
 

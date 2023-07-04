@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "users")
 public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +38,6 @@ public class User extends Auditable {
     private String birth;
 
     private float star = 0;
-
-    private String created_at;
-
-    private String last_modified_at;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)

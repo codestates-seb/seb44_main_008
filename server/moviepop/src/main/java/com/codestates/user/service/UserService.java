@@ -81,7 +81,6 @@ public class UserService {
         reviewBoardWish.setUser(user);
         reviewBoardWish.setReviewBoard(reviewBoard);
 
-        user.addReviewBoard(reviewBoard);
         user.addReviewBoardWish(reviewBoardWish);
     }
 
@@ -94,7 +93,7 @@ public class UserService {
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        ReviewBoardWish reviewBoardWish = reviewBoardWishRepository.findByReviewBoardIdAndUserId(reviewBoardId, userId);
+        ReviewBoardWish reviewBoardWish = reviewBoardWishRepository.findByReviewBoardReviewBoardIdAndUserUserId(reviewBoardId, userId);
 
         user.deleteReviewBoard(reviewBoardId);
         user.deletereviewBoardWish(reviewBoardWish.getReviewBoardWishId());

@@ -60,4 +60,12 @@ public class UserDto {
         private String profileImage;
 //        private Tag tag;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ReviewBoardResponse {
+        private String userId;
+        private String username;
+        private String profileImage;
+    }
 }
