@@ -23,6 +23,7 @@ public class ReviewBoard extends Auditable {
     private String title;
     private String review;
     private int wish;
+    private String thumbnail;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
