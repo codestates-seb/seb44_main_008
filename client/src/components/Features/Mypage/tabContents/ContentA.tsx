@@ -2,7 +2,6 @@ import { styled } from 'styled-components';
 import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
 import { useState } from 'react';
 import Pagenation from '../Pagenation';
-import avatar from '@/assets/images/user-info/userAvatar.png';
 import { data } from './dummy';
 import { postsType } from './type';
 
@@ -20,16 +19,16 @@ const ContentA = () => {
   return (
     <>
       {data.map(item => (
-        <ListContainer key={item.id}>
+        <ListContainer key={item.reviewBoardId}>
           <ListOnce>
             <ListHead>
               <Titles>
-                <p className="title">{item.postTitle}</p>
+                <p className="title">{item.title}</p>
                 <p className="mvTitle">{item.movieTitle}</p>
               </Titles>
               <AuthorInfo>
-                <img src={avatar} alt="사용자 이미지" />
-                <p className="author">{item.postAuthor}</p>
+                <img src={item.user.profileImage} alt="사용자 이미지" />
+                <p className="author">{item.user.nickname}</p>
               </AuthorInfo>
             </ListHead>
             <ListTail>
@@ -63,11 +62,12 @@ const ListOnce = styled.div`
 const ListHead = styled.div`
   display: flex;
   flex-direction: column;
-  width: 18rem;
 `;
 const Titles = styled.div`
   display: flex;
+  align-items: center;
   .title {
+    font-weight: 700;
     font-size: 1.15rem;
     margin-bottom: 0.6rem;
   }
@@ -75,6 +75,7 @@ const Titles = styled.div`
     font-size: 0.8rem;
     margin-left: 0.4rem;
     color: var(--mypage-font-color);
+    margin-bottom: 0.25rem;
   }
 `;
 const AuthorInfo = styled.div`

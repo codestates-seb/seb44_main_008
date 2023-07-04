@@ -1,6 +1,9 @@
 export interface postsType {
-  id: number;
-  postTitle: string;
-  postAuthor: string;
+  reviewBoardId: number;
+  title: string;
   movieTitle: string;
+  user: {
+    nickname: string;
+    profileImage: string;
+  };
 }
