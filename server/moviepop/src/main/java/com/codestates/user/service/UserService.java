@@ -2,7 +2,11 @@ package com.codestates.user.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
+import com.codestates.user.repository.ReviewBoardWishRepository;
 import com.codestates.user.repository.UserRepository;
 import com.codestates.utils.CustomBeanUtils;
 import org.springframework.stereotype.Service;
@@ -14,10 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final CustomBeanUtils<User> beanUtils;
+    private final ReviewBoardWishService reviewBoardWishService;
+    private final ReviewBoardService reviewBoardService;
 
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils) {
+    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService) {
         this.userRepository = userRepository;
         this.beanUtils = beanUtils;
+        this.reviewBoardWishService = reviewBoardWishService;
+        this.reviewBoardService = reviewBoardService;
     }
 
     public User createUser(User user) {
@@ -56,5 +64,37 @@ public class UserService {
         User findUser = userRepository.findById(userId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
+    }
+
+    public void createReviewBoardWish(long userId, long reviewBoardId) {
+        User user = findUser(userId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+
+        if(reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
+            throw new BusinessLogicException(ExceptionCode.ALREADY_WISH_EXIST);
+
+        reviewBoard.setWish(reviewBoard.getWish() + 1);
+
+        ReviewBoardWish reviewBoardWish = new ReviewBoardWish();
+        reviewBoardWish.setUser(user);
+        reviewBoardWish.setReviewBoard(reviewBoard);
+
+        user.addReviewBoard(reviewBoard);
+        user.addReviewBoardWish(reviewBoardWish);
+    }
+
+    public void deleteReviewBoardWish(long userId, long reviewBoardId) {
+        User user = findUser(userId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+
+        if(!reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
+            throw new BusinessLogicException(ExceptionCode.WISH_NOT_FOUND);
+
+        reviewBoard.setWish(reviewBoard.getWish() - 1);
+
+        ReviewBoardWishRepository.
+
+        user.deleteReviewBoard(reviewBoardId);
+        user.deletereviewBoardWish(reviewBoardWishId);
     }
 }
