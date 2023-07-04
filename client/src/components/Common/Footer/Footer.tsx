@@ -1,4 +1,4 @@
-import '../../root.css';
+import '../../../root.css';
 import { AiFillGithub } from 'react-icons/ai';
 import { RxNotionLogo } from 'react-icons/rx';
 import { FiFigma } from 'react-icons/fi';

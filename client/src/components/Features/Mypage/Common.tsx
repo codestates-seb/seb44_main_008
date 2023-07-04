@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-import Button from '../Button/Button';
-import UserAva from '@/assets/images/user-info/userAvatar.svg';
+import Button from '../../Common/Button/Button';
+import UserAva from '@/assets/images/user-info/userAvatar.png';
 
 const Common = (): JSX.Element => {
   return (

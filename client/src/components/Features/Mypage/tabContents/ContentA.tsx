@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
 import { useState } from 'react';
 import Pagenation from '../Pagenation';
-import avatar from '../../../assets/images/user-info/userAvatar.svg';
+import avatar from '@/assets/images/user-info/userAvatar.png';
 
 interface postsType {
   id: number;
