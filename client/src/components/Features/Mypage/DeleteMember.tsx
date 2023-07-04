@@ -14,6 +14,9 @@ const Container = styled.div`
   justify-content: center;
   background-color: var(--main-dark-color);
   padding-bottom: 3rem;
+  :hover {
+    background-color: var(--theme-hover-color);
+  }
 `;
 const DeleteButton = styled.button`
   width: 25rem;
