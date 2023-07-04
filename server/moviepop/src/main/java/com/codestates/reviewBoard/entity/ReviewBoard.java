@@ -36,8 +36,8 @@ public class ReviewBoard extends Auditable {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
-    private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
+//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
+//    private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 //
 //    @OneToOne
 //    private Movie movie;
