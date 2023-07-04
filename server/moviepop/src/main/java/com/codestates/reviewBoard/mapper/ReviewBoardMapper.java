@@ -12,4 +12,5 @@ public interface ReviewBoardMapper {
     ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch);
     ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
+    ReviewBoardDto.WishResponse reviewBoardToWishResponse(ReviewBoard reviewBoard);
 }
