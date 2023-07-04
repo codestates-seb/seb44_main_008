@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/comments")
 @Validated
 public class CommentController {
-    private final String COMMENT_DEFAULT_URL = "/comments";
+    public static final String COMMENT_DEFAULT_URL = "/comments";
     private final CommentService commentService;
     private final CommentMapper mapper;
 
@@ -30,13 +30,13 @@ public class CommentController {
         this.mapper = mapper;
     }
 
-    @PostMapping
-    public ResponseEntity postComment(@RequestBody @Valid CommentDto.Post requestBody) {
-        Comment comment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
-        URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
-
-        return ResponseEntity.created(location).build();
-    }
+//    @PostMapping
+//    public ResponseEntity postComment(@RequestBody @Valid CommentDto.Post requestBody) {
+//        Comment comment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
+//        URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
+//
+//        return ResponseEntity.created(location).build();
+//    }
 
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
@@ -44,7 +44,7 @@ public class CommentController {
         requestBody.setCommentId(commentId);
         Comment comment = commentService.updateComment(mapper.commentPatchDtoToComment(requestBody));
 
-        return new ResponseEntity(
+        return new ResponseEntity (
                 new ResponseDto.SingleResponseDto(mapper.commentToCommentPatchResponseDto(comment)),
                 HttpStatus.OK
         );
