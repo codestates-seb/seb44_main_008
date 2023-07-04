@@ -19,9 +19,9 @@ const ButtonStyle = styled.button<ButtonType>`
   }
 `;
 
-const Button = ({ value, type, width, onClick }: ButtonType) => {
+const Button = ({id, value, type, width, onClick }: ButtonType) => {
   return (
-    <ButtonStyle width={width} type={type} onClick={onClick}>
+    <ButtonStyle id={id} width={width} type={type} onClick={onClick} name={value}>
       {value}
     </ButtonStyle>
   );

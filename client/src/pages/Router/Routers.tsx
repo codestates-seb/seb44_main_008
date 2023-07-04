@@ -7,7 +7,7 @@ import Signup from '../Account/Signup';
 import Login from '../Account/Login';
 import Main from '../Main/Main';
 import Allcontens from '../Main/Allcontents';
-import Writecontent from '../Detail/Writecontent';
+import Writecontent from '../Detail/Writecontent/Writecontent';
 import Detailcontent from '../Detail/Detailcontent';
 import Mypage from '../MyPage/Mypage';
 import Editmypage from '../MyPage/Editmypage';
