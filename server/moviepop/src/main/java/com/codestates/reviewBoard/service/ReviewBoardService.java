@@ -36,7 +36,7 @@ public class ReviewBoardService {
 
         //영화제목, 태그, 썸네일 설정해야함.
 
-        getReviewboard.setModifiedAt(LocalDateTime.now());
+//        getReviewboard.setModifiedAt(LocalDateTime.now());
         return reviewBoardRepository.save(getReviewboard);
     }
 
@@ -46,7 +46,15 @@ public class ReviewBoardService {
 
     public Page<ReviewBoard> findReviewBoards(int page, int size) {
         return reviewBoardRepository.findAll(PageRequest.of(page,size,
-                Sort.by("reviewId").descending()));
+                Sort.by("reviewBoardId").descending()));
+    }
+
+    public List<ReviewBoard> findReviewBoards() {
+        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+    }
+
+    public List<ReviewBoard> findPopularReviewBoards() {
+        return reviewBoardRepository.findTop8ByOrderByWishDesc();
     }
 
     public void deleteReviewBoard(long reviewId) {
