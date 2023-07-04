@@ -48,4 +48,9 @@ public class ReviewBoardDto {
         private LocalDateTime date;
         //추후 추가
     }
+
+    public static class WishResponse {
+        private long reviewBoarId;
+        private long likes;
+    }
 }
