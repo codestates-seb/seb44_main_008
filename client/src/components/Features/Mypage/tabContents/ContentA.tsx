@@ -1,9 +1,9 @@
 import { styled } from 'styled-components';
-import Poplike from '@/assets/images/pop-icons/pop-fill.svg';
 import { useState } from 'react';
 import Pagenation from '../Pagenation';
 import { data } from './dummy';
 import { postsType } from './type';
+import Poplike from '../../../Common/PopIcons/Poplike';
 
 const ContentA = () => {
   const [page, setPage] = useState(1);
@@ -32,7 +32,7 @@ const ContentA = () => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <img src={Poplike} alt="좋아요 버튼" />
+              <PopImg />
             </ListTail>
           </ListOnce>
         </ListContainer>
@@ -95,11 +95,16 @@ const AuthorInfo = styled.div`
   }
 `;
 const ListTail = styled.div`
-  img {
-    width: 1.4rem;
-    height: 1.4rem;
+  button {
+    width: 1rem;
+    height: 1rem;
     cursor: pointer;
+    > svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 `;
+const PopImg = styled(Poplike)``;
 
 export default ContentA;
