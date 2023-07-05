@@ -162,7 +162,7 @@ const ButtonList = styled.ul`
     background-color: var(--theme-color);
   }
   li .clicked:hover {
-    background-color: var(--theme-hover-color);
+    background-color: var(--theme-hover-color) !important;
   }
 `;
 
