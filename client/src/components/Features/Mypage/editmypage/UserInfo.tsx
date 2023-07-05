@@ -118,6 +118,9 @@ const ImgContainer = styled.div`
     transform: translate(-90%, -110%);
     border-radius: 50%;
     cursor: pointer;
+    &:hover {
+      background-color: var(--ghost-color);
+    }
   }
   .editImage {
     width: 1.5rem;
