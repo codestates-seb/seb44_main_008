@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import styled, { StyleSheetManager } from 'styled-components';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
+import isPropValid from '@emotion/is-prop-valid';
 
 const Main = () => {
   const dummyData = {
@@ -125,35 +126,39 @@ const Main = () => {
 
   const popularItems = dummyData.popularBoards.map(item => {
     return (
-      <SpecialContainer>
-        <SliderContainer>
-          <SingleItem
-            src={item.thumbnail}
-            title={item.title}
-            date={item.createdAt}
-            author={item.user.nickname}
-            isMain={false}
-            onClick={onClickSingleItem}
-          ></SingleItem>
-        </SliderContainer>
-      </SpecialContainer>
+      <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+        <SpecialContainer>
+          <SliderContainer>
+            <SingleItem
+              src={item.thumbnail}
+              title={item.title}
+              date={item.createdAt}
+              author={item.user.nickname}
+              isMain={false}
+              onClick={onClickSingleItem}
+            ></SingleItem>
+          </SliderContainer>
+        </SpecialContainer>
+      </StyleSheetManager>
     );
   });
 
   const recommendItems = dummyData.recommendBoards.map(item => {
     return (
-      <SpecialContainer>
-        <SliderContainer>
-          <SingleItem
-            src={item.thumbnail}
-            title={item.title}
-            date={item.createdAt}
-            author={item.user.nickname}
-            isMain={false}
-            onClick={onClickSingleItem}
-          ></SingleItem>
-        </SliderContainer>
-      </SpecialContainer>
+      <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+        <SpecialContainer>
+          <SliderContainer>
+            <SingleItem
+              src={item.thumbnail}
+              title={item.title}
+              date={item.createdAt}
+              author={item.user.nickname}
+              isMain={false}
+              onClick={onClickSingleItem}
+            ></SingleItem>
+          </SliderContainer>
+        </SpecialContainer>
+      </StyleSheetManager>
     );
   });
 
@@ -195,26 +200,30 @@ const Main = () => {
         <StaticContainer>
           {dummyData.recommendBoards.map(item => {
             return (
-              <SingleItem
-                src={item.thumbnail}
-                title={item.title}
-                date={item.createdAt}
-                author={item.user.nickname}
-                isMain={true}
-                onClick={onClickSingleItem}
-              ></SingleItem>
+              <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+                <SingleItem
+                  src={item.thumbnail}
+                  title={item.title}
+                  date={item.createdAt}
+                  author={item.user.nickname}
+                  isMain={true}
+                  onClick={onClickSingleItem}
+                ></SingleItem>
+              </StyleSheetManager>
             );
           })}
           {dummyData.popularBoards.map(item => {
             return (
-              <SingleItem
-                src={item.thumbnail}
-                title={item.title}
-                date={item.createdAt}
-                author={item.user.nickname}
-                isMain={true}
-                onClick={onClickSingleItem}
-              ></SingleItem>
+              <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+                <SingleItem
+                  src={item.thumbnail}
+                  title={item.title}
+                  date={item.createdAt}
+                  author={item.user.nickname}
+                  isMain={true}
+                  onClick={onClickSingleItem}
+                ></SingleItem>
+              </StyleSheetManager>
             );
           })}
         </StaticContainer>
