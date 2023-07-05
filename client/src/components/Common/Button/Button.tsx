@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { ButtonType } from './type';
 
 const ButtonStyle = styled.button<ButtonType>`
+  &.clicked {
+    background-color: #f20000 !important;
+  }
+
   width: 100%;
   border: none;
   border-radius: 0.5rem;
