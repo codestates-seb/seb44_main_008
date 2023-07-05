@@ -19,9 +19,9 @@ public class Tag {
 
     private String tagName;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private ReviewBoardTag reviewBoardTag;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private UserTag userTag;
 }
