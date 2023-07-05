@@ -20,4 +20,8 @@ public class ReviewBoardWishService {
     public boolean isExistReviewBoardWish(ReviewBoard reviewBoard, User user) {
         return reviewBoardWishRepository.existsByReviewBoardAndUser(reviewBoard, user);
     }
+
+    public ReviewBoardWish findReviewBoardAndUser(ReviewBoard reviewBoard, User user) {
+        return reviewBoardWishRepository.findByReviewBoardAndUser(reviewBoard, user);
+    }
 }

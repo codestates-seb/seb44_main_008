@@ -26,6 +26,7 @@ public class Comment extends Auditable {
     @JoinColumn(name = "REVIEW_BOARD_ID")
     private ReviewBoard reviewBoard;
 
+
     public void setReviewBoard(ReviewBoard reviewBoard) {
         this.reviewBoard = reviewBoard;
         if(!reviewBoard.getComments().contains(this))

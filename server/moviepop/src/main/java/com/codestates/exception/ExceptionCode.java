@@ -10,7 +10,12 @@ public enum ExceptionCode {
     INVALID_USER(400, "존재하지않는 유저입니다"),
     ALREADY_WISH_EXIST(409, "이미 찜하기가 되어있습니다"),
     WISH_NOT_FOUND(404, "찜하기가 되어있지 않습니다"),
-    COMMENT_NOT_FOUND(404, "Comment Not Found");
+    COMMENT_NOT_FOUND(404, "Comment Not Found"),
+    ALREADY_LIKE_EXIST(409, "이미 좋아요가 되어있습니다"),
+    LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다");
+
+
+
     @Getter
     private int status;
 
