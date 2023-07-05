@@ -13,4 +13,5 @@ export interface Props
   placeholder?: Placeholder;
   isvalid?: boolean | string;
   width?: number | string;
+  type?: string;
 }
