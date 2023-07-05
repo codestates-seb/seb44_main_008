@@ -1,22 +1,21 @@
-import React from "react";
+import React from 'react';
 
 type MapItem = {
-	tagId: number | string;
+  tagId: number | string;
 };
 
 export interface WriteContentType {
-	event : React.MouseEvent<HTMLButtonElement, MouseEvent>;
+  event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-	target: {
-		id: number | string;
-		name: string;
-	}
+  target: {
+    id: number | string;
+    name: string;
+  };
 
-	placeholder: string;
+  placeholder: string;
 
-	map(callback: (value: MapItem) => MapItem): string[];
+  map(callback: (value: MapItem) => MapItem): string[];
 
-	onChange?: React.ChangeEventHandler<HTMLInputElement>;
-	onClickImg?: React.MouseEventHandler<HTMLImageElement> | void;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onClickImg?: React.MouseEventHandler<HTMLImageElement> | void;
 }
-  

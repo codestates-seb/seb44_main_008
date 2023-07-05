@@ -1,5 +1,3 @@
-
-
 export interface ButtonType {
   id?: number;
   value?: string;
