@@ -1,11 +1,15 @@
-package com.codestates.movie.db;
+package com.codestates.movie.init.service;
 
 import com.codestates.movie.entity.Movie;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.codestates.movie.service.MovieService;
+import com.codestates.tag.entity.Tag;
+import com.codestates.tag.service.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -13,15 +17,32 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+@Component
 public class MovieApi {
-    public static Set<String> getMovieList() {
+    // 1. Set에 중복 제거된 코드 받아오기
+    // 2. 중복 제거된 코드가 들어있는 Set을 이용해서 Movie 객체 만들고 List에 넣어주기
+    //      - 추가적인 작업으로 genresSet에 중복 제거된 장르들 넣어주기
+    // -> 1, 2번에서는 멀티 스레드 동작
+    // 3. movie 객체들을 DB에 저장
+    // 4. genresSet에 있는 중복 제거된 장르들을 Tag DB에 저장
+    // -> 3, 4번은 싱글 스레드
+
+    private final MovieService movieService;
+    private final TagService tagService;
+
+    public MovieApi(MovieService movieService, TagService tagService) {
+        this.movieService = movieService;
+        this.tagService = tagService;
+    }
+
+    static Set<String> genresSet, auditsSet;
+    public Set<String> getMovieList() {
         HashMap<String, Object> result = new HashMap<String, Object>();
         Set<String> movieCodeSet = new HashSet<>();
 
@@ -59,13 +80,13 @@ public class MovieApi {
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             result.put("statusCode", e.getRawStatusCode());
-            result.put("body"  , e.getStatusText());
-            System.out.println(e.toString());
+            result.put("body", e.getStatusText());
+            System.out.println(e);
 
         } catch (Exception e) {
             result.put("statusCode", "999");
-            result.put("body"  , "excpetion오류");
-            System.out.println(e.toString());
+            result.put("body", "exception");
+            System.out.println(e);
         } finally {
             executorService.shutdown();
         }
@@ -73,9 +94,11 @@ public class MovieApi {
         return movieCodeSet;
     }
 
-    public static List<Movie> getMovieDetail(Set<String> movieCodes) {
+    public List<Movie> getMovieDetail(Set<String> movieCodes) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         List<Movie> movieList = new ArrayList<>();
+        genresSet = new HashSet<>();
+        auditsSet = new HashSet<>();
 
         ExecutorService executorService = Executors.newFixedThreadPool(10); // 동시 요청 수
 
@@ -106,9 +129,17 @@ public class MovieApi {
                 LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieInfoResult");
                 Map dboxoffList = (Map) lm.get("movieInfo");
 
-                ArrayList<String> genres = (ArrayList<String>)dboxoffList.get("genres");
-                ArrayList<String> audits = (ArrayList<String>)dboxoffList.get("audits");
-                movieList.add(new Movie(dboxoffList.get("movieCd").toString(), dboxoffList.get("movieNm").toString(), dboxoffList.get("genres").toString(), dboxoffList.get("audits").toString()));
+                ArrayList<LinkedHashMap> genres = (ArrayList<LinkedHashMap>)dboxoffList.get("genres");
+                for(int idx = 0; idx < genres.size(); idx++)
+                    genresSet.add(genres.get(0).get("genreNm").toString());
+                ArrayList<LinkedHashMap> audits = (ArrayList<LinkedHashMap>)dboxoffList.get("audits");
+                boolean isAdulted = false;
+                if(audits.size() != 0) {
+                    String audit = audits.get(0).get("watchGradeNm").toString();
+                    if(audit.contains("청소년") || audit.contains("18")) isAdulted = true;
+                    auditsSet.add(audits.get(0).get("watchGradeNm").toString());
+                }
+                movieList.add(new Movie(dboxoffList.get("movieNm").toString(), isAdulted));
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             result.put("statusCode", e.getRawStatusCode());
@@ -117,7 +148,7 @@ public class MovieApi {
 
         } catch (Exception e) {
             result.put("statusCode", "999");
-            result.put("body"  , "excpetion오류");
+            result.put("body", "exception");
             System.out.println(e.toString());
         } finally {
             executorService.shutdown();
@@ -126,10 +157,22 @@ public class MovieApi {
         return movieList;
     }
 
-    public static void main(String[] args) {
-        Set<String> movieCodes = getMovieList();
-        System.out.println("movieCodes.size() = " + movieCodes.size());
-        List<Movie> movies = getMovieDetail(movieCodes);
-        System.out.println("movies.size() = " + movies.size());
+    public void makeInitMovieData(List<Movie> movieList) {
+        movieService.makeInitData(movieList);
     }
+
+    public void makeInitTagData(Set<Tag> tagList) {
+        tagService.makeInitData(tagList);
+    }
+
+//    public static void main(String[] args) {
+//        Set<String> movieCodes = getMovieList();
+////        System.out.println("movieCodes.size() = " + movieCodes.size());
+//        List<Movie> movies = getMovieDetail(movieCodes);
+////        System.out.println("movies.size() = " + movies.size());
+////        System.out.println(movies.get(0));
+////        System.out.println("genresSet = " + genresSet);
+////        System.out.println("auditsSet = " + auditsSet);
+//
+//    }
 }
