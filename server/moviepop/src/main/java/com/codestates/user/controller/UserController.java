@@ -1,5 +1,8 @@
 package com.codestates.user.controller;
 
+import com.codestates.comment.entity.Comment;
+import com.codestates.comment.mapper.CommentMapper;
+import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
@@ -33,6 +36,8 @@ public class UserController {
     private final ReviewBoardService reviewBoardService;
     private final UserMapper userMapper;
     private final ReviewBoardMapper reviewBoardMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 //    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
@@ -113,10 +118,29 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/reviewBoards/{review-id}") // 게시글 찜 해제
+    @DeleteMapping("{user-id}/reviewBoards/{review-id}") // 게시글 찜 해제
     public ResponseEntity deleteReviewWish(@PathVariable("user-id") @Positive long userId,
                                            @PathVariable("review-id") @Positive long reviewId) {
         userService.deleteReviewBoardWish(userId, reviewId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요
+    public ResponseEntity postCommentLike(@PathVariable("user-id") @Positive long userId,
+                                          @PathVariable("comment-id") @Positive long commentId) {
+        userService.createCommentLike(userId, commentId);
+        Comment comment = commentService.findComment(commentId);
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요 해제
+    public ResponseEntity deleteCommentLike(@PathVariable("user-id") @Positive long userId,
+                                            @PathVariable("comment-id") @Positive long commentId) {
+        userService.deleteCommentLike(userId, commentId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

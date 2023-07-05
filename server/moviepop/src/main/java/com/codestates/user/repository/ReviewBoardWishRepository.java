@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ReviewBoardWishRepository extends JpaRepository<ReviewBoardWish, Long> {
-    ReviewBoardWish findByReviewBoardReviewBoardIdAndUserUserId(long reviewBoardId, long userId);
+    ReviewBoardWish findByReviewBoardAndUser(ReviewBoard reviewBoard, User user);
     boolean existsByReviewBoardAndUser(ReviewBoard reviewBoard, User user);
 }

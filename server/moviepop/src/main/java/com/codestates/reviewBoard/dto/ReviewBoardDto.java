@@ -61,7 +61,7 @@ public class ReviewBoardDto {
 
     public static class WishResponse {
         private long reviewBoarId;
-        private long likes;
+        private int wish;
     }
 
     @Getter

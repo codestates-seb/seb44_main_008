@@ -1,9 +1,12 @@
 package com.codestates.user.service;
 
+import com.codestates.comment.entity.Comment;
+import com.codestates.comment.service.CommentService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.user.entity.CommentLike;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
 import com.codestates.user.repository.ReviewBoardWishRepository;
@@ -17,17 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final ReviewBoardWishRepository reviewBoardWishRepository;
     private final CustomBeanUtils<User> beanUtils;
     private final ReviewBoardWishService reviewBoardWishService;
     private final ReviewBoardService reviewBoardService;
+    private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
 
-    public UserService(UserRepository userRepository, ReviewBoardWishRepository reviewBoardWishRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService) {
+    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils,
+                       ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService) {
         this.userRepository = userRepository;
-        this.reviewBoardWishRepository = reviewBoardWishRepository;
         this.beanUtils = beanUtils;
         this.reviewBoardWishService = reviewBoardWishService;
         this.reviewBoardService = reviewBoardService;
+        this.commentService = commentService;
+        this.commentLikeService = commentLikeService;
     }
 
     public User createUser(User user) {
@@ -93,9 +99,38 @@ public class UserService {
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        ReviewBoardWish reviewBoardWish = reviewBoardWishRepository.findByReviewBoardReviewBoardIdAndUserUserId(reviewBoardId, userId);
+        ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
 
-        user.deleteReviewBoard(reviewBoardId);
-        user.deletereviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+        user.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+    }
+
+    public void createCommentLike(long userId, long commentId) {
+        User user = findUser(userId);
+        Comment comment = commentService.findComment(commentId);
+
+        if(commentLikeService.existsByCommentAndUser(comment,user)) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_EXIST);
+        }
+        comment.setLikes(comment.getLikes() + 1);
+
+        CommentLike commentLike = new CommentLike();
+        commentLike.setUser(user);
+        commentLike.setComment(comment);
+
+        user.addCommentLike(commentLike);
+    }
+
+    public void deleteCommentLike(long userId, long commentId) {
+        User user = findUser(userId);
+        Comment comment = commentService.findComment(commentId);
+
+        if(!commentLikeService.existsByCommentAndUser(comment, user)) {
+            throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
+        }
+        comment.setLikes(comment.getLikes() - 1);
+
+        CommentLike commentLike = commentLikeService.findByCommentAndUser(comment, user);
+
+        user.deleteCommentLike(commentLike.getCommentLikeId());
     }
 }
