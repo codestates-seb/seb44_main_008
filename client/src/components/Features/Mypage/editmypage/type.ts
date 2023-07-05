@@ -22,6 +22,7 @@ export interface EditInfoType {
   map(callback: (value: MapItem) => MapItem): string[];
 
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onClick?: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 }
 export interface Tag {
   tagId: number | string;

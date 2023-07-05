@@ -34,6 +34,7 @@ const Input = ({
   placeholder,
   isvalid,
   width,
+  type,
 }: Props) => {
   const [inputValue, setInputValue] = useState<InputValue>(value);
 
@@ -51,6 +52,7 @@ const Input = ({
           placeholder={placeholder}
           isvalid={isvalid!.toString()}
           width={width}
+          type={type}
         />
       </InputCoverStyled>
     </StyleSheetManager>

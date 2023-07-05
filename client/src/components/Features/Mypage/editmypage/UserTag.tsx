@@ -1,7 +1,8 @@
 import { styled } from 'styled-components';
 import Button from '../../../Common/Button/Button';
 import { EditInfoType, Tag } from './type';
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserTag = () => {
   const tags = [
@@ -57,7 +58,9 @@ const UserTag = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   console.log(selectedTags);
 
-  const onClickTag = (event: EditInfoType) => {
+  const onClickTag = (
+    event: EditInfoType,
+  ): void | MouseEvent<HTMLButtonElement> | undefined => {
     const element = document.getElementById(
       event.target.id.toString(),
     )?.classList;
@@ -80,6 +83,7 @@ const UserTag = () => {
       setSelectedTags([...selectedTags, newTag]);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <Wrapper>
@@ -102,7 +106,11 @@ const UserTag = () => {
           </ButtonList>
         </TopContainer>
         <TailContainer>
-          <Button width="47%" value="비밀번호 수정" />
+          <Button
+            width="47%"
+            value="비밀번호 수정"
+            onClick={() => navigate('/mypage/edit/pass')}
+          />
           <Button width="47%" value="회원정보 저장" type="variant" />
         </TailContainer>
       </Container>
