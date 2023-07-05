@@ -56,8 +56,8 @@ public class User extends Auditable {
         }
     }
 
-//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-//    private Tag tag;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserTag> userTag = new ArrayList<>();
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

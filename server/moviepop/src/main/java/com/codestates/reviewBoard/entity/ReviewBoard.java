@@ -11,6 +11,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.codestates.comment.entity.Comment;
+
+import java.util.*;
 
 @Entity
 @Getter
@@ -23,6 +26,7 @@ public class ReviewBoard extends Auditable {
     private String title;
     private String review;
     private int wish;
+    private String thumbnail;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -30,6 +34,7 @@ public class ReviewBoard extends Auditable {
 
     @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
+
 //
 //    @OneToOne
 //    private Movie movie;
@@ -40,8 +45,15 @@ public class ReviewBoard extends Auditable {
 //    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
 //    private List<Group> groups = new ArrayList<>();
 //
-//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
-//    private List<Comment> comments = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OrderBy("commentId desc")
+    private Set<Comment> comments = new LinkedHashSet<>();
+
+    public void addComment(Comment comment) {
+
+        this.comments.add(comment);
+    }
 
 }

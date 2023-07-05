@@ -17,8 +17,10 @@ public class UserDto {
         @NotBlank
         private String nickname;
 
-        @NotBlank
         private String profileImage;
+
+        @NotBlank
+        private String name;
 
         @NotBlank
         private String birth;
@@ -64,7 +66,7 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     public static class ReviewBoardResponse {
-        private String userId;
+        private long userId;
         private String username;
         private String profileImage;
     }
