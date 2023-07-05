@@ -67,6 +67,7 @@ const Writecontent = ()  => {
   const [selectedTags, setSelectedTags] = useState<Object[]>([]);
   const [content, setContent] = useState<string>('')
 
+
   // 이미지 관련 함수
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -100,12 +101,16 @@ const Writecontent = ()  => {
   }
 
   const onClickTag: void = (event: WriteContentType) => {
+  
+    const element = document.getElementById(event.target.id).classList;
+
     const newTagId: number | string = event.target.id;
     const newTagName: string = (event.target.name).substr(1);
 
     const tagIdArray = selectedTags.map((tagObject) => tagObject.tagId);
 
     if(tagIdArray.indexOf(newTagId) != -1){
+      element.toggle('clicked')
       const deletedTagList = selectedTags.filter((tag) => tag.tagId != newTagId);
       setSelectedTags(deletedTagList);
     }
@@ -113,6 +118,7 @@ const Writecontent = ()  => {
       alert('태그는 최대 3개까지 선택 가능합니다.');
     }
     else {
+      element.toggle('clicked')
       const newTag = {
         tagId: newTagId,
         tagName: newTagName
@@ -120,6 +126,8 @@ const Writecontent = ()  => {
       setSelectedTags([...selectedTags, newTag]);
     }
   }
+
+  console.log(selectedTags);
 
   const onClickSubmitButton = () => {
 

@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { ButtonType } from './type';
 
 const ButtonStyle = styled.button<ButtonType>`
+  &.clicked {
+    background-color: #f20000 !important;
+  } 
+
   width: 100%;
   border: none;
   border-radius: 0.5rem;
@@ -18,15 +22,9 @@ const ButtonStyle = styled.button<ButtonType>`
   }
 `;
 
-const Button = ({ id, value, type, width, onClick }: ButtonType) => {
+const Button = ({id, value, type, width, onClick }: ButtonType) => {
   return (
-    <ButtonStyle
-      id={id}
-      width={width}
-      type={type}
-      onClick={onClick}
-      name={value}
-    >
+    <ButtonStyle id={id} width={width} type={type} onClick={onClick} name={value}>
       {value}
     </ButtonStyle>
   );
