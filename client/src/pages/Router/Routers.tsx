@@ -6,7 +6,7 @@ import Start from '../Start/Start';
 import Signup from '../Account/Signup';
 import Login from '../Account/Login';
 import Main from '../Main/Main';
-import Allcontens from '../Main/Allcontents';
+import Allcontents from '../Main/Allcontents';
 import Writecontent from '../Detail/Writecontent/Writecontent';
 import Detailcontent from '../Detail/Detailcontent';
 import Mypage from '../MyPage/Mypage';
@@ -30,7 +30,7 @@ const Routers = () => {
         <Route path="/account/signup" element={<Signup />} />
         <Route path="/account/login" element={<Login />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/main/contents" element={<Allcontens />} />
+        <Route path="/main/contents" element={<Allcontents />} />
         <Route path="/detail/write" element={<Writecontent />} />
         <Route path="/detail/content" element={<Detailcontent />} />
         <Route path="/mypage" element={<Mypage />} />
