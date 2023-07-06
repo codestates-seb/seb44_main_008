@@ -94,15 +94,10 @@ public class MovieApiService {
     public Map<String, Object> getMovieDetail(Set<String> movieCodes) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         List<Movie> movieList = new ArrayList<>();
-<<<<<<< HEAD:server/moviepop/src/main/java/com/codestates/movie/init/service/MovieApiService.java
         Set<Tag> tagSet = new HashSet<>();
 
         Set<Movie> existsMovies = movieService.findMovies();
         Set<Tag> existsTags = tagService.findTags();
-=======
-        Set<String> genresSet = new HashSet<>();
-        Set<String> auditsSet = new HashSet<>();
->>>>>>> 15fbec5c8b5341e55b2723cc04b81dd42cf21ec0:server/moviepop/src/main/java/com/codestates/movie/db/MovieApi.java
 
         ExecutorService executorService = Executors.newFixedThreadPool(10); // 동시 요청 수
 
@@ -133,12 +128,11 @@ public class MovieApiService {
                 LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieInfoResult");
                 Map movieInfo = (Map) lm.get("movieInfo");
 
-<<<<<<< HEAD:server/moviepop/src/main/java/com/codestates/movie/init/service/MovieApiService.java
                 // 중복 제거한 태그 정보 가져오기
                 ArrayList<LinkedHashMap> genres = (ArrayList<LinkedHashMap>)movieInfo.get("genres");
                 for(int idx = 0; idx < genres.size(); idx++) {
                     Tag tag = new Tag(genres.get(0).get("genreNm").toString());
-                    if(!existsTags.contains(tag))
+                    if(!existsTags.contains(tag) && !tagSet.contains(tag.getTagName()))
                         tagSet.add(tag);
                 }
                 ArrayList<LinkedHashMap> audits = (ArrayList<LinkedHashMap>)movieInfo.get("audits");
@@ -153,15 +147,6 @@ public class MovieApiService {
                 Movie movie = new Movie(movieInfo.get("movieNm").toString(), isAdulted);
                 if(!existsMovies.contains(movie))
                     movieList.add(movie);
-=======
-                ArrayList<LinkedHashMap> genres = (ArrayList<LinkedHashMap>)dboxoffList.get("genres");
-                System.out.println("genres = " + genres.get(0).get("genreNm"));
-                for(int idx = 0; idx < genres.size(); idx++)
-                    genresSet.add(genres.get(0).get("genreNm").toString());
-                ArrayList<LinkedHashMap> audits = (ArrayList<LinkedHashMap>)dboxoffList.get("audits");
-                auditsSet.add(audits.get(0).get("watchGradeNm").toString());
-                movieList.add(new Movie(dboxoffList.get("movieCd").toString(), dboxoffList.get("movieNm").toString(), dboxoffList.get("genres").toString(), dboxoffList.get("audits").toString()));
->>>>>>> 15fbec5c8b5341e55b2723cc04b81dd42cf21ec0:server/moviepop/src/main/java/com/codestates/movie/db/MovieApi.java
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             result.put("statusCode", e.getRawStatusCode());
@@ -176,7 +161,6 @@ public class MovieApiService {
             executorService.shutdown();
         }
 
-<<<<<<< HEAD:server/moviepop/src/main/java/com/codestates/movie/init/service/MovieApiService.java
         Map<String, Object> initData = new HashMap<>();
         initData.put("movie", movieList);
         initData.put("tag", tagSet);
@@ -186,19 +170,6 @@ public class MovieApiService {
 
     public void makeInitMovieData(List<Movie> movieList) {
         movieService.makeInitData(movieList);
-=======
-        System.out.println(genresSet.size());
-        System.out.println(auditsSet);
-        return movieList;
-    }
-
-    public static void main(String[] args) {
-        Set<String> movieCodes = getMovieList();
-        System.out.println("movieCodes.size() = " + movieCodes.size());
-        List<Movie> movies = getMovieDetail(movieCodes);
-        System.out.println("movies.size() = " + movies.size());
-        System.out.println(movies.get(0));
->>>>>>> 15fbec5c8b5341e55b2723cc04b81dd42cf21ec0:server/moviepop/src/main/java/com/codestates/movie/db/MovieApi.java
     }
 
     public void makeInitTagData(Set<Tag> tagList) {
