@@ -77,7 +77,7 @@ public class UserService {
 
     public void createReviewBoardWish(long userId, long reviewBoardId) {
         User user = findUser(userId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         if(reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
             throw new BusinessLogicException(ExceptionCode.ALREADY_WISH_EXIST);
@@ -95,7 +95,7 @@ public class UserService {
 
     public void deleteReviewBoardWish(long userId, long reviewBoardId) {
         User user = findUser(userId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
         if(reviewBoardWish == null)
@@ -103,7 +103,7 @@ public class UserService {
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        user.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+        reviewBoardWishService.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
 
         userRepository.save(user);
     }
@@ -138,7 +138,7 @@ public class UserService {
 
         comment.setLikes(comment.getLikes() - 1);
 
-        user.deleteCommentLike(commentLike.getCommentLikeId());
+        commentLikeService.deleteCommentLike(commentLike.getCommentLikeId());
 
         return comment;
     }
