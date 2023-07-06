@@ -5,16 +5,16 @@ type MapItem = {
 };
 
 export interface WriteContentType {
-  event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
+  event?: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-  target: {
+  target?: {
     id: number | string;
     name: string;
   };
 
-  placeholder: string;
+  placeholder?: string;
 
-  map(callback: (value: MapItem) => MapItem): string[];
+  map?(callback: (value: MapItem) => MapItem): string[];
 
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onClickImg?: React.MouseEventHandler<HTMLImageElement> | void;
