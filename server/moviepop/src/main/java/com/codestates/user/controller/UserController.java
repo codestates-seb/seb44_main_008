@@ -50,6 +50,29 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
+    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long userId,
+                                    @Valid @RequestBody UserDto.Patch userPatchDto) {
+        userPatchDto.setUserId(userId);
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserBriefResponseDto(user)),
+                HttpStatus.OK
+        );
+    }
+
+    @PatchMapping("/{user-id}/password") // 비밀번호 수정
+    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
+                                            @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
+        User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
+                HttpStatus.OK
+        );
+    }
+
 //    @GetMapping // 자신의 회원정보 조회
 //    public ResponseEntity getUser() {
 //        //로그인된 사용자 정보를 가져와야 가능해보임
@@ -77,28 +100,6 @@ public class UserController {
 //                HttpStatus.OK
 //        );
 //    }
-
-    @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
-    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long UserId,
-                                    @Valid @RequestBody UserDto.Patch userPatchDto) {
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
-
-        return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserBriefResponseDto(user)),
-                HttpStatus.OK
-        );
-    }
-
-    @PatchMapping("/{user-id}/password") // 비밀번호 수정
-    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
-                                            @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
-        User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
-
-        return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
-                        HttpStatus.OK
-        );
-    }
 
     @DeleteMapping("/{user-id}") // 회원 삭제
     public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId) {
@@ -129,8 +130,8 @@ public class UserController {
     @PostMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요
     public ResponseEntity postCommentLike(@PathVariable("user-id") @Positive long userId,
                                           @PathVariable("comment-id") @Positive long commentId) {
-        userService.createCommentLike(userId, commentId);
-        Comment comment = commentService.findComment(commentId);
+        Comment comment = userService.createCommentLike(userId, commentId);
+
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
                 HttpStatus.OK
@@ -140,9 +141,12 @@ public class UserController {
     @DeleteMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요 해제
     public ResponseEntity deleteCommentLike(@PathVariable("user-id") @Positive long userId,
                                             @PathVariable("comment-id") @Positive long commentId) {
-        userService.deleteCommentLike(userId, commentId);
+        Comment comment = userService.deleteCommentLike(userId, commentId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
+                HttpStatus.NO_CONTENT
+        );
     }
 
     @PostMapping("/groups/{group-id}") // 팟 참여 기능
