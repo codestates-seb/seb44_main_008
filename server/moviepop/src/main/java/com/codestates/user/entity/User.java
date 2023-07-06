@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class User extends Auditable {
 //    @Column(nullable = false)
     private String profileImage;
 
-    private String birth;
+    private LocalDate birth;
 
     private float star = 0;
 
