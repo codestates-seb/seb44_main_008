@@ -98,6 +98,9 @@ export const PopperBox = styled.div`
     padding: 1.875rem;
     background-color: var(--main-dark-color);
     border-radius: 7px;
+    input {
+      margin-bottom: 0.9rem;
+    }
     .dateBox {
       position: relative;
       input {

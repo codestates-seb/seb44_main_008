@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { PopperDetailData } from './popperType';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
-import { LargeNumberLike } from 'crypto';
 
 const response = {
   data: {
@@ -35,10 +34,10 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   const navigate = useNavigate();
   const [groups, setGroups] = useState<PopperDetailData>({});
 
-  const clickEdit = useCallback(() => {
+  const clickEdit = () => {
     setCurrentRender('Edit');
     setCurrentID(id);
-  }, []);
+  };
 
   const getData = useCallback(async () => {
     try {
