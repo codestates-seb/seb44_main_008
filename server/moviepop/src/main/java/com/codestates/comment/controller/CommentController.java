@@ -5,7 +5,6 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
-import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -38,11 +36,12 @@ public class CommentController {
 //        return ResponseEntity.created(location).build();
 //    }
 
-    @PatchMapping("/{comment-id}")
+    @PatchMapping("/{comment-id}/users/{user-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
+                                       @PathVariable("user-id") @Positive long userId,
                                        @RequestBody @Valid CommentDto.Patch requestBody) {
         requestBody.setCommentId(commentId);
-        Comment comment = commentService.updateComment(mapper.commentPatchDtoToComment(requestBody));
+        Comment comment = commentService.updateComment(userId, mapper.commentPatchDtoToComment(requestBody));
 
         return new ResponseEntity (
                 new ResponseDto.SingleResponseDto(mapper.commentToCommentPatchResponseDto(comment)),
@@ -72,9 +71,10 @@ public class CommentController {
         );
     }
 
-    @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId) {
-        commentService.deleteComment(commentId);
+    @DeleteMapping("/{comment-id}/users/{user-id}")
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId,
+                                        @PathVariable("user-id") @Positive long userId) {
+        commentService.deleteComment(userId, commentId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
