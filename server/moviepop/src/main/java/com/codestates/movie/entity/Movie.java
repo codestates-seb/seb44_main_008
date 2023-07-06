@@ -39,4 +39,14 @@ public class Movie {
     public int hashCode() {
         return Objects.hash(title, isAdulted);
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieCode='" + movieCode + '\'' +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", isAdulted='" + isAdulted + '\'' +
+                '}';
+    }
 }

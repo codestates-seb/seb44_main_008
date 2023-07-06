@@ -2,6 +2,7 @@ package com.codestates.comment.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,10 @@ public class Comment extends Auditable {
     @ManyToOne
     @JoinColumn(name = "REVIEW_BOARD_ID")
     private ReviewBoard reviewBoard;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     public void setReviewBoard(ReviewBoard reviewBoard) {
         this.reviewBoard = reviewBoard;

@@ -1,5 +1,8 @@
 package com.codestates.reviewBoard.mapper;
 
+
+import com.codestates.user.dto.UserDto;
+
 import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.reviewBoard.dto.ReviewBoardDto;
@@ -15,7 +18,26 @@ import java.util.stream.Collectors;
 public interface ReviewBoardMapper {
     ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post);
     ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch);
-    ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard);
+    default ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard) {
+        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(
+                reviewBoard.getUser().getUserId(),
+                reviewBoard.getUser().getNickname(),
+                reviewBoard.getUser().getProfileImage()
+        );
+
+        ReviewBoardDto.Response response = ReviewBoardDto.Response.builder()
+                .reviewBoardId(reviewBoard.getReviewBoardId())
+                .title(reviewBoard.getTitle())
+                .review(reviewBoard.getReview())
+                .wish(reviewBoard.getWish())
+                .thumbnail(reviewBoard.getThumbnail())
+                .createdAt(reviewBoard.getCreatedAt())
+                .user(userResponse)
+                .build();
+
+        return response;
+    }
+    ReviewBoardDto.WishResponse reviewBoardToWishResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
     ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);

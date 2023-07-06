@@ -1,7 +1,10 @@
 package com.codestates.reviewBoard.dto;
 
+
+import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,16 +45,25 @@ public class ReviewBoardDto {
     }
 
     @Getter
-    @Setter
+    @Builder
     public static class Response {
         private long reviewBoardId;
         private String title;
         private String review;
-        private String thumbnail;
         private int wish;
+        private String thumbnail;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
+
+        private UserDto.ReviewBoardResponse user;
         //추후 추가
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class WishResponse {
+        private long reviewBoardId;
+        private int wish;
     }
 
     @Getter
@@ -69,7 +81,6 @@ public class ReviewBoardDto {
     public static class DetailResponse {
         private long reviewBoardId;
         private String title;
-//        private String movieTitle;
         private String review;
         private String thumbnail;
         private int wish;
