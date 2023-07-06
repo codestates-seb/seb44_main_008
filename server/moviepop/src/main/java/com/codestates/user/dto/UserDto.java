@@ -2,6 +2,7 @@ package com.codestates.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -17,8 +18,10 @@ public class UserDto {
         @NotBlank
         private String nickname;
 
-        @NotBlank
         private String profileImage;
+
+        @NotBlank
+        private String name;
 
         @NotBlank
         private String birth;
@@ -33,6 +36,8 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     public static class Patch{
+        @Setter
+        private long userId;
         @NotBlank
         private String nickname;
 
@@ -64,7 +69,7 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     public static class ReviewBoardResponse {
-        private String userId;
+        private long userId;
         private String username;
         private String profileImage;
     }

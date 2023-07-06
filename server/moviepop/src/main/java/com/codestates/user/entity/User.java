@@ -1,6 +1,7 @@
 package com.codestates.user.entity;
 
 import com.codestates.audit.Auditable;
+import com.codestates.comment.entity.Comment;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.reviewBoard.entity.ReviewBoard;
@@ -32,7 +33,7 @@ public class User extends Auditable {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String profileImage;
 
     private String birth;
@@ -56,8 +57,8 @@ public class User extends Auditable {
         }
     }
 
-//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-//    private Tag tag;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<UserTag> userTag = new ArrayList<>();
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -66,8 +67,11 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-//    private Comment comment;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentLike> commentLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
@@ -85,11 +89,19 @@ public class User extends Auditable {
         this.reviewBoardWishes.add(reviewBoardWish);
     }
 
+    public void addCommentLike(CommentLike commentLike) {
+        this.commentLikes.add(commentLike);
+    }
+
     public void deleteReviewBoard(long reviewBoardId) {
         this.reviewBoards.remove(reviewBoardId);
     }
 
-    public void deletereviewBoardWish(long reviewBoardWishId) {
+    public void deleteReviewBoardWish(long reviewBoardWishId) {
         this.reviewBoardWishes.remove(reviewBoardWishId);
+    }
+
+    public void deleteCommentLike(long commentLikeId) {
+        this.commentLikes.remove(commentLikeId);
     }
 }

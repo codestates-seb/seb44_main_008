@@ -5,9 +5,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 public class UriComponent {
-    public static URI createUri(String defaultUri, long id) {
+    public static URI createUri(String defaultUrl, long id) {
         return UriComponentsBuilder.newInstance()
-                .path(defaultUri + "/{id}")
+                .path(defaultUrl + "/{id}")
                 .buildAndExpand(id)
                 .toUri();
     }

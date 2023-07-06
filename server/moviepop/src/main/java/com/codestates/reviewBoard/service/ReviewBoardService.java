@@ -1,10 +1,12 @@
 package com.codestates.reviewBoard.service;
 
+
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.user.entity.User;
+
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.repository.ReviewBoardRepository;
-import com.codestates.user.entity.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,14 +24,15 @@ public class ReviewBoardService {
 
     private final ReviewBoardRepository reviewBoardRepository;
 
-
     public ReviewBoardService(ReviewBoardRepository reviewBoardRepository) {
         this.reviewBoardRepository = reviewBoardRepository;
     }
 
-    public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
 
+    public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
         user.addReviewBoard(reviewBoard);
+
+        reviewBoard.setUser(user);
 
         return reviewBoardRepository.save(reviewBoard);
     }
@@ -49,28 +53,35 @@ public class ReviewBoardService {
     }
 
     public ReviewBoard findReviewBoard(long reviewId) {
-
         return findReviewBoardById(reviewId);
     }
 
-    public Page<ReviewBoard> findReviewBoards(int page, int size) {
+    public Page<ReviewBoard> findAllReviewBoards(int page, int size) {
         return reviewBoardRepository.findAll(PageRequest.of(page,size,
-                Sort.by("reviewId").descending()));
+                Sort.by("reviewBoardId").descending()));
     }
 
-    public void deleteReviewBoard(long userId,long reviewId) {
-        ReviewBoard reviewBoard = findReviewBoardById(reviewId);
-        if(reviewBoard.getUser().getUserId() != userId) {
-            throw new IllegalArgumentException("오류코드 만들어야함");
-        }
+    public void deleteReviewBoard(long userId, long reviewId) {
+        ReviewBoard reviewBoard = findReviewBoard(reviewId);
+        if(reviewBoard.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
+
         reviewBoardRepository.delete(reviewBoard);
+    }
+
+    public List<ReviewBoard> findReviewBoards() {
+        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+    }
+
+    public List<ReviewBoard> findPopularReviewBoards() {
+        return reviewBoardRepository.findTop8ByOrderByWishDesc();
     }
 
     @Transactional(readOnly = true)
     public ReviewBoard findReviewBoardById(long reviewId) {
         Optional<ReviewBoard> optionalReviewBoard = reviewBoardRepository.findById(reviewId);
         ReviewBoard findReviewBoard =
-                optionalReviewBoard.orElseThrow(() -> new IllegalArgumentException());
+                optionalReviewBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_BOARD_NOT_FOUND));
         return findReviewBoard;
     }
 }

@@ -1,6 +1,12 @@
 package com.codestates.reviewBoard.dto;
 
+
+import com.codestates.tag.dto.TagDto;
 import com.codestates.user.dto.UserDto;
+import com.codestates.comment.dto.CommentDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +25,7 @@ public class ReviewBoardDto {
         private String movieTitle;
         @NotBlank(message = "내용을 채우세요")
         private String review;
-
-//        private List<String> tags;
+        private List<TagDto.ReviewBoardRequest> tags;
 //        private String thumbnail_URL;
     }
 
@@ -34,26 +39,64 @@ public class ReviewBoardDto {
         private String movieTitle;
         @NotBlank(message = "내용을 채우세요")
         private String review;
+        private List<TagDto.ReviewBoardRequest> tags;
 
 //        private List<String> tags;
 //        private String thumbnail_URL;
     }
 
     @Getter
-    @Setter
+    @Builder
     public static class Response {
         private long reviewBoardId;
         private String title;
         private String review;
-        private int likes;
-        private LocalDateTime date;
+        private int wish;
+        private String thumbnail;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDateTime createdAt;
 
-        private List<UserDto.ReviewBoardResponse> reviewBoardResponses;
+        private List<TagDto.response> tags;
+
+        private UserDto.ReviewBoardResponse user;
         //추후 추가
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class WishResponse {
-        private long reviewBoarId;
-        private long likes;
+        private long reviewBoardId;
+        private int wish;
+    }
+
+    @Getter
+    @Builder
+    public static class EntireResponse {
+        private long reviewBoardId;
+        private String title;
+        private String thumbnail;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Builder
+    public static class DetailResponse {
+        private long reviewBoardId;
+        private String title;
+        private String review;
+        private String thumbnail;
+        private int wish;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDateTime createdAt;
+        private List<CommentDto.Response> comments;
+        private List<TagDto.response> tags;
+    }
+
+    @Getter
+    @Builder
+    public static class MainResponse {
+        private List<EntireResponse> popularBoards;
+        private List<EntireResponse> boards;
     }
 }

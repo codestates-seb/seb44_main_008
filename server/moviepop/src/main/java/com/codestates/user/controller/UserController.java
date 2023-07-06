@@ -1,5 +1,8 @@
 package com.codestates.user.controller;
 
+import com.codestates.comment.entity.Comment;
+import com.codestates.comment.mapper.CommentMapper;
+import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
@@ -33,6 +36,8 @@ public class UserController {
     private final ReviewBoardService reviewBoardService;
     private final UserMapper userMapper;
     private final ReviewBoardMapper reviewBoardMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 //    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
@@ -43,6 +48,29 @@ public class UserController {
         URI uri = UriComponent.createUri(USER_DEFAULT_URI, createUser.getUserId());
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
+    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long userId,
+                                    @Valid @RequestBody UserDto.Patch userPatchDto) {
+        userPatchDto.setUserId(userId);
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserBriefResponseDto(user)),
+                HttpStatus.OK
+        );
+    }
+
+    @PatchMapping("/{user-id}/password") // 비밀번호 수정
+    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
+                                            @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
+        User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
+                HttpStatus.OK
+        );
     }
 
 //    @GetMapping // 자신의 회원정보 조회
@@ -73,28 +101,6 @@ public class UserController {
 //        );
 //    }
 
-    @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
-    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long UserId,
-                                    @Valid @RequestBody UserDto.Patch userPatchDto) {
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
-
-        return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserBriefResponseDto(user)),
-                HttpStatus.OK
-        );
-    }
-
-    @PatchMapping("/{user-id}/password") // 비밀번호 수정
-    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
-                                            @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
-        User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
-
-        return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
-                        HttpStatus.OK
-        );
-    }
-
     @DeleteMapping("/{user-id}") // 회원 삭제
     public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId) {
         userService.deleteUser(userId);
@@ -113,12 +119,34 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/reviewBoards/{review-id}") // 게시글 찜 해제
+    @DeleteMapping("{user-id}/reviewBoards/{review-id}") // 게시글 찜 해제
     public ResponseEntity deleteReviewWish(@PathVariable("user-id") @Positive long userId,
                                            @PathVariable("review-id") @Positive long reviewId) {
         userService.deleteReviewBoardWish(userId, reviewId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요
+    public ResponseEntity postCommentLike(@PathVariable("user-id") @Positive long userId,
+                                          @PathVariable("comment-id") @Positive long commentId) {
+        Comment comment = userService.createCommentLike(userId, commentId);
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요 해제
+    public ResponseEntity deleteCommentLike(@PathVariable("user-id") @Positive long userId,
+                                            @PathVariable("comment-id") @Positive long commentId) {
+        Comment comment = userService.deleteCommentLike(userId, commentId);
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
+                HttpStatus.NO_CONTENT
+        );
     }
 
     @PostMapping("/groups/{group-id}") // 팟 참여 기능
