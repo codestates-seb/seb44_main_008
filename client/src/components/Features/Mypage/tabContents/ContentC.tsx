@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { postsType } from './type';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import { data2 } from './dummy2';
+import Modal from '../../../Common/Modal/Modal';
 
 const ContentC = () => {
   const [page, setPage] = useState(1);
@@ -15,11 +16,24 @@ const ContentC = () => {
       return result;
     }
   };
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalVisibleId, setModalVisibleId] = useState(0);
+  const onModalHandler = (id: SetStateAction<number>) => {
+    setModalVisibleId(id);
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
-      {data2.map(item => (
+      {data2.map((item, idx) => (
         <ListContainer key={item.groupId}>
-          <ListOnce>
+          <Modal
+            id={idx}
+            isOpen={isOpen}
+            modalVisibleId={modalVisibleId}
+            onModalHandler={onModalHandler}
+          />
+          <ListOnce className="list" onClick={() => onModalHandler(idx)}>
             <ListHead>
               <Titles>
                 <p className="title">{item.title}</p>

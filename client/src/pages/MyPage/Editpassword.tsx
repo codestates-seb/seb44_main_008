@@ -21,41 +21,43 @@ const Editpassword = () => {
   };
   console.log(currentPw, editPw, confirmPw);
   return (
-    <Container>
-      <Wrapper>
-        <InputWrapper>
-          <Input
-            value={currentPw}
-            onChange={pwChangeHandler}
-            type="password"
-            placeholder="현재 비밀번호"
-            isvalid={'true'}
-          />
-          <Input
-            value={editPw}
-            onChange={editChangeHandler}
-            type="password"
-            placeholder="변경 비밀번호"
-            isvalid={'true'}
-          />
-          <Input
-            value={confirmPw}
-            onChange={confirmChangeHandler}
-            type="password"
-            placeholder="변경 비밀번호 확인"
-            isvalid={'true'}
-          />
-        </InputWrapper>
-        <ButtonWrapper>
-          <Button
-            width="47%"
-            value="마이페이지로 이동"
-            onClick={() => navigate('/mypage')}
-          />
-          <Button width="47%" value="수정하기" type="variant" />
-        </ButtonWrapper>
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Wrapper>
+          <InputWrapper>
+            <Input
+              value={currentPw}
+              onChange={pwChangeHandler}
+              type="password"
+              placeholder="현재 비밀번호"
+              isvalid={'true'}
+            />
+            <Input
+              value={editPw}
+              onChange={editChangeHandler}
+              type="password"
+              placeholder="변경 비밀번호"
+              isvalid={'true'}
+            />
+            <Input
+              value={confirmPw}
+              onChange={confirmChangeHandler}
+              type="password"
+              placeholder="변경 비밀번호 확인"
+              isvalid={'true'}
+            />
+          </InputWrapper>
+          <ButtonWrapper>
+            <Button
+              width="47%"
+              value="마이페이지로 이동"
+              onClick={() => navigate('/mypage')}
+            />
+            <Button width="47%" value="수정하기" type="variant" />
+          </ButtonWrapper>
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 
