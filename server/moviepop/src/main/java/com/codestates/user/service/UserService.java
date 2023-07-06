@@ -44,13 +44,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public User findUser(long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        return findUser;
-    }
-
     public User updateUser(User user) {
         User findUser = findUser(user.getUserId());
         User updateUser = findUser.changeUserInfo(user, beanUtils);
@@ -59,19 +52,27 @@ public class UserService {
     }
 
     public User updateUserPassword(long userId, String currentPassword, String newPassword) {
-        User findUser = userRepository.findById(userId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        if(findUser.getPassword() != currentPassword)
+        User findUser = verifyUserId(userId);
+        if(!findUser.getPassword().equals(currentPassword))
             throw new BusinessLogicException(ExceptionCode.PASSWORD_INCORRECT);
 
         findUser.setPassword(newPassword);
         return userRepository.save(findUser);
     }
 
+    @Transactional(readOnly = true)
+    public User findUser(long userId) {
+        return verifyUserId(userId);
+    }
+
     public void deleteUser(long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        User findUser = verifyUserId(userId);
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
+    }
+
+    private User verifyUserId(long userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     public void createReviewBoardWish(long userId, long reviewBoardId) {
@@ -88,29 +89,32 @@ public class UserService {
         reviewBoardWish.setReviewBoard(reviewBoard);
 
         user.addReviewBoardWish(reviewBoardWish);
+
+        userRepository.save(user);
     }
 
     public void deleteReviewBoardWish(long userId, long reviewBoardId) {
         User user = findUser(userId);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
 
-        if(!reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
+        ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
+        if(reviewBoardWish == null)
             throw new BusinessLogicException(ExceptionCode.WISH_NOT_FOUND);
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
-
         user.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+
+        userRepository.save(user);
     }
 
-    public void createCommentLike(long userId, long commentId) {
+    public Comment createCommentLike(long userId, long commentId) {
         User user = findUser(userId);
         Comment comment = commentService.findComment(commentId);
 
-        if(commentLikeService.existsByCommentAndUser(comment,user)) {
+        if(commentLikeService.existsByCommentAndUser(comment,user))
             throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_EXIST);
-        }
+
         comment.setLikes(comment.getLikes() + 1);
 
         CommentLike commentLike = new CommentLike();
@@ -118,19 +122,24 @@ public class UserService {
         commentLike.setComment(comment);
 
         user.addCommentLike(commentLike);
+
+        userRepository.save(user);
+
+        return comment;
     }
 
-    public void deleteCommentLike(long userId, long commentId) {
+    public Comment deleteCommentLike(long userId, long commentId) {
         User user = findUser(userId);
         Comment comment = commentService.findComment(commentId);
 
-        if(!commentLikeService.existsByCommentAndUser(comment, user)) {
+        CommentLike commentLike = commentLikeService.findByCommentAndUser(comment, user);
+        if(commentLike == null)
             throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
-        }
+
         comment.setLikes(comment.getLikes() - 1);
 
-        CommentLike commentLike = commentLikeService.findByCommentAndUser(comment, user);
-
         user.deleteCommentLike(commentLike.getCommentLikeId());
+
+        return comment;
     }
 }
