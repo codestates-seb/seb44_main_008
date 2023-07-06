@@ -49,7 +49,6 @@ public class ReviewBoardController {
         this.commentMapper = commentMapper;
     }
 
-
     @PostMapping("/{user-id}")
     public ResponseEntity postReviewBoard(@PathVariable("user-id") @Positive long userId,
                                           @Valid @RequestBody ReviewBoardDto.Post post) {
@@ -59,8 +58,8 @@ public class ReviewBoardController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{review-id}")
-    public ResponseEntity patchReviewBoard(@Positive long userId,
+    @PatchMapping("/{review-id}/users/{user-id}")
+    public ResponseEntity patchReviewBoard(@PathVariable("user-id") @Positive long userId,
                                            @PathVariable("review-id") @Positive long reviewId,
                                            @Valid @RequestBody ReviewBoardDto.Patch patch) {
         patch.setReviewBoardId(reviewId);
@@ -85,8 +84,9 @@ public class ReviewBoardController {
         return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{review-id}")
-    public ResponseEntity deleteReviewBoard(@Positive long userId, @PathVariable("review-id") @Positive long reviewId) {
+    @DeleteMapping("/{review-id}/users/{user-id}")
+    public ResponseEntity deleteReviewBoard(@PathVariable("user-id") @Positive long userId,
+                                            @PathVariable("review-id") @Positive long reviewId) {
         reviewBoardService.deleteReviewBoard(userId,reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -102,12 +102,12 @@ public class ReviewBoardController {
         );
     }
 
-
-    @PostMapping("/{review-id}/comments")
+    @PostMapping("/{review-id}/users/{user-id}/comments")
     public ResponseEntity postComment(@PathVariable("review-id") @Positive long reviewId,
+                                      @PathVariable("user-id") @Positive long userId,
                                       @RequestBody @Valid CommentDto.Post requestBody) {
-
-        Comment comment = commentService.createComment(reviewId, commentMapper.commentPostDtoToComment(requestBody));
+        User user = userService.findUser(userId);
+        Comment comment = commentService.createComment(reviewId, user, commentMapper.commentPostDtoToComment(requestBody));
         URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
 
         return ResponseEntity.created(location).build();
