@@ -112,7 +112,7 @@ public class UserController {
     public ResponseEntity postUserWish(@PathVariable("user-id") @Positive long userId,
                                        @PathVariable("review-id") @Positive long reviewId) {
         userService.createReviewBoardWish(userId, reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(userService.findUser(userId), reviewId);
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
                 HttpStatus.OK
