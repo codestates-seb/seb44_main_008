@@ -35,10 +35,10 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   const navigate = useNavigate();
   const [groups, setGroups] = useState<PopperDetailData>({});
 
-  const clickEdit = useCallback(() => {
+  const clickEdit = () => {
     setCurrentRender('Edit');
     setCurrentID(id);
-  }, []);
+  };
 
   const getData = useCallback(async () => {
     try {
