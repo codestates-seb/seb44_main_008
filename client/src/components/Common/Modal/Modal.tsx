@@ -1,19 +1,18 @@
 import { styled } from 'styled-components';
 import { ModalTypes } from './type';
-import { useEffect } from 'react';
 
-const Modal = ({ isOpen, id, modalVisibleId, onModalHandler }: ModalTypes) => {
+const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
   return (
     <>
       {modalVisibleId === id && isOpen ? (
         <Container>
-          <ModalBackDrop onClick={() => onModalHandler(id)}>
+          <ModalBackDrop onClick={() => offModalHandler(id)}>
             <ModalView
               onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                 e.stopPropagation()
               }
             >
-              <ExitButton onClick={() => onModalHandler(id)}>↩</ExitButton>
+              <ExitButton onClick={() => offModalHandler(id)}>↩</ExitButton>
               <div className="desc">Hello!</div>
             </ModalView>
           </ModalBackDrop>

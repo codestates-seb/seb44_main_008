@@ -4,6 +4,6 @@ export interface ModalTypes {
   isOpen: boolean;
   id: number;
   modalVisibleId: number | string;
-  onModalHandler: (id: SetStateAction<number>) => void;
+  offModalHandler: (id: SetStateAction<number>) => void;
   onClick?: MouseEventHandler<HTMLDivElement>;
 }

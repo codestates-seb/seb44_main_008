@@ -4,8 +4,10 @@ import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import { data2 } from './dummy2';
 import Modal from '../../../Common/Modal/Modal';
+import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 
 const ContentC = () => {
+  const { lockScroll, openScroll } = useBodyScrollLock();
   const [page, setPage] = useState(1);
   const limit = 5;
   const offset = (page - 1) * limit;
@@ -20,7 +22,13 @@ const ContentC = () => {
   const [modalVisibleId, setModalVisibleId] = useState(0);
   const onModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
-    setIsOpen(!isOpen);
+    setIsOpen(true);
+    lockScroll();
+  };
+  const offModalHandler = (id: SetStateAction<number>) => {
+    setModalVisibleId(id);
+    setIsOpen(false);
+    openScroll();
   };
 
   return (
@@ -31,7 +39,8 @@ const ContentC = () => {
             id={idx}
             isOpen={isOpen}
             modalVisibleId={modalVisibleId}
-            onModalHandler={onModalHandler}
+            // onModalHandler={onModalHandler}
+            offModalHandler={offModalHandler}
           />
           <ListOnce className="list" onClick={() => onModalHandler(idx)}>
             <ListHead>
