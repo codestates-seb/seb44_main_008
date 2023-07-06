@@ -1,51 +1,44 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import Popunlike from '../../Common/PopIcons/Popunlike';
-import UserAvat from '@/assets/images/user-info/userAvatar.png';
+import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 
 const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
+  const [like, setLike] = useState(false);
+  const handleLikeClick = () => {
+    setLike(!like);
+  };
+  const date = data.createdAt;
+  const reviewDate = date?.replace(/-/gi, '.');
+
   return (
     <DetailSection>
-      <h4>고양이 집사라면 필수 시청인 영화</h4>
+      <h4>{data.title}</h4>
       <div className="movieInfo">
-        <p>고양이의 보은</p>
+        <p>{data.movieTitle}</p>
         <ul>
-          <li>#힐링</li>
-          <li>#로맨스</li>
+          {data.tags?.map(tag => {
+            return <li key={tag.tagId}># {tag.tagId}</li>;
+          })}
         </ul>
       </div>
       <div className="writeInfo">
         <div>
-          <Popunlike />
-          <span>23</span>
+          <Popunlike onClick={handleLikeClick} like={like} />
+          <span>{data.wish}</span>
         </div>
         <div>
-          <span>2023.06.30</span>
+          <span>{reviewDate}</span>
           <div className="userImg">
-            <img src={UserAvat} alt="유저명" />
+            <img src={data.user?.profileImage} alt="유저명" />
           </div>
-          <p>정승현</p>
+          <p>{data.user?.nickname}</p>
         </div>
       </div>
       <div className="imgWrap">
-        <img
-          src="https://i.ytimg.com/vi/xa7r2aQz2tQ/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAfMGgw2iICyXPv-ALunB-3oOdwlQ"
-          alt="고양이의 보은 사진"
-        />
+        <img src={data.thumbnail} alt={data.movieTitle} />
       </div>
-      <p className="detailContent">
-        17세 여고생인 하루는 집으로 가는 길에 트럭에 치일뻔한 고양이를
-        구해줍니다. 그 고양이는 하루에게 고맙다고 이야기를 하고 하루의 일상은
-        변화가 생기기 시작합니다. 하루는 자신이 구해준 고양이가 고양이 왕국의
-        왕자인 룬이라는 사실을 알게 되고 하루의 집 앞에 찾아온 고양이 무리는
-        왕자를 구해준 보답으로 왕자와 결혼해 달라고 하고 사라집니다. 그러던 중
-        이상한 목소리에 듣게 되고 하루는 고양이 사무소를 찾게 됩니다. 고양이
-        사무소에서 바론, 무타, 토토를 만나게 되지만 고양이 왕국의 고양이 무리가
-        와서 하루를 데리고 가 버립니다. 바론, 무타는 추격해서 고양이 왕국으로
-        들어가게 됩니다. 고양이 왕국에 도착하자 하루는 서서히 고양이로 변하고
-        바론과 무타의 도움으로 하루는 탈출을 시도합니다. 이를 고양이 왕국의 왕은
-        막으려고 하고 한바탕 소동이 벌어집니다.
-      </p>
+      <p className="detailContent">{data.review}</p>
     </DetailSection>
   );
 };
