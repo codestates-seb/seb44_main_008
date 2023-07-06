@@ -35,12 +35,12 @@ public class ReviewBoard extends Auditable {
     @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
+    private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
+
 //
 //    @OneToOne
 //    private Movie movie;
-//
-//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
-//    private List<Tag> tags = new ArrayList<>();
 //
 //    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
 //    private List<Group> groups = new ArrayList<>();

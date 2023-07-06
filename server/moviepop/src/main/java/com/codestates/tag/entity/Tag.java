@@ -1,13 +1,13 @@
 package com.codestates.tag.entity;
 
+import com.codestates.reviewBoard.entity.ReviewBoardTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -36,10 +36,11 @@ public class Tag {
     public int hashCode() {
         return Objects.hash(tagName);
     }
+
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
 }
 
-//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-//    private ReviewBoardTag reviewBoardTag;
 //
 //    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
 //    private UserTag userTag;

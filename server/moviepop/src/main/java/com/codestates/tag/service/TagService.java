@@ -5,6 +5,7 @@ import com.codestates.tag.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,5 +24,9 @@ public class TagService {
 
     public Set<Tag> findTags() {
         return tagRepository.findAll().stream().collect(Collectors.toSet());
+    }
+
+    public List<Tag> getTags() {
+        return tagRepository.findAll();
     }
 }

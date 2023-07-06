@@ -1,6 +1,9 @@
 package com.codestates.reviewBoard.mapper;
 
 
+import com.codestates.tag.dto.TagDto;
+import com.codestates.tag.entity.Tag;
+import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.dto.UserDto;
 
 import com.codestates.comment.dto.CommentDto;
