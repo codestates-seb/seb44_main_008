@@ -11,6 +11,7 @@ import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
 import com.codestates.reviewBoard.service.ReviewBoardService;
 
+import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;
 
@@ -40,20 +41,31 @@ public class ReviewBoardController {
     private final UserService userService;
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final TagMapper tagMapper;
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
+//    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
+//        this.reviewBoardService = reviewBoardService;
+//        this.mapper = mapper;
+//        this.userService = userService;
+//        this.commentService = commentService;
+//        this.commentMapper = commentMapper;
+//    }
+
+
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
         this.commentService = commentService;
         this.commentMapper = commentMapper;
+        this.tagMapper = tagMapper;
     }
 
     @PostMapping("/{user-id}")
     public ResponseEntity postReviewBoard(@PathVariable("user-id") @Positive long userId,
                                           @Valid @RequestBody ReviewBoardDto.Post post) {
         User user = userService.findUser(userId);
-        ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(user, mapper.PostToReviewBoard(post));
+        ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(user, mapper.PostToReviewBoard(post, tagMapper));
         URI location = UriComponent.createUri(REVIEW_BOARD_DEFAULT_URI, reviewBoard.getReviewBoardId());
         return ResponseEntity.created(location).build();
     }
