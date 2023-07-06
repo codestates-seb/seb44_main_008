@@ -33,7 +33,7 @@ public class User extends Auditable {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String profileImage;
 
     private String birth;
@@ -57,8 +57,8 @@ public class User extends Auditable {
         }
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserTag> userTag = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<UserTag> userTag = new ArrayList<>();
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -98,9 +98,9 @@ public class User extends Auditable {
     }
 
     public void deleteReviewBoardWish(long reviewBoardWishId) {
-
         this.reviewBoardWishes.remove(reviewBoardWishId);
     }
+
     public void deleteCommentLike(long commentLikeId) {
         this.commentLikes.remove(commentLikeId);
     }
