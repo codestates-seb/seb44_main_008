@@ -1,6 +1,7 @@
 package com.codestates.reviewBoard.mapper;
 
 
+import com.codestates.movie.dto.MovieDto;
 import com.codestates.user.dto.UserDto;
 
 import com.codestates.comment.dto.CommentDto;
@@ -9,6 +10,7 @@ import com.codestates.reviewBoard.dto.ReviewBoardDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.service.ReviewBoardService;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReviewBoardMapper {
+    @Mapping(source = "movieId", target = "movie.movieId")
     ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post);
     ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch);
     default ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard) {
@@ -39,9 +42,15 @@ public interface ReviewBoardMapper {
     }
     ReviewBoardDto.WishResponse reviewBoardToWishResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
+    @Mapping(source = "user.userId", target = "user.userId")
+    @Mapping(source = "user.nickname", target = "user.nickname")
     ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
+
     default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper) {
+        MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
+        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
+
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> commentMapper.commentToCommentResponseDto(comment))
                 .collect(Collectors.toList());
@@ -53,6 +62,8 @@ public interface ReviewBoardMapper {
                 .thumbnail(reviewBoard.getThumbnail())
                 .wish(reviewBoard.getWish())
                 .createdAt(reviewBoard.getCreatedAt())
+                .movie(movieResponse)
+                .user(userResponse)
                 .comments(commentResponse)
                 .build();
 
