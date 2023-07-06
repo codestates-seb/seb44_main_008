@@ -1,6 +1,7 @@
 package com.codestates.reviewBoard.mapper;
 
 
+import com.codestates.reviewBoard.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
@@ -19,7 +20,16 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReviewBoardMapper {
-    ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post);
+    default ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post, TagMapper tagMapper) {
+        List<ReviewBoardTag> reviewBoardTags = tagMapper.reviewBoardsRequestToReviewBoardTags(post.getTags());
+
+        ReviewBoard reviewBoard = new ReviewBoard();
+        reviewBoard.setTitle(post.getTitle());
+        reviewBoard.setReview(post.getReview());
+        reviewBoard.setReviewBoardTags(reviewBoardTags);
+
+        return reviewBoard;
+    }
     ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch);
     default ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard) {
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(
