@@ -43,6 +43,10 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 
 	implementation 'org.apache.commons:commons-lang3'
+
+	// mysql
+	implementation 'org.springframework.boot:spring-boot-starter'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 tasks.named('test') {
