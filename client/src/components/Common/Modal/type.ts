@@ -6,4 +6,6 @@ export interface ModalTypes {
   modalVisibleId: number | string;
   offModalHandler: (id: SetStateAction<number>) => void;
   onClick?: MouseEventHandler<HTMLDivElement>;
+  currentRender: string;
+  setCurrentRender: any;
 }
