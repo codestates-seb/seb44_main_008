@@ -1,10 +1,10 @@
 package com.codestates.group.controller;
 
 import com.codestates.dto.ResponseDto;
-import com.codestates.group.dto.GroupDto;
+import com.codestates.group.dto.MoviePartyDto;
 import com.codestates.group.entity.MovieParty;
-import com.codestates.group.mapper.GroupMapper;
-import com.codestates.group.service.GroupService;
+import com.codestates.group.mapper.MoviePartyMapper;
+import com.codestates.group.service.MoviePartyService;
 import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,43 +20,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/groups")
 @Validated
-public class GroupController {
-    private final String GROUP_DEFAULT_URI = "/groups";
-    private final GroupService groupService;
-    private final GroupMapper mapper;
+public class MoviePartyController {
+    private final String MOVIE_PARTY_DEFAULT_URI = "/groups";
+    private final MoviePartyService moviePartyService;
+    private final MoviePartyMapper mapper;
 
-    public GroupController(GroupService groupService, GroupMapper mapper) {
-        this.groupService = groupService;
+    public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper) {
+        this.moviePartyService = moviePartyService;
         this.mapper = mapper;
     }
 
     @PostMapping
-    public ResponseEntity postGroup(@RequestBody @Valid GroupDto.Post requestBody) {
-        MovieParty group = groupService.createGroup(mapper.groupPostDtoToGroup(requestBody));
+    public ResponseEntity postMovieParty(@RequestBody @Valid MoviePartyDto.Post requestBody) {
+        MovieParty movieParty = moviePartyService.createGroup(mapper.moviePartyPostDtoToMovieParty(requestBody));
 
-        URI location = UriComponent.createUri(GROUP_DEFAULT_URI, group.getGroupId());
+        URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
 
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{group-id}")
-    public ResponseEntity patchGroup(@PathVariable("group-id") @Positive long groupId,
-                                     @RequestBody @Valid GroupDto.Patch requestBody) {
-        requestBody.setGroupId(groupId);
-        MovieParty group = groupService.updateGroup(mapper.groupPatchDtoToGroup(requestBody));
+    @PatchMapping("/{movie-party-id}")
+    public ResponseEntity patchMovieParty(@PathVariable("movie-party-id") @Positive long moviePartyId,
+                                     @RequestBody @Valid MoviePartyDto.Patch requestBody) {
+        requestBody.setMoviePartyId(moviePartyId);
+        MovieParty group = moviePartyService.updateGroup(mapper.moviePartyPatchDtoToMovieParty(requestBody));
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto(mapper.groupToGroupResponseDto(group)),
+                new ResponseDto.SingleResponseDto(mapper.moviePartyToMoviePartyResponseDto(group)),
                 HttpStatus.OK
         );
     }
 
-    @GetMapping("/{group-id}")
-    public ResponseEntity getGroup(@PathVariable("group-id") @Positive long groupId) {
-        MovieParty group = groupService.findGroup(groupId);
+    @GetMapping("/{movie-party-id}")
+    public ResponseEntity getGroup(@PathVariable("movie-party-id") @Positive long moviePartyId) {
+        MovieParty group = moviePartyService.findGroup(moviePartyId);
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto(mapper.groupToGroupResponseDto(group)),
+                new ResponseDto.SingleResponseDto(mapper.moviePartyToMoviePartyResponseDto(group)),
                 HttpStatus.OK
         );
     }
@@ -64,18 +64,18 @@ public class GroupController {
     @GetMapping
     public ResponseEntity getGroups(@Positive int page,
                                     @Positive int size) {
-        Page<MovieParty> pageGroups = groupService.findGroups(page, size);
+        Page<MovieParty> pageGroups = moviePartyService.findGroups(page, size);
         List<MovieParty> groups = pageGroups.getContent();
 
         return new ResponseEntity(
-                new ResponseDto.MultipleResponseDto<>(mapper.groupsToGroupResponseDtos(groups), pageGroups),
+                new ResponseDto.MultipleResponseDto<>(mapper.moviePartiesToMoviePartyResponseDtos(groups), pageGroups),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{group-id}")
     public ResponseEntity deleteGroup(@PathVariable("group-id") @Positive long groupId) {
-        groupService.deleteGroup(groupId);
+        moviePartyService.deleteGroup(groupId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
