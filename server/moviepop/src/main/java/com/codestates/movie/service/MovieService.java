@@ -1,5 +1,7 @@
 package com.codestates.movie.service;
 
+import com.codestates.exception.BusinessLogicException;
+import com.codestates.exception.ExceptionCode;
 import com.codestates.movie.entity.Movie;
 import com.codestates.movie.repository.MovieRepository;
 import com.codestates.tag.entity.Tag;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,16 @@ public class MovieService {
         movieRepository.saveAll(movieList);
     }
 
+    public Movie findMovie(long movieId) {
+        return findVerifiedMovieId(movieId);
+    }
+
     public Set<Movie> findMovies() {
         return movieRepository.findAll().stream().collect(Collectors.toSet());
+    }
+
+    private Movie findVerifiedMovieId(long movieId) {
+        Optional<Movie> optionalMovie = movieRepository.findById(movieId);
+        return optionalMovie.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_NOT_FOUND));
     }
 }
