@@ -32,7 +32,7 @@ public class CommentService {
     }
 
     public Comment createComment(long reviewId, User user, Comment comment) {
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
 
         comment.setUser(user);
         comment.setReviewBoard(reviewBoard);
