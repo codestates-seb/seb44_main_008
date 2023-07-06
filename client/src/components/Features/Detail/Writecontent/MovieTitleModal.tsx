@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { WriteModalType } from './type';
 
 import Input from '../../../Common/Input/Input';
