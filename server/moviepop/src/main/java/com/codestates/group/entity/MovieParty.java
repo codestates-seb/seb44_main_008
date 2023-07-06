@@ -12,11 +12,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "groups")
-public class Group {
+public class MovieParty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long groupId;
+    private Long MoviePartyId;
     @Column(nullable = false, length = 200)
     private String title;
     @Column(nullable = false)
@@ -28,4 +27,6 @@ public class Group {
     private Integer maxCapacity;
     @Column(nullable = false, length = 2000)
     private String content;
+    @Column(nullable = false, length = 200)
+    private String movieTitle;
 }

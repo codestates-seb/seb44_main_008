@@ -2,7 +2,7 @@ package com.codestates.group.controller;
 
 import com.codestates.dto.ResponseDto;
 import com.codestates.group.dto.GroupDto;
-import com.codestates.group.entity.Group;
+import com.codestates.group.entity.MovieParty;
 import com.codestates.group.mapper.GroupMapper;
 import com.codestates.group.service.GroupService;
 import com.codestates.utils.UriComponent;
@@ -32,7 +32,7 @@ public class GroupController {
 
     @PostMapping
     public ResponseEntity postGroup(@RequestBody @Valid GroupDto.Post requestBody) {
-        Group group = groupService.createGroup(mapper.groupPostDtoToGroup(requestBody));
+        MovieParty group = groupService.createGroup(mapper.groupPostDtoToGroup(requestBody));
 
         URI location = UriComponent.createUri(GROUP_DEFAULT_URI, group.getGroupId());
 
@@ -43,7 +43,7 @@ public class GroupController {
     public ResponseEntity patchGroup(@PathVariable("group-id") @Positive long groupId,
                                      @RequestBody @Valid GroupDto.Patch requestBody) {
         requestBody.setGroupId(groupId);
-        Group group = groupService.updateGroup(mapper.groupPatchDtoToGroup(requestBody));
+        MovieParty group = groupService.updateGroup(mapper.groupPatchDtoToGroup(requestBody));
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto(mapper.groupToGroupResponseDto(group)),
@@ -53,7 +53,7 @@ public class GroupController {
 
     @GetMapping("/{group-id}")
     public ResponseEntity getGroup(@PathVariable("group-id") @Positive long groupId) {
-        Group group = groupService.findGroup(groupId);
+        MovieParty group = groupService.findGroup(groupId);
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto(mapper.groupToGroupResponseDto(group)),
@@ -64,8 +64,8 @@ public class GroupController {
     @GetMapping
     public ResponseEntity getGroups(@Positive int page,
                                     @Positive int size) {
-        Page<Group> pageGroups = groupService.findGroups(page, size);
-        List<Group> groups = pageGroups.getContent();
+        Page<MovieParty> pageGroups = groupService.findGroups(page, size);
+        List<MovieParty> groups = pageGroups.getContent();
 
         return new ResponseEntity(
                 new ResponseDto.MultipleResponseDto<>(mapper.groupsToGroupResponseDtos(groups), pageGroups),
