@@ -3,7 +3,11 @@ import Button from '../../../Common/Button/Button';
 import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 
-const PopperWrite = () => {
+type PopperWriteProps = {
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [person, setPerson] = useState<number>();
@@ -19,7 +23,6 @@ const PopperWrite = () => {
   const today = `${year}-${month}-${day}T${hour}:${minute}`;
   const [saleStartDate, setSaleStartDate] = useState(today);
 
-  console.log(today);
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckTitle(false);
     setTitle(e.currentTarget.value);
@@ -81,7 +84,13 @@ const PopperWrite = () => {
         ></textarea>
       </div>
       <div className="popperButtonWrap">
-        <Button value="↩" width="2.438rem" />
+        <Button
+          value="↩"
+          onClick={() => {
+            setCurrentRender('List');
+          }}
+          width="2.438rem"
+        />
         <Button
           value="팟 모집하기"
           width="calc(100% - 3.5rem)"

@@ -3,7 +3,15 @@ import Button from '../../../Common/Button/Button';
 import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 
-const PopperEdit = () => {
+type PoppeEditProps = {
+  currentId: number;
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const PopperEdit: React.FC<PoppeEditProps> = ({
+  currentId,
+  setCurrentRender,
+}) => {
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [person, setPerson] = useState<number>();
@@ -82,11 +90,7 @@ const PopperEdit = () => {
       </div>
       <div className="popperButtonWrap">
         <Button value="↩" width="2.438rem" />
-        <Button
-          value="팟 모집하기"
-          width="calc(100% - 3.5rem)"
-          type="variant"
-        />
+        <Button value="수정하기" width="calc(100% - 3.5rem)" type="variant" />
       </div>
     </PopperBox>
   );

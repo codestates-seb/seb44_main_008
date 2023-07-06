@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import UserAvat from '@/assets/images/user-info/userAvatar.png';
 import { GrClose } from 'react-icons/gr';
 import Popunlike from '../../../Common/PopIcons/Popunlike';
+import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
-const CommentList = () => {
+const CommentList = ({ answer }: { answer: Comments[] }) => {
   return (
     <CommentListWrap>
       <li>
