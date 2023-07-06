@@ -4,13 +4,21 @@ import { useState } from 'react';
 import PopperDetail from '../../Features/Detail/Popper/PopperDetail';
 import PopperEdit from '../../Features/Detail/Popper/PopperEdit';
 
-const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
+const Modal = ({
+  isOpen,
+  id,
+  modalVisibleId,
+  offModalHandler,
+  currentRender,
+  setCurrentRender,
+}: ModalTypes) => {
   const [currentId, setCurrentID] = useState(id);
-  const [currentRender, setCurrentRender] = useState('Detail');
+  const [currentRenderPrev, setCurrentRenderPrev] = useState('');
   const prevStep = () => {
     offModalHandler(id);
-    setCurrentRender('Detail');
+    setCurrentRenderPrev('Detail');
   };
+
   return (
     <>
       {modalVisibleId === id && isOpen ? (
@@ -34,6 +42,14 @@ const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
                   <PopperEdit
                     currentId={currentId}
                     setCurrentRender={setCurrentRender}
+                  />
+                )}
+                {currentRender === 'DetailMine' && (
+                  <PopperDetail
+                    currentId={currentId}
+                    setCurrentID={setCurrentID}
+                    setCurrentRender={setCurrentRender}
+                    currentPage="myPageOtherPop"
                   />
                 )}
               </ModalPopperBox>
