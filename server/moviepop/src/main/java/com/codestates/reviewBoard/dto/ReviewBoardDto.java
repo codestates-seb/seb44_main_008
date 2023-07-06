@@ -11,20 +11,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewBoardDto {
-
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post {
         @NotBlank(message = "내용을 채우세요")
         private String title;
         @NotBlank(message = "내용을 채우세요")
-        private String movieTitle;
-        @NotBlank(message = "내용을 채우세요")
         private String review;
+        @NotNull
+        private Long movieId;
+        @NotNull
         private List<TagDto.ReviewBoardRequest> tags;
 //        private String thumbnail_URL;
     }
