@@ -20,7 +20,6 @@ export const PopperBox = styled.div`
     &::-webkit-scrollbar {
       width: 10px;
     }
-
     &::-webkit-scrollbar-thumb {
       background-color: #000;
       background-clip: padding-box;
@@ -35,8 +34,10 @@ export const PopperBox = styled.div`
         &:last-child {
           margin-bottom: 0;
         }
-        a {
+        button {
           color: var(--white-color);
+          width: 100%;
+          text-align: left;
           h4 {
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
@@ -137,6 +138,11 @@ export const PopperBox = styled.div`
     margin-top: 1.2rem;
     display: flex;
     justify-content: space-between;
+    .popDetailButtonBox {
+      display: flex;
+      justify-content: space-between;
+      width: calc(100% - 3.5rem);
+    }
     button {
       display: flex;
       justify-content: center;

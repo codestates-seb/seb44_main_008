@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import Popunlike from '../../Common/PopIcons/Popunlike';
 import UserAvat from '@/assets/images/user-info/userAvatar.png';
+import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 
-const Detail = () => {
+const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
   return (
     <DetailSection>
       <h4>고양이 집사라면 필수 시청인 영화</h4>

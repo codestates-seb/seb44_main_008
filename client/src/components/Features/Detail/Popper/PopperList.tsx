@@ -1,273 +1,74 @@
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
+import { Group } from '../../../../pages/Detail/Detailcontent/detailType';
 
-const PopperList = () => {
+type PopperListProps = {
+  groups: Group[];
+  setCurrentID: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+};
+const PopperList: React.FC<PopperListProps> = ({
+  groups,
+  setCurrentID,
+  setCurrentRender,
+}) => {
+  const clickList = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const { currentTarget } = e;
+    const value = parseInt(currentTarget.value);
+    setCurrentRender('Detail');
+    setCurrentID(value);
+  }, []);
   return (
     <PopperBox>
       <h2 className="popperTitle">지금 이 영화를 같이 보고 싶어하는 팝퍼🍿</h2>
       <div className="popperList">
         <ul>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
+          {groups.map(item => {
+            const itemDate = item.date;
+            const year = itemDate.split('-')[0];
+            const month = itemDate.split('-')[1];
+            const date = itemDate.split('-')[2];
+            return (
+              <li key={item.groupId}>
+                <button onClick={clickList} value={item.groupId}>
+                  <h4>{item.title}</h4>
+                  <div>
+                    <ol>
+                      <li>
+                        일시 : {year}년 {month}월 {date}일 저녁 8시
+                      </li>
+                      <li>장소: {item.location}</li>
+                      <li>
+                        모집 인원: {item.users.length}/{item.max}
+                      </li>
+                    </ol>
+                    <div className="profileImgWrap">
+                      {item.users.map(user => {
+                        return (
+                          <div className="imgBox" key={user.userId}>
+                            <img src={user.profileImage} alt="프로필 사진" />
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <h4>맥주 한 캔들고 같이 봐요! ✨</h4>
-              <div>
-                <ol>
-                  <li>일시 : 2023년 6월 30일 저녁 8시</li>
-                  <li>장소: Watcha Party</li>
-                  <li>모집 인원: 4/5</li>
-                </ol>
-                <div className="profileImgWrap">
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.9oodnews.com/news/photo/202302/21554_31060_4216.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cdn.psnews.co.kr/news/photo/202204/2006728_48712_033.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="imgBox">
-                    <img
-                      src="https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=2022022314505005222d3244b4fed58141237161.jpg&nmt=19"
-                      alt=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </li>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="popperButtonWrap">
-        <Button value="등록하기" width="100%" type="variant" />
+        <Button
+          onClick={() => {
+            setCurrentRender('Write');
+          }}
+          value="등록하기"
+          width="100%"
+          type="variant"
+        />
       </div>
     </PopperBox>
   );

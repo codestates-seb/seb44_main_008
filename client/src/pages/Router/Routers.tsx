@@ -8,7 +8,7 @@ import Login from '../Account/Login';
 import Main from '../Main/Main';
 import Allcontents from '../Main/Allcontents';
 import Writecontent from '../Detail/Writecontent/Writecontent';
-import Detailcontent from '../Detail/Detailcontent';
+import Detailcontent from '../Detail/Detailcontent/Detailcontent';
 import Mypage from '../MyPage/Mypage';
 import Editmypage from '../MyPage/Editmypage';
 import Editpassword from '../MyPage/Editpassword';
