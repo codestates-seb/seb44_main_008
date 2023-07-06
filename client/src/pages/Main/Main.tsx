@@ -126,7 +126,10 @@ const Main = () => {
 
   const popularItems = dummyData.popularBoards.map(item => {
     return (
-      <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+      <StyleSheetManager
+        key={item.reviewBoardId}
+        shouldForwardProp={prop => isPropValid(prop)}
+      >
         <SpecialContainer>
           <SliderContainer>
             <SingleItem
@@ -145,7 +148,10 @@ const Main = () => {
 
   const recommendItems = dummyData.recommendBoards.map(item => {
     return (
-      <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+      <StyleSheetManager
+        key={item.reviewBoardId}
+        shouldForwardProp={prop => isPropValid(prop)}
+      >
         <SpecialContainer>
           <SliderContainer>
             <SingleItem
@@ -170,8 +176,8 @@ const Main = () => {
           mouseTracking
           infinite={true}
           animationDuration={2000}
-          disableDotsControls
           disableButtonsControls
+          controlsStrategy="alternate"
           responsive={responsive}
           autoPlay
           items={recommendItems}
@@ -184,7 +190,7 @@ const Main = () => {
           mouseTracking
           infinite={true}
           animationDuration={2000}
-          disableDotsControls
+          controlsStrategy="alternate"
           disableButtonsControls
           responsive={responsive}
           autoPlay
@@ -200,7 +206,10 @@ const Main = () => {
         <StaticContainer>
           {dummyData.recommendBoards.map(item => {
             return (
-              <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+              <StyleSheetManager
+                key={item.reviewBoardId}
+                shouldForwardProp={prop => isPropValid(prop)}
+              >
                 <SingleItem
                   src={item.thumbnail}
                   title={item.title}
@@ -214,7 +223,10 @@ const Main = () => {
           })}
           {dummyData.popularBoards.map(item => {
             return (
-              <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+              <StyleSheetManager
+                key={item.reviewBoardId}
+                shouldForwardProp={prop => isPropValid(prop)}
+              >
                 <SingleItem
                   src={item.thumbnail}
                   title={item.title}
@@ -251,11 +263,22 @@ const SpecialContainer = styled.div`
   width: 120%;
   margin-top: 2rem;
 
+  position: relative;
+
   & > h1 {
     font-size: 1.5rem;
     font-weight: 700;
     padding-left: 10rem;
     color: white;
+  }
+
+  & .alice-carousel__dots {
+    position: absolute;
+    top: -50px;
+    left: 1200px;
+    & > .__active {
+      background-color: #f20000;
+    }
   }
 `;
 const DefaultContainer = styled.div`
