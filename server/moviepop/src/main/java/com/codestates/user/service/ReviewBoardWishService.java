@@ -24,4 +24,8 @@ public class ReviewBoardWishService {
     public ReviewBoardWish findReviewBoardAndUser(ReviewBoard reviewBoard, User user) {
         return reviewBoardWishRepository.findByReviewBoardAndUser(reviewBoard, user);
     }
+
+    public void deleteReviewBoardWish(long reviewBoardWishId) {
+        reviewBoardWishRepository.deleteById(reviewBoardWishId);
+    }
 }
