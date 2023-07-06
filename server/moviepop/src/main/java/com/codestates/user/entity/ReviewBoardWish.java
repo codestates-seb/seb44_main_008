@@ -21,6 +21,6 @@ public class ReviewBoardWish {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "REVIEWBOARD_ID")
+    @JoinColumn(name = "REVIEW_BOARD_ID")
     private ReviewBoard reviewBoard;
 }
