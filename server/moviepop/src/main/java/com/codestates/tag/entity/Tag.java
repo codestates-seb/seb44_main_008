@@ -1,6 +1,5 @@
-package com.codestates.movie.entity;
+package com.codestates.tag.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,28 +14,26 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-public class Movie {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long movieId;
-    private String title;
-    private boolean isAdulted;
+    private Long tagId;
+    private String tagName;
 
-    public Movie(String title, boolean isAdulted) {
-        this.title = title;
-        this.isAdulted = isAdulted;
+    public Tag(String tagName) {
+        this.tagName = tagName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Movie movie = (Movie) o;
-        return isAdulted == movie.isAdulted && Objects.equals(title, movie.title);
+        Tag tag = (Tag) o;
+        return Objects.equals(tagName, tag.tagName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, isAdulted);
+        return Objects.hash(tagName);
     }
 }

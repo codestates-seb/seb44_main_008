@@ -1,5 +1,6 @@
 package com.codestates.tag.service;
 
+import com.codestates.tag.entity.Tag;
 import com.codestates.tag.repository.TagRepository;
 import org.springframework.stereotype.Service;
 

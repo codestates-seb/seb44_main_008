@@ -1,6 +1,8 @@
 package com.codestates.movie.init.controller;
 
 import com.codestates.movie.entity.Movie;
+import com.codestates.movie.init.service.MovieApiService;
+import com.codestates.tag.entity.Tag;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,7 @@ public class MovieApiController {
         this.movieApiService = movieApiService;
     }
 
-    @Scheduled(cron = "0 38 17 5 * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "30 35 11 6 * ?", zone = "Asia/Seoul")
     public void makeInitData() {
         Set<String> movieCodes = movieApiService.getMovieList();
         Map<String, Object> initData = movieApiService.getMovieDetail(movieCodes);
