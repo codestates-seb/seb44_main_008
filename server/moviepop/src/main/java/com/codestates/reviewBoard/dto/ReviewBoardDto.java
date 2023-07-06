@@ -4,6 +4,7 @@ package com.codestates.reviewBoard.dto;
 import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +46,6 @@ public class ReviewBoardDto {
 
     @Getter
     @Builder
-    @Setter
     public static class Response {
         private long reviewBoardId;
         private String title;
@@ -59,8 +59,10 @@ public class ReviewBoardDto {
         //추후 추가
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class WishResponse {
-        private long reviewBoarId;
+        private long reviewBoardId;
         private int wish;
     }
 

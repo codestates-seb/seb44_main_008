@@ -18,7 +18,7 @@ public class MovieApiController {
         this.movieApiService = movieApiService;
     }
 
-    @Scheduled(cron = "30 35 11 6 * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "30 13 12 6 * ?", zone = "Asia/Seoul")
     public void makeInitData() {
         Set<String> movieCodes = movieApiService.getMovieList();
         Map<String, Object> initData = movieApiService.getMovieDetail(movieCodes);

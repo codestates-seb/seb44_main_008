@@ -6,6 +6,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,15 +31,19 @@ public class CommentService {
         this.reviewBoardService = reviewBoardService;
     }
 
-    public Comment createComment(long reviewId, Comment comment) {
+    public Comment createComment(long reviewId, User user, Comment comment) {
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+
+        comment.setUser(user);
         comment.setReviewBoard(reviewBoard);
 
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(Comment comment) {
+    public Comment updateComment(long userId, Comment comment) {
         Comment findComment = findVerifiedCommentId(comment.getCommentId());
+        if(findComment.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> findComment.setContent(content));
@@ -56,8 +61,11 @@ public class CommentService {
         );
     }
 
-    public void deleteComment(long commentId) {
-        verifyCommentId(commentId);
+    public void deleteComment(long userId, long commentId) {
+        Comment comment = findVerifiedCommentId(commentId);
+        if(comment.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
+
         commentRepository.deleteById(commentId);
     }
 

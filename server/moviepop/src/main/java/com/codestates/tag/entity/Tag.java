@@ -37,3 +37,10 @@ public class Tag {
         return Objects.hash(tagName);
     }
 }
+
+//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+//    private ReviewBoardTag reviewBoardTag;
+//
+//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+//    private UserTag userTag;
+

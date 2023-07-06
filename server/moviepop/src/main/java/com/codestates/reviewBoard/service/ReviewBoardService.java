@@ -30,8 +30,9 @@ public class ReviewBoardService {
 
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
-
         user.addReviewBoard(reviewBoard);
+
+        reviewBoard.setUser(user);
 
         return reviewBoardRepository.save(reviewBoard);
     }
@@ -47,7 +48,6 @@ public class ReviewBoardService {
                 .ifPresent(review -> getReviewboard.setReview(review));
 
         //영화제목, 태그, 썸네일 설정해야함.
-//        getReviewboard.setModifiedAt(LocalDateTime.now());
 
         return reviewBoardRepository.save(getReviewboard);
     }
@@ -58,14 +58,14 @@ public class ReviewBoardService {
 
     public Page<ReviewBoard> findAllReviewBoards(int page, int size) {
         return reviewBoardRepository.findAll(PageRequest.of(page,size,
-                Sort.by("reviewId").descending()));
+                Sort.by("reviewBoardId").descending()));
     }
 
-    public void deleteReviewBoard(long userId,long reviewId) {
-        ReviewBoard reviewBoard = findReviewBoardById(reviewId);
-        if(reviewBoard.getUser().getUserId() != userId) {
-            throw new IllegalArgumentException("오류코드 만들어야함");
-        }
+    public void deleteReviewBoard(long userId, long reviewId) {
+        ReviewBoard reviewBoard = findReviewBoard(reviewId);
+        if(reviewBoard.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
+
         reviewBoardRepository.delete(reviewBoard);
     }
 
@@ -81,7 +81,7 @@ public class ReviewBoardService {
     public ReviewBoard findReviewBoardById(long reviewId) {
         Optional<ReviewBoard> optionalReviewBoard = reviewBoardRepository.findById(reviewId);
         ReviewBoard findReviewBoard =
-                optionalReviewBoard.orElseThrow(() -> new IllegalArgumentException());
+                optionalReviewBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_BOARD_NOT_FOUND));
         return findReviewBoard;
     }
 }
