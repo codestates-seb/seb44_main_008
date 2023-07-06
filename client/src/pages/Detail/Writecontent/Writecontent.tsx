@@ -63,7 +63,7 @@ const Writecontent = () => {
   ];
 
   const [title, setTitle] = useState<string>('');
-  const [movieName, setMovieName] = useState<string>('');
+  const [movieTitle, setMovieTitle] = useState<string>('');
   const [selectedTags, setSelectedTags] = useState<Object[]>([]);
   const [content, setContent] = useState<string>('');
 
@@ -93,8 +93,8 @@ const Writecontent = () => {
       setTitle(event.target.value);
       console.log(' title set 함수 작동함');
     } else if (event.target.placeholder === '영화 제목을 입력하세요.') {
-      setMovieName(event.target.value);
-      console.log(' movieName set 함수 작동함');
+      setMovieTitle(event.target.value);
+      console.log(' movieTitle set 함수 작동함');
     } else {
       setContent(event.target.value);
     }
@@ -130,7 +130,7 @@ const Writecontent = () => {
     // 이미지는 formData로 보내야 하기 때문에 추후 수정
     const submitData = {
       title: title,
-      movieTitle: movieName,
+      movieTitle: movieTitle,
       review: content,
       tags: selectedTags,
       image: file,
@@ -146,7 +146,14 @@ const Writecontent = () => {
 
   return (
     <WriteWrapper>
-      {modalOn ? <MovieTitleModal setModalOn={setModalOn} /> : <></>}
+      {modalOn ? (
+        <MovieTitleModal
+          setModalOn={setModalOn}
+          setMovieTitle={setMovieTitle}
+        />
+      ) : (
+        <></>
+      )}
       <div>
         <WriteImgDiv>
           <img
@@ -172,7 +179,7 @@ const Writecontent = () => {
         ></Input>
         <div className="movie--title--div" onClick={onClickMovieTitle}>
           <Input
-            value={movieName}
+            value={movieTitle}
             placeholder="영화 제목을 입력하세요."
             isvalid={true}
             onChange={onChangeInput}

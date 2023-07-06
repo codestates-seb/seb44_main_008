@@ -5,7 +5,7 @@ import { WriteModalType } from './type';
 import Input from '../../../Common/Input/Input';
 import Button from '../../../Common/Button/Button';
 
-const MovieTitleModal = ({ setModalOn }: WriteModalType) => {
+const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
   const dummyData = {
     data: {
       movies: [
@@ -32,7 +32,8 @@ const MovieTitleModal = ({ setModalOn }: WriteModalType) => {
       ],
     },
   };
-  const [movieTitle, setMovieTitle] = useState('');
+
+  const [searchTitle, setSearchTitle] = useState('');
 
   const onClickBackground = () => {
     document.body.style.overflow = 'unset';
@@ -40,12 +41,18 @@ const MovieTitleModal = ({ setModalOn }: WriteModalType) => {
   };
 
   const onChangeMovieTitle = e => {
-    setMovieTitle(e.target.value);
+    setSearchTitle(e.target.value);
   };
 
   // axios 통신
   const onClickSearchButton = () => {
     const postData = {};
+  };
+
+  const onClickMovieTitle = e => {
+    setMovieTitle(e.target.innerHTML);
+    setModalOn(false);
+    document.body.style.overflow = 'unset';
   };
   return (
     <MovieTitleModalWrapper>
@@ -54,7 +61,7 @@ const MovieTitleModal = ({ setModalOn }: WriteModalType) => {
           <div className="search--bar">
             <div>
               <Input
-                value={movieTitle}
+                value={searchTitle}
                 onChange={onChangeMovieTitle}
                 placeholder="영화 제목을 검색하세요"
                 isvalid={true}
@@ -68,7 +75,11 @@ const MovieTitleModal = ({ setModalOn }: WriteModalType) => {
               {dummyData &&
                 dummyData.data.movies.map(item => {
                   return (
-                    <SearchResult key={item.movieId}>
+                    <SearchResult
+                      key={item.movieId}
+                      value={item.movieTitle}
+                      onClick={onClickMovieTitle}
+                    >
                       {item.movieTitle}
                     </SearchResult>
                   );
