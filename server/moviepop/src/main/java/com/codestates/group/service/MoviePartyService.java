@@ -3,7 +3,7 @@ package com.codestates.group.service;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.group.entity.MovieParty;
-import com.codestates.group.repository.GroupRepository;
+import com.codestates.group.repository.MoviePartyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,19 +14,19 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class GroupService {
-    private final GroupRepository groupRepository;
+public class MoviePartyService {
+    private final MoviePartyRepository moviePartyRepository;
 
-    public GroupService(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
+    public MoviePartyService(MoviePartyRepository moviePartyRepository) {
+        this.moviePartyRepository = moviePartyRepository;
     }
 
     public MovieParty createGroup(MovieParty group) {
-        return groupRepository.save(group);
+        return moviePartyRepository.save(group);
     }
 
     public MovieParty updateGroup(MovieParty group) {
-        MovieParty findGroup = findVerifiedGroupId(group.getGroupId());
+        MovieParty findGroup = findVerifiedGroupId(group.getMoviePartyId());
 
         Optional.ofNullable(group.getTitle())
                 .ifPresent(title -> findGroup.setTitle(title));
@@ -39,7 +39,7 @@ public class GroupService {
         Optional.ofNullable(group.getContent())
                 .ifPresent(content -> findGroup.setContent(content));
 
-        return groupRepository.save(findGroup);
+        return moviePartyRepository.save(findGroup);
     }
 
     public MovieParty findGroup(long groupId) {
@@ -47,23 +47,23 @@ public class GroupService {
     }
 
     public Page<MovieParty> findGroups(int page, int size) {
-        return groupRepository.findAll(PageRequest.of(
+        return moviePartyRepository.findAll(PageRequest.of(
                 page - 1, size, Sort.by("groupId").descending())
         );
     }
 
     public void deleteGroup(long groupId) {
         verifyGroupId(groupId);
-        groupRepository.deleteById(groupId);
+        moviePartyRepository.deleteById(groupId);
     }
 
     private void verifyGroupId(long groupId) {
-        Optional<MovieParty> optionalGroup = groupRepository.findById(groupId);
+        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(groupId);
         optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
     }
 
     private MovieParty findVerifiedGroupId(long groupId) {
-        Optional<MovieParty> optionalGroup = groupRepository.findById(groupId);
+        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(groupId);
         MovieParty group = optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
 
         return group;
