@@ -1,38 +1,41 @@
 import styled from 'styled-components';
-import UserAvat from '@/assets/images/user-info/userAvatar.png';
 import { GrClose } from 'react-icons/gr';
-import Poplike from '../../../Common/PopIcons/Poplike';
+import Popunlike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
 const CommentList = ({ answer }: { answer: Comments[] }) => {
   return (
     <CommentListWrap>
-      <li>
-        <div>
-          <div className="userBox">
-            <div className="userImg">
-              <img src={UserAvat} alt="유저명" />
+      {answer.map(answer => {
+        return (
+          <li key={answer.commentId}>
+            <div>
+              <div className="userBox">
+                <div className="userImg">
+                  <img
+                    src={answer.user.profileImage}
+                    alt={answer.user.nickname}
+                  />
+                </div>
+                <p>
+                  <span>{answer.user.nickname}</span>
+                  <span>{answer.createdAt}</span>
+                </p>
+              </div>
+              <button className="closeBtn">
+                <GrClose />
+              </button>
             </div>
-            <p>
-              <span>POPPER</span>
-              <span>2023.06.30</span>
-            </p>
-          </div>
-          <button className="closeBtn">
-            <GrClose />
-          </button>
-        </div>
-        <div className="commetTxt">
-          <p>
-            고양이의 보은! 저도 참 좋아합니다. 🐈 어릴 적에 보고 정말 고양이를
-            키우고 싶었는데... 지금은 세마리의 집사가 되어있네요..^^
-          </p>
-          <div className="buttonWrap">
-            <Poplike />
-            <span>23 Pops</span>
-          </div>
-        </div>
-      </li>
+            <div className="commetTxt">
+              <p>{answer.content}</p>
+              <div className="buttonWrap">
+                <Popunlike />
+                <span>{answer.like} Pops</span>
+              </div>
+            </div>
+          </li>
+        );
+      })}
     </CommentListWrap>
   );
 };

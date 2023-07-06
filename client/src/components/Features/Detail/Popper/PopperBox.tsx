@@ -34,7 +34,11 @@ const PopperBox: React.FC<PopperBoxProps> = ({ groups }) => {
         <PopperWrite setCurrentRender={setCurrentRender} />
       )}
       {currentRender === 'Edit' && (
-        <PopperEdit currentId={currentId} setCurrentRender={setCurrentRender} />
+        <PopperEdit
+          currentId={currentId}
+          setCurrentRender={setCurrentRender}
+          currentPage="popDetail"
+        />
       )}
     </>
   );

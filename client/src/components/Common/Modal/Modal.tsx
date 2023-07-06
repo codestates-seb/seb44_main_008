@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 import { ModalTypes } from './type';
 import { useState } from 'react';
+import { GrClose } from 'react-icons/gr';
 import PopperDetail from '../../Features/Detail/Popper/PopperDetail';
 import PopperEdit from '../../Features/Detail/Popper/PopperEdit';
 
@@ -29,6 +30,9 @@ const Modal = ({
                 e.stopPropagation()
               }
             >
+              <button className="closeBtn" onClick={() => prevStep()}>
+                <GrClose />
+              </button>
               <ModalPopperBox>
                 {currentRender === 'Detail' && (
                   <PopperDetail
@@ -42,6 +46,7 @@ const Modal = ({
                   <PopperEdit
                     currentId={currentId}
                     setCurrentRender={setCurrentRender}
+                    currentPage="myPageMyPop"
                   />
                 )}
                 {currentRender === 'DetailMine' && (
@@ -89,6 +94,18 @@ const ModalView = styled.div`
   width: 35%;
   background-color: var(--main-dark-color);
   z-index: 1000;
+  position: relative;
+  .closeBtn {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    svg {
+      font-size: 1.2rem;
+      path {
+        stroke: var(--white-color);
+      }
+    }
+  }
 `;
 const ModalPopperBox = styled.div`
   width: 100%;
