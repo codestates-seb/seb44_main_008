@@ -15,7 +15,6 @@ public class TagDto {
 
     @Getter
     @Setter
-    @AllArgsConstructor
     public static class ReviewBoardRequest {
         private long tagId;
     }
