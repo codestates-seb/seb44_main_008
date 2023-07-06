@@ -39,7 +39,6 @@ const ContentC = () => {
             id={idx}
             isOpen={isOpen}
             modalVisibleId={modalVisibleId}
-            // onModalHandler={onModalHandler}
             offModalHandler={offModalHandler}
           />
           <ListOnce className="list" onClick={() => onModalHandler(idx)}>

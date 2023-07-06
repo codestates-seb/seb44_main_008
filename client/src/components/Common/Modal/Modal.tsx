@@ -30,7 +30,7 @@ const Container = styled.div`
 `;
 
 const ModalBackDrop = styled.div`
-  z-index: 1;
+  z-index: 1000;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -48,12 +48,12 @@ const ModalView = styled.div`
   justify-content: center;
   flex-direction: column;
   border-radius: 20px;
-  width: 22rem;
-  height: 34rem;
+  width: 50%;
   background-color: var(--main-dark-color);
+  padding: 1rem;
+  z-index: 1000;
   .desc {
     color: var(--footer-icon-color);
-    font-size: 2rem;
   }
 `;
 const ExitButton = styled.button``;
