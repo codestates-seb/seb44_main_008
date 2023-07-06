@@ -1,6 +1,8 @@
 package com.codestates.reviewBoard.dto;
 
 
+import com.codestates.movie.dto.MovieDto;
+import com.codestates.movie.entity.Movie;
 import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,9 +24,9 @@ public class ReviewBoardDto {
         @NotBlank(message = "내용을 채우세요")
         private String title;
         @NotBlank(message = "내용을 채우세요")
-        private String movieTitle;
-        @NotBlank(message = "내용을 채우세요")
         private String review;
+        @NotNull
+        private long movieId;
 
 //        private List<String> tags;
 //        private String thumbnail_URL;
@@ -31,12 +34,10 @@ public class ReviewBoardDto {
 
     @Getter
     @Setter
-    public static  class Patch {
+    public static class Patch {
         private long reviewBoardId;
         @NotBlank(message = "내용을 채우세요")
         private String title;
-        @NotBlank(message = "내용을 채우세요")
-        private String movieTitle;
         @NotBlank(message = "내용을 채우세요")
         private String review;
 
@@ -74,6 +75,7 @@ public class ReviewBoardDto {
         private String thumbnail;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
+        private UserDto.MainResponse user;
     }
 
     @Getter
@@ -86,6 +88,8 @@ public class ReviewBoardDto {
         private int wish;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
+        private MovieDto.Response movie;
+        private UserDto.ReviewBoardResponse user;
         private List<CommentDto.Response> comments;
     }
 
