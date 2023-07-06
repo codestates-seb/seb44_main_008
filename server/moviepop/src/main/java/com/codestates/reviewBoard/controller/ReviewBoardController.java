@@ -62,23 +62,28 @@ public class ReviewBoardController {
     public ResponseEntity patchReviewBoard(@PathVariable("user-id") @Positive long userId,
                                            @PathVariable("review-id") @Positive long reviewId,
                                            @Valid @RequestBody ReviewBoardDto.Patch patch) {
+        User user = userService.findUser(userId);
         patch.setReviewBoardId(reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(userId, mapper.PatchToReviewBoard(patch));
+        ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch));
         ReviewBoardDto.Response response = mapper.reviewBoardToResponse(reviewBoard);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{review-id}")
-    public ResponseEntity getReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+    @GetMapping("/{review-id}/users/{user-id}")
+    public ResponseEntity getReviewBoard(@PathVariable("user-id") @Positive long userId,
+                                         @PathVariable("review-id") @Positive long reviewId) {
+        User user = userService.findUser(userId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
 //        return new ResponseEntity<>(mapper.reviewBoardToResponse(reviewBoard), HttpStatus.OK);
         return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity getAllReviewBoards(@Positive @RequestParam int page,
+    @GetMapping("/users/{user-id}")
+    public ResponseEntity getAllReviewBoards(@PathVariable("user-id") @Positive long userId,
+                                             @Positive @RequestParam int page,
                                              @Positive @RequestParam int size) {
-        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findAllReviewBoards(page - 1, size);
+        User user = userService.findUser(userId);
+        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findAllReviewBoards(user, page - 1, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
         return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
@@ -87,14 +92,16 @@ public class ReviewBoardController {
     @DeleteMapping("/{review-id}/users/{user-id}")
     public ResponseEntity deleteReviewBoard(@PathVariable("user-id") @Positive long userId,
                                             @PathVariable("review-id") @Positive long reviewId) {
-        reviewBoardService.deleteReviewBoard(userId,reviewId);
+        User user = userService.findUser(userId);
+        reviewBoardService.deleteReviewBoard(user,reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/main")
-    public ResponseEntity getMainReviewBoards() {
-        List<ReviewBoard> reviewBoards = reviewBoardService.findReviewBoards();
-        List<ReviewBoard> popularBoards = reviewBoardService.findPopularReviewBoards();
+    @GetMapping("/main/users/{user-id}")
+    public ResponseEntity getMainReviewBoards(@PathVariable("user-id") @Positive long userId) {
+        User user = userService.findUser(userId);
+        List<ReviewBoard> reviewBoards = reviewBoardService.findReviewBoards(user);
+        List<ReviewBoard> popularBoards = reviewBoardService.findPopularReviewBoards(user);
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards)),
