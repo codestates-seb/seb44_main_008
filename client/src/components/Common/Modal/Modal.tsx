@@ -1,7 +1,23 @@
 import { styled } from 'styled-components';
 import { ModalTypes } from './type';
+import { PopperBox } from '../../Features/Detail/Popper/PopperStyle';
+import { useCallback, useState } from 'react';
+import PopperDetail from '../../Features/Detail/Popper/PopperDetail';
+
+type PopperDetailProps = {
+  currentId: number;
+  setCurrentID: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+  currentPage: string;
+};
 
 const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
+  const [currentId, setCurrentID] = useState(id);
+  const [currentRender, setCurrentRender] = useState('List');
+  const clickEdit = useCallback(() => {
+    setCurrentRender('Edit');
+    setCurrentID(id);
+  }, []);
   return (
     <>
       {modalVisibleId === id && isOpen ? (
@@ -13,7 +29,16 @@ const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
               }
             >
               <ExitButton onClick={() => offModalHandler(id)}>↩</ExitButton>
-              <div className="desc">Hello!</div>
+              <div>
+                <ModalPopperBox>
+                  <PopperDetail
+                    currentId={currentId}
+                    setCurrentID={setCurrentID}
+                    setCurrentRender={setCurrentRender}
+                    currentPage="popDetail"
+                  />
+                </ModalPopperBox>
+              </div>
             </ModalView>
           </ModalBackDrop>
         </Container>
@@ -57,4 +82,5 @@ const ModalView = styled.div`
   }
 `;
 const ExitButton = styled.button``;
+const ModalPopperBox = styled.div``;
 export default Modal;
