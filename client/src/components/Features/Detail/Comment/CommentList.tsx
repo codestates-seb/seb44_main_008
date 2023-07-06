@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import UserAvat from '@/assets/images/user-info/userAvatar.png';
 import { GrClose } from 'react-icons/gr';
-import Popunlike from '../../../Common/PopIcons/Popunlike';
+import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
 const CommentList = ({ answer }: { answer: Comments[] }) => {
@@ -28,7 +28,7 @@ const CommentList = ({ answer }: { answer: Comments[] }) => {
             키우고 싶었는데... 지금은 세마리의 집사가 되어있네요..^^
           </p>
           <div className="buttonWrap">
-            <Popunlike />
+            <Poplike />
             <span>23 Pops</span>
           </div>
         </div>
