@@ -1,10 +1,10 @@
-package com.codestates.group.controller;
+package com.codestates.movie_party.controller;
 
 import com.codestates.dto.ResponseDto;
-import com.codestates.group.dto.MoviePartyDto;
-import com.codestates.group.entity.MovieParty;
-import com.codestates.group.mapper.MoviePartyMapper;
-import com.codestates.group.service.MoviePartyService;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.entity.MovieParty;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
+import com.codestates.movie_party.service.MoviePartyService;
 import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

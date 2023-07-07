@@ -1,7 +1,7 @@
-package com.codestates.group.mapper;
+package com.codestates.movie_party.mapper;
 
-import com.codestates.group.dto.MoviePartyDto;
-import com.codestates.group.entity.MovieParty;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.entity.MovieParty;
 import org.mapstruct.Mapper;
 
 import java.util.List;

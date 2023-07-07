@@ -1,9 +1,9 @@
-package com.codestates.group.service;
+package com.codestates.movie_party.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.group.entity.MovieParty;
-import com.codestates.group.repository.MoviePartyRepository;
+import com.codestates.movie_party.entity.MovieParty;
+import com.codestates.movie_party.repository.MoviePartyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

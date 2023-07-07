@@ -1,4 +1,4 @@
-package com.codestates.group.entity;
+package com.codestates.movie_party.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

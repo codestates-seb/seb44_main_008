@@ -1,4 +1,4 @@
-package com.codestates.group.dto;
+package com.codestates.movie_party.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

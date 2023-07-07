@@ -1,9 +1,9 @@
 package com.codestates.group.controller;
 
-import com.codestates.group.dto.GroupDto;
-import com.codestates.group.entity.Group;
-import com.codestates.group.mapper.GroupMapper;
-import com.codestates.group.service.GroupService;
+import com.codestates.group.dto.MoviePartyDto;
+import com.codestates.group.entity.MovieParty;
+import com.codestates.group.mapper.MoviePartyMapper;
+import com.codestates.group.service.MoviePartyService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,7 +28,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -38,7 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(GroupController.class)
+@WebMvcTest(MoviePartyController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureWebMvc
 class GroupControllerTest {
@@ -48,20 +47,20 @@ class GroupControllerTest {
     private Gson gson;
 
     @MockBean
-    private GroupService groupService;
+    private MoviePartyService groupService;
     @MockBean
-    private GroupMapper groupMapper;
+    private MoviePartyMapper groupMapper;
 
     @Test
     public void postGroupTest() throws Exception {
-        GroupDto.Post postDto = new GroupDto.Post("맥주 한 캔 들고 같이 봐요!", LocalDateTime.of(2023, 6, 30, 20, 0), "watcha party", 5, "팟 소개글");
+        MoviePartyDto.Post postDto = new MoviePartyDto.Post("맥주 한 캔 들고 같이 봐요!", LocalDateTime.of(2023, 6, 30, 20, 0), "watcha party", 5, "팟 소개글");
         String content = "{\"title\":\"맥주 한 캔 들고 같이 봐요!\",\"meetingDate\":\"2023-06-30T20:00\",\"location\":\"watcha party\",\"maxCapacity\":5,\"content\":\"팟 소개글\"}";
 
-        Group group = new Group();
+        MovieParty group = new MovieParty();
         group.setGroupId(1L);
 
-        given(groupMapper.groupPostDtoToGroup(Mockito.any(GroupDto.Post.class))).willReturn(new Group());
-        given(groupService.createGroup(Mockito.any(Group.class))).willReturn(group);
+        given(groupMapper.groupPostDtoToGroup(Mockito.any(MoviePartyDto.Post.class))).willReturn(new MovieParty());
+        given(groupService.createGroup(Mockito.any(MovieParty.class))).willReturn(group);
 
         ResultActions actions = mockMvc.perform(
                 post("/groups")
@@ -77,7 +76,7 @@ class GroupControllerTest {
     @Test
     public void patchGroupTest() throws Exception {
         long groupId = 1L;
-        GroupDto.Patch patchDto = GroupDto.Patch.builder()
+        MoviePartyDto.Patch patchDto = MoviePartyDto.Patch.builder()
                 .title("맥주 두 캔 들고 같이 봐요!")
                 .meetingDate(LocalDateTime.of(2023, 6, 30, 20, 0))
                 .location("Watcha Party")
@@ -86,11 +85,11 @@ class GroupControllerTest {
                 .build();
         String content = "{\"groupId\":0,\"title\":\"맥주 두 캔 들고 같이 봐요!\",\"meetingDate\":\"2023-06-30T20:00\",\"location\":\"Watcha Party\",\"maxCapacity\":5,\"content\":\"안녕하세요! 영화를 좋아하는...\"}";
 
-        GroupDto.Response response = new GroupDto.Response(groupId, patchDto.getTitle(), patchDto.getMeetingDate(), patchDto.getLocation(), patchDto.getMaxCapacity(), patchDto.getContent());
+        MoviePartyDto.Response response = new MoviePartyDto.Response(groupId, patchDto.getTitle(), patchDto.getMeetingDate(), patchDto.getLocation(), patchDto.getMaxCapacity(), patchDto.getContent());
 
-        given(groupMapper.groupPatchDtoToGroup(Mockito.any(GroupDto.Patch.class))).willReturn(new Group());
-        given(groupService.updateGroup(Mockito.any(Group.class))).willReturn(new Group());
-        given(groupMapper.groupToGroupResponseDto(Mockito.any(Group.class))).willReturn(response);
+        given(groupMapper.groupPatchDtoToGroup(Mockito.any(MoviePartyDto.Patch.class))).willReturn(new MovieParty());
+        given(groupService.updateGroup(Mockito.any(MovieParty.class))).willReturn(new MovieParty());
+        given(groupMapper.groupToGroupResponseDto(Mockito.any(MovieParty.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
                 patch("/groups/{group-id}", groupId)
@@ -112,10 +111,10 @@ class GroupControllerTest {
     public void getGroupTest() throws Exception {
         long groupId = 1L;
 
-        GroupDto.Response response = new GroupDto.Response(groupId, "맥주 한 캔 들고 같이 봐요!", LocalDateTime.of(2023, 6, 30, 20, 0), "watcha party", 5, "팟 소개글");
+        MoviePartyDto.Response response = new MoviePartyDto.Response(groupId, "맥주 한 캔 들고 같이 봐요!", LocalDateTime.of(2023, 6, 30, 20, 0), "watcha party", 5, "팟 소개글");
 
-        given(groupService.findGroup(anyLong())).willReturn(new Group());
-        given(groupMapper.groupToGroupResponseDto(Mockito.any(Group.class))).willReturn(response);
+        given(groupService.findGroup(anyLong())).willReturn(new MovieParty());
+        given(groupMapper.groupToGroupResponseDto(Mockito.any(MovieParty.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
                 get("/groups/{group-id}", groupId)
@@ -128,12 +127,12 @@ class GroupControllerTest {
 
     @Test
     public void getGroupsTest() throws Exception {
-        List<Group> groupList = getGroupList();
+        List<MovieParty> groupList = getGroupList();
 
         int page = 2, size = 6;
-        List<Group> subList = groupList.subList(size, groupList.size());
-        Page<Group> pageGroups = getPageGroupList(page, size, groupList.size(), subList);
-        List<GroupDto.Response> responses = getSubGroupResponseList(subList);
+        List<MovieParty> subList = groupList.subList(size, groupList.size());
+        Page<MovieParty> pageGroups = getPageGroupList(page, size, groupList.size(), subList);
+        List<MoviePartyDto.Response> responses = getSubGroupResponseList(subList);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("page", String.valueOf(page));
@@ -195,16 +194,16 @@ class GroupControllerTest {
         }
     }
 
-    private Page<Group> getPageGroupList(int page, int size, int total, List<Group> subList) {
+    private Page<MovieParty> getPageGroupList(int page, int size, int total, List<MovieParty> subList) {
         return new PageImpl<>(subList, PageRequest.of(page - 1, size, Sort.by("groupId").descending()), total);
     }
 
-    private List<GroupDto.Response> getSubGroupResponseList(List<Group> subList) {
-        List<GroupDto.Response> responses = new ArrayList<>();
+    private List<MoviePartyDto.Response> getSubGroupResponseList(List<MovieParty> subList) {
+        List<MoviePartyDto.Response> responses = new ArrayList<>();
 
         for(int idx = 0; idx < subList.size(); idx++) {
-            Group group = subList.get(idx);
-            GroupDto.Response response = new GroupDto.Response(
+            MovieParty group = subList.get(idx);
+            MoviePartyDto.Response response = new MoviePartyDto.Response(
                     group.getGroupId(),
                     group.getTitle(),
                     LocalDateTime.of(2023, 6, 30, 20, 0),
@@ -219,10 +218,10 @@ class GroupControllerTest {
         return responses;
     }
 
-    private List<Group> getGroupList() {
-        List<Group> groups = new ArrayList<>();
+    private List<MovieParty> getGroupList() {
+        List<MovieParty> groups = new ArrayList<>();
         for(int idx = 10; idx > 0; idx--) {
-            Group group = new Group();
+            MovieParty group = new MovieParty();
             group.setGroupId((long)idx);
             group.setTitle("맥주 " + idx + "캔 들고 같이 봐요!");
             group.setMeetingDate(LocalDateTime.of(2023, 6, 30, 20, 0 ,0));
