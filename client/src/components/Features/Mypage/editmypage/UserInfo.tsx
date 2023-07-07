@@ -79,15 +79,6 @@ const UserInfo = () => {
               isvalid={'true'}
             />
           </NicknameContainer>
-          <EmailContainer>
-            <p>이메일</p>
-            <Input
-              placeholder="이메일"
-              value={emailValue}
-              onChange={emailChangeHandler}
-              isvalid={'true'}
-            />
-          </EmailContainer>
         </EditInputContainer>
       </Container>
     </>
