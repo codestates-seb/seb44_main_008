@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { GrClose } from 'react-icons/gr';
 import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
 const CommentList = ({ answer }: { answer: Comments[] }) => {
+  const [like, setLike] = useState(false);
+  const likeHandler = () => {
+    setLike(!like);
+  };
   return (
     <CommentListWrap>
       {answer.map(answer => {
@@ -29,7 +34,7 @@ const CommentList = ({ answer }: { answer: Comments[] }) => {
             <div className="commetTxt">
               <p>{answer.content}</p>
               <div className="buttonWrap">
-                <Poplike />
+                <Poplike onClick={likeHandler} like={like} />
                 <span>{answer.like} Pops</span>
               </div>
             </div>
