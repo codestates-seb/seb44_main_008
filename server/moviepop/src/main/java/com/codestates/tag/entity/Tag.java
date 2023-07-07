@@ -1,6 +1,7 @@
 package com.codestates.tag.entity;
 
-import com.codestates.reviewBoard.entity.ReviewBoardTag;
+
+import com.codestates.review_board.entity.ReviewBoardTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,9 +40,6 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
-}
 
-//
-//    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-//    private UserTag userTag;
+}
 

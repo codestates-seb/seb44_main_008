@@ -4,13 +4,14 @@ import com.codestates.audit.Auditable;
 import com.codestates.comment.entity.Comment;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.utils.CustomBeanUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class User extends Auditable {
     @Column(nullable = false)
     private String name;
 
-    private String birth;
+    private LocalDate birth;
 
     private float star = 0;
 

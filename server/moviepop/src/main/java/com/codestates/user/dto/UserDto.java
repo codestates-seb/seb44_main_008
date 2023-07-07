@@ -5,15 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserDto {
     @Getter
-    @AllArgsConstructor
+    @Builder
     public static class Post{
         @NotBlank
         @Email
@@ -27,8 +29,12 @@ public class UserDto {
         @NotBlank
         private String name;
 
-        @NotBlank
-        private String birth;
+        @NotNull
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private LocalDate birth;
+
+//        @NotBlank
+//        private String birth;
 
         @NotBlank
         private String password;

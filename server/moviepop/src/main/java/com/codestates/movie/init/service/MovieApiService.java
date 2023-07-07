@@ -132,7 +132,7 @@ public class MovieApiService {
                 ArrayList<LinkedHashMap> genres = (ArrayList<LinkedHashMap>)movieInfo.get("genres");
                 for(int idx = 0; idx < genres.size(); idx++) {
                     Tag tag = new Tag(genres.get(0).get("genreNm").toString());
-                    if(!existsTags.contains(tag))
+                    if(!existsTags.contains(tag) && !tagSet.contains(tag.getTagName()))
                         tagSet.add(tag);
                 }
                 ArrayList<LinkedHashMap> audits = (ArrayList<LinkedHashMap>)movieInfo.get("audits");

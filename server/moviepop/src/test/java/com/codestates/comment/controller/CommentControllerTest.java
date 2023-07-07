@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ class CommentControllerTest {
         response.setCommentId(1L);
 
         given(commentMapper.commentPostDtoToComment(Mockito.any(CommentDto.Post.class))).willReturn(new Comment());
-        given(commentService.createComment(Mockito.any(Comment.class))).willReturn(response);
+        given(commentService.createComment(anyLong(), Mockito.any(Comment.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
                 post("/comments")
@@ -103,7 +104,7 @@ class CommentControllerTest {
     public void getCommentTest() throws Exception {
         long commentId = 1L;
 
-        CommentDto.Response response = new CommentDto.Response(commentId, "고양이의 보은...", 23, "2023-06-30");
+        CommentDto.Response response = new CommentDto.Response(commentId, "고양이의 보은...", 23, LocalDateTime.of(2023, 06, 30, 20, 0, 0));
 
         given(commentService.findComment(anyLong())).willReturn(new Comment());
         given(commentMapper.commentToCommentResponseDto(Mockito.any(Comment.class))).willReturn(response);
@@ -192,7 +193,7 @@ class CommentControllerTest {
 
         for(int idx = 0; idx < subList.size(); idx++) {
             Comment comment = subList.get(idx);
-            CommentDto.Response response = new CommentDto.Response(comment.getCommentId(), comment.getContent(), comment.getLikes(), "2023-06-30");
+            CommentDto.Response response = new CommentDto.Response(comment.getCommentId(), comment.getContent(), comment.getLikes(), LocalDateTime.of(2023, 06, 30, 20, 0, 0));
 
             responses.add(response);
         }

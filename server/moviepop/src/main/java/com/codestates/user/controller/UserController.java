@@ -1,17 +1,17 @@
 package com.codestates.user.controller;
 
+
 import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
-import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.mapper.ReviewBoardMapper;
+import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.dto.UserDto;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
-import com.codestates.user.service.ReviewBoardWishService;
 import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
 import lombok.RequiredArgsConstructor;
@@ -112,7 +112,7 @@ public class UserController {
     public ResponseEntity postUserWish(@PathVariable("user-id") @Positive long userId,
                                        @PathVariable("review-id") @Positive long reviewId) {
         userService.createReviewBoardWish(userId, reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(userService.findUser(userId), reviewId);
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
                 HttpStatus.OK

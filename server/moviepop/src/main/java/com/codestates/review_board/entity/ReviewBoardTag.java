@@ -1,4 +1,4 @@
-package com.codestates.reviewBoard.entity;
+package com.codestates.review_board.entity;
 
 import com.codestates.tag.entity.Tag;
 import lombok.Getter;

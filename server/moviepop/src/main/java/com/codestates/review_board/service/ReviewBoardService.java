@@ -1,18 +1,17 @@
-package com.codestates.reviewBoard.service;
+package com.codestates.review_board.service;
 
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.movie.entity.Movie;
-import com.codestates.movie.repository.MovieRepository;
 import com.codestates.movie.service.MovieService;
-import com.codestates.reviewBoard.entity.ReviewBoardTag;
+import com.codestates.review_board.entity.ReviewBoardTag;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.service.TagService;
 import com.codestates.user.entity.User;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.repository.ReviewBoardRepository;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.repository.ReviewBoardRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +20,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -44,21 +47,9 @@ public class ReviewBoardService {
     }
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
-        // reviewBoardTag.getTag() -> 이 Tag는 tagId 밖에 없었음
-        // 저 tagId를 가지고 실제 정보인 Tag 객체를 가져옴(DB에서)
-        // reviewBoardTag 안에 있는 Tag 객체를 실제 정보로 변경해주자!
-//        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
-//            Tag tag = tagService.findTagById(reviewBoardTag.getTag().getTagId());
-//            reviewBoardTag.setTag(tag);
-//            reviewBoardTag.setReviewBoard(reviewBoard);
-//        }
-//
-//        user.addReviewBoard(reviewBoard);
-//
-//        reviewBoard.setUser(user);
-        //2가지 방법
-        //1. 위처럼reviewboardtag안에 tag를 가져와서 실제 객체로 만들고 반환한다.
-        //2. 그냥 그 과정없이 아이디값만 가져온것을 바로 적용한다
+        Movie movie = movieService.findMovie(reviewBoard.getMovie().getMovieId());
+        reviewBoard.setMovie(movie);
+
         for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
             reviewBoardTag.setReviewBoard(reviewBoard);
         }
@@ -70,9 +61,9 @@ public class ReviewBoardService {
         return reviewBoardRepository.save(reviewBoard);
     }
 
-    public ReviewBoard updateReviewBoard(long userId, ReviewBoard reviewBoard) {
-        ReviewBoard getReviewboard = findReviewBoard(reviewBoard.getReviewBoardId());
-        if(getReviewboard.getUser().getUserId() != userId)
+    public ReviewBoard updateReviewBoard(User user, ReviewBoard reviewBoard) {
+        ReviewBoard getReviewboard = findReviewBoard(user, reviewBoard.getReviewBoardId());
+        if(getReviewboard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.INVALID_USER);
 
         Optional.ofNullable(reviewBoard.getTitle())
@@ -95,47 +86,85 @@ public class ReviewBoardService {
         return reviewBoardRepository.save(getReviewboard);
     }
 
-    public ReviewBoard findReviewBoard(long reviewId) {
-        return findReviewBoardById(reviewId);
+    public ReviewBoard findReviewBoard(User user, long reviewId) {
+        ReviewBoard reviewBoard = findReviewBoardById(reviewId);
+
+        Period age = getAge(user.getBirth());
+        if(age.getYears() < 19 && reviewBoard.getMovie().isAdulted())
+            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_REVIEW_BOARD);
+
+        return reviewBoard;
     }
 
-    public Page<ReviewBoard> findAllReviewBoards(int page, int size) {
-        return reviewBoardRepository.findAll(PageRequest.of(page,size,
+    public Page<ReviewBoard> findAllReviewBoards(User user, int page, int size) {
+        Period age = getAge(user.getBirth());
+        if(age.getYears() >= 19)
+            return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
                 Sort.by("reviewBoardId").descending()));
+        else
+            return reviewBoardRepository.findAllByIsAdulted(false, PageRequest.of(page-1, size,
+                    Sort.by("reviewBoardId").descending()));
     }
 
-    public void deleteReviewBoard(long userId, long reviewId) {
-        ReviewBoard reviewBoard = findReviewBoard(reviewId);
-        if(reviewBoard.getUser().getUserId() != userId)
+    public void deleteReviewBoard(User user, long reviewId) {
+        ReviewBoard reviewBoard = findReviewBoard(user, reviewId);
+        if(reviewBoard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
 
         reviewBoardRepository.delete(reviewBoard);
     }
 
-    public List<ReviewBoard> findReviewBoards() {
-        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+    public List<ReviewBoard> findReviewBoards(User user) {
+        Period age = getAge(user.getBirth());
+        if(age.getYears() >= 19)
+            return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+        else {
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop12ByOrderByReviewBoardIdDescByIsAdulted(false);
+            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 12));
+        }
+
+//        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+//            return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDescByIsAdulted(false);
     }
 
-    public List<ReviewBoard> findPopularReviewBoards() {
-        return reviewBoardRepository.findTop8ByOrderByWishDesc();
+    public List<ReviewBoard> findPopularReviewBoards(User user) {
+        Period age = getAge(user.getBirth());
+        if(age.getYears() >= 19)
+            return reviewBoardRepository.findTop8ByOrderByWishDesc();
+        else {
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
+            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
+        }
+//        return reviewBoardRepository.findTop8ByOrderByWishDesc();
+//            return reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
     }
 
     public Page<ReviewBoard> findSpecificTagReviewBoards(Tag tag, int page, int size) {
-        return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page,size,
+        return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
                 Sort.by("reviewBoardId").descending()));
     }
 
     public Page<ReviewBoard> findSearchedReviewBoards(String title, int page, int size) {
         List<Movie> movies = movieService.findSearchedMovies(title);
+        List<Long> movieIds = movies.stream()
+                .map(Movie::getMovieId)
+                .collect(Collectors.toList());
+        System.out.println("movieIds = " + movieIds);
 
-        return;
+        return reviewBoardRepository.findByMovieMovieIdIn(movieIds, PageRequest.of(page-1,size,
+                Sort.by("reviewBoardId").descending()));
     }
-
     @Transactional(readOnly = true)
     public ReviewBoard findReviewBoardById(long reviewId) {
         Optional<ReviewBoard> optionalReviewBoard = reviewBoardRepository.findById(reviewId);
         ReviewBoard findReviewBoard =
                 optionalReviewBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_BOARD_NOT_FOUND));
         return findReviewBoard;
+    }
+
+    private Period getAge(LocalDate birth) {
+        LocalDateTime now = LocalDateTime.now();
+
+        return Period.between(birth, now.toLocalDate());
     }
 }
