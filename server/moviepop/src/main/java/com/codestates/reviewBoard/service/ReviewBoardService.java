@@ -41,9 +41,19 @@ public class ReviewBoardService {
         // reviewBoardTag.getTag() -> 이 Tag는 tagId 밖에 없었음
         // 저 tagId를 가지고 실제 정보인 Tag 객체를 가져옴(DB에서)
         // reviewBoardTag 안에 있는 Tag 객체를 실제 정보로 변경해주자!
+//        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
+//            Tag tag = tagService.findTagById(reviewBoardTag.getTag().getTagId());
+//            reviewBoardTag.setTag(tag);
+//            reviewBoardTag.setReviewBoard(reviewBoard);
+//        }
+//
+//        user.addReviewBoard(reviewBoard);
+//
+//        reviewBoard.setUser(user);
+        //2가지 방법
+        //1. 위처럼reviewboardtag안에 tag를 가져와서 실제 객체로 만들고 반환한다.
+        //2. 그냥 그 과정없이 아이디값만 가져온것을 바로 적용한다
         for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
-            Tag tag = tagService.findTagById(reviewBoardTag.getTag().getTagId());
-            reviewBoardTag.setTag(tag);
             reviewBoardTag.setReviewBoard(reviewBoard);
         }
 
@@ -102,6 +112,11 @@ public class ReviewBoardService {
 
     public List<ReviewBoard> findPopularReviewBoards() {
         return reviewBoardRepository.findTop8ByOrderByWishDesc();
+    }
+
+    public Page<ReviewBoard> findSpecificTagReviewBoards(Tag tag, int page, int size) {
+        return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page,size,
+                Sort.by("reviewBoardId").descending()));
     }
 
     @Transactional(readOnly = true)

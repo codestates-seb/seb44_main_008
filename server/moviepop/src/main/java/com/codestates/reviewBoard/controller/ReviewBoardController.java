@@ -11,7 +11,9 @@ import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
 import com.codestates.reviewBoard.service.ReviewBoardService;
 
+import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
+import com.codestates.tag.service.TagService;
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;
 
@@ -42,6 +44,7 @@ public class ReviewBoardController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
+    private final TagService tagService;
 
 //    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
 //        this.reviewBoardService = reviewBoardService;
@@ -52,13 +55,15 @@ public class ReviewBoardController {
 //    }
 
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper) {
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper,
+                                 UserService userService, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
         this.commentService = commentService;
         this.commentMapper = commentMapper;
         this.tagMapper = tagMapper;
+        this.tagService = tagService;
     }
 
     @PostMapping("/{user-id}")
@@ -112,6 +117,17 @@ public class ReviewBoardController {
                 new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards)),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("/tags/{tag-id}")
+    public ResponseEntity getSpecificTag(@PathVariable("tag-id") @Positive long tagId,
+                                         @Positive @RequestParam int page,
+                                         @Positive @RequestParam int size) {
+        Tag tag = tagService.findTagById(tagId);
+        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(tag,page - 1, size);
+        List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
+
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
     @PostMapping("/{review-id}/users/{user-id}/comments")

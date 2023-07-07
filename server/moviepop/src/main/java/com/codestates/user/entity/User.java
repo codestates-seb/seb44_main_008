@@ -81,7 +81,7 @@ public class User extends Auditable {
         if(targetUser != null) throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
     }
 
-    public void addReviewBoard(ReviewBoard reviewBoard) {
+    public void     addReviewBoard(ReviewBoard reviewBoard) {
         this.reviewBoards.add(reviewBoard);
     }
 
