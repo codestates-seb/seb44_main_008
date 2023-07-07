@@ -154,4 +154,5 @@ const NicknameContainer = styled.div`
     padding-right: 1.5rem;
   }
 `;
+
 export default UserInfo;

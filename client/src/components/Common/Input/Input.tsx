@@ -42,7 +42,6 @@ const Input = ({
 const InputCoverStyled = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
   position: relative;
 `;
@@ -78,6 +77,7 @@ const StyledResetButton = styled.button`
   position: absolute;
   width: 1rem;
   right: 0.1rem;
+  transform: translate(0, 80%);
 `;
 
 export default Input;
