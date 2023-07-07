@@ -26,10 +26,6 @@ const CommentList = ({ answer }: { answer: Comments[] }) => {
                 <GrClose />
               </button>
             </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> eac367a0a68be09a44af6eb8d95ca2f1c5b64d8e
             <div className="commetTxt">
               <p>{answer.content}</p>
               <div className="buttonWrap">
