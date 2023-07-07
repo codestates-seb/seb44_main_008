@@ -37,7 +37,7 @@ const Comment: React.FC<{ reviewId: string }> = ({ reviewId }) => {
   }, []);
   return (
     <>
-      <CommentWrite />
+      <CommentWrite reviewId={reviewId} />
       <CommentList answer={answer} />
     </>
   );

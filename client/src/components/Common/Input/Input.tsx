@@ -48,7 +48,7 @@ const InputCoverStyled = styled.div`
 `;
 
 const InputStyled = styled.input<Props>`
-  background-color: var(--main-dark-color);
+  background-color: transparent;
   color: var(--white-color);
   position: relative;
   width: ${({ width }) => (width ? width : '25rem')};
