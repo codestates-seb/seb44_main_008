@@ -74,9 +74,9 @@ public class ReviewBoardController {
     public ResponseEntity patchReviewBoard(@PathVariable("user-id") @Positive long userId,
                                            @PathVariable("review-id") @Positive long reviewId,
                                            @Valid @RequestBody ReviewBoardDto.Patch patch) {
-        patch.setReviewBoardId(reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(userId, mapper.PatchToReviewBoard(patch));
-        ReviewBoardDto.Response response = mapper.reviewBoardToResponse(reviewBoard);
+        patch.setReviewId(reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(userId, mapper.PatchToReviewBoard(patch, tagMapper));
+        ReviewBoardDto.Response response = mapper.reviewBoardToResponse(reviewBoard, tagMapper);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -84,7 +84,7 @@ public class ReviewBoardController {
     public ResponseEntity getReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
 //        return new ResponseEntity<>(mapper.reviewBoardToResponse(reviewBoard), HttpStatus.OK);
-        return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, tagMapper), HttpStatus.OK);
     }
 
     @GetMapping
