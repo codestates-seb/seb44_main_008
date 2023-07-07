@@ -1,6 +1,6 @@
 import axios from 'axios';
 import CommentList from './CommentList';
-import CommentWrite from './CommentWriteWrap';
+import CommentWrite from './CommentWrite';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 import { useEffect, useState } from 'react';
 

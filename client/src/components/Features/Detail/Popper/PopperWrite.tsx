@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from '../../../Common/Button/Button';
 import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
-
+import { getTodayDate } from '../../../../assets/commonts/common';
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -14,14 +14,9 @@ const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
   const [checkTitle, setCheckTitle] = useState<boolean>(false);
   const [checkLocation, setCheckLocation] = useState<boolean>(false);
   const [checkPerson, setCheckPerson] = useState<boolean>(false);
-  const dateNow = new Date();
-  const year = dateNow.getFullYear();
-  const month = String(dateNow.getMonth() + 1).padStart(2, '0');
-  const day = String(dateNow.getDate()).padStart(2, '0');
-  const hour = String(dateNow.getHours()).padStart(2, '0');
-  const minute = String(dateNow.getMinutes()).padStart(2, '0');
-  const today = `${year}-${month}-${day}T${hour}:${minute}`;
+  const today = getTodayDate();
   const [saleStartDate, setSaleStartDate] = useState(today);
+  console.log(today);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckTitle(false);

@@ -20,16 +20,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   const [checkTitle, setCheckTitle] = useState<boolean>(false);
   const [checkLocation, setCheckLocation] = useState<boolean>(false);
   const [checkPerson, setCheckPerson] = useState<boolean>(false);
-  const dateNow = new Date();
-  const year = dateNow.getFullYear();
-  const month = String(dateNow.getMonth() + 1).padStart(2, '0');
-  const day = String(dateNow.getDate()).padStart(2, '0');
-  const hour = String(dateNow.getHours()).padStart(2, '0');
-  const minute = String(dateNow.getMinutes()).padStart(2, '0');
-  const today = `${year}-${month}-${day}T${hour}:${minute}`;
-  const [saleStartDate, setSaleStartDate] = useState(today);
 
-  console.log(today);
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckTitle(false);
     setTitle(e.currentTarget.value);
@@ -62,14 +53,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
         ></Input>
 
         <div className="dateBox">
-          <input
-            type="datetime-local"
-            value={saleStartDate}
-            min={saleStartDate}
-            onChange={e => setSaleStartDate(e.target.value)}
-            className="dateInput"
-            id="dateInput"
-          />
+          <input type="datetime-local" className="dateInput" id="dateInput" />
         </div>
         <Input
           value={location}
