@@ -98,7 +98,7 @@ public class ReviewBoardController {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findAllReviewBoards(page - 1, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
     @DeleteMapping("/{review-id}/users/{user-id}")
@@ -127,7 +127,7 @@ public class ReviewBoardController {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(tag,page - 1, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
     @PostMapping("/{review-id}/users/{user-id}/comments")

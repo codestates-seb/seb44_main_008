@@ -66,8 +66,23 @@ public interface ReviewBoardMapper {
         return response;
     }
     ReviewBoardDto.WishResponse reviewBoardToWishResponse(ReviewBoard reviewBoard);
-    List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
-    ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
+//    List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
+    default ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard) {
+        UserDto.totalReviewBoardResponse userResponse = new UserDto.totalReviewBoardResponse(
+                reviewBoard.getUser().getUserId(),
+                reviewBoard.getUser().getNickname()
+        );
+
+        ReviewBoardDto.EntireResponse response = ReviewBoardDto.EntireResponse.builder()
+                .reviewBoardId(reviewBoard.getReviewBoardId())
+                .title(reviewBoard.getTitle())
+                .thumbnail(reviewBoard.getThumbnail())
+                .createdAt(reviewBoard.getCreatedAt())
+                .user(userResponse)
+                .build();
+
+        return response;
+    }
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
     default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper) {
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
@@ -101,4 +116,5 @@ public interface ReviewBoardMapper {
                 .boards(reviewBoardEntire)
                 .build();
     }
+
 }

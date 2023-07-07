@@ -4,6 +4,7 @@ package com.codestates.reviewBoard.dto;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
+import com.codestates.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -86,6 +87,8 @@ public class ReviewBoardDto {
         private String thumbnail;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
+
+        private UserDto.totalReviewBoardResponse user;
     }
 
     @Getter

@@ -84,7 +84,14 @@ public class UserDto {
     @AllArgsConstructor
     public static class ReviewBoardResponse {
         private long userId;
-        private String username;
+        private String nickname;
         private String profileImage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class totalReviewBoardResponse {
+        private long userId;
+        private String nickname;
     }
 }
