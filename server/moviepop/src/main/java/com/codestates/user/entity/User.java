@@ -36,6 +36,9 @@ public class User extends Auditable {
 //    @Column(nullable = false)
     private String profileImage;
 
+    @Column(nullable = false)
+    private String name;
+
     private String birth;
 
     private float star = 0;
@@ -57,8 +60,8 @@ public class User extends Auditable {
         }
     }
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<UserTag> userTag = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTag> userTags = new ArrayList<>();
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
 //    private Group group;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -75,10 +78,6 @@ public class User extends Auditable {
 
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
-    }
-
-    public static void checkExistEmail (User targetUser) {
-        if(targetUser != null) throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
     }
 
     public void addReviewBoard(ReviewBoard reviewBoard) {
