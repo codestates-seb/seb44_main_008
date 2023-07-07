@@ -5,10 +5,47 @@ import '../../../root.css';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
+const Input = ({
+  value = '',
+  onChange,
+  placeholder,
+  isvalid,
+  width,
+  type,
+}: Props) => {
+  const [inputValue, setInputValue] = useState<InputValue>(value);
+
+  const onReset = () => {
+    setInputValue('');
+  };
+
+  const changeHandler = (e: InputChangeEvent) => {
+    setInputValue(e.target.value);
+    onChange && onChange(e);
+  };
+  console.log(inputValue);
+  return (
+    <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+      <InputCoverStyled>
+        <InputStyled
+          value={inputValue}
+          onChange={changeHandler}
+          placeholder={placeholder}
+          isvalid={isvalid!.toString()}
+          width={width}
+          type={type}
+        />
+        <StyledResetButton onClick={onReset}>X</StyledResetButton>
+      </InputCoverStyled>
+    </StyleSheetManager>
+  );
+};
 const InputCoverStyled = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  position: relative;
 `;
 
 const InputStyled = styled.input<Props>`
@@ -27,35 +64,11 @@ const InputStyled = styled.input<Props>`
       ? '2px solid var(--ghost-color)'
       : '2px solid var(--theme-color)'};
 `;
+const StyledResetButton = styled.button`
+  color: var(--ghost-color);
+  position: absolute;
+  width: 1rem;
+  right: 1rem;
+`;
 
-const Input = ({
-  value = '',
-  onChange,
-  placeholder,
-  isvalid,
-  width,
-  type,
-}: Props) => {
-  const [inputValue, setInputValue] = useState<InputValue>(value);
-
-  const changeHandler = (e: InputChangeEvent) => {
-    setInputValue(e.target.value);
-    onChange && onChange(e);
-  };
-  console.log(inputValue);
-  return (
-    <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
-      <InputCoverStyled>
-        <InputStyled
-          value={value}
-          onChange={changeHandler}
-          placeholder={placeholder}
-          isvalid={isvalid!.toString()}
-          width={width}
-          type={type}
-        />
-      </InputCoverStyled>
-    </StyleSheetManager>
-  );
-};
 export default Input;
