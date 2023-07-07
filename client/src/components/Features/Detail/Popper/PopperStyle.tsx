@@ -102,6 +102,11 @@ export const PopperBox = styled.div`
     input {
       margin-bottom: 0.9rem;
     }
+    input::-webkit-inner-spin-button {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+    }
     .dateBox {
       position: relative;
       input {
