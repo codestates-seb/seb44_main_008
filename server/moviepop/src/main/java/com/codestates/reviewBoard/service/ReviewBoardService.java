@@ -3,6 +3,9 @@ package com.codestates.reviewBoard.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.reviewBoard.entity.ReviewBoardTag;
+import com.codestates.tag.entity.Tag;
+import com.codestates.tag.service.TagService;
 import com.codestates.user.entity.User;
 
 import com.codestates.reviewBoard.entity.ReviewBoard;
@@ -23,13 +26,27 @@ import java.util.Optional;
 public class ReviewBoardService {
 
     private final ReviewBoardRepository reviewBoardRepository;
+    private final TagService tagService;
 
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository) {
+//    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository) {
+//        this.reviewBoardRepository = reviewBoardRepository;
+//    }
+
+    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService) {
         this.reviewBoardRepository = reviewBoardRepository;
+        this.tagService = tagService;
     }
 
-
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
+        // reviewBoardTag.getTag() -> 이 Tag는 tagId 밖에 없었음
+        // 저 tagId를 가지고 실제 정보인 Tag 객체를 가져옴(DB에서)
+        // reviewBoardTag 안에 있는 Tag 객체를 실제 정보로 변경해주자!
+        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
+            Tag tag = tagService.findTagById(reviewBoardTag.getTag().getTagId());
+            reviewBoardTag.setTag(tag);
+            reviewBoardTag.setReviewBoard(reviewBoard);
+        }
+
         user.addReviewBoard(reviewBoard);
 
         reviewBoard.setUser(user);
@@ -46,6 +63,16 @@ public class ReviewBoardService {
                 .ifPresent(title -> getReviewboard.setTitle(title));
         Optional.ofNullable(reviewBoard.getReview())
                 .ifPresent(review -> getReviewboard.setReview(review));
+
+        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
+            Tag tag = tagService.findTagById(reviewBoardTag.getTag().getTagId());
+            reviewBoardTag.setTag(tag);
+            reviewBoardTag.setReviewBoard(getReviewboard);
+        }
+
+        List<ReviewBoardTag> newTags = reviewBoard.getReviewBoardTags();
+        getReviewboard.getReviewBoardTags().clear();
+        getReviewboard.getReviewBoardTags().addAll(newTags);
 
         //영화제목, 태그, 썸네일 설정해야함.
 

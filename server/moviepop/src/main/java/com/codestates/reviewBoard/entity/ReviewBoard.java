@@ -35,7 +35,7 @@ public class ReviewBoard extends Auditable {
     @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
 
 //

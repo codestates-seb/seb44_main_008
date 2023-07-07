@@ -10,21 +10,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewBoardDto {
-
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post {
         @NotBlank(message = "내용을 채우세요")
         private String title;
         @NotBlank(message = "내용을 채우세요")
-        private String movieTitle;
-        @NotBlank(message = "내용을 채우세요")
         private String review;
+        @NotNull
+        private Long movieId;
+        @Valid
+        @NotNull(message = "태그는 필수 입력값입니다.")
+        @Size(min = 1, max = 3, message = "태그는 최소 1개에서 최대 3개까지 입력 가능합니다.")
         private List<TagDto.ReviewBoardRequest> tags;
 //        private String thumbnail_URL;
     }
@@ -32,13 +38,16 @@ public class ReviewBoardDto {
     @Getter
     @Setter
     public static  class Patch {
-        private long reviewBoardId;
+
+        private long reviewId;
+
         @NotBlank(message = "내용을 채우세요")
         private String title;
         @NotBlank(message = "내용을 채우세요")
-        private String movieTitle;
-        @NotBlank(message = "내용을 채우세요")
         private String review;
+        @Valid
+        @NotNull(message = "태그는 필수 입력값입니다.")
+        @Size(min = 1, max = 3, message = "태그는 최소 1개에서 최대 3개까지 입력 가능합니다.")
         private List<TagDto.ReviewBoardRequest> tags;
 
 //        private List<String> tags;

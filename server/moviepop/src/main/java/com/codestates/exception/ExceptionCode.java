@@ -15,7 +15,8 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "Comment Not Found"),
     CANNOT_UPDATE_COMMENT(403, "댓글 작성자가 아닙니다"),
     ALREADY_LIKE_EXIST(409, "이미 좋아요가 되어있습니다"),
-    LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다");
+    LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다"),
+    TAG_NOT_FOUND(404, "해당 태그가 존재하지 않습니다");
 
 
 

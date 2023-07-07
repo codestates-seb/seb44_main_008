@@ -1,8 +1,8 @@
 package com.codestates.reviewBoard.mapper;
 
 
+import com.codestates.reviewBoard.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
-import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.dto.UserDto;
 
@@ -10,23 +10,47 @@ import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.reviewBoard.dto.ReviewBoardDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.service.ReviewBoardService;
 import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReviewBoardMapper {
-    ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post);
-    ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch);
-    default ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard) {
+    default ReviewBoard PostToReviewBoard(ReviewBoardDto.Post post, TagMapper tagMapper) {
+        List<ReviewBoardTag> reviewBoardTags = tagMapper.reviewBoardsRequestToReviewBoardTags(post.getTags());
+
+        ReviewBoard reviewBoard = new ReviewBoard();
+        reviewBoard.setTitle(post.getTitle());
+        reviewBoard.setReview(post.getReview());
+        reviewBoard.setReviewBoardTags(reviewBoardTags);
+
+        return reviewBoard;
+    }
+    default ReviewBoard PatchToReviewBoard(ReviewBoardDto.Patch patch, TagMapper tagMapper) {
+        List<ReviewBoardTag> reviewBoardTags = tagMapper.reviewBoardsRequestToReviewBoardTags(patch.getTags());
+
+        ReviewBoard reviewBoard = new ReviewBoard();
+        reviewBoard.setReviewBoardId(patch.getReviewId());
+        reviewBoard.setTitle(patch.getTitle());
+        reviewBoard.setReview(patch.getReview());
+        reviewBoard.setReviewBoardTags(reviewBoardTags);
+
+        return reviewBoard;
+    }
+
+    default ReviewBoardDto.Response reviewBoardToResponse(ReviewBoard reviewBoard, TagMapper tagMapper) {
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(
                 reviewBoard.getUser().getUserId(),
                 reviewBoard.getUser().getNickname(),
                 reviewBoard.getUser().getProfileImage()
         );
+
+        List<TagDto.response> tagResponse = reviewBoard.getReviewBoardTags().stream()
+                .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
+                .collect(Collectors.toList());
+
+
 
         ReviewBoardDto.Response response = ReviewBoardDto.Response.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
@@ -36,6 +60,7 @@ public interface ReviewBoardMapper {
                 .thumbnail(reviewBoard.getThumbnail())
                 .createdAt(reviewBoard.getCreatedAt())
                 .user(userResponse)
+                .tags(tagResponse)
                 .build();
 
         return response;
@@ -44,9 +69,13 @@ public interface ReviewBoardMapper {
     List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
     ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
-    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper) {
+    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper) {
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> commentMapper.commentToCommentResponseDto(comment))
+                .collect(Collectors.toList());
+
+        List<TagDto.response> tagResponse = reviewBoard.getReviewBoardTags().stream()
+                .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
         ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
@@ -57,6 +86,7 @@ public interface ReviewBoardMapper {
                 .wish(reviewBoard.getWish())
                 .createdAt(reviewBoard.getCreatedAt())
                 .comments(commentResponse)
+                .tags(tagResponse)
                 .build();
 
         return detailResponse;
