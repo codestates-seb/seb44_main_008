@@ -25,4 +25,8 @@ public class MovieService {
     public Set<Movie> findMovies() {
         return movieRepository.findAll().stream().collect(Collectors.toSet());
     }
+
+    public List<Movie> findSearchedMovies(String title) {
+        return movieRepository.findByTitleContains(title);
+    }
 }

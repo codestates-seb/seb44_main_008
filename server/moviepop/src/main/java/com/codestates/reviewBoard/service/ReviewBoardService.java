@@ -3,6 +3,9 @@ package com.codestates.reviewBoard.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.movie.entity.Movie;
+import com.codestates.movie.repository.MovieRepository;
+import com.codestates.movie.service.MovieService;
 import com.codestates.reviewBoard.entity.ReviewBoardTag;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.service.TagService;
@@ -27,14 +30,17 @@ public class ReviewBoardService {
 
     private final ReviewBoardRepository reviewBoardRepository;
     private final TagService tagService;
+    private final MovieService movieService;
 
 //    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository) {
 //        this.reviewBoardRepository = reviewBoardRepository;
 //    }
 
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService) {
+
+    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService) {
         this.reviewBoardRepository = reviewBoardRepository;
         this.tagService = tagService;
+        this.movieService = movieService;
     }
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
@@ -117,6 +123,12 @@ public class ReviewBoardService {
     public Page<ReviewBoard> findSpecificTagReviewBoards(Tag tag, int page, int size) {
         return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page,size,
                 Sort.by("reviewBoardId").descending()));
+    }
+
+    public Page<ReviewBoard> findSearchedReviewBoards(String title, int page, int size) {
+        List<Movie> movies = movieService.findSearchedMovies(title);
+
+        return;
     }
 
     @Transactional(readOnly = true)

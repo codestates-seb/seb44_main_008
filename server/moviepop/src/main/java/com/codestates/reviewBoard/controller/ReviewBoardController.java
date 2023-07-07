@@ -119,6 +119,17 @@ public class ReviewBoardController {
         );
     }
 
+    @GetMapping("/search")
+    public ResponseEntity searchReviewBoards(@RequestParam("q") String title,
+                                             @Positive @RequestParam int page,
+                                             @Positive @RequestParam int size) {
+        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSearchedReviewBoards(title, page, size);
+        List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
+
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+    }
+
+
     @GetMapping("/tags/{tag-id}")
     public ResponseEntity getSpecificTag(@PathVariable("tag-id") @Positive long tagId,
                                          @Positive @RequestParam int page,
