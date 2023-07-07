@@ -4,7 +4,7 @@ import com.codestates.audit.Auditable;
 import com.codestates.comment.entity.Comment;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.utils.CustomBeanUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

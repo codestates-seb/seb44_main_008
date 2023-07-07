@@ -1,6 +1,6 @@
-package com.codestates.reviewBoard.repository;
+package com.codestates.review_board.repository;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReviewBoardRepository extends JpaRepository<ReviewBoard,Long> {
     List<ReviewBoard> findTop12ByOrderByReviewBoardIdDesc();

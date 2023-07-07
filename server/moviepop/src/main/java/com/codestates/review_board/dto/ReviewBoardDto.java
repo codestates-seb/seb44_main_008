@@ -1,8 +1,7 @@
-package com.codestates.reviewBoard.dto;
+package com.codestates.review_board.dto;
 
 
 import com.codestates.movie.dto.MovieDto;
-import com.codestates.movie.entity.Movie;
 import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;

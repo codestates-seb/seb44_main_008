@@ -1,4 +1,4 @@
-package com.codestates.reviewBoard.controller;
+package com.codestates.review_board.controller;
 
 
 import com.codestates.comment.dto.CommentDto;
@@ -6,10 +6,10 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
-import com.codestates.reviewBoard.dto.ReviewBoardDto;
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
-import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.review_board.dto.ReviewBoardDto;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.mapper.ReviewBoardMapper;
+import com.codestates.review_board.service.ReviewBoardService;
 
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;

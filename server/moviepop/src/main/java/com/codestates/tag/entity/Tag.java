@@ -1,7 +1,5 @@
 package com.codestates.tag.entity;
 
-import com.codestates.reviewBoard.entity.ReviewBoardTag;
-import com.codestates.user.entity.UserTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

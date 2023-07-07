@@ -1,7 +1,6 @@
 package com.codestates.movie.entity;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import lombok.AllArgsConstructor;
+import com.codestates.review_board.entity.ReviewBoard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

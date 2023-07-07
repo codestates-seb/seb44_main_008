@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/groups")
 @Validated
 public class MoviePartyController {
-    private final String MOVIE_PARTY_DEFAULT_URI = "/groups";
+    public static final String MOVIE_PARTY_DEFAULT_URI = "/groups";
     private final MoviePartyService moviePartyService;
     private final MoviePartyMapper mapper;
 

@@ -1,4 +1,4 @@
-package com.codestates.reviewBoard.mapper;
+package com.codestates.review_board.mapper;
 
 
 import com.codestates.movie.dto.MovieDto;
@@ -6,13 +6,11 @@ import com.codestates.user.dto.UserDto;
 
 import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
-import com.codestates.reviewBoard.dto.ReviewBoardDto;
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.review_board.dto.ReviewBoardDto;
+import com.codestates.review_board.entity.ReviewBoard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

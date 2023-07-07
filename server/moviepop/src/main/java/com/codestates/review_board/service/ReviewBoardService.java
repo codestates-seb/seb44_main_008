@@ -1,4 +1,4 @@
-package com.codestates.reviewBoard.service;
+package com.codestates.review_board.service;
 
 
 import com.codestates.exception.BusinessLogicException;
@@ -7,8 +7,8 @@ import com.codestates.movie.entity.Movie;
 import com.codestates.movie.service.MovieService;
 import com.codestates.user.entity.User;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.repository.ReviewBoardRepository;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.repository.ReviewBoardRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
