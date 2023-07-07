@@ -1,7 +1,20 @@
 import { styled } from 'styled-components';
 import Button from '../../Common/Button/Button';
-import UserAva from '@/assets/images/user-info/userAvatar.png';
+// import UserAva from '@/assets/images/user-info/userAvatar.png';
 import { useNavigate } from 'react-router-dom';
+
+const data: dataType = {
+  userId: 1,
+  name: '홍길동',
+  nickname: '팝콘즈',
+  email: 'hgd123@gmail.com',
+  profileImage: 'https://s3.....',
+  myTags: [
+    { tagId: 1, tagName: '로맨스' },
+    { tagId: 2, tagName: '공포' },
+    { tagId: 3, tagName: '스릴러' },
+  ],
+};
 
 const Common = (): JSX.Element => {
   const navigate = useNavigate();
@@ -11,8 +24,8 @@ const Common = (): JSX.Element => {
         <TopContainer>
           <UserTopContainer>
             <User>
-              <img src={UserAva} alt="사용자 이미지" />
-              <span>홍길동님</span>
+              <img src={data.profileImage} alt="사용자 이미지" />
+              <span>{data.name}님</span>
             </User>
             <Button
               value={'회원 정보 수정'}
@@ -27,19 +40,23 @@ const Common = (): JSX.Element => {
           <UserBotContainer>
             <UserInfo>
               <span className="title">닉네임</span>
-              <span className="desc">팝콘즈 짱짱</span>
+              <span className="desc">{data.nickname}</span>
             </UserInfo>
           </UserBotContainer>
           <UserBotContainer>
             <UserInfo>
               <span className="title">이메일</span>
-              <span className="desc">popcorns@gmail.com</span>
+              <span className="desc">{data.email}</span>
             </UserInfo>
           </UserBotContainer>
           <UserBotContainer>
             <UserInfo>
               <span className="title">태그</span>
-              <span className="last-desc">#공포 #로맨스 #스릴러</span>
+              <span className="last-desc">
+                {data.myTags.map(tag => (
+                  <span key={tag.tagId}>{`#${tag.tagName} `}</span>
+                ))}
+              </span>
             </UserInfo>
           </UserBotContainer>
         </BotContainer>
