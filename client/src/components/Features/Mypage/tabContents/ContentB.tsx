@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { postsType } from './type';
-import { data } from './dummy';
+import { data } from './tabAB';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Button from '../../../Common/Button/Button';
