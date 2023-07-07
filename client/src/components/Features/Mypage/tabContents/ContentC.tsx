@@ -2,7 +2,7 @@ import { SetStateAction, useState } from 'react';
 import { postsType } from './type';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
-import { data2 } from './dummy2';
+import { data2 } from './tabCD';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 

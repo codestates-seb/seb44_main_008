@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import Pagenation from '../Pagenation';
-import { data } from './dummy';
+import { data } from './tabAB';
 import { postsType } from './type';
 import Poplike from '../../../Common/PopIcons/Poplike';
 
