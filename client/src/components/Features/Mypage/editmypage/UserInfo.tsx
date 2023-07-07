@@ -34,15 +34,12 @@ const UserInfo = () => {
     }
   };
   const [inputValue, setInputValue] = useState('뽀로로');
-  const [emailValue, setEmailValue] = useState('popcorns@gmail.com');
+
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     onChange && onChange(e);
   };
-  const emailChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmailValue(e.target.value);
-    onChange && onChange(e);
-  };
+
   return (
     <>
       <Container>
@@ -140,18 +137,6 @@ const NicknameContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  p {
-    font-size: 0.8rem;
-    color: #cfcfcf;
-    width: 100%;
-    padding-right: 1.5rem;
-  }
-`;
-const EmailContainer = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  padding-top: 1rem;
   p {
     font-size: 0.8rem;
     color: #cfcfcf;
