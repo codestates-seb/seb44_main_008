@@ -1,11 +1,15 @@
 package com.codestates.user.dto;
 
+import com.codestates.tag.dto.TagDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class UserDto {
     @Getter
@@ -29,8 +33,8 @@ public class UserDto {
         @NotBlank
         private String password;
 
-//        @NotBlank
-//        private Tag tag;
+        @NotNull
+        private List<TagDto.UserRequest> tags;
     }
 
     @Getter
@@ -40,9 +44,9 @@ public class UserDto {
         private long userId;
         @NotBlank
         private String nickname;
-
-//        @NotBlank
-//        private Tag tag;
+        private String profileImage;
+        @NotNull
+        private List<TagDto.UserRequest> tags;
     }
 
     @Getter
@@ -64,6 +68,16 @@ public class UserDto {
         private String email;
         private String profileImage;
 //        private Tag tag;
+    }
+
+    @Getter
+    @Builder
+    public static class PatchResponse{
+        private Long userId;
+        private String nickname;
+        private String email;
+        private String profileImage;
+        private List<TagDto.UserRequest> tags;
     }
 
     @Getter
