@@ -20,10 +20,12 @@ const ContentC = () => {
   };
   const [isOpen, setIsOpen] = useState(false);
   const [modalVisibleId, setModalVisibleId] = useState(0);
+  const [currentRender, setCurrentRender] = useState('Detail');
   const onModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
     setIsOpen(true);
     lockScroll();
+    setCurrentRender('Detail');
   };
   const offModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
@@ -33,15 +35,20 @@ const ContentC = () => {
 
   return (
     <>
-      {data2.map((item, idx) => (
+      {data2.map(item => (
         <ListContainer key={item.groupId}>
           <Modal
-            id={idx}
+            id={item.groupId}
             isOpen={isOpen}
             modalVisibleId={modalVisibleId}
             offModalHandler={offModalHandler}
+            currentRender={currentRender}
+            setCurrentRender={setCurrentRender}
           />
-          <ListOnce className="list" onClick={() => onModalHandler(idx)}>
+          <ListOnce
+            className="list"
+            onClick={() => onModalHandler(item.groupId)}
+          >
             <ListHead>
               <Titles>
                 <p className="title">{item.title}</p>

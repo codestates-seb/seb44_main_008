@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { GrClose } from 'react-icons/gr';
-import Popunlike from '../../../Common/PopIcons/Poplike';
+import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
 const CommentList = ({ answer }: { answer: Comments[] }) => {
@@ -26,10 +26,11 @@ const CommentList = ({ answer }: { answer: Comments[] }) => {
                 <GrClose />
               </button>
             </div>
+
             <div className="commetTxt">
               <p>{answer.content}</p>
               <div className="buttonWrap">
-                <Popunlike />
+                <Poplike />
                 <span>{answer.like} Pops</span>
               </div>
             </div>

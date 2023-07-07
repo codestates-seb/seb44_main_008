@@ -1,44 +1,58 @@
 import { styled } from 'styled-components';
 import { ModalTypes } from './type';
-import { PopperBox } from '../../Features/Detail/Popper/PopperStyle';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import PopperDetail from '../../Features/Detail/Popper/PopperDetail';
+import PopperEdit from '../../Features/Detail/Popper/PopperEdit';
 
-type PopperDetailProps = {
-  currentId: number;
-  setCurrentID: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
-  currentPage: string;
-};
-
-const Modal = ({ isOpen, id, modalVisibleId, offModalHandler }: ModalTypes) => {
+const Modal = ({
+  isOpen,
+  id,
+  modalVisibleId,
+  offModalHandler,
+  currentRender,
+  setCurrentRender,
+}: ModalTypes) => {
   const [currentId, setCurrentID] = useState(id);
-  const [currentRender, setCurrentRender] = useState('List');
-  const clickEdit = useCallback(() => {
-    setCurrentRender('Edit');
-    setCurrentID(id);
-  }, []);
+  const [currentRenderPrev, setCurrentRenderPrev] = useState('');
+  const prevStep = () => {
+    offModalHandler(id);
+    setCurrentRenderPrev('Detail');
+  };
+
   return (
     <>
       {modalVisibleId === id && isOpen ? (
         <Container>
-          <ModalBackDrop onClick={() => offModalHandler(id)}>
+          <ModalBackDrop onClick={() => prevStep()}>
             <ModalView
               onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                 e.stopPropagation()
               }
             >
-              <ExitButton onClick={() => offModalHandler(id)}>↩</ExitButton>
-              <div>
-                <ModalPopperBox>
+              <ModalPopperBox>
+                {currentRender === 'Detail' && (
                   <PopperDetail
                     currentId={currentId}
                     setCurrentID={setCurrentID}
                     setCurrentRender={setCurrentRender}
-                    currentPage="popDetail"
+                    currentPage="myPageMyPop"
                   />
-                </ModalPopperBox>
-              </div>
+                )}
+                {currentRender === 'Edit' && (
+                  <PopperEdit
+                    currentId={currentId}
+                    setCurrentRender={setCurrentRender}
+                  />
+                )}
+                {currentRender === 'DetailMine' && (
+                  <PopperDetail
+                    currentId={currentId}
+                    setCurrentID={setCurrentID}
+                    setCurrentRender={setCurrentRender}
+                    currentPage="myPageOtherPop"
+                  />
+                )}
+              </ModalPopperBox>
             </ModalView>
           </ModalBackDrop>
         </Container>
@@ -60,8 +74,7 @@ const ModalBackDrop = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
   top: 0;
   left: 0;
   right: 0;
@@ -72,15 +85,12 @@ const ModalView = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border-radius: 20px;
-  width: 50%;
+  border-radius: 10px;
+  width: 35%;
   background-color: var(--main-dark-color);
-  padding: 1rem;
   z-index: 1000;
-  .desc {
-    color: var(--footer-icon-color);
-  }
 `;
-const ExitButton = styled.button``;
-const ModalPopperBox = styled.div``;
+const ModalPopperBox = styled.div`
+  width: 100%;
+`;
 export default Modal;

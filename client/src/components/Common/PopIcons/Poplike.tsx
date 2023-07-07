@@ -23,7 +23,7 @@ type LikePop = {
   like?: boolean;
 };
 
-const Popunlike: React.FC<LikePop> = ({ onClick, like }) => {
+const Poplike: React.FC<LikePop> = ({ onClick, like }) => {
   return (
     <PopButton onClick={onClick}>
       {!like && <PopEmpty className="popEmpty" />}
@@ -32,4 +32,4 @@ const Popunlike: React.FC<LikePop> = ({ onClick, like }) => {
   );
 };
 
-export default Popunlike;
+export default Poplike;

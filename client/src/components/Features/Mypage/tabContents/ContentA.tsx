@@ -6,6 +6,10 @@ import { postsType } from './type';
 import Poplike from '../../../Common/PopIcons/Poplike';
 
 const ContentA = () => {
+  const [like, setLike] = useState(false);
+  const likeHandler = () => {
+    setLike(!like);
+  };
   const [page, setPage] = useState(1);
   const limit = 5;
   const offset = (page - 1) * limit;
@@ -32,7 +36,7 @@ const ContentA = () => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <PopImg />
+              <Poplike onClick={likeHandler} like={like} />
             </ListTail>
           </ListOnce>
         </ListContainer>
@@ -105,6 +109,5 @@ const ListTail = styled.div`
     }
   }
 `;
-const PopImg = styled(Poplike)``;
 
 export default ContentA;
