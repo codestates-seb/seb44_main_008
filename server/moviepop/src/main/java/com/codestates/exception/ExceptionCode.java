@@ -3,7 +3,6 @@ package com.codestates.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-
     USER_NOT_FOUND(404, "유저가 존재하지 않습니다"),
     USER_EXISTS(409, "이미 유저가 존재합니다"),
     PASSWORD_INCORRECT(403, "비밀번호가 일치하지 않습니다"),
@@ -15,15 +14,13 @@ public enum ExceptionCode {
     WISH_NOT_FOUND(404, "찜하기가 되어있지 않습니다"),
     COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다"),
     CANNOT_UPDATE_COMMENT(403, "댓글 작성자가 아닙니다"),
+    GROUP_NOT_FOUND(404, "Group Not Found"),
     MOVIE_NOT_FOUND(404, "영화가 존재하지 않습니다"),
     ALREADY_LIKE_EXIST(409, "이미 좋아요가 되어있습니다"),
     LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다");
 
-
-
     @Getter
     private int status;
-
     @Getter
     private String message;
 
