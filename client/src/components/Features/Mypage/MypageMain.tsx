@@ -22,7 +22,6 @@ const tabContent: JSX.Element[] = [
 
 const MypageMain = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  console.log(activeTab);
   return (
     <StyledContainer>
       <StyledInnerContainer>

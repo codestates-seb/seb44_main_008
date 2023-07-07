@@ -36,7 +36,7 @@ const Editpassword = () => {
               value={editPw}
               onChange={editChangeHandler}
               type="password"
-              placeholder="변경 비밀번호"
+              placeholder="변경 비밀번호 (영문, 숫자, 특수문자 조합 8~16글자)"
               isvalid={'true'}
             />
             <Input

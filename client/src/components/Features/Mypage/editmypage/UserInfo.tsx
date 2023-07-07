@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { FileData } from './type';
+import { FileData, UserInfoType } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
 
@@ -9,6 +9,12 @@ const UserInfo = () => {
     'http://localhost:5173/src/assets/images/user-info/userAvatar.png';
   const [Image, setImage] = useState<FileData | null | string>(defaultImage);
   const fileInput = useRef(null);
+  const data: UserInfoType = {
+    userId: 1,
+    email: 'hgd123@gmail.com',
+    nickname: '홍길동 2',
+    profileImage: Image,
+  };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
@@ -33,7 +39,7 @@ const UserInfo = () => {
       return;
     }
   };
-  const [inputValue, setInputValue] = useState('뽀로로');
+  const [inputValue, setInputValue] = useState(data.nickname);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -45,7 +51,11 @@ const UserInfo = () => {
       <Container>
         <ImgContainer>
           {typeof Image === 'string' ? (
-            <img src={Image} alt="사용자 이미지" className="userImage" />
+            <img
+              src={data.profileImage}
+              alt="사용자 이미지"
+              className="userImage"
+            />
           ) : (
             <span>이미지가 없습니다.</span>
           )}
@@ -73,7 +83,7 @@ const UserInfo = () => {
               placeholder="닉네임"
               value={inputValue}
               onChange={changeHandler}
-              isvalid={'true'}
+              isvalid={'false'}
             />
           </NicknameContainer>
         </EditInputContainer>

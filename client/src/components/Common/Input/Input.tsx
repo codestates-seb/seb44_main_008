@@ -14,7 +14,6 @@ const Input = ({
   type,
 }: Props) => {
   const [inputValue, setInputValue] = useState<InputValue>(value);
-
   const onReset = () => {
     setInputValue('');
   };
@@ -63,12 +62,22 @@ const InputStyled = styled.input<Props>`
     isvalid === 'true'
       ? '2px solid var(--ghost-color)'
       : '2px solid var(--theme-color)'};
+  animation: ${({ isvalid }) =>
+    isvalid === 'false' ? 'vibration 0.1s 4' : ''};
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
+  }
 `;
 const StyledResetButton = styled.button`
   color: var(--ghost-color);
   position: absolute;
   width: 1rem;
-  right: 1rem;
+  right: 0.1rem;
 `;
 
 export default Input;

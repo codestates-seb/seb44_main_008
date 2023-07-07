@@ -27,3 +27,9 @@ export interface Tag {
   tagId: number | string;
   tagName: string;
 }
+export interface UserInfoType {
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImage: string | FileData | null;
+}
