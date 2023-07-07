@@ -6,6 +6,7 @@ export const PopperBox = styled.div`
   padding: 1.5rem 1rem;
   .popperTitle {
     font-size: 1.3rem;
+    line-height: 1.7rem;
     color: var(--white-color);
     margin-bottom: 1.2rem;
   }
@@ -145,6 +146,9 @@ export const PopperBox = styled.div`
       display: flex;
       justify-content: space-between;
       width: calc(100% - 3.5rem);
+      &.w100 {
+        width: 100%;
+      }
     }
     button {
       display: flex;

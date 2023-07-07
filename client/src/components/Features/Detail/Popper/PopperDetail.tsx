@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { PopperDetailData } from './popperType';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
@@ -31,7 +30,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   currentPage,
 }) => {
   const id = currentId;
-  const navigate = useNavigate();
   const [groups, setGroups] = useState<PopperDetailData>({});
 
   const clickEdit = () => {
@@ -53,7 +51,10 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
 
   return (
     <PopperBox>
-      <h2 className="popperTitle">지금 이 영화를 같이 보고 싶어하는 팝퍼🍿</h2>
+      <h2 className="popperTitle">
+        지금 이 영화를 <br />
+        같이 보고 싶어하는 팝퍼🍿
+      </h2>
       <div className="popperDetail">
         <h4>{groups.title}</h4>
         <ol>
@@ -64,27 +65,36 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
         <p>{groups.content}</p>
       </div>
       <div className="popperButtonWrap">
-        <Button
-          value="↩"
-          onClick={() => {
-            setCurrentRender('List');
-          }}
-          width="2.438rem"
-        />
-        <div className="popDetailButtonBox">
-          {currentPage === 'popDetail' && (
-            <Button value="모집 신청" width="100%" type="variant" />
-          )}
-          {currentPage === 'myPageMyPop' && (
-            <>
+        {currentPage === 'popDetail' && (
+          <>
+            <Button
+              value="↩"
+              onClick={() => {
+                setCurrentRender('List');
+              }}
+              width="2.438rem"
+            />
+            <div className="popDetailButtonBox">
+              <Button value="모집 신청" width="100%" type="variant" />
+            </div>
+          </>
+        )}
+        {currentPage === 'myPageMyPop' && (
+          <>
+            <div className="popDetailButtonBox w100">
               <Button value="수정하기" width="49%" onClick={clickEdit} />
               <Button value="모집 삭제" width="49%" type="variant" />
-            </>
-          )}
-          {currentPage === 'myPageOtherPop' && (
-            <Button value="팟 참여 취소하기" width="100%" type="variant" />
-          )}
-        </div>
+            </div>
+          </>
+        )}
+
+        {currentPage === 'myPageOtherPop' && (
+          <>
+            <div className="popDetailButtonBox w100">
+              <Button value="팟 참여 취소하기" width="100%" type="variant" />
+            </div>
+          </>
+        )}
       </div>
     </PopperBox>
   );

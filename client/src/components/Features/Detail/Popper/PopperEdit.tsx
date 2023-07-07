@@ -6,11 +6,13 @@ import { PopperBox } from './PopperStyle';
 type PoppeEditProps = {
   currentId: number;
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+  currentPage: string;
 };
 
 const PopperEdit: React.FC<PoppeEditProps> = ({
   currentId,
   setCurrentRender,
+  currentPage,
 }) => {
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
@@ -45,7 +47,10 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
 
   return (
     <PopperBox>
-      <h2 className="popperTitle">다른 팝퍼들과 함께 보면 재미가 2배!🍿</h2>
+      <h2 className="popperTitle">
+        다른 팝퍼들과 <br />
+        함께 보면 재미가 2배!🍿
+      </h2>
       <div className="popperWrite">
         <Input
           value={title}
@@ -89,8 +94,38 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
         ></textarea>
       </div>
       <div className="popperButtonWrap">
-        <Button value="↩" width="2.438rem" />
-        <Button value="수정하기" width="calc(100% - 3.5rem)" type="variant" />
+        {currentPage === 'popDetail' && (
+          <>
+            <Button
+              value="↩"
+              width="2.438rem"
+              onClick={() => {
+                setCurrentRender('List');
+              }}
+            />
+            <Button
+              value="수정하기"
+              width="calc(100% - 3.5rem)"
+              type="variant"
+            />
+          </>
+        )}
+        {currentPage === 'myPageMyPop' && (
+          <>
+            <Button
+              value="↩"
+              width="2.438rem"
+              onClick={() => {
+                setCurrentRender('Detail');
+              }}
+            />
+            <Button
+              value="수정하기"
+              width="calc(100% - 3.5rem)"
+              type="variant"
+            />
+          </>
+        )}
       </div>
     </PopperBox>
   );
