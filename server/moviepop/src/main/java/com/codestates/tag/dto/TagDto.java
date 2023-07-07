@@ -17,4 +17,9 @@ public class TagDto {
     public static class ReviewBoardRequest {
         private long tagId;
     }
+    @Getter
+    @Setter
+    public static class UserRequest {
+        private long tagId;
+    }
 }

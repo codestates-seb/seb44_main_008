@@ -7,6 +7,7 @@ import com.codestates.dto.ResponseDto;
 import com.codestates.reviewBoard.entity.ReviewBoard;
 import com.codestates.reviewBoard.mapper.ReviewBoardMapper;
 import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.dto.UserDto;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
@@ -38,11 +39,13 @@ public class UserController {
     private final ReviewBoardMapper reviewBoardMapper;
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final TagMapper tagMapper;
+
 //    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post userPostDto) {
-        User user = userMapper.userPostDtoToUser(userPostDto);
+        User user = userMapper.userPostDtoToUser(userPostDto, tagMapper);
         User createUser = userService.createUser(user);
 
         URI uri = UriComponent.createUri(USER_DEFAULT_URI, createUser.getUserId());
@@ -54,10 +57,10 @@ public class UserController {
     public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long userId,
                                     @Valid @RequestBody UserDto.Patch userPatchDto) {
         userPatchDto.setUserId(userId);
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto));
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper));
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserBriefResponseDto(user)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchDto(user, tagMapper)),
                 HttpStatus.OK
         );
     }
@@ -67,10 +70,7 @@ public class UserController {
                                             @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
         User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
 
-        return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
-                HttpStatus.OK
-        );
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @GetMapping // 자신의 회원정보 조회
