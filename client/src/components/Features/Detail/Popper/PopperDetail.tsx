@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { PopperDetailData } from './popperType';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
-import { LargeNumberLike } from 'crypto';
 
 const response = {
   data: {
