@@ -4,17 +4,20 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.service.CommentService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.user.entity.CommentLike;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
-import com.codestates.user.repository.ReviewBoardWishRepository;
+
+import com.codestates.user.entity.UserTag;
 import com.codestates.user.repository.UserRepository;
 import com.codestates.utils.CustomBeanUtils;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -37,18 +40,39 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        User findUser = userRepository.findByEmail(user.getEmail());
-        User.checkExistEmail(findUser);
+        if(!verifyEmail(user))
+            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+
+        //UserTag에 user를 넣어줘야한다.
+        for(UserTag userTag : user.getUserTags()){
+            userTag.setUser(user);
+        }
         //비밀번호 암호화
         //권한 부여
         return userRepository.save(user);
     }
 
+    private boolean verifyEmail(User user) {
+        if(userRepository.findByEmail(user.getEmail()) == null)
+            return true;
+        return false;
+    }
+
     public User updateUser(User user) {
         User findUser = findUser(user.getUserId());
-        User updateUser = findUser.changeUserInfo(user, beanUtils);
+        Optional.ofNullable(user.getNickname())
+                .ifPresent(nickname -> findUser.setNickname(nickname));
+        findUser.getUserTags().clear();
 
-        return userRepository.save(updateUser);
+        findUser.getUserTags().addAll(user.getUserTags());
+
+        for(UserTag userTag : findUser.getUserTags()) {
+            userTag.setUser(findUser);
+        }
+
+        findUser.setProfileImage(user.getProfileImage());
+
+        return userRepository.save(findUser);
     }
 
     public User updateUserPassword(long userId, String currentPassword, String newPassword) {
@@ -77,7 +101,7 @@ public class UserService {
 
     public void createReviewBoardWish(long userId, long reviewBoardId) {
         User user = findUser(userId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         if(reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
             throw new BusinessLogicException(ExceptionCode.ALREADY_WISH_EXIST);
@@ -95,7 +119,7 @@ public class UserService {
 
     public void deleteReviewBoardWish(long userId, long reviewBoardId) {
         User user = findUser(userId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewBoardId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
         if(reviewBoardWish == null)
@@ -103,7 +127,7 @@ public class UserService {
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
 
-        user.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+        reviewBoardWishService.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
 
         userRepository.save(user);
     }
@@ -138,7 +162,7 @@ public class UserService {
 
         comment.setLikes(comment.getLikes() - 1);
 
-        user.deleteCommentLike(commentLike.getCommentLikeId());
+        commentLikeService.deleteCommentLike(commentLike.getCommentLikeId());
 
         return comment;
     }

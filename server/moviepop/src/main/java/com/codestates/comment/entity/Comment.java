@@ -1,7 +1,7 @@
 package com.codestates.comment.entity;
 
 import com.codestates.audit.Auditable;
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@Table(name = "comments")
 public class Comment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

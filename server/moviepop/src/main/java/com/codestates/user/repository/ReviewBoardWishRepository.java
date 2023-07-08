@@ -1,6 +1,6 @@
 package com.codestates.user.repository;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

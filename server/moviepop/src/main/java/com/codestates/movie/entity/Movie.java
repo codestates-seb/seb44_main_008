@@ -1,38 +1,48 @@
 package com.codestates.movie.entity;
 
-import lombok.AllArgsConstructor;
+import com.codestates.review_board.entity.ReviewBoard;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
 public class Movie {
-    private String movieCode;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long movieId;
     private String title;
-    private String genre;
-    private String isAdulted;
+    private boolean isAdulted;
+
+    @OneToMany(mappedBy = "movie")
+    private List<ReviewBoard> reviewBoards = new ArrayList<>();
+
+    public Movie(String title, boolean isAdulted) {
+        this.title = title;
+        this.isAdulted = isAdulted;
+    }
+
+    public void addReviewBoard(ReviewBoard reviewBoard) {
+        this.reviewBoards.add(reviewBoard);
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return movieCode == movie.movieCode;
+        return isAdulted == movie.isAdulted && Objects.equals(title, movie.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(movieCode);
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "movieCode='" + movieCode + '\'' +
-                ", title='" + title + '\'' +
-                ", genre='" + genre + '\'' +
-                ", isAdulted='" + isAdulted + '\'' +
-                '}';
+        return Objects.hash(title, isAdulted);
     }
 }

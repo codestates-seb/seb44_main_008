@@ -1,6 +1,7 @@
-package com.codestates.reviewBoard.entity;
+package com.codestates.review_board.entity;
 
 import com.codestates.audit.Auditable;
+import com.codestates.movie.entity.Movie;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
 import lombok.Getter;
@@ -35,12 +36,13 @@ public class ReviewBoard extends Auditable {
     @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
-//
-//    @OneToOne
-//    private Movie movie;
-//
-//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
-//    private List<Tag> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "MOVIE_ID")
+    private Movie movie;
 //
 //    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
 //    private List<Group> groups = new ArrayList<>();

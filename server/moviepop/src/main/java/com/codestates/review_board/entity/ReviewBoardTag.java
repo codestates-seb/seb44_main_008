@@ -1,24 +1,24 @@
-package com.codestates.user.entity;
+package com.codestates.review_board.entity;
 
-import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.tag.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
-public class ReviewBoardWish {
+@NoArgsConstructor
+public class ReviewBoardTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reviewBoardWishId;
+    private long reviewBoardTagId;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "TAG_ID")
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn(name = "REVIEW_BOARD_ID")

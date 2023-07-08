@@ -4,8 +4,8 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.reviewBoard.entity.ReviewBoard;
-import com.codestates.reviewBoard.service.ReviewBoardService;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +32,7 @@ public class CommentService {
     }
 
     public Comment createComment(long reviewId, User user, Comment comment) {
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
 
         comment.setUser(user);
         comment.setReviewBoard(reviewBoard);
