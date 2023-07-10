@@ -23,14 +23,73 @@ const Signup = (props: any) => {
     formState: { errors },
   } = useForm<SignupType>({ mode: 'onChange' });
 
+  const onVaild = (data: any) => {
+    console.log(data);
+  };
+
   const [page, setPage] = useState(1);
   const [email, setEmail] = useState('');
   const [passWord, setPassword] = useState('');
   const [checkPassWord, setCheckPassword] = useState('');
+  const [tag, setTag] = useState('');
+  const [name, setName] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [birth, setBirth] = useState('');
 
   const ChangePage = () => {
     setPage(2);
   };
+
+  const tags = [
+    {
+      tagId: 1,
+      tagName: '로맨스',
+    },
+    {
+      tagId: 2,
+      tagName: '호러',
+    },
+    {
+      tagId: 3,
+      tagName: '판타지',
+    },
+    {
+      tagId: 4,
+      tagName: '스포츠',
+    },
+    {
+      tagId: 5,
+      tagName: 'SF',
+    },
+    {
+      tagId: 6,
+      tagName: '액션',
+    },
+    {
+      tagId: 7,
+      tagName: '애니메이션',
+    },
+    {
+      tagId: 8,
+      tagName: '범죄',
+    },
+    {
+      tagId: 9,
+      tagName: '힐링',
+    },
+    {
+      tagId: 10,
+      tagName: '미스테리',
+    },
+    {
+      tagId: 11,
+      tagName: '뮤지컬',
+    },
+    {
+      tagId: 12,
+      tagName: '코미디',
+    },
+  ];
 
   const [imagePreview, setImagePreview] = useState('');
   const image = watch('profileImage');
@@ -48,13 +107,14 @@ const Signup = (props: any) => {
 
   return (
     <AccountWrap>
-      <form onSubmit={handleSubmit(props.onSubmit)}>
+      <form onSubmit={handleSubmit(onVaild)}>
         {page === 1 && (
           <div>
             <div className="signImg">
+              <label htmlFor="picture" />
               {image ? <img src={imagePreview} /> : <img src={noImg} />}
+              <input {...register('profileImage')} id="picture" type="file" />
             </div>
-            <input {...register('profileImage')} id="picture" type="file" />
             <Input
               id="email"
               type="text"
@@ -125,7 +185,71 @@ const Signup = (props: any) => {
             ></Button>
           </div>
         )}
-        {page === 2 && <div>2페이지 입니당 ~~</div>}
+        {page === 2 && (
+          <div>
+            <div className="tagBtnWrap">
+              <ul>
+                {tags.map(tag => {
+                  return (
+                    <li key={tag.tagId}>
+                      <Button
+                        value={`#${tag.tagName}`}
+                        id={tag.tagId}
+                        width={'100%'}
+                        onClick={e => {
+                          setTag(tag.tagName);
+                        }}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+              <input type="hidden" value={tag} readOnly />
+            </div>
+            <Input
+              id="name"
+              type="text"
+              isvalid="true"
+              width="100%"
+              value={name}
+              onChange={e => {
+                setName(e.target.value);
+                register('name', {
+                  required: '이름은 필수 입력입니다.',
+                });
+              }}
+              placeholder="이름"
+            />
+            <Input
+              id="nickname"
+              type="text"
+              isvalid="true"
+              width="100%"
+              value={nickName}
+              onChange={e => {
+                setNickName(e.target.value);
+                register('nickname', {
+                  required: '닉네임은 필수 입력입니다.',
+                });
+              }}
+              placeholder="닉네임"
+            />
+            <Input
+              id="birth"
+              type="date"
+              isvalid="true"
+              width="100%"
+              value={birth}
+              onChange={e => {
+                setBirth(e.target.value);
+                register('birth', {
+                  required: '생년월일은 필수 입력입니다.',
+                });
+              }}
+            />
+            <Button width="100%" type="submit" value="회원가입" />
+          </div>
+        )}
       </form>
     </AccountWrap>
   );
