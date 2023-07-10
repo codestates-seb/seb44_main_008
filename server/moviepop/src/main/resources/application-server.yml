@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${AWS_RDS_ENDPOINT}/preproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${MYSQL_ROOT_NAME}
+    password: ${MYSQL_ROOT_PASSWORD}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+config:
+  domain: ${AWS_S3_ENDPOINT}
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  secret: ${JWT_SECRET_KEY}
