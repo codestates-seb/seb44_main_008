@@ -1,28 +1,34 @@
 import { styled } from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
 import { data } from './tabAB';
-import { postsType } from './type';
 import Poplike from '../../../Common/PopIcons/Poplike';
+import axios from 'axios';
 
 const ContentA = () => {
   const [like, setLike] = useState(false);
   const likeHandler = () => {
     setLike(!like);
   };
+
+  const [totalElements, setTotalElements] = useState(0);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
-  const limit = 5;
   const offset = (page - 1) * limit;
 
-  const postData = (posts: postsType[]) => {
-    if (posts) {
-      let result = posts.slice(offset, offset + limit);
-      return result;
-    }
+  const getData = async () => {
+    const response = await axios.get('/url/groups', {
+      params: { page: page, size: limit },
+    });
+    setTotalElements(response.data.pageInfo.totalElements);
   };
+  useEffect(() => {
+    getData();
+  }, [page]);
+
   return (
     <>
-      {data.map(item => (
+      {data.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce>
             <ListHead>
@@ -41,7 +47,12 @@ const ContentA = () => {
           </ListOnce>
         </ListContainer>
       ))}
-      <Pagenation />
+      <Pagenation
+        total={totalElements}
+        limit={limit}
+        page={page}
+        setPage={setPage}
+      />
     </>
   );
 };
