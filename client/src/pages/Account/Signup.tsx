@@ -175,7 +175,7 @@ const Signup = (props: any) => {
                   },
                 });
               }}
-              placeholder="비밀번호"
+              placeholder="비밀번호 확인"
             />
             <Button
               width="100%"
