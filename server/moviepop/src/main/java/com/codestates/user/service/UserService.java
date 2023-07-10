@@ -8,6 +8,14 @@ import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.service.MoviePartyService;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.service.ReviewBoardService;
+import com.codestates.security.jwt.JwtTokenizer;
+import com.codestates.security.redis.CacheKey;
+import com.codestates.security.redis.repository.LogoutAccessTokenRedisRepository;
+import com.codestates.security.redis.repository.RefreshTokenRedisRepository;
+import com.codestates.security.redis.token.LogoutAccessToken;
+import com.codestates.security.redis.token.RefreshToken;
+import com.codestates.security.vo.Login;
+import com.codestates.security.vo.Token;
 import com.codestates.user.entity.CommentLike;
 import com.codestates.user.entity.MoviePartyUser;
 import com.codestates.user.entity.ReviewBoardWish;
@@ -16,11 +24,17 @@ import com.codestates.user.entity.UserTag;
 import com.codestates.user.repository.MoviePartyUserRepository;
 import com.codestates.user.repository.UserRepository;
 import com.codestates.utils.CustomBeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.codestates.security.utils.JwtExpirationEnums.REFRESH_TOKEN_EXPIRATION_TIME;
 
 @Transactional
 @Service
@@ -33,6 +47,10 @@ public class UserService {
     private final CommentLikeService commentLikeService;
     private final MoviePartyService moviePartyService;
     private final MoviePartyUserRepository moviePartyUserRepository;
+    private final JwtTokenizer jwtTokenizer;
+    private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
 
 //    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils,
 //                       ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService) {
@@ -45,7 +63,7 @@ public class UserService {
 //    }
 
 
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository) {
+    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository) {
         this.userRepository = userRepository;
         this.beanUtils = beanUtils;
         this.reviewBoardWishService = reviewBoardWishService;
@@ -54,6 +72,10 @@ public class UserService {
         this.commentLikeService = commentLikeService;
         this.moviePartyService = moviePartyService;
         this.moviePartyUserRepository = moviePartyUserRepository;
+        this.jwtTokenizer = jwtTokenizer;
+        this.passwordEncoder = passwordEncoder;
+        this.refreshTokenRedisRepository = refreshTokenRedisRepository;
+        this.logoutAccessTokenRedisRepository = logoutAccessTokenRedisRepository;
     }
 
     public User createUser(User user) {
@@ -114,6 +136,48 @@ public class UserService {
     private User verifyUserId(long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+    public Map<String, String> login(Login login) {
+        User user = userRepository.findByEmail(login.getEmail());
+        if(user.getUserStatus().equals(User.UserStatus.USER_WITHDRAW))
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+        checkPassword(login.getPassword(), user.getPassword());
+
+        String username = user.getEmail();
+        String accessToken = jwtTokenizer.generateAccessToken(username);
+        RefreshToken refreshToken = saveRefreshToken(username);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("Authorization", accessToken);
+        tokens.put("Refresh", refreshToken.getRefreshToken());
+
+        return tokens;
+    }
+
+    private void checkPassword(String password, String registeredPassword) {
+        if(!passwordEncoder.matches(password, registeredPassword))
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_INCORRECT);
+    }
+
+    private RefreshToken saveRefreshToken(String username) {
+        return refreshTokenRedisRepository.save(RefreshToken.createRefreshToken(
+                username,
+                jwtTokenizer.generateRefreshToken(username),
+                REFRESH_TOKEN_EXPIRATION_TIME.getValue()
+        ));
+    }
+
+    @CacheEvict(value = CacheKey.USER, key = "#username")
+    public void logout(Token token, String username) {
+        String accessToken = resolveToken(token.getAccessToken());
+        long remainMilliSeconds = jwtTokenizer.getRemainMilliSeconds(accessToken);
+        refreshTokenRedisRepository.deleteById(username);
+        logoutAccessTokenRedisRepository.save(LogoutAccessToken.of(accessToken, username, remainMilliSeconds));
+    }
+
+    private String resolveToken(String token) {
+        return token.substring(7);
     }
 
     public void createReviewBoardWish(long userId, long reviewBoardId) {
