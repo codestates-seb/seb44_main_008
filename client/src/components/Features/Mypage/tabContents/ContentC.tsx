@@ -1,23 +1,29 @@
-import { SetStateAction, useState } from 'react';
-import { postsType } from './type';
+import { SetStateAction, useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import { data2 } from './tabCD';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
+import axios from 'axios';
 
 const ContentC = () => {
-  const { lockScroll, openScroll } = useBodyScrollLock();
+  const [totalElements, setTotalElements] = useState(0);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
-  const limit = 5;
   const offset = (page - 1) * limit;
 
-  const postData = (posts: postsType[]) => {
-    if (posts) {
-      let result = posts.slice(offset, offset + limit);
-      return result;
-    }
+  const getData = async () => {
+    const response = await axios.get('/url/groups', {
+      params: { page: page, size: limit },
+    });
+    setTotalElements(response.data.pageInfo.totalElements);
   };
+
+  useEffect(() => {
+    getData();
+  }, [page]);
+
+  const { lockScroll, openScroll } = useBodyScrollLock();
   const [isOpen, setIsOpen] = useState(false);
   const [modalVisibleId, setModalVisibleId] = useState(0);
   const [currentRender, setCurrentRender] = useState('Detail');
@@ -35,7 +41,7 @@ const ContentC = () => {
 
   return (
     <>
-      {data2.map(item => (
+      {data2.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.groupId}>
           <Modal
             id={item.groupId}
@@ -65,7 +71,12 @@ const ContentC = () => {
           </ListOnce>
         </ListContainer>
       ))}
-      <Pagenation />
+      <Pagenation
+        total={totalElements}
+        limit={limit}
+        page={page}
+        setPage={setPage}
+      />
     </>
   );
 };
