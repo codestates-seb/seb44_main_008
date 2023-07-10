@@ -1,5 +1,7 @@
 package com.codestates.user.mapper;
 
+import com.codestates.review_board.dto.ReviewBoardDto;
+import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.user.dto.UserDto;
@@ -57,7 +59,36 @@ public interface UserMapper {
         return userTags;
     }
 
-    UserResponseDto userToUserResponseDto(User user);
+    default UserDto.PatchPageResponse userToUserPatchPageResponse(User user, TagMapper tagMapper, List<TagDto.Response> tags) {
+        List<TagDto.UserRequest> requests = tagMapper.userTagsToUserRequest(user.getUserTags());
 
-    //default UserResponseDto
+        UserDto.PatchPageResponse response = UserDto.PatchPageResponse.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .profileImage(user.getProfileImage())
+                .tags(tags)
+                .myTags(requests)
+                .build();
+
+        return response;
+    }
+
+    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper) {
+        List<TagDto.UserRequest> userTags = tagMapper.userTagsToUserRequest(user.getUserTags());
+        List<ReviewBoardDto.UserResponse> wishBoards = reviewBoardMapper.reviewBoardWishToUserResponses(user.getReviewBoardWishes());
+        List<ReviewBoardDto.UserResponse> myBoards = reviewBoardMapper.reviewBoardToUserResponses(user.getReviewBoards());
+
+        UserResponseDto response = new UserResponseDto(
+                user.getUserId(),
+                user.getName(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getProfileImage(),
+                userTags,
+                myBoards,
+                wishBoards);
+
+        return response;
+    }
 }

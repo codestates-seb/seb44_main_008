@@ -12,6 +12,7 @@ import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.user.entity.ReviewBoardWish;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -103,7 +104,7 @@ public interface ReviewBoardMapper {
                 .map(comment -> commentMapper.commentToCommentResponseDto(comment))
                 .collect(Collectors.toList());
 
-        List<TagDto.response> tagResponse = reviewBoard.getReviewBoardTags().stream()
+        List<TagDto.Response> tagResponse = reviewBoard.getReviewBoardTags().stream()
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
@@ -131,6 +132,42 @@ public interface ReviewBoardMapper {
                 .popularBoards(popularReviewBoardEntire)
                 .boards(reviewBoardEntire)
                 .build();
+    }
+
+    List<ReviewBoardDto.UserResponse> reviewBoardToUserResponses(List<ReviewBoard> reviewBoards); // UserResponse를 가져오기 위한 mapper
+    default ReviewBoardDto.UserResponse reviewBoardToUserResponse(ReviewBoard reviewBoard, TagMapper tagMapper) { // UserResponse를 가져오기 위한 mapper
+        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
+                reviewBoard.getUser().getUserId(),
+                reviewBoard.getUser().getNickname(),
+                reviewBoard.getUser().getProfileImage()
+        );
+
+        ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
+                .reviewBoardId(reviewBoard.getReviewBoardId())
+                .title(reviewBoard.getTitle())
+                .movieTitle(reviewBoard.getTitle())
+                .user(user)
+                .build();
+
+        return userResponse;
+    }
+
+    List<ReviewBoardDto.UserResponse> reviewBoardWishToUserResponses(List<ReviewBoardWish> reviewBoardWishes);
+    default ReviewBoardDto.UserResponse reviewBoardWishToUserResponse(ReviewBoardWish reviewBoardWish) {
+        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
+                reviewBoardWish.getUser().getUserId(),
+                reviewBoardWish.getUser().getNickname(),
+                reviewBoardWish.getUser().getProfileImage()
+        );
+
+        ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
+                .reviewBoardId(reviewBoardWish.getReviewBoard().getReviewBoardId())
+                .title(reviewBoardWish.getReviewBoard().getTitle())
+                .movieTitle(reviewBoardWish.getReviewBoard().getTitle())
+                .user(user)
+                .build();
+
+        return userResponse;
     }
 
 }

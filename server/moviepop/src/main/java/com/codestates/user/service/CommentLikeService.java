@@ -23,7 +23,7 @@ public class CommentLikeService {
         return commentLikeRepository.existsByCommentAndUser(comment,user);
     }
 
-    public void deleteCommentLike(long commentLikeId) {
-        commentLikeRepository.deleteById(commentLikeId);
-    }
+//    public void deleteCommentLike(long commentLikeId) {
+//        commentLikeRepository.deleteById(commentLikeId);
+//    }
 }

@@ -14,8 +14,8 @@ import java.util.List;
 public interface TagMapper {
 
 
-    TagDto.response tagToResponse(Tag tag);
-    List<TagDto.response> tagsToResponses(List<Tag> tag);
+    TagDto.Response tagToResponse(Tag tag);
+    List<TagDto.Response> tagsToResponses(List<Tag> tag);
 //    Tag requestToReviewBoardTag(TagDto.ReviewBoardRequest reviewBoardRequest);
 //
 //    List<Tag> requestsToReviewBoardTags(List<TagDto.ReviewBoardRequest> reviewBoardRequests);
@@ -31,6 +31,7 @@ public interface TagMapper {
     List<UserTag> usersRequestToUserTags(List<TagDto.UserRequest> requests);
 
     @Mapping(source = "tag.tagId", target = "tagId")
+    @Mapping(source = "tag.tagName", target = "tagName")
     TagDto.UserRequest userTagToUserRequest(UserTag userTag);
     List<TagDto.UserRequest> userTagsToUserRequest(List<UserTag> userTags);
 }
