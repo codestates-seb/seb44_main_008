@@ -77,9 +77,11 @@ const UserArea = () => {
   // }, []);
   const btnMypage = useCallback(() => {
     navigate('/mypage');
+    setMyShow(false);
   }, []);
   const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     //dispatch(resetUser());
+    setMyShow(false);
   }, []);
   return (
     <UserAreaWrap>
@@ -101,6 +103,9 @@ const UserArea = () => {
                       value={`#${tag.tagName}`}
                       id={tag.tagId}
                       width={'100%'}
+                      onClick={e => {
+                        setHashShow(false);
+                      }}
                     />
                   </li>
                 );
