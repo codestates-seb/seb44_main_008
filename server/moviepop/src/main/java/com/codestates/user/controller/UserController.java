@@ -10,6 +10,9 @@ import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
+import com.codestates.security.jwt.JwtTokenizer;
+import com.codestates.security.vo.Login;
+import com.codestates.security.vo.Token;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
@@ -26,10 +29,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -48,7 +53,7 @@ public class UserController {
     private final TagMapper tagMapper;
     private final TagService tagService;
     private final MoviePartyMapper moviePartyMapper;
-//    private final JwtTokenizer jwtTokenizer;
+    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post userPostDto) {
@@ -124,6 +129,28 @@ public class UserController {
         userService.deleteUser(userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid Login login, HttpServletResponse response) {
+        Map<String, String> tokens = userService.login(login);
+        response.setHeader("Authorization", "Bearer " + tokens.get("Authorization"));
+        response.setHeader("Refresh", "Bearer " + tokens.get("Refresh"));
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestHeader("Authorization") String accessToken,
+                                 @RequestHeader("Refresh") String refreshToken) {
+        String username = jwtTokenizer.getUsername(resolveToken(accessToken));
+        userService.logout(new Token(accessToken, refreshToken), username);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    private String resolveToken(String accessToken) {
+        return accessToken.substring(7);
     }
 
     @PostMapping("/{user-id}/reviewBoards/{review-id}") // 게시글 찜 등록
