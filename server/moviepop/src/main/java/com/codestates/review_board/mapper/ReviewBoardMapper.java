@@ -2,12 +2,15 @@ package com.codestates.review_board.mapper;
 
 
 import com.codestates.movie.dto.MovieDto;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.user.dto.UserDto;
 
 import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.user.mapper.UserMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -45,13 +48,15 @@ public interface ReviewBoardMapper {
     ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
 
-    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper) {
+    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper) {
         MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
 
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> commentMapper.commentToCommentResponseDto(comment))
                 .collect(Collectors.toList());
+
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
 
         ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
@@ -63,6 +68,7 @@ public interface ReviewBoardMapper {
                 .movie(movieResponse)
                 .user(userResponse)
                 .comments(commentResponse)
+                .groups(groups)
                 .build();
 
         return detailResponse;
