@@ -5,6 +5,8 @@ import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.movie_party.service.MoviePartyService;
+import com.codestates.user.entity.User;
+import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,26 +26,35 @@ public class MoviePartyController {
     public static final String MOVIE_PARTY_DEFAULT_URI = "/groups";
     private final MoviePartyService moviePartyService;
     private final MoviePartyMapper mapper;
+    private final UserService userService;
 
-    public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper) {
+//    public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper) {
+//        this.moviePartyService = moviePartyService;
+//        this.mapper = mapper;
+//    }
+
+    public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper, UserService userService) {
         this.moviePartyService = moviePartyService;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity postMovieParty(@RequestBody @Valid MoviePartyDto.Post requestBody) {
-        MovieParty movieParty = moviePartyService.createGroup(mapper.moviePartyPostDtoToMovieParty(requestBody));
 
-        URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
+//    @PostMapping
+//    public ResponseEntity postMovieParty(@RequestBody @Valid MoviePartyDto.Post requestBody) {
+//        MovieParty movieParty = moviePartyService.createGroup(mapper.moviePartyPostDtoToMovieParty(requestBody));
+//
+//        URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
+//
+//        return ResponseEntity.created(location).build();
+//    }
 
-        return ResponseEntity.created(location).build();
-    }
-
-    @PatchMapping("/{movie-party-id}")
+    @PatchMapping("/{movie-party-id}/users/{user-id}")
     public ResponseEntity patchMovieParty(@PathVariable("movie-party-id") @Positive long moviePartyId,
+                                     @PathVariable("user-id") @Positive long userId,
                                      @RequestBody @Valid MoviePartyDto.Patch requestBody) {
         requestBody.setMoviePartyId(moviePartyId);
-        MovieParty group = moviePartyService.updateGroup(mapper.moviePartyPatchDtoToMovieParty(requestBody));
+        MovieParty group = moviePartyService.updateMovieParty(userId, mapper.moviePartyPatchDtoToMovieParty(requestBody));
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto(mapper.moviePartyToMoviePartyResponseDto(group)),
@@ -51,9 +62,12 @@ public class MoviePartyController {
         );
     }
 
-    @GetMapping("/{movie-party-id}")
-    public ResponseEntity getGroup(@PathVariable("movie-party-id") @Positive long moviePartyId) {
-        MovieParty group = moviePartyService.findGroup(moviePartyId);
+    @GetMapping("/{movie-party-id}/users/{user-id}")
+    public ResponseEntity getGroup(@PathVariable("movie-party-id") @Positive long moviePartyId,
+                                   @PathVariable("user-id") @Positive long userId) {
+        User user = userService.findUser(userId);
+
+        MovieParty group = moviePartyService.findMovieParty(moviePartyId, user);
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto(mapper.moviePartyToMoviePartyResponseDto(group)),
@@ -61,10 +75,12 @@ public class MoviePartyController {
         );
     }
 
-    @GetMapping
-    public ResponseEntity getGroups(@Positive int page,
+    @GetMapping("/users/{user-id}")
+    public ResponseEntity getGroups(@PathVariable("user-id") @Positive long userId,
+                                    @Positive int page,
                                     @Positive int size) {
-        Page<MovieParty> pageGroups = moviePartyService.findGroups(page, size);
+        User user = userService.findUser(userId);
+        Page<MovieParty> pageGroups = moviePartyService.findMovieParties(page, size, user);
         List<MovieParty> groups = pageGroups.getContent();
 
         return new ResponseEntity(
@@ -73,9 +89,10 @@ public class MoviePartyController {
         );
     }
 
-    @DeleteMapping("/{group-id}")
-    public ResponseEntity deleteGroup(@PathVariable("group-id") @Positive long groupId) {
-        moviePartyService.deleteGroup(groupId);
+    @DeleteMapping("/{group-id}/users/{user-id}")
+    public ResponseEntity deleteGroup(@PathVariable("group-id") @Positive long groupId,
+                                      @PathVariable("user-id") @Positive long userId) {
+        moviePartyService.deleteMovieParty(userId, groupId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

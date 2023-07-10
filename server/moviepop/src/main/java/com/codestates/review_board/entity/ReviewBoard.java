@@ -2,6 +2,7 @@ package com.codestates.review_board.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.movie.entity.Movie;
+import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
 import lombok.Getter;
@@ -39,23 +40,22 @@ public class ReviewBoard extends Auditable {
     @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewBoardTag> reviewBoardTags = new ArrayList<>();
 
-
     @ManyToOne
     @JoinColumn(name = "MOVIE_ID")
     private Movie movie;
-//
-//    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE)
-//    private List<Group> groups = new ArrayList<>();
-//
 
+    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<MovieParty> parties = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @OrderBy("commentId desc")
     private Set<Comment> comments = new LinkedHashSet<>();
 
     public void addComment(Comment comment) {
-
         this.comments.add(comment);
     }
 
+    public void addMovieParty(MovieParty movieParty) {
+        this.parties.add(movieParty);
+    }
 }

@@ -2,6 +2,7 @@ package com.codestates.user.dto;
 
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.tag.dto.TagDto;
+import com.codestates.movie_party.dto.MoviePartyDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,6 +19,6 @@ public class UserResponseDto {
     private List<TagDto.UserRequest> myTags;
     private List<ReviewBoardDto.UserResponse> myBoard;
     private List<ReviewBoardDto.UserResponse> wishBoard;
-//    private groupDto.response myRecruitingGroup;
-//    private groupDto.response myParticipatingGroup;
+    private List<MoviePartyDto.MyPageResponse> myRecruitingGroup;
+    private List<MoviePartyDto.MyPageResponse> myParticipatingGroup;
 }

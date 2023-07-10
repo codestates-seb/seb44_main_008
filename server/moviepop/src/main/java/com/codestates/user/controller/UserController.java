@@ -5,6 +5,8 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.movie_party.entity.MovieParty;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
@@ -12,6 +14,7 @@ import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
 import com.codestates.user.dto.UserDto;
+import com.codestates.user.entity.MoviePartyUser;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
 import com.codestates.user.service.UserService;
@@ -44,7 +47,7 @@ public class UserController {
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
     private final TagService tagService;
-
+    private final MoviePartyMapper moviePartyMapper;
 //    private final JwtTokenizer jwtTokenizer;
 
     @PostMapping // 회원가입
@@ -91,7 +94,7 @@ public class UserController {
         User user = userService.findUser(userId);
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper, moviePartyMapper)),
                 HttpStatus.OK
         );
     }
@@ -160,17 +163,29 @@ public class UserController {
 
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
-                HttpStatus.NO_CONTENT
+                HttpStatus.OK
         );
     }
 
-    @PostMapping("/groups/{group-id}") // 팟 참여 기능
-    public ResponseEntity postUserParticipation() {
-        return null;
+    @PostMapping("/{user-id}/groups/{group-id}") // 팟 참여 기능
+    public ResponseEntity postUserParticipation(@PathVariable("user-id") @Positive long userId,
+                                                @PathVariable("group-id") @Positive long groupId) {
+        MovieParty movieParty = userService.createUserParticipation(userId, groupId);
+
+        return new ResponseEntity(
+                new ResponseDto.SingleResponseDto<>(moviePartyMapper.moviePartyToCurrentParticipantResponse(movieParty)),
+                HttpStatus.OK
+        );
     }
 
-    @DeleteMapping("/groups/{group-id}") // 팟 참여 취소
-    public ResponseEntity deleteParticipatedGroup() {
-        return null;
+    @DeleteMapping("/{user-id}/groups/{group-id}") // 팟 참여 취소
+    public ResponseEntity deleteParticipatedGroup(@PathVariable("user-id") @Positive long userId,
+                                                  @PathVariable("group-id") @Positive long groupId) {
+        MovieParty movieParty = userService.deleteUserParticipation(userId, groupId);
+
+        return new ResponseEntity(
+                new ResponseDto.SingleResponseDto<>(moviePartyMapper.moviePartyToCurrentParticipantResponse(movieParty)),
+                HttpStatus.OK
+        );
     }
 }

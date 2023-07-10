@@ -88,7 +88,6 @@ public class UserDto {
     public static class PatchPageResponse{  //회원정보 수정 페이지 응답 dto
         private Long userId;
         private String nickname;
-        private String email;
         private String profileImage;
         private List<TagDto.Response> tags;
         private List<TagDto.UserRequest> myTags;
@@ -107,5 +106,12 @@ public class UserDto {
     public static class totalReviewBoardResponse {
         private long userId;
         private String nickname;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MoviePartyResponse {
+        private long userId;
+        private String profileImage;
     }
 }

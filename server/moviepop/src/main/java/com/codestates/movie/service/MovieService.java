@@ -44,4 +44,8 @@ public class MovieService {
         Optional<Movie> optionalMovie = movieRepository.findById(movieId);
         return optionalMovie.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_NOT_FOUND));
     }
+
+    public List<Movie> searchMovies(String query) {
+        return movieRepository.findByTitleContains(query);
+    }
 }

@@ -4,6 +4,9 @@ import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.entity.MovieParty;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.user.dto.UserDto;
 import com.codestates.user.dto.UserResponseDto;
 import com.codestates.user.entity.User;
@@ -12,6 +15,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
@@ -65,7 +69,6 @@ public interface UserMapper {
         UserDto.PatchPageResponse response = UserDto.PatchPageResponse.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
-                .email(user.getEmail())
                 .profileImage(user.getProfileImage())
                 .tags(tags)
                 .myTags(requests)
@@ -74,10 +77,21 @@ public interface UserMapper {
         return response;
     }
 
-    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper) {
+    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper) {
         List<TagDto.UserRequest> userTags = tagMapper.userTagsToUserRequest(user.getUserTags());
         List<ReviewBoardDto.UserResponse> wishBoards = reviewBoardMapper.reviewBoardWishToUserResponses(user.getReviewBoardWishes());
         List<ReviewBoardDto.UserResponse> myBoards = reviewBoardMapper.reviewBoardToUserResponses(user.getReviewBoards());
+
+        List<MoviePartyDto.MyPageResponse> myRecruitingGroup = moviePartyMapper.moviePartiesToMyPageResponses(user.getParties());
+
+        List<MovieParty> participatingGroup = user.getMoviePartyUsers().stream()
+                .map(moviePartyUser -> moviePartyUser.getMovieParty())
+                .collect(Collectors.toList());
+        List<MoviePartyDto.MyPageResponse> myParticipatingGroup = moviePartyMapper.moviePartiesToMyPageResponses(participatingGroup);
+
+//        UserResponseDto response = new UserResponseDto(userToUserBriefResponseDto(user), myRecruitingGroup, myParticipatingGroup);
+//
+//        return response;
 
         UserResponseDto response = new UserResponseDto(
                 user.getUserId(),
@@ -87,8 +101,13 @@ public interface UserMapper {
                 user.getProfileImage(),
                 userTags,
                 myBoards,
-                wishBoards);
+                wishBoards,
+                myRecruitingGroup,
+                myParticipatingGroup);
 
         return response;
     }
+    UserDto.MoviePartyResponse userToMoviePartyResponseDto(User user);
+    List<UserDto.MoviePartyResponse> usersToMoviePartyResponseDtos(List<User> users);
+    //default UserResponseDto
 }

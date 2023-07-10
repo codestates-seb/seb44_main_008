@@ -6,6 +6,8 @@ import com.codestates.review_board.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.movie.dto.MovieDto;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.user.dto.UserDto;
 
 import com.codestates.comment.dto.CommentDto;
@@ -13,8 +15,8 @@ import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.user.entity.ReviewBoardWish;
+import com.codestates.user.mapper.UserMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,8 +97,7 @@ public interface ReviewBoardMapper {
 //    ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
 
-
-    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper) {
+    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper) {
         MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
 
@@ -107,6 +108,7 @@ public interface ReviewBoardMapper {
         List<TagDto.Response> tagResponse = reviewBoard.getReviewBoardTags().stream()
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
 
         ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
@@ -119,6 +121,7 @@ public interface ReviewBoardMapper {
                 .user(userResponse)
                 .comments(commentResponse)
                 .tags(tagResponse)
+                .groups(groups)
                 .build();
 
         return detailResponse;

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class TagDto {
-
     @Getter
     @Setter
     public static class Response {
@@ -21,6 +20,5 @@ public class TagDto {
     @Setter
     public static class UserRequest {
         private long tagId;
-        private String tagName;
     }
 }

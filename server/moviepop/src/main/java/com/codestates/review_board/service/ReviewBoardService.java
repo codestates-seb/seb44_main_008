@@ -64,7 +64,7 @@ public class ReviewBoardService {
     public ReviewBoard updateReviewBoard(User user, ReviewBoard reviewBoard) {
         ReviewBoard getReviewboard = findReviewBoard(user, reviewBoard.getReviewBoardId());
         if(getReviewboard.getUser().getUserId() != user.getUserId())
-            throw new BusinessLogicException(ExceptionCode.INVALID_USER);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
 
         Optional.ofNullable(reviewBoard.getTitle())
                 .ifPresent(title -> getReviewboard.setTitle(title));
@@ -130,7 +130,7 @@ public class ReviewBoardService {
     public List<ReviewBoard> findPopularReviewBoards(User user) {
         Period age = getAge(user.getBirth());
         if(age.getYears() >= 19)
-            return reviewBoardRepository.findTop8ByOrderByWishDesc();
+            return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
         else {
             List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
             return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));

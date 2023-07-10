@@ -14,8 +14,8 @@ public interface ReviewBoardRepository extends JpaRepository<ReviewBoard,Long> {
     List<ReviewBoard> findTop12ByOrderByReviewBoardIdDesc();
     @Query(value = "select r from ReviewBoard r inner join r.movie m where m.isAdulted = :isAdulted order by r.reviewBoardId desc")
     List<ReviewBoard> findTop12ByOrderByReviewBoardIdDescByIsAdulted(boolean isAdulted);
-    List<ReviewBoard> findTop8ByOrderByWishDesc();
-    @Query(value = "select r from ReviewBoard r inner join r.movie m where m.isAdulted = :isAdulted order by r.wish desc")
+    List<ReviewBoard> findTop8ByOrderByWishDescReviewBoardIdDesc();
+    @Query(value = "select r from ReviewBoard r inner join r.movie m where m.isAdulted = :isAdulted order by r.wish desc, r.reviewBoardId desc")
     List<ReviewBoard> findTop8ByOrderByWishDescByIsAdulted(boolean isAdulted);
     @Query(value = "select r from ReviewBoard r inner join r.movie m where m.isAdulted = :isAdulted")
     Page<ReviewBoard> findAllByIsAdulted(boolean isAdulted, Pageable pageable);
