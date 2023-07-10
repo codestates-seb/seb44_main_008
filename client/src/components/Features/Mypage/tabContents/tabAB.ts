@@ -39,4 +39,34 @@ export const data = [
         'https://cdn.pixabay.com/photo/2017/06/09/23/22/avatar-2388584_1280.png',
     },
   },
+  {
+    reviewBoardId: 4,
+    title: '나는야 거미 사람',
+    movieTitle: '스파이더맨',
+    user: {
+      nickname: '톰 홀랜드',
+      profileImage:
+        'https://cdn.pixabay.com/photo/2017/06/09/23/22/avatar-2388584_1280.png',
+    },
+  },
+  {
+    reviewBoardId: 5,
+    title: '나는야 거미 사람',
+    movieTitle: '스파이더맨',
+    user: {
+      nickname: '톰 홀랜드',
+      profileImage:
+        'https://cdn.pixabay.com/photo/2017/06/09/23/22/avatar-2388584_1280.png',
+    },
+  },
+  {
+    reviewBoardId: 6,
+    title: '나는야 거미 사람',
+    movieTitle: '스파이더맨',
+    user: {
+      nickname: '톰 홀랜드',
+      profileImage:
+        'https://cdn.pixabay.com/photo/2017/06/09/23/22/avatar-2388584_1280.png',
+    },
+  },
 ];

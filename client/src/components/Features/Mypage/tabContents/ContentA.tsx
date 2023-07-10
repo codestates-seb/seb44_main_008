@@ -5,26 +5,26 @@ import { data } from './tabAB';
 import Poplike from '../../../Common/PopIcons/Poplike';
 import axios from 'axios';
 
+// const getData = async () => {
+//   const response = await axios.get('/url/groups', {
+//     params: { page: page, size: limit },
+//   });
+//   setTotalElements(response.data.pageInfo.totalElements);
+// };
+// useEffect(() => {
+//   getData();
+// }, [page]);
+
 const ContentA = () => {
   const [like, setLike] = useState(false);
   const likeHandler = () => {
     setLike(!like);
   };
 
-  const [totalElements, setTotalElements] = useState(0);
+  const [totalElements, setTotalElements] = useState(data.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
-  const getData = async () => {
-    const response = await axios.get('/url/groups', {
-      params: { page: page, size: limit },
-    });
-    setTotalElements(response.data.pageInfo.totalElements);
-  };
-  useEffect(() => {
-    getData();
-  }, [page]);
 
   return (
     <>
