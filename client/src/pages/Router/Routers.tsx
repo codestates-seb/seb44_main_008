@@ -12,6 +12,7 @@ import Detailcontent from '../Detail/Detailcontent/Detailcontent';
 import Mypage from '../MyPage/Mypage';
 import Editmypage from '../MyPage/Editmypage';
 import Editpassword from '../MyPage/Editpassword';
+import ErrorPage from '../ErrorPage/ErrorPage';
 
 const Routers = () => {
   const hideNavbar = ['/', '/start'];
@@ -36,6 +37,7 @@ const Routers = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<Editmypage />} />
         <Route path="/mypage/edit/pass" element={<Editpassword />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
       {!isLayout && <Footer />}
     </BrowserRouter>
