@@ -6,12 +6,17 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.movie_party.dto.MoviePartyDto;
+import com.codestates.movie_party.entity.MovieParty;
+import com.codestates.movie_party.mapper.MoviePartyMapper;
+import com.codestates.movie_party.service.MoviePartyService;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
 
 import com.codestates.user.entity.User;
+import com.codestates.user.mapper.UserMapper;
 import com.codestates.user.service.UserService;
 
 import com.codestates.utils.UriComponent;
@@ -28,6 +33,7 @@ import java.util.List;
 
 
 import static com.codestates.comment.controller.CommentController.COMMENT_DEFAULT_URL;
+import static com.codestates.movie_party.controller.MoviePartyController.MOVIE_PARTY_DEFAULT_URI;
 
 @RequestMapping("/reviewBoards")
 @RestController
@@ -38,15 +44,30 @@ public class ReviewBoardController {
     private final ReviewBoardService reviewBoardService;
     private final ReviewBoardMapper mapper;
     private final UserService userService;
+    private final UserMapper userMapper;
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final MoviePartyService moviePartyService;
+    private final MoviePartyMapper moviePartyMapper;
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
+//    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
+//        this.reviewBoardService = reviewBoardService;
+//        this.mapper = mapper;
+//        this.userService = userService;
+//        this.commentService = commentService;
+//        this.commentMapper = commentMapper;
+//    }
+
+
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
+        this.userMapper = userMapper;
         this.commentService = commentService;
         this.commentMapper = commentMapper;
+        this.moviePartyService = moviePartyService;
+        this.moviePartyMapper = moviePartyMapper;
     }
 
     @PostMapping("/{user-id}")
@@ -75,7 +96,7 @@ public class ReviewBoardController {
         User user = userService.findUser(userId);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
 //        return new ResponseEntity<>(mapper.reviewBoardToResponse(reviewBoard), HttpStatus.OK);
-        return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, moviePartyMapper, userMapper), HttpStatus.OK);
     }
 
     @GetMapping("/users/{user-id}")
@@ -116,6 +137,18 @@ public class ReviewBoardController {
         User user = userService.findUser(userId);
         Comment comment = commentService.createComment(reviewId, user, commentMapper.commentPostDtoToComment(requestBody));
         URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/{review-id}/groups/users/{user-id}")
+    public ResponseEntity postMovieParty(@PathVariable("review-id") @Positive long reviewId,
+                                         @PathVariable("user-id") @Positive long userId,
+                                         @RequestBody @Valid MoviePartyDto.Post requestBody) {
+        User user = userService.findUser(userId);
+        MovieParty movieParty = moviePartyService.createMovieParty(user, reviewBoardService.findReviewBoard(user, reviewId), moviePartyMapper.moviePartyPostDtoToMovieParty(requestBody));
+
+        URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
 
         return ResponseEntity.created(location).build();
     }
