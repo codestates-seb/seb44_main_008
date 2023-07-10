@@ -1,8 +1,140 @@
 import { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { RootState } from '../../../redux/store/store';
 import styled from 'styled-components';
+import Button from '../Button/Button';
+
+const UserArea = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [hashShow, setHashShow] = useState(false);
+  const [myShow, setMyShow] = useState(false);
+
+  const tags = [
+    {
+      tagId: 1,
+      tagName: '로맨스',
+    },
+    {
+      tagId: 2,
+      tagName: '호러',
+    },
+    {
+      tagId: 3,
+      tagName: '판타지',
+    },
+    {
+      tagId: 4,
+      tagName: '스포츠',
+    },
+    {
+      tagId: 5,
+      tagName: 'SF',
+    },
+    {
+      tagId: 6,
+      tagName: '액션',
+    },
+    {
+      tagId: 7,
+      tagName: '애니메이션',
+    },
+    {
+      tagId: 8,
+      tagName: '범죄',
+    },
+    {
+      tagId: 9,
+      tagName: '힐링',
+    },
+    {
+      tagId: 10,
+      tagName: '미스테리',
+    },
+    {
+      tagId: 11,
+      tagName: '뮤지컬',
+    },
+    {
+      tagId: 12,
+      tagName: '코미디',
+    },
+  ];
+
+  const userImg = useSelector(
+    (state: RootState) => state.user.userInfo.user_img,
+  );
+
+  // const getHashData = useCallback(async () => {
+  //   try {
+  //     // const {data : { result}} = axios.get("/api/v1/hash");
+  //     // setHashArray(result)
+
+  //   } catch (err) {
+  //     console.log('err', err);
+  //   }
+  // }, []);
+  const btnMypage = useCallback(() => {
+    navigate('/mypage');
+    setMyShow(false);
+  }, []);
+  const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    //dispatch(resetUser());
+    setMyShow(false);
+  }, []);
+  return (
+    <UserAreaWrap>
+      <div className="hashArea">
+        <button
+          onClick={() => {
+            setHashShow(prev => !prev);
+          }}
+        >
+          #
+        </button>
+        {hashShow && (
+          <div className="hashBtns">
+            <ul>
+              {tags.map(tag => {
+                return (
+                  <li key={tag.tagId}>
+                    <Button
+                      value={`#${tag.tagName}`}
+                      id={tag.tagId}
+                      width={'100%'}
+                      onClick={e => {
+                        setHashShow(false);
+                      }}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+      <Link to="/detail/write" className="headerWriteBtn">
+        리뷰 작성
+      </Link>
+      <div className="myArea">
+        <button
+          onClick={() => {
+            setMyShow(prev => !prev);
+          }}
+        >
+          <img src={userImg} alt="사용자 프로필 사진" />
+        </button>
+        {myShow && (
+          <div className="myBtns">
+            <button onClick={btnMypage}>MyPage</button>
+            <button onClick={BtnLogout}>Logout</button>
+          </div>
+        )}
+      </div>
+    </UserAreaWrap>
+  );
+};
 
 const UserAreaWrap = styled.div`
   display: flex;
@@ -31,7 +163,7 @@ const UserAreaWrap = styled.div`
       ul {
         display: flex;
         flex-wrap: wrap;
-        gap: 1.6rem;
+        gap: 1rem;
         li {
           width: 29%;
         }
@@ -45,7 +177,6 @@ const UserAreaWrap = styled.div`
       position: relative;
       border-radius: 100%;
       overflow: hidden;
-      margin-left: 1.25rem;
       img {
         width: 100%;
         position: absolute;
@@ -74,90 +205,22 @@ const UserAreaWrap = styled.div`
       }
     }
   }
+  .headerWriteBtn {
+    height: 3.3rem;
+    line-height: 100%;
+    border-radius: 20px;
+    background-color: var(--main-gray-color);
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    transition: all 0.2s;
+    margin: 0 1rem;
+    &:hover {
+      background-color: var(--theme-hover-color);
+    }
+  }
 `;
-
-const UserArea = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [hashShow, setHashShow] = useState(false);
-  const [myShow, setMyShow] = useState(false);
-  const [hashArray, setHashArray] = useState([
-    '로맨스',
-    '호러',
-    '로맨스',
-
-    '호러',
-    '로맨스',
-    '호러',
-
-    '로맨스',
-    '호러',
-    '로맨스',
-
-    '호러',
-    '로맨스',
-    '호러',
-  ]);
-  const userImg = useSelector(
-    (state: RootState) => state.user.userInfo.user_img,
-  );
-
-  // const getHashData = useCallback(async () => {
-  //   try {
-  //     // const {data : { result}} = axios.get("/api/v1/hash");
-  //     // setHashArray(result)
-
-  //   } catch (err) {
-  //     console.log('err', err);
-  //   }
-  // }, []);
-  const btnMypage = useCallback(() => {
-    navigate('/mypage');
-  }, []);
-  const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    //dispatch(resetUser());
-  }, []);
-  return (
-    <UserAreaWrap>
-      <div className="hashArea">
-        <button
-          onClick={() => {
-            setHashShow(prev => !prev);
-          }}
-        >
-          #
-        </button>
-        {hashShow && (
-          <div className="hashBtns">
-            <ul>
-              {hashArray.map((hashItem, idx) => {
-                return (
-                  <li key={idx}>
-                    <button value={hashItem} />
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-      </div>
-      <div className="myArea">
-        <button
-          onClick={() => {
-            setMyShow(prev => !prev);
-          }}
-        >
-          <img src={userImg} alt="사용자 프로필 사진" />
-        </button>
-        {myShow && (
-          <div className="myBtns">
-            <button onClick={btnMypage}>MyPage</button>
-            <button onClick={BtnLogout}>Logout</button>
-          </div>
-        )}
-      </div>
-    </UserAreaWrap>
-  );
-};
 
 export default UserArea;
