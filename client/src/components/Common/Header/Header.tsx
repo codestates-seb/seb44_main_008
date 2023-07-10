@@ -6,6 +6,28 @@ import LoginBtns from './LoginBtns';
 import UserArea from './UserArea';
 import SearchInput from './SearchInput';
 
+const Header = () => {
+  const user = useSelector((state: RootState) => state.user);
+  return (
+    <HeaderWrapper>
+      <div className="headerInner">
+        <Logo>
+          <Link to="/main">MoviePOP</Link>
+        </Logo>
+
+        {user.isLoggedIn ? (
+          <>
+            <SearchInput />
+            <UserArea />
+          </>
+        ) : (
+          <LoginBtns />
+        )}
+      </div>
+    </HeaderWrapper>
+  );
+};
+
 const HeaderWrapper = styled.header`
   width: 100%;
   position: fixed;
@@ -31,27 +53,5 @@ const Logo = styled.h1`
     letter-spacing: 1px;
   }
 `;
-
-const Header = () => {
-  const user = useSelector((state: RootState) => state.user);
-  return (
-    <HeaderWrapper>
-      <div className="headerInner">
-        <Logo>
-          <Link to="/main">MoviePOP</Link>
-        </Logo>
-
-        {user.isLoggedIn ? (
-          <>
-            <SearchInput />
-            <UserArea />
-          </>
-        ) : (
-          <LoginBtns />
-        )}
-      </div>
-    </HeaderWrapper>
-  );
-};
 
 export default Header;

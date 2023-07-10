@@ -63,7 +63,6 @@ export const AccountWrap = styled.div`
   }
   input[type='date'] {
     &::-webkit-calendar-picker-indicator {
-      color: #fff;
       opacity: 0;
       width: 100%;
       position: absolute;
