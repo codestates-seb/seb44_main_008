@@ -4,6 +4,7 @@ import com.codestates.audit.Auditable;
 import com.codestates.comment.entity.Comment;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.utils.CustomBeanUtils;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -60,8 +63,7 @@ public class User extends Auditable {
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<UserTag> userTag = new ArrayList<>();
-//    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-//    private Group group;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewBoard> reviewBoards = new ArrayList<>();
 
@@ -73,6 +75,12 @@ public class User extends Auditable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MovieParty> parties = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MoviePartyUser> moviePartyUsers = new HashSet<>();
 
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
@@ -104,5 +112,13 @@ public class User extends Auditable {
 
     public void deleteCommentLike(long commentLikeId) {
         this.commentLikes.remove(commentLikeId);
+    }
+
+    public void addMovieParty(MovieParty movieParty) {
+        this.parties.add(movieParty);
+    }
+
+    public void addMoviePartyUser(MoviePartyUser moviePartyUser) {
+        this.moviePartyUsers.add(moviePartyUser);
     }
 }
