@@ -71,7 +71,7 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -80,7 +80,6 @@ public class User extends Auditable {
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
     }
-
 
     public void addReviewBoard(ReviewBoard reviewBoard) {
         this.reviewBoards.add(reviewBoard);
