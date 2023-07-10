@@ -121,6 +121,7 @@ public class ReviewBoardDto {
 
     @Getter
     @Builder
+    @AllArgsConstructor
     public static class UserResponse {
         private long reviewBoardId;
         private String title;
