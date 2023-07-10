@@ -8,7 +8,9 @@ import com.codestates.dto.ResponseDto;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
+import com.codestates.tag.dto.TagDto;
 import com.codestates.tag.mapper.TagMapper;
+import com.codestates.tag.service.TagService;
 import com.codestates.user.dto.UserDto;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -40,6 +43,7 @@ public class UserController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
+    private final TagService tagService;
 
 //    private final JwtTokenizer jwtTokenizer;
 
@@ -87,7 +91,18 @@ public class UserController {
         User user = userService.findUser(userId);
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper)),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("{user-id}/brief") // 회원정보 수정 페이지
+    public ResponseEntity getUserBrief(@PathVariable("user-id") @Positive long userId) {
+        User user = userService.findUser(userId);
+        List<TagDto.Response> tags = tagMapper.tagsToResponses(tagService.getTags());
+
+        return new ResponseEntity<>(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchPageResponse(user, tagMapper, tags)),
                 HttpStatus.OK
         );
     }

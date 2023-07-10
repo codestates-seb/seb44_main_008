@@ -126,8 +126,8 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.WISH_NOT_FOUND);
 
         reviewBoard.setWish(reviewBoard.getWish() - 1);
-
-        reviewBoardWishService.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
+        user.deleteReviewBoardWish(reviewBoardWish);
+//        reviewBoardWishService.deleteReviewBoardWish(reviewBoardWish.getReviewBoardWishId());
 
         userRepository.save(user);
     }
@@ -162,7 +162,7 @@ public class UserService {
 
         comment.setLikes(comment.getLikes() - 1);
 
-        commentLikeService.deleteCommentLike(commentLike.getCommentLikeId());
+        user.deleteCommentLike(commentLike);
 
         return comment;
     }

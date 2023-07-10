@@ -7,7 +7,7 @@ public class TagDto {
 
     @Getter
     @Setter
-    public static class response {
+    public static class Response {
         private long tagId;
         private String tagName;
     }
@@ -21,5 +21,6 @@ public class TagDto {
     @Setter
     public static class UserRequest {
         private long tagId;
+        private String tagName;
     }
 }

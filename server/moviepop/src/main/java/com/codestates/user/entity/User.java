@@ -68,7 +68,7 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewBoard> reviewBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -98,11 +98,11 @@ public class User extends Auditable {
         this.reviewBoards.remove(reviewBoardId);
     }
 
-    public void deleteReviewBoardWish(long reviewBoardWishId) {
-        this.reviewBoardWishes.remove(reviewBoardWishId);
+    public void deleteReviewBoardWish(ReviewBoardWish reviewBoardWish) {
+        this.reviewBoardWishes.remove(reviewBoardWish);
     }
 
-    public void deleteCommentLike(long commentLikeId) {
-        this.commentLikes.remove(commentLikeId);
+    public void deleteCommentLike(CommentLike commentLike) {
+        this.commentLikes.remove(commentLike);
     }
 }

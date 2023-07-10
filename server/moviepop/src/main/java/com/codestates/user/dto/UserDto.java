@@ -33,9 +33,6 @@ public class UserDto {
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDate birth;
 
-//        @NotBlank
-//        private String birth;
-
         @NotBlank
         private String password;
 
@@ -73,7 +70,7 @@ public class UserDto {
         private String nickname;
         private String email;
         private String profileImage;
-//        private Tag tag;
+        private List<TagDto.UserRequest> myTags;
     }
 
     @Getter
@@ -84,6 +81,17 @@ public class UserDto {
         private String email;
         private String profileImage;
         private List<TagDto.UserRequest> tags;
+    }
+
+    @Getter
+    @Builder
+    public static class PatchPageResponse{  //회원정보 수정 페이지 응답 dto
+        private Long userId;
+        private String nickname;
+        private String email;
+        private String profileImage;
+        private List<TagDto.Response> tags;
+        private List<TagDto.UserRequest> myTags;
     }
 
     @Getter

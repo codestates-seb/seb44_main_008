@@ -107,7 +107,7 @@ public class ReviewBoardDto {
         private MovieDto.Response movie;
         private UserDto.ReviewBoardResponse user;
         private List<CommentDto.Response> comments;
-        private List<TagDto.response> tags;
+        private List<TagDto.Response> tags;
     }
 
     @Getter
@@ -115,5 +115,15 @@ public class ReviewBoardDto {
     public static class MainResponse {
         private List<EntireResponse> popularBoards;
         private List<EntireResponse> boards;
+    }
+
+    @Getter
+    @Builder
+    public static class UserResponse {
+        private long reviewBoardId;
+        private String title;
+        private String movieTitle;
+        private UserDto.ReviewBoardResponse user;
+        //추후 추가
     }
 }
