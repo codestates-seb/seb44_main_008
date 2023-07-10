@@ -33,3 +33,8 @@ server:
   servlet:
     encoding:
       force-response: true
+jwt:
+  secret: ${JWT_SECRET_KEY}
+mail:
+  address:
+    admin: admin@gmail.com
