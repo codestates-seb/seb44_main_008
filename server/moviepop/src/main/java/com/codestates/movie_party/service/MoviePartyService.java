@@ -4,12 +4,18 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.repository.MoviePartyRepository;
+import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.user.entity.MoviePartyUser;
+import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -21,51 +27,88 @@ public class MoviePartyService {
         this.moviePartyRepository = moviePartyRepository;
     }
 
-    public MovieParty createGroup(MovieParty group) {
-        return moviePartyRepository.save(group);
+    public MovieParty createMovieParty(User user, ReviewBoard reviewBoard, MovieParty movieParty) {
+        // user mapping
+        user.addMovieParty(movieParty);
+        movieParty.setUser(user);
+
+        // review board mapping
+        reviewBoard.addMovieParty(movieParty);
+        movieParty.setReviewBoard(reviewBoard);
+
+        MoviePartyUser moviePartyUser = new MoviePartyUser();
+        moviePartyUser.setMovieParty(movieParty);
+        moviePartyUser.setUser(user);
+        moviePartyUser.setProfileImage(user.getProfileImage());
+        movieParty.addMoviePartyUser(moviePartyUser);
+
+        return moviePartyRepository.save(movieParty);
     }
 
-    public MovieParty updateGroup(MovieParty group) {
-        MovieParty findGroup = findVerifiedGroupId(group.getMoviePartyId());
+    public MovieParty updateMovieParty(long userId, MovieParty movieParty) {
+        MovieParty findMovieParty = findVerifiedMoviePartyId(movieParty.getMoviePartyId());
+        if(findMovieParty.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_MOVIE_PARTY);
 
-        Optional.ofNullable(group.getTitle())
-                .ifPresent(title -> findGroup.setTitle(title));
-        Optional.ofNullable(group.getMeetingDate())
-                .ifPresent(date -> findGroup.setMeetingDate(date));
-        Optional.ofNullable(group.getLocation())
-                .ifPresent(location -> findGroup.setLocation(location));
-        Optional.ofNullable(group.getMaxCapacity())
-                .ifPresent(capacity -> findGroup.setMaxCapacity(capacity));
-        Optional.ofNullable(group.getContent())
-                .ifPresent(content -> findGroup.setContent(content));
+        Optional.ofNullable(movieParty.getTitle())
+                .ifPresent(title -> findMovieParty.setTitle(title));
+        Optional.ofNullable(movieParty.getMeetingDate())
+                .ifPresent(date -> findMovieParty.setMeetingDate(date));
+        Optional.ofNullable(movieParty.getLocation())
+                .ifPresent(location -> findMovieParty.setLocation(location));
+        Optional.ofNullable(movieParty.getMaxCapacity())
+                .ifPresent(capacity -> findMovieParty.setMaxCapacity(capacity));
+        Optional.ofNullable(movieParty.getContent())
+                .ifPresent(content -> findMovieParty.setContent(content));
 
-        return moviePartyRepository.save(findGroup);
+        return moviePartyRepository.save(findMovieParty);
     }
 
-    public MovieParty findGroup(long groupId) {
-        return findVerifiedGroupId(groupId);
+    public MovieParty findMovieParty(long groupId, User user) {
+        MovieParty movieParty = findVerifiedMoviePartyId(groupId);
+        Period age = getAge(user.getBirth());
+
+        if(age.getYears() < 19 && movieParty.getReviewBoard().getMovie().isAdulted())
+            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_MOVIE_PARTY);
+
+        return movieParty;
     }
 
-    public Page<MovieParty> findGroups(int page, int size) {
-        return moviePartyRepository.findAll(PageRequest.of(
-                page - 1, size, Sort.by("groupId").descending())
-        );
+    public Page<MovieParty> findMovieParties(int page, int size, User user) {
+        Period age = getAge(user.getBirth());
+
+        if(age.getYears() >= 19)
+            return moviePartyRepository.findAll(PageRequest.of(
+                page - 1, size, Sort.by("moviePartyId").descending())
+            );
+        else
+            return moviePartyRepository.findAllByIsAdulted(PageRequest.of(
+                    page - 1, size, Sort.by("moviePartyId").descending()
+            ));
     }
 
-    public void deleteGroup(long groupId) {
-        verifyGroupId(groupId);
-        moviePartyRepository.deleteById(groupId);
+    public void deleteMovieParty(long userId, long moviePartyId) {
+        MovieParty movieParty = findVerifiedMoviePartyId(moviePartyId);
+        if(movieParty.getUser().getUserId() != userId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_MOVIE_PARTY);
+        moviePartyRepository.deleteById(moviePartyId);
     }
 
-    private void verifyGroupId(long groupId) {
-        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(groupId);
-        optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+    private void verifyMoviePartyId(long moviePartyId) {
+        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(moviePartyId);
+        optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_PARTY_NOT_FOUND));
     }
 
-    private MovieParty findVerifiedGroupId(long groupId) {
-        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(groupId);
-        MovieParty group = optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+    private MovieParty findVerifiedMoviePartyId(long moviePartyId) {
+        Optional<MovieParty> optionalGroup = moviePartyRepository.findById(moviePartyId);
+        MovieParty group = optionalGroup.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_PARTY_NOT_FOUND));
 
         return group;
+    }
+
+    private Period getAge(LocalDate birth) {
+        LocalDateTime now = LocalDateTime.now();
+
+        return Period.between(birth, now.toLocalDate());
     }
 }
