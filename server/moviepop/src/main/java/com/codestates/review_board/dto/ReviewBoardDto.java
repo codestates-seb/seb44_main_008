@@ -2,6 +2,7 @@ package com.codestates.review_board.dto;
 
 
 import com.codestates.movie.dto.MovieDto;
+import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.user.dto.UserDto;
 import com.codestates.comment.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -90,6 +91,7 @@ public class ReviewBoardDto {
         private MovieDto.Response movie;
         private UserDto.ReviewBoardResponse user;
         private List<CommentDto.Response> comments;
+        private List<MoviePartyDto.EntireResponse> groups;
     }
 
     @Getter
