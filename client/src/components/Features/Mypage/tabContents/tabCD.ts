@@ -35,4 +35,22 @@ export const data2 = [
     date: '2023-07-26 T20:00',
     movieTitle: '명탐정 코난 극장판',
   },
+  {
+    groupId: 5,
+    title: '코난 극장판 같이 정주행 하실분~ ⭐️',
+    location: 'http://watcha...',
+    max: 3,
+    current: 2,
+    date: '2023-07-26 T20:00',
+    movieTitle: '명탐정 코난 극장판',
+  },
+  {
+    groupId: 6,
+    title: '코난 극장판 같이 정주행 하실분~ ⭐️',
+    location: 'http://watcha...',
+    max: 3,
+    current: 2,
+    date: '2023-07-26 T20:00',
+    movieTitle: '명탐정 코난 극장판',
+  },
 ];

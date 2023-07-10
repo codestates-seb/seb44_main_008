@@ -1,33 +1,4 @@
 import { styled } from 'styled-components';
-
-// const Pagenation = ({ total, limit, page, setPage }) => {
-//   const numPages = Math.ceil(total / limit);
-//   return (
-//     <>
-//       <PaginationContainer>
-//         <StyledButton onClick={() => setPage(page - 1)} disabled={page === 1}>
-//           &lt;
-//         </StyledButton>
-//         {Array(numPages)
-//           .map((_, i) => (
-//             <StyledButton
-//               key={i + 1}
-//               onClick={() => setPage(i + 1)}
-//               aria-current={page === i + 1 ? 'page' : null}
-//             >
-//               {i + 1}
-//             </StyledButton>
-//           ))}
-//         <StyledButton
-//           onClick={() => setPage(page + 1)}
-//           disabled={page === numPages}
-//         >
-//           &gt;
-//         </StyledButton>
-//       </PaginationContainer>
-//     </>
-//   );
-// };
 import React from 'react';
 
 interface PaginationProps {
@@ -51,6 +22,23 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
+  const visiblePages = 5; // 한 페이지에 보여줄 최대 버튼 개수
+  const startPage = Math.max(page - Math.floor(visiblePages / 2), 1);
+  const endPage = Math.min(startPage + visiblePages - 1, numPages);
+
+  const pageButtons = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageButtons.push(
+      <StyledButton
+        key={i}
+        onClick={() => handlePageChange(i)}
+        aria-current={page === i ? 'page' : undefined}
+      >
+        {i}
+      </StyledButton>,
+    );
+  }
+
   return (
     <PaginationContainer>
       <StyledButton
@@ -59,20 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         &lt;
       </StyledButton>
-      {Array(numPages)
-        .fill(null)
-        .map((_, i) => {
-          const pageNumber = i + 1;
-          return (
-            <StyledButton
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              aria-current={page === pageNumber ? 'page' : undefined}
-            >
-              {pageNumber}
-            </StyledButton>
-          );
-        })}
+      {pageButtons}
       <StyledButton
         onClick={() => handlePageChange(page + 1)}
         disabled={page === numPages}

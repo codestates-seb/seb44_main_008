@@ -6,21 +6,21 @@ import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 import axios from 'axios';
 
+// const getData = async () => {
+//   const response = await axios.get('/url/groups', {
+//     params: { page: page, size: limit },
+//   });
+//   setTotalElements(response.data.pageInfo.totalElements);
+// };
+// useEffect(() => {
+//   getData();
+// }, [page]);
+
 const ContentD = () => {
-  const [totalElements, setTotalElements] = useState(0);
+  const [totalElements, setTotalElements] = useState(data2.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
-  const getData = async () => {
-    const response = await axios.get('/url/groups', {
-      params: { page: page, size: limit },
-    });
-    setTotalElements(response.data.pageInfo.totalElements);
-  };
-  useEffect(() => {
-    getData();
-  }, [page]);
 
   const { lockScroll, openScroll } = useBodyScrollLock();
   const [isOpen, setIsOpen] = useState(false);
