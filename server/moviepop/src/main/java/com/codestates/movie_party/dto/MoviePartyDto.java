@@ -1,12 +1,15 @@
 package com.codestates.movie_party.dto;
 
+import com.codestates.user.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MoviePartyDto {
     @Getter
@@ -49,7 +52,7 @@ public class MoviePartyDto {
     @Getter
     @AllArgsConstructor
     public static class Response {
-        private long moviePartyId;
+        private long groupId;
         private String title;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime meetingDate;
@@ -57,5 +60,39 @@ public class MoviePartyDto {
         private int maxCapacity;
         private String content;
         private String movieTitle;
+    }
+
+    @Getter
+    @Builder
+    public static class EntireResponse {
+        private long groupId;
+        private String title;
+        private String location;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime meetingDate;
+        private int maxCapacity;
+        private int currentParticipant;
+        private List<UserDto.MoviePartyResponse> users;
+        // userId, profileImage
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MyPageResponse {
+        private long groupId;
+        private String title;
+        private String location;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime meetingDate;
+        private int maxCapacity;
+        private int currentParticipant;
+        private String movieTitle;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CurrentParticipantResponse {
+        private long groupId;
+        private int currentParticipant;
     }
 }
