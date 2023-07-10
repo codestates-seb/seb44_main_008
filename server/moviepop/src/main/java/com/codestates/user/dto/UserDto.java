@@ -89,4 +89,11 @@ public class UserDto {
         private long userId;
         private String nickname;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MoviePartyResponse {
+        private long userId;
+        private String profileImage;
+    }
 }
