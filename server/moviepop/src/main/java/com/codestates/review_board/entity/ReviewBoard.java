@@ -14,8 +14,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.codestates.comment.entity.Comment;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.*;
+
+@DynamicInsert
 
 @Entity
 @Getter
@@ -29,6 +32,7 @@ public class ReviewBoard extends Auditable {
     private String review;
     private int wish;
     private String thumbnail;
+    private boolean adulted;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "USER_ID")

@@ -4,12 +4,14 @@ import com.codestates.review_board.entity.ReviewBoard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@DynamicInsert
 @NoArgsConstructor
 @Getter
 @Setter
