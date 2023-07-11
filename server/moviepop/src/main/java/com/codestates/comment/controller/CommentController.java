@@ -5,6 +5,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.security.interceptor.JwtParseInterceptor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class CommentController {
         this.mapper = mapper;
     }
 
-//    @PostMapping
+    //    @PostMapping
 //    public ResponseEntity postComment(@RequestBody @Valid CommentDto.Post requestBody) {
 //        Comment comment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
 //        URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
@@ -36,12 +37,12 @@ public class CommentController {
 //        return ResponseEntity.created(location).build();
 //    }
 
-    @PatchMapping("/{comment-id}/users/{user-id}")
+    @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                       @PathVariable("user-id") @Positive long userId,
                                        @RequestBody @Valid CommentDto.Patch requestBody) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
         requestBody.setCommentId(commentId);
-        Comment comment = commentService.updateComment(userId, mapper.commentPatchDtoToComment(requestBody));
+        Comment comment = commentService.updateComment(email, mapper.commentPatchDtoToComment(requestBody));
 
         return new ResponseEntity (
                 new ResponseDto.SingleResponseDto(mapper.commentToCommentPatchResponseDto(comment)),
@@ -71,10 +72,10 @@ public class CommentController {
         );
     }
 
-    @DeleteMapping("/{comment-id}/users/{user-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId,
-                                        @PathVariable("user-id") @Positive long userId) {
-        commentService.deleteComment(userId, commentId);
+    @DeleteMapping("/{comment-id}")
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        commentService.deleteComment(email, commentId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

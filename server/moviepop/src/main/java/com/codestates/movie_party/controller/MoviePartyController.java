@@ -5,6 +5,7 @@ import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.movie_party.service.MoviePartyService;
+import com.codestates.security.interceptor.JwtParseInterceptor;
 import com.codestates.user.entity.User;
 import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
@@ -49,12 +50,12 @@ public class MoviePartyController {
 //        return ResponseEntity.created(location).build();
 //    }
 
-    @PatchMapping("/{movie-party-id}/users/{user-id}")
+    @PatchMapping("/{movie-party-id}")
     public ResponseEntity patchMovieParty(@PathVariable("movie-party-id") @Positive long moviePartyId,
-                                     @PathVariable("user-id") @Positive long userId,
                                      @RequestBody @Valid MoviePartyDto.Patch requestBody) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
         requestBody.setMoviePartyId(moviePartyId);
-        MovieParty group = moviePartyService.updateMovieParty(userId, mapper.moviePartyPatchDtoToMovieParty(requestBody));
+        MovieParty group = moviePartyService.updateMovieParty(email, mapper.moviePartyPatchDtoToMovieParty(requestBody));
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto(mapper.moviePartyToMoviePartyResponseDto(group)),
@@ -62,10 +63,10 @@ public class MoviePartyController {
         );
     }
 
-    @GetMapping("/{movie-party-id}/users/{user-id}")
-    public ResponseEntity getGroup(@PathVariable("movie-party-id") @Positive long moviePartyId,
-                                   @PathVariable("user-id") @Positive long userId) {
-        User user = userService.findUser(userId);
+    @GetMapping("/{movie-party-id}")
+    public ResponseEntity getGroup(@PathVariable("movie-party-id") @Positive long moviePartyId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
 
         MovieParty group = moviePartyService.findMovieParty(moviePartyId, user);
 
@@ -75,11 +76,11 @@ public class MoviePartyController {
         );
     }
 
-    @GetMapping("/users/{user-id}")
-    public ResponseEntity getGroups(@PathVariable("user-id") @Positive long userId,
-                                    @Positive int page,
+    @GetMapping
+    public ResponseEntity getGroups(@Positive int page,
                                     @Positive int size) {
-        User user = userService.findUser(userId);
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         Page<MovieParty> pageGroups = moviePartyService.findMovieParties(page, size, user);
         List<MovieParty> groups = pageGroups.getContent();
 
@@ -89,10 +90,10 @@ public class MoviePartyController {
         );
     }
 
-    @DeleteMapping("/{group-id}/users/{user-id}")
-    public ResponseEntity deleteGroup(@PathVariable("group-id") @Positive long groupId,
-                                      @PathVariable("user-id") @Positive long userId) {
-        moviePartyService.deleteMovieParty(userId, groupId);
+    @DeleteMapping("/{group-id}")
+    public ResponseEntity deleteGroup(@PathVariable("group-id") @Positive long groupId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        moviePartyService.deleteMovieParty(email, groupId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

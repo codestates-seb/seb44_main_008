@@ -10,6 +10,7 @@ import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
+import com.codestates.security.interceptor.JwtParseInterceptor;
 import com.codestates.security.jwt.JwtTokenizer;
 import com.codestates.security.vo.Login;
 import com.codestates.security.vo.Token;
@@ -65,10 +66,10 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PatchMapping("/{user-id}") // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
-    public ResponseEntity patchUser(@PathVariable ("user-id") @Positive long userId,
-                                    @Valid @RequestBody UserDto.Patch userPatchDto) {
-        userPatchDto.setUserId(userId);
+    @PatchMapping // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
+    public ResponseEntity patchUser(@Valid @RequestBody UserDto.Patch userPatchDto) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        userPatchDto.setEmail(email);
         User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper));
 
         return new ResponseEntity<>(
@@ -77,22 +78,24 @@ public class UserController {
         );
     }
 
-    @PatchMapping("/{user-id}/password") // 비밀번호 수정
-    public ResponseEntity patchUserPassword(@PathVariable("user-id") @Positive long userId,
-                                            @Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
-        User user = userService.updateUserPassword(userId, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
+    @PatchMapping("/password") // 비밀번호 수정
+    public ResponseEntity patchUserPassword(@Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.updateUserPassword(email, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping // 자신의 회원정보 조회
-//    public ResponseEntity getUser() {
-//        //로그인된 사용자 정보를 가져와야 가능해보임
-//        return new ResponseEntity(
-//                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(토큰정보)),
-//                HttpStatus.OK
-//        );
-//    }
+    @GetMapping // 자신의 회원정보 조회
+    public ResponseEntity getUser() {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
+
+        return new ResponseEntity(
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user, reviewBoardMapper, tagMapper, moviePartyMapper)),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping("/{user-id}") // 특정 회원정보 조회
     public ResponseEntity getOtherUser(@PathVariable("user-id") @Positive long userId) {
@@ -104,9 +107,10 @@ public class UserController {
         );
     }
 
-    @GetMapping("{user-id}/brief") // 회원정보 수정 페이지
-    public ResponseEntity getUserBrief(@PathVariable("user-id") @Positive long userId) {
-        User user = userService.findUser(userId);
+    @GetMapping("/brief") // 회원정보 수정 페이지
+    public ResponseEntity getUserBrief() {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         List<TagDto.Response> tags = tagMapper.tagsToResponses(tagService.getTags());
 
         return new ResponseEntity<>(
@@ -124,9 +128,10 @@ public class UserController {
 //        );
 //    }
 
-    @DeleteMapping("/{user-id}") // 회원 삭제
-    public ResponseEntity deleteUser(@PathVariable("user-id") @Positive long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping // 회원 삭제
+    public ResponseEntity deleteUser() {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        userService.deleteUser(email);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -153,29 +158,29 @@ public class UserController {
         return accessToken.substring(7);
     }
 
-    @PostMapping("/{user-id}/reviewBoards/{review-id}") // 게시글 찜 등록
-    public ResponseEntity postUserWish(@PathVariable("user-id") @Positive long userId,
-                                       @PathVariable("review-id") @Positive long reviewId) {
-        userService.createReviewBoardWish(userId, reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(userService.findUser(userId), reviewId);
+    @PostMapping("/reviewBoards/{review-id}") // 게시글 찜 등록
+    public ResponseEntity postUserWish(@PathVariable("review-id") @Positive long reviewId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        userService.createReviewBoardWish(email, reviewId);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(userService.findVerifiedUserByEmail(email), reviewId);
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
                 HttpStatus.OK
         );
     }
 
-    @DeleteMapping("{user-id}/reviewBoards/{review-id}") // 게시글 찜 해제
-    public ResponseEntity deleteReviewWish(@PathVariable("user-id") @Positive long userId,
-                                           @PathVariable("review-id") @Positive long reviewId) {
-        userService.deleteReviewBoardWish(userId, reviewId);
+    @DeleteMapping("/reviewBoards/{review-id}") // 게시글 찜 해제
+    public ResponseEntity deleteReviewWish(@PathVariable("review-id") @Positive long reviewId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        userService.deleteReviewBoardWish(email, reviewId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요
-    public ResponseEntity postCommentLike(@PathVariable("user-id") @Positive long userId,
-                                          @PathVariable("comment-id") @Positive long commentId) {
-        Comment comment = userService.createCommentLike(userId, commentId);
+    @PostMapping("/comments/{comment-id}") //댓글 좋아요
+    public ResponseEntity postCommentLike(@PathVariable("comment-id") @Positive long commentId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        Comment comment = userService.createCommentLike(email, commentId);
 
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
@@ -183,10 +188,10 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/{user-id}/comments/{comment-id}") //댓글 좋아요 해제
-    public ResponseEntity deleteCommentLike(@PathVariable("user-id") @Positive long userId,
-                                            @PathVariable("comment-id") @Positive long commentId) {
-        Comment comment = userService.deleteCommentLike(userId, commentId);
+    @DeleteMapping("/comments/{comment-id}") //댓글 좋아요 해제
+    public ResponseEntity deleteCommentLike(@PathVariable("comment-id") @Positive long commentId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        Comment comment = userService.deleteCommentLike(email, commentId);
 
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(commentMapper.commentToCommentLikeResponse(comment)),
@@ -194,10 +199,10 @@ public class UserController {
         );
     }
 
-    @PostMapping("/{user-id}/groups/{group-id}") // 팟 참여 기능
-    public ResponseEntity postUserParticipation(@PathVariable("user-id") @Positive long userId,
-                                                @PathVariable("group-id") @Positive long groupId) {
-        MovieParty movieParty = userService.createUserParticipation(userId, groupId);
+    @PostMapping("/groups/{group-id}") // 팟 참여 기능
+    public ResponseEntity postUserParticipation(@PathVariable("group-id") @Positive long groupId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        MovieParty movieParty = userService.createUserParticipation(email, groupId);
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto<>(moviePartyMapper.moviePartyToCurrentParticipantResponse(movieParty)),
@@ -205,10 +210,10 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/{user-id}/groups/{group-id}") // 팟 참여 취소
-    public ResponseEntity deleteParticipatedGroup(@PathVariable("user-id") @Positive long userId,
-                                                  @PathVariable("group-id") @Positive long groupId) {
-        MovieParty movieParty = userService.deleteUserParticipation(userId, groupId);
+    @DeleteMapping("/groups/{group-id}") // 팟 참여 취소
+    public ResponseEntity deleteParticipatedGroup(@PathVariable("group-id") @Positive long groupId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        MovieParty movieParty = userService.deleteUserParticipation(email, groupId);
 
         return new ResponseEntity(
                 new ResponseDto.SingleResponseDto<>(moviePartyMapper.moviePartyToCurrentParticipantResponse(movieParty)),

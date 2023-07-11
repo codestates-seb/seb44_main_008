@@ -15,6 +15,7 @@ import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.review_board.service.ReviewBoardService;
 
+import com.codestates.security.interceptor.JwtParseInterceptor;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
@@ -77,21 +78,20 @@ public class ReviewBoardController {
         this.moviePartyMapper = moviePartyMapper;
     }
 
-    @PostMapping("/{user-id}")
-    public ResponseEntity postReviewBoard(@PathVariable("user-id") @Positive long userId,
-                                          @Valid @RequestBody ReviewBoardDto.Post post) {
-        User user = userService.findUser(userId);
+    @PostMapping
+    public ResponseEntity postReviewBoard(@Valid @RequestBody ReviewBoardDto.Post post) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(user, mapper.PostToReviewBoard(post, tagMapper));
         URI location = UriComponent.createUri(REVIEW_BOARD_DEFAULT_URI, reviewBoard.getReviewBoardId());
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{review-id}/users/{user-id}")
-    public ResponseEntity patchReviewBoard(@PathVariable("user-id") @Positive long userId,
-                                           @PathVariable("review-id") @Positive long reviewId,
+    @PatchMapping("/{review-id}")
+    public ResponseEntity patchReviewBoard(@PathVariable("review-id") @Positive long reviewId,
                                            @Valid @RequestBody ReviewBoardDto.Patch patch) {
-
-        User user = userService.findUser(userId);
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         patch.setReviewBoardId(reviewId);
         ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch, tagMapper));
         ReviewBoardDto.DetailResponse response = mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, tagMapper, moviePartyMapper, userMapper);
@@ -99,38 +99,39 @@ public class ReviewBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{review-id}/users/{user-id}")
-    public ResponseEntity getReviewBoard(@PathVariable("user-id") @Positive long userId,
-                                         @PathVariable("review-id") @Positive long reviewId) {
-        User user = userService.findUser(userId);
+    @GetMapping("/{review-id}")
+    public ResponseEntity getReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
 //        return new ResponseEntity<>(mapper.reviewBoardToResponse(reviewBoard), HttpStatus.OK);
 
         return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, tagMapper, moviePartyMapper, userMapper), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{user-id}")
-    public ResponseEntity getAllReviewBoards(@PathVariable("user-id") @Positive long userId,
-                                             @Positive @RequestParam int page,
+    @GetMapping
+    public ResponseEntity getAllReviewBoards(@Positive @RequestParam int page,
                                              @Positive @RequestParam int size) {
-        User user = userService.findUser(userId);
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findAllReviewBoards(user, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
         return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{review-id}/users/{user-id}")
-    public ResponseEntity deleteReviewBoard(@PathVariable("user-id") @Positive long userId,
-                                            @PathVariable("review-id") @Positive long reviewId) {
-        User user = userService.findUser(userId);
+    @DeleteMapping("/{review-id}")
+    public ResponseEntity deleteReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         reviewBoardService.deleteReviewBoard(user,reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/main/users/{user-id}")
-    public ResponseEntity getMainReviewBoards(@PathVariable("user-id") @Positive long userId) {
-        User user = userService.findUser(userId);
+    @GetMapping("/main")
+    public ResponseEntity getMainReviewBoards() {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         List<ReviewBoard> reviewBoards = reviewBoardService.findReviewBoards(user);
         List<ReviewBoard> popularBoards = reviewBoardService.findPopularReviewBoards(user);
 
@@ -155,29 +156,31 @@ public class ReviewBoardController {
     public ResponseEntity getSpecificTag(@PathVariable("tag-id") @Positive long tagId,
                                          @Positive @RequestParam int page,
                                          @Positive @RequestParam int size) {
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         Tag tag = tagService.findTagById(tagId);
-        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(tag,page, size);
+        Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(user, tag, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
         return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
 
-    @PostMapping("/{review-id}/users/{user-id}/comments")
+    @PostMapping("/{review-id}/comments")
     public ResponseEntity postComment(@PathVariable("review-id") @Positive long reviewId,
-                                      @PathVariable("user-id") @Positive long userId,
                                       @RequestBody @Valid CommentDto.Post requestBody) {
-        User user = userService.findUser(userId);
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         Comment comment = commentService.createComment(reviewId, user, commentMapper.commentPostDtoToComment(requestBody));
         URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
 
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping("/{review-id}/groups/users/{user-id}")
+    @PostMapping("/{review-id}/groups")
     public ResponseEntity postMovieParty(@PathVariable("review-id") @Positive long reviewId,
-                                         @PathVariable("user-id") @Positive long userId,
                                          @RequestBody @Valid MoviePartyDto.Post requestBody) {
-        User user = userService.findUser(userId);
+        String email = JwtParseInterceptor.getAuthenticatedUsername();
+        User user = userService.findVerifiedUserByEmail(email);
         MovieParty movieParty = moviePartyService.createMovieParty(user, reviewBoardService.findReviewBoard(user, reviewId), moviePartyMapper.moviePartyPostDtoToMovieParty(requestBody));
 
         URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
