@@ -16,7 +16,7 @@ import axios from 'axios';
 // }, [page]);
 
 const ContentA = () => {
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(true);
   const likeHandler = () => {
     setLike(!like);
   };
