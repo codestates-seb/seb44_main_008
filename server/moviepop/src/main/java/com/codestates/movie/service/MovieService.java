@@ -54,6 +54,6 @@ public class MovieService {
         if(age.getYears() >= 19)
             return movieRepository.findByTitleContains(query);
         else
-            return movieRepository.findByIsAdultedIsFalseAndTitleContains(query);
+            return movieRepository.findByAdultedIsFalseAndTitleContains(query);
     }
 }
