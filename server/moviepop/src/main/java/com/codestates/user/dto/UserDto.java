@@ -44,7 +44,7 @@ public class UserDto {
     @AllArgsConstructor
     public static class Patch{
         @Setter
-        private long userId;
+        private String email;
         @NotBlank
         private String nickname;
         private String profileImage;
