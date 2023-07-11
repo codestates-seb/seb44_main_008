@@ -4,6 +4,7 @@ import { useState } from 'react';
 import '../../../root.css';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+import { GrClose } from 'react-icons/gr';
 
 const Input = ({
   value = '',
@@ -34,11 +35,14 @@ const Input = ({
           width={width}
           type={type}
         />
-        <StyledResetButton onClick={onReset}>X</StyledResetButton>
+        <StyledResetButton onClick={onReset}>
+          <GrClose />
+        </StyledResetButton>
       </InputCoverStyled>
     </StyleSheetManager>
   );
 };
+
 const InputCoverStyled = styled.div`
   display: flex;
   justify-content: space-between;
@@ -73,11 +77,16 @@ const InputStyled = styled.input<Props>`
   }
 `;
 const StyledResetButton = styled.button`
-  color: var(--ghost-color);
   position: absolute;
   width: 1rem;
   right: 0.1rem;
-  transform: translate(0, 80%);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: flex-end;
+  path {
+    stroke: var(--white-color);
+  }
 `;
 
 export default Input;
