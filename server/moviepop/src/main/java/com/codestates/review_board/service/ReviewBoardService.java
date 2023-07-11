@@ -102,7 +102,7 @@ public class ReviewBoardService {
             return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
                 Sort.by("reviewBoardId").descending()));
         else
-            return reviewBoardRepository.findAllByIsAdulted(false, PageRequest.of(page-1, size,
+            return reviewBoardRepository.findAllByAdultedIsFalse(PageRequest.of(page-1, size,
                     Sort.by("reviewBoardId").descending()));
     }
 
@@ -119,7 +119,7 @@ public class ReviewBoardService {
         if(age.getYears() >= 19)
             return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
         else {
-            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop12ByOrderByReviewBoardIdDescByIsAdulted(false);
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop12ByAdultedIsFalseOrderByReviewBoardIdDesc();
             return reviewBoards.subList(0, Math.min(reviewBoards.size(), 12));
         }
 
@@ -132,7 +132,7 @@ public class ReviewBoardService {
         if(age.getYears() >= 19)
             return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
         else {
-            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByAdultedIsFalseOrderByWishDescReviewBoardIdDesc();
             return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
         }
 //        return reviewBoardRepository.findTop8ByOrderByWishDesc();
