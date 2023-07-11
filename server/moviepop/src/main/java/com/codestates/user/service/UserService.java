@@ -8,12 +8,14 @@ import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.service.MoviePartyService;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.service.ReviewBoardService;
+import com.codestates.security.entity.Authority;
 import com.codestates.security.jwt.JwtTokenizer;
 import com.codestates.security.redis.CacheKey;
 import com.codestates.security.redis.repository.LogoutAccessTokenRedisRepository;
 import com.codestates.security.redis.repository.RefreshTokenRedisRepository;
 import com.codestates.security.redis.token.LogoutAccessToken;
 import com.codestates.security.redis.token.RefreshToken;
+import com.codestates.security.utils.CustomAuthorityUtils;
 import com.codestates.security.vo.Login;
 import com.codestates.security.vo.Token;
 import com.codestates.user.entity.CommentLike;
@@ -30,9 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.codestates.security.utils.JwtExpirationEnums.REFRESH_TOKEN_EXPIRATION_TIME;
 
@@ -51,6 +52,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
+    private final CustomAuthorityUtils authorityUtils;
 
 //    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils,
 //                       ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService) {
@@ -62,8 +64,7 @@ public class UserService {
 //        this.commentLikeService = commentLikeService;
 //    }
 
-
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository) {
+    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository, CustomAuthorityUtils authorityUtils) {
         this.userRepository = userRepository;
         this.beanUtils = beanUtils;
         this.reviewBoardWishService = reviewBoardWishService;
@@ -76,6 +77,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRedisRepository = refreshTokenRedisRepository;
         this.logoutAccessTokenRedisRepository = logoutAccessTokenRedisRepository;
+        this.authorityUtils = authorityUtils;
     }
 
     public User createUser(User user) {
@@ -86,8 +88,20 @@ public class UserService {
         for(UserTag userTag : user.getUserTags()){
             userTag.setUser(user);
         }
+
         //비밀번호 암호화
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         //권한 부여
+        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        Set<Authority> authorities = roles.stream()
+                .map(role -> Authority.builder()
+                        .role("ROLE_" + role)
+                        .user(user)
+                        .build())
+                .collect(Collectors.toSet());
+        user.setAuthorities(authorities);
+
         return userRepository.save(user);
     }
 
