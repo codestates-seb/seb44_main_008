@@ -24,6 +24,7 @@ public interface ReviewBoardRepository extends JpaRepository<ReviewBoard,Long> {
     Page<ReviewBoard> findAllByAdultedIsFalse(Pageable pageable);
 
     Page<ReviewBoard> findByReviewBoardTagsTag(Tag tag, Pageable pageable);
+    Page<ReviewBoard> findByAdultedIsFalseAndReviewBoardTagsTag(Tag tag, Pageable pageable);
 
 //    @Query(value = "select * from review_board where movie_id in :movieIds", nativeQuery = true)
     Page<ReviewBoard> findByMovieMovieIdIn(List<Long> movieIds, Pageable pageable);
