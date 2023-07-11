@@ -5,6 +5,7 @@ import com.codestates.comment.dto.CommentDto;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.image.service.StorageService;
 import com.codestates.movie.dto.MovieDto;
 import com.codestates.movie.entity.Movie;
 import com.codestates.movie.service.MovieService;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Period;
 import java.util.List;
@@ -48,8 +50,9 @@ public class ReviewBoardService {
     private final CommentLikeRepository commentLikeRepository;
     private final MoviePartyMapper moviePartyMapper;
     private final UserMapper userMapper;
+    private final StorageService storageService;
 
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService, ReviewBoardWishService reviewBoardWishService, CommentMapper commentMapper, TagMapper tagMapper, CommentLikeRepository commentLikeRepository, MoviePartyMapper moviePartyMapper, UserMapper userMapper) {
+    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService, ReviewBoardWishService reviewBoardWishService, CommentMapper commentMapper, TagMapper tagMapper, CommentLikeRepository commentLikeRepository, MoviePartyMapper moviePartyMapper, UserMapper userMapper, StorageService storageService) {
         this.reviewBoardRepository = reviewBoardRepository;
         this.tagService = tagService;
         this.movieService = movieService;
@@ -59,9 +62,10 @@ public class ReviewBoardService {
         this.commentLikeRepository = commentLikeRepository;
         this.moviePartyMapper = moviePartyMapper;
         this.userMapper = userMapper;
+        this.storageService = storageService;
     }
 
-    public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard) {
+    public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard, MultipartFile thumbnail) {
         Movie movie = movieService.findMovie(reviewBoard.getMovie().getMovieId());
         reviewBoard.setMovie(movie);
 
@@ -72,6 +76,10 @@ public class ReviewBoardService {
         user.addReviewBoard(reviewBoard);
 
         reviewBoard.setUser(user);
+
+        storageService.storeThumbnailImage(thumbnail);
+
+        // reviewBoard에 썸네일 파일 이름 저장
 
         return reviewBoardRepository.save(reviewBoard);
     }

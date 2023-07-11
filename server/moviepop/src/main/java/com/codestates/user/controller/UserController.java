@@ -28,9 +28,11 @@ import com.codestates.utils.UriComponent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -59,21 +61,23 @@ public class UserController {
 //    private final CommentLikeService commentLikeService;
 //    private final ReviewBoardWishService reviewBoardWishService;
 
-    @PostMapping // 회원가입
-    public ResponseEntity postUser(@Valid @RequestBody UserDto.Post userPostDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}) // 회원가입
+    public ResponseEntity postUser(@Valid @RequestPart UserDto.Post userPostDto,
+                                   @RequestPart MultipartFile profileImage) {
         User user = userMapper.userPostDtoToUser(userPostDto, tagMapper);
-        User createUser = userService.createUser(user);
+        User createUser = userService.createUser(user, profileImage);
 
         URI uri = UriComponent.createUri(USER_DEFAULT_URI, createUser.getUserId());
 
         return ResponseEntity.created(uri).build();
     }
 
-    @PatchMapping // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
-    public ResponseEntity patchUser(@Valid @RequestBody UserDto.Patch userPatchDto) {
+    @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}) // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
+    public ResponseEntity patchUser(@Valid @RequestPart UserDto.Patch userPatchDto,
+                                    @RequestPart MultipartFile profileImage) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         userPatchDto.setEmail(email);
-        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper));
+        User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper), profileImage);
 
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchDto(user, tagMapper)),

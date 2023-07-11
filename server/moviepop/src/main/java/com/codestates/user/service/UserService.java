@@ -4,6 +4,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.service.CommentService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.image.service.StorageService;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.service.MoviePartyService;
 import com.codestates.review_board.entity.ReviewBoard;
@@ -31,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,6 +55,7 @@ public class UserService {
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
     private final CustomAuthorityUtils authorityUtils;
+    private final StorageService storageService;
 
 //    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils,
 //                       ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService) {
@@ -64,7 +67,8 @@ public class UserService {
 //        this.commentLikeService = commentLikeService;
 //    }
 
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository, CustomAuthorityUtils authorityUtils) {
+
+    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository, CustomAuthorityUtils authorityUtils, StorageService storageService) {
         this.userRepository = userRepository;
         this.beanUtils = beanUtils;
         this.reviewBoardWishService = reviewBoardWishService;
@@ -78,9 +82,10 @@ public class UserService {
         this.refreshTokenRedisRepository = refreshTokenRedisRepository;
         this.logoutAccessTokenRedisRepository = logoutAccessTokenRedisRepository;
         this.authorityUtils = authorityUtils;
+        this.storageService = storageService;
     }
 
-    public User createUser(User user) {
+    public User createUser(User user, MultipartFile profileImage) {
         if(!verifyEmail(user))
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
 
@@ -102,6 +107,10 @@ public class UserService {
                 .collect(Collectors.toSet());
         user.setAuthorities(authorities);
 
+        storageService.storeProfileImage(profileImage);
+
+        // user에 프로필 이미지 제목 저장
+
         return userRepository.save(user);
     }
 
@@ -119,7 +128,7 @@ public class UserService {
         return user;
     }
 
-    public User updateUser(User user) {
+    public User updateUser(User user, MultipartFile profileImage) {
         User findUser = findVerifiedUserByEmail(user.getEmail());
         Optional.ofNullable(user.getNickname())
                 .ifPresent(nickname -> findUser.setNickname(nickname));
@@ -131,7 +140,10 @@ public class UserService {
             userTag.setUser(findUser);
         }
 
-        findUser.setProfileImage(user.getProfileImage());
+//        findUser.setProfileImage(user.getProfileImage());
+        storageService.storeProfileImage(profileImage);
+
+        // user에 프로필 이미지 제목 저장
 
         return userRepository.save(findUser);
     }
