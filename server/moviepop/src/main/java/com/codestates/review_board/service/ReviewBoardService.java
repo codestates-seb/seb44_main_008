@@ -13,9 +13,11 @@ import com.codestates.user.entity.User;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.repository.ReviewBoardRepository;
 
+import com.codestates.utils.UserUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,15 +91,15 @@ public class ReviewBoardService {
     public ReviewBoard findReviewBoard(User user, long reviewId) {
         ReviewBoard reviewBoard = findReviewBoardById(reviewId);
 
-        Period age = getAge(user.getBirth());
-        if(age.getYears() < 19 && reviewBoard.getMovie().isAdulted())
+        Period age = UserUtils.getAge(user);
+        if(age.getYears() < 19 && reviewBoard.isAdulted())
             throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_REVIEW_BOARD);
 
         return reviewBoard;
     }
 
     public Page<ReviewBoard> findAllReviewBoards(User user, int page, int size) {
-        Period age = getAge(user.getBirth());
+        Period age = UserUtils.getAge(user);
         if(age.getYears() >= 19)
             return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
                 Sort.by("reviewBoardId").descending()));
@@ -115,7 +117,7 @@ public class ReviewBoardService {
     }
 
     public List<ReviewBoard> findReviewBoards(User user) {
-        Period age = getAge(user.getBirth());
+        Period age = UserUtils.getAge(user);
         if(age.getYears() >= 19)
             return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
         else {
@@ -128,7 +130,7 @@ public class ReviewBoardService {
     }
 
     public List<ReviewBoard> findPopularReviewBoards(User user) {
-        Period age = getAge(user.getBirth());
+        Period age = UserUtils.getAge(user);
         if(age.getYears() >= 19)
             return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
         else {
@@ -139,9 +141,15 @@ public class ReviewBoardService {
 //            return reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
     }
 
-    public Page<ReviewBoard> findSpecificTagReviewBoards(Tag tag, int page, int size) {
-        return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
-                Sort.by("reviewBoardId").descending()));
+    public Page<ReviewBoard> findSpecificTagReviewBoards(User user, Tag tag, int page, int size) {
+        Period age = UserUtils.getAge(user);
+
+        if(age.getYears() >= 19)
+            return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
+                    Sort.by("reviewBoardId").descending()));
+        else
+            return reviewBoardRepository.findByAdultedIsFalseAndReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
+                    Sort.by("reviewBoardId").descending()));
     }
 
     public Page<ReviewBoard> findSearchedReviewBoards(String title, int page, int size) {
@@ -160,11 +168,5 @@ public class ReviewBoardService {
         ReviewBoard findReviewBoard =
                 optionalReviewBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_BOARD_NOT_FOUND));
         return findReviewBoard;
-    }
-
-    private Period getAge(LocalDate birth) {
-        LocalDateTime now = LocalDateTime.now();
-
-        return Period.between(birth, now.toLocalDate());
     }
 }

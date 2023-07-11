@@ -4,9 +4,12 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.movie.entity.Movie;
 import com.codestates.movie.repository.MovieRepository;
+import com.codestates.user.entity.User;
+import com.codestates.utils.UserUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,7 +48,12 @@ public class MovieService {
         return optionalMovie.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_NOT_FOUND));
     }
 
-    public List<Movie> searchMovies(String query) {
-        return movieRepository.findByTitleContains(query);
+    public List<Movie> searchMovies(User user, String query) {
+        Period age = UserUtils.getAge(user);
+
+        if(age.getYears() >= 19)
+            return movieRepository.findByTitleContains(query);
+        else
+            return movieRepository.findByIsAdultedIsFalseAndTitleContains(query);
     }
 }

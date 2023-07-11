@@ -111,8 +111,16 @@ public class UserService {
         return false;
     }
 
+    public User findVerifiedUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user == null)
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+
+        return user;
+    }
+
     public User updateUser(User user) {
-        User findUser = findUser(user.getUserId());
+        User findUser = findVerifiedUserByEmail(user.getEmail());
         Optional.ofNullable(user.getNickname())
                 .ifPresent(nickname -> findUser.setNickname(nickname));
         findUser.getUserTags().clear();
@@ -128,8 +136,8 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
-    public User updateUserPassword(long userId, String currentPassword, String newPassword) {
-        User findUser = verifyUserId(userId);
+    public User updateUserPassword(String email, String currentPassword, String newPassword) {
+        User findUser = findVerifiedUserByEmail(email);
         if(!findUser.getPassword().equals(currentPassword))
             throw new BusinessLogicException(ExceptionCode.PASSWORD_INCORRECT);
 
@@ -142,8 +150,8 @@ public class UserService {
         return verifyUserId(userId);
     }
 
-    public void deleteUser(long userId) {
-        User findUser = verifyUserId(userId);
+    public void deleteUser(String email) {
+        User findUser = findVerifiedUserByEmail(email);
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
     }
 
@@ -194,8 +202,8 @@ public class UserService {
         return token.substring(7);
     }
 
-    public void createReviewBoardWish(long userId, long reviewBoardId) {
-        User user = findUser(userId);
+    public void createReviewBoardWish(String email, long reviewBoardId) {
+        User user = findVerifiedUserByEmail(email);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         if(reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))
@@ -212,8 +220,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteReviewBoardWish(long userId, long reviewBoardId) {
-        User user = findUser(userId);
+    public void deleteReviewBoardWish(String email, long reviewBoardId) {
+        User user = findVerifiedUserByEmail(email);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         ReviewBoardWish reviewBoardWish = reviewBoardWishService.findReviewBoardAndUser(reviewBoard, user);
@@ -227,8 +235,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Comment createCommentLike(long userId, long commentId) {
-        User user = findUser(userId);
+    public Comment createCommentLike(String email, long commentId) {
+        User user = findVerifiedUserByEmail(email);
         Comment comment = commentService.findComment(commentId);
 
         if(commentLikeService.existsByCommentAndUser(comment,user))
@@ -247,8 +255,8 @@ public class UserService {
         return comment;
     }
 
-    public Comment deleteCommentLike(long userId, long commentId) {
-        User user = findUser(userId);
+    public Comment deleteCommentLike(String email, long commentId) {
+        User user = findVerifiedUserByEmail(email);
         Comment comment = commentService.findComment(commentId);
 
         CommentLike commentLike = commentLikeService.findByCommentAndUser(comment, user);
@@ -262,11 +270,11 @@ public class UserService {
         return comment;
     }
 
-    public MovieParty createUserParticipation(long userId, long groupId) {
-        User user = findUser(userId);
+    public MovieParty createUserParticipation(String email, long groupId) {
+        User user = findVerifiedUserByEmail(email);
         MovieParty movieParty = moviePartyService.findMovieParty(groupId, user);
 
-        if(movieParty.getUser().getUserId() == userId)
+        if(movieParty.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_PARTICIPATE_WRITER);
         if(movieParty.getMaxCapacity() <= movieParty.getCurrentParticipant())
             throw new BusinessLogicException(ExceptionCode.OVER_MAX_PARTICIPANT);
@@ -288,11 +296,11 @@ public class UserService {
         return movieParty;
     }
 
-    public MovieParty deleteUserParticipation(long userId, long groupId) {
-        User user = findUser(userId);
+    public MovieParty deleteUserParticipation(String email, long groupId) {
+        User user = findVerifiedUserByEmail(email);
         MovieParty movieParty = moviePartyService.findMovieParty(groupId, user);
 
-        if(movieParty.getUser().getUserId() == userId)
+        if(movieParty.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_CANCEL_WRITER);
         if(!moviePartyUserRepository.existsByUserAndMovieParty(user, movieParty))
             throw new BusinessLogicException(ExceptionCode.CANNOT_CANCEL_MOVIE_PARTY);

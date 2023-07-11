@@ -7,12 +7,14 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.user.entity.User;
+import com.codestates.utils.UserUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -40,9 +42,9 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(long userId, Comment comment) {
+    public Comment updateComment(String email, Comment comment) {
         Comment findComment = findVerifiedCommentId(comment.getCommentId());
-        if(findComment.getUser().getUserId() != userId)
+        if(!findComment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
         Optional.ofNullable(comment.getContent())
@@ -61,9 +63,9 @@ public class CommentService {
         );
     }
 
-    public void deleteComment(long userId, long commentId) {
+    public void deleteComment(String email, long commentId) {
         Comment comment = findVerifiedCommentId(commentId);
-        if(comment.getUser().getUserId() != userId)
+        if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
         commentRepository.deleteById(commentId);
