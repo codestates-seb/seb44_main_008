@@ -31,6 +31,9 @@ public class JwtParseInterceptor implements HandlerInterceptor {
             throws Exception {
         String method = request.getMethod(), uri = request.getRequestURI();
 
+        if(method.equals("POST") && (uri.equals("/users") || uri.equals("/users/login")))
+            return true;
+
         try {
             Map<String, Object> claims = jwtUtils.getJwsClaimsFromRequest(request);
             authenticatedUsername.set(String.valueOf(claims.get("username").toString()));
