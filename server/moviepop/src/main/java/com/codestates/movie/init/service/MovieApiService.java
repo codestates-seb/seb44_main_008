@@ -4,6 +4,7 @@ import com.codestates.movie.entity.Movie;
 import com.codestates.movie.service.MovieService;
 import com.codestates.tag.entity.Tag;
 import com.codestates.tag.service.TagService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,8 +41,9 @@ public class MovieApiService {
     public Set<String> getMovieList() {
         HashMap<String, Object> result = new HashMap<String, Object>();
         Set<String> movieCodeSet = new HashSet<>();
+        List<LinkedHashMap> lmList = new ArrayList<>();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(5); // 동시 요청 수
+//        ExecutorService executorService = Executors.newFixedThreadPool(5); // 동시 요청 수
 
         try {
             List<Future<ResponseEntity<Map>>> futures = new ArrayList<>();
@@ -59,16 +61,26 @@ public class MovieApiService {
                 String url = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json";
                 UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+"?"+"targetDt="+formatter.format(calendar.getTime())+"&weekGb=0&"+"key=f5eef3421c602c6cb7ea224104795888").build();
 
-                Callable<ResponseEntity<Map>> resultMap = () -> restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
-                Future<ResponseEntity<Map>> future = executorService.submit(resultMap);
-                futures.add(future);
+                ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+                result.put("statusCode", resultMap.getStatusCodeValue());
+                result.put("header", resultMap.getHeaders());
+                result.put("body", resultMap.getBody());
+
+                lmList.add((LinkedHashMap) resultMap.getBody().get("boxOfficeResult"));
+
+//                LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("boxOfficeResult");
+//                ArrayList<Map> boxOfficeList = (ArrayList<Map>) lm.get("weeklyBoxOfficeList");
+//
+//                for(int idx = 0; idx < boxOfficeList.size(); idx++)
+//                    movieCodeSet.add(boxOfficeList.get(idx).get("movieCd").toString());
+
+//                Callable<ResponseEntity<Map>> resultMap = () -> restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+//                Future<ResponseEntity<Map>> future = executorService.submit(resultMap);
+//                futures.add(future);
                 calendar.add(Calendar.MONTH, -1);
             }
 
-            for(Future<ResponseEntity<Map>> future : futures) {
-                ResponseEntity<Map> resultMap = future.get();
-
-                LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("boxOfficeResult");
+            for(LinkedHashMap lm : lmList) {
                 ArrayList<Map> boxOfficeList = (ArrayList<Map>) lm.get("weeklyBoxOfficeList");
 
                 for(int idx = 0; idx < boxOfficeList.size(); idx++)
@@ -82,8 +94,6 @@ public class MovieApiService {
             result.put("statusCode", "999");
             result.put("body", "exception");
             e.printStackTrace();
-        } finally {
-            executorService.shutdown();
         }
 
         return movieCodeSet;
@@ -98,8 +108,9 @@ public class MovieApiService {
 
         Set<Movie> existsMovies = movieService.findMovies();
         Set<Tag> existsTags = tagService.findTags();
+        List<LinkedHashMap> lmList = new ArrayList<>();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10); // 동시 요청 수
+//        ExecutorService executorService = Executors.newFixedThreadPool(10); // 동시 요청 수
 
         try {
             List<Future<ResponseEntity<Map>>> futures = new ArrayList<>();
@@ -117,15 +128,20 @@ public class MovieApiService {
                 String url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
                 UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+"?"+"movieCd="+movieCode+"&key=f5eef3421c602c6cb7ea224104795888").build();
 
-                Callable<ResponseEntity<Map>> resultMap = () -> restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
-                Future<ResponseEntity<Map>> future = executorService.submit(resultMap);
-                futures.add(future);
+                ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+                result.put("statusCode", resultMap.getStatusCodeValue());
+                result.put("header", resultMap.getHeaders());
+                result.put("body", resultMap.getBody());
+
+                lmList.add((LinkedHashMap) resultMap.getBody().get("movieInfoResult"));
+
+//                Callable<ResponseEntity<Map>> resultMap = () -> restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+//                Future<ResponseEntity<Map>> future = executorService.submit(resultMap);
+//                futures.add(future);
                 calendar.add(Calendar.MONTH, -1);
             }
 
-            for(Future<ResponseEntity<Map>> future : futures) {
-                ResponseEntity<Map> resultMap = future.get();
-                LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieInfoResult");
+            for(LinkedHashMap lm : lmList) {
                 Map movieInfo = (Map) lm.get("movieInfo");
 
                 // 중복 제거한 태그 정보 가져오기
@@ -148,6 +164,32 @@ public class MovieApiService {
                 if(!existsMovies.contains(movie))
                     movieList.add(movie);
             }
+
+//            for(Future<ResponseEntity<Map>> future : futures) {
+//                ResponseEntity<Map> resultMap = future.get();
+//                LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieInfoResult");
+//                Map movieInfo = (Map) lm.get("movieInfo");
+//
+//                // 중복 제거한 태그 정보 가져오기
+//                ArrayList<LinkedHashMap> genres = (ArrayList<LinkedHashMap>)movieInfo.get("genres");
+//                for(int idx = 0; idx < genres.size(); idx++) {
+//                    Tag tag = new Tag(genres.get(0).get("genreNm").toString());
+//                    if(!existsTags.contains(tag) && !tagSet.contains(tag.getTagName()))
+//                        tagSet.add(tag);
+//                }
+//                ArrayList<LinkedHashMap> audits = (ArrayList<LinkedHashMap>)movieInfo.get("audits");
+//
+//                // 청불 여부 확인
+//                boolean isAdulted = false;
+//                if(audits.size() != 0) {
+//                    String audit = audits.get(0).get("watchGradeNm").toString();
+//                    if(audit.contains("청소년") || audit.contains("18")) isAdulted = true;
+//                }
+//
+//                Movie movie = new Movie(movieInfo.get("movieNm").toString(), isAdulted);
+//                if(!existsMovies.contains(movie))
+//                    movieList.add(movie);
+//            }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             result.put("statusCode", e.getRawStatusCode());
             result.put("body"  , e.getStatusText());
@@ -157,9 +199,10 @@ public class MovieApiService {
             result.put("statusCode", "999");
             result.put("body", "exception");
             System.out.println(e.toString());
-        } finally {
-            executorService.shutdown();
         }
+//        finally {
+//            executorService.shutdown();
+//        }
 
         Map<String, Object> initData = new HashMap<>();
         initData.put("movie", movieList);
