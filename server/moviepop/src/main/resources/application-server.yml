@@ -13,9 +13,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
   sql:
     init:
-      data-locations: classpath*:db/mysql/data.sql
+      mode: always
 config:
   domain: ${AWS_S3_ENDPOINT}
 logging:
