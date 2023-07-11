@@ -13,9 +13,14 @@ export interface WriteContentType {
   };
 
   placeholder?: string;
+  isValid?: boolean;
 
   map?(callback: (value: MapItem) => MapItem): string[];
 
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onClickImg?: React.MouseEventHandler<HTMLImageElement> | void;
+}
+
+export interface Props {
+  isValid?: boolean;
 }
