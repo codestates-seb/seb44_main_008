@@ -13,6 +13,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  sql:
+    init:
+      data-locations: classpath*:db/mysql/data.sql
 config:
   domain: ${AWS_S3_ENDPOINT}
 logging:
