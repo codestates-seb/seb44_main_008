@@ -37,7 +37,7 @@ public interface UserMapper {
         List<UserTag> userTags = tagMapper.usersRequestToUserTags(userPatchDto.getTags());
 
         User user = new User();
-        user.setUserId(userPatchDto.getUserId());
+        user.setEmail(userPatchDto.getEmail());
         user.setNickname(userPatchDto.getNickname());
         user.setProfileImage(userPatchDto.getProfileImage());
         user.setUserTags(userTags);
