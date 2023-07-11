@@ -1,6 +1,6 @@
 package com.codestates.user.service;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.entity.User;
 import com.codestates.user.repository.ReviewBoardWishRepository;
@@ -20,4 +20,12 @@ public class ReviewBoardWishService {
     public boolean isExistReviewBoardWish(ReviewBoard reviewBoard, User user) {
         return reviewBoardWishRepository.existsByReviewBoardAndUser(reviewBoard, user);
     }
+
+    public ReviewBoardWish findReviewBoardAndUser(ReviewBoard reviewBoard, User user) {
+        return reviewBoardWishRepository.findByReviewBoardAndUser(reviewBoard, user);
+    }
+
+//    public void deleteReviewBoardWish(long reviewBoardWishId) {
+//        reviewBoardWishRepository.deleteById(reviewBoardWishId);
+//    }
 }

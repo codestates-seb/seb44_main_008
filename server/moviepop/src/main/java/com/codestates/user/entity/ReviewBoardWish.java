@@ -1,6 +1,6 @@
 package com.codestates.user.entity;
 
-import com.codestates.reviewBoard.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +21,6 @@ public class ReviewBoardWish {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "REVIEWBOARD_ID")
+    @JoinColumn(name = "REVIEW_BOARD_ID")
     private ReviewBoard reviewBoard;
 }

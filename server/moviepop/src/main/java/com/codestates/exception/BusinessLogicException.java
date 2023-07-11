@@ -2,7 +2,7 @@ package com.codestates.exception;
 
 import lombok.Getter;
 
-public class BusinessLogicException extends RuntimeException{
+public class BusinessLogicException extends RuntimeException {
     @Getter
     private ExceptionCode exceptionCode;
 
