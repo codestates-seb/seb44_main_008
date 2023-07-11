@@ -82,7 +82,7 @@ public class MoviePartyService {
                 page - 1, size, Sort.by("moviePartyId").descending())
             );
         else
-            return moviePartyRepository.findAllByIsAdulted(PageRequest.of(
+            return moviePartyRepository.findAllByAdulted(false, PageRequest.of(
                     page - 1, size, Sort.by("moviePartyId").descending()
             ));
     }
