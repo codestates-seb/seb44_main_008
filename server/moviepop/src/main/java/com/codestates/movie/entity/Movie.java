@@ -21,14 +21,14 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
     private String title;
-    private boolean isAdulted;
+    private boolean adulted;
 
     @OneToMany(mappedBy = "movie")
     private List<ReviewBoard> reviewBoards = new ArrayList<>();
 
-    public Movie(String title, boolean isAdulted) {
+    public Movie(String title, boolean adulted) {
         this.title = title;
-        this.isAdulted = isAdulted;
+        this.adulted = adulted;
     }
 
     public void addReviewBoard(ReviewBoard reviewBoard) {
@@ -40,11 +40,11 @@ public class Movie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return isAdulted == movie.isAdulted && Objects.equals(title, movie.title);
+        return adulted == movie.adulted && Objects.equals(title, movie.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, isAdulted);
+        return Objects.hash(title, adulted);
     }
 }
