@@ -99,8 +99,7 @@ public class UserService {
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
-    public void createReviewBoardWish(long userId, long reviewBoardId) {
-        User user = findUser(userId);
+    public void createReviewBoardWish(User user, long reviewBoardId) {
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewBoardId);
 
         if(reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user))

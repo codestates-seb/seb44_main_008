@@ -80,6 +80,7 @@ public class ReviewBoardDto {
     public static class WishResponse {
         private long reviewBoardId;
         private int wish;
+        private boolean iswished;
     }
 
     @Getter
@@ -102,6 +103,7 @@ public class ReviewBoardDto {
         private String review;
         private String thumbnail;
         private int wish;
+        private boolean wished;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
         private MovieDto.Response movie;

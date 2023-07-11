@@ -96,7 +96,7 @@ public interface ReviewBoardMapper {
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
 
 
-    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper) {
+    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, boolean iswished) {
         MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
 
@@ -114,6 +114,7 @@ public interface ReviewBoardMapper {
                 .review(reviewBoard.getReview())
                 .thumbnail(reviewBoard.getThumbnail())
                 .wish(reviewBoard.getWish())
+                .wished(iswished)
                 .createdAt(reviewBoard.getCreatedAt())
                 .movie(movieResponse)
                 .user(userResponse)
