@@ -21,6 +21,7 @@ import com.codestates.tag.mapper.TagMapper;
 import com.codestates.tag.service.TagService;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
+import com.codestates.user.service.ReviewBoardWishService;
 import com.codestates.user.service.UserService;
 
 import com.codestates.utils.UriComponent;
@@ -55,17 +56,9 @@ public class ReviewBoardController {
     private final TagService tagService;
     private final MoviePartyService moviePartyService;
     private final MoviePartyMapper moviePartyMapper;
+    private final ReviewBoardWishService reviewBoardWishService;
 
-
-//    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, CommentService commentService, CommentMapper commentMapper) {
-//        this.reviewBoardService = reviewBoardService;
-//        this.mapper = mapper;
-//        this.userService = userService;
-//        this.commentService = commentService;
-//        this.commentMapper = commentMapper;
-//    }
-
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper) {
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper, ReviewBoardWishService reviewBoardWishService) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
@@ -76,6 +69,7 @@ public class ReviewBoardController {
         this.tagService = tagService;
         this.moviePartyService = moviePartyService;
         this.moviePartyMapper = moviePartyMapper;
+        this.reviewBoardWishService = reviewBoardWishService;
     }
 
     @PostMapping
@@ -93,20 +87,19 @@ public class ReviewBoardController {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         User user = userService.findVerifiedUserByEmail(email);
         patch.setReviewBoardId(reviewId);
-        ReviewBoard reviewBoard = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch, tagMapper));
-        ReviewBoardDto.DetailResponse response = mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, tagMapper, moviePartyMapper, userMapper);
+
+        ReviewBoardDto.DetailResponse response = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch, tagMapper));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{review-id}")
-    public ResponseEntity getReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
+        public ResponseEntity getReviewBoard(@PathVariable("review-id") @Positive long reviewId) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         User user = userService.findVerifiedUserByEmail(email);
-        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
-//        return new ResponseEntity<>(mapper.reviewBoardToResponse(reviewBoard), HttpStatus.OK);
+        ReviewBoardDto.DetailResponse response = reviewBoardService.findDetailReviewBoard(user, reviewId);
 
-        return new ResponseEntity<>(mapper.reviewBoardToDetailResponse(reviewBoard, commentMapper, tagMapper, moviePartyMapper, userMapper), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping

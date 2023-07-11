@@ -1,6 +1,5 @@
 package com.codestates.review_board.mapper;
 
-
 import com.codestates.movie.entity.Movie;
 import com.codestates.review_board.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
@@ -97,35 +96,36 @@ public interface ReviewBoardMapper {
 //    ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
     List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
 
-    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper) {
-        MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
-        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
-
-        List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
-                .map(comment -> commentMapper.commentToCommentResponseDto(comment))
-                .collect(Collectors.toList());
-
-        List<TagDto.Response> tagResponse = reviewBoard.getReviewBoardTags().stream()
-                .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
-                .collect(Collectors.toList());
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
-
-        ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
-                .reviewBoardId(reviewBoard.getReviewBoardId())
-                .title(reviewBoard.getTitle())
-                .review(reviewBoard.getReview())
-                .thumbnail(reviewBoard.getThumbnail())
-                .wish(reviewBoard.getWish())
-                .createdAt(reviewBoard.getCreatedAt())
-                .movie(movieResponse)
-                .user(userResponse)
-                .comments(commentResponse)
-                .tags(tagResponse)
-                .groups(groups)
-                .build();
-
-        return detailResponse;
-    }
+//    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper, boolean iswished) {
+//        MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
+//        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
+//
+//        List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
+//                .map(comment -> commentMapper.commentToCommentResponseDto(comment))
+//                .collect(Collectors.toList());
+//
+//        List<TagDto.Response> tagResponse = reviewBoard.getReviewBoardTags().stream()
+//                .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
+//                .collect(Collectors.toList());
+//        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
+//
+//        ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
+//                .reviewBoardId(reviewBoard.getReviewBoardId())
+//                .title(reviewBoard.getTitle())
+//                .review(reviewBoard.getReview())
+//                .thumbnail(reviewBoard.getThumbnail())
+//                .wish(reviewBoard.getWish())
+//                .wished(iswished)
+//                .createdAt(reviewBoard.getCreatedAt())
+//                .movie(movieResponse)
+//                .user(userResponse)
+//                .comments(commentResponse)
+//                .tags(tagResponse)
+//                .groups(groups)
+//                .build();
+//
+//        return detailResponse;
+//    }
 
     default ReviewBoardDto.MainResponse reviewBoardsToDetailResponses(List<ReviewBoard> reviewBoards, List<ReviewBoard> popularBoards) {
         List<ReviewBoardDto.EntireResponse> reviewBoardEntire = reviewBoardsToEntireResponses(reviewBoards);

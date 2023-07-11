@@ -1,10 +1,8 @@
 package com.codestates.comment.dto;
 
+import com.codestates.user.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -35,13 +33,17 @@ public class CommentDto {
     }
 
     @Getter
+    @Setter
+    @Builder
     @AllArgsConstructor
     public static class Response {
         private long commentId;
         private String content;
         private int likes;
+        private boolean liked;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime createdAt;
+        private UserDto.ReviewBoardResponse user;
     }
 
     @Getter
@@ -50,5 +52,6 @@ public class CommentDto {
     public static class likeResponse {
         private long commentId;
         private int likes;
+//        private boolean liked;
     }
 }

@@ -21,6 +21,8 @@ import com.codestates.user.dto.UserDto;
 import com.codestates.user.entity.MoviePartyUser;
 import com.codestates.user.entity.User;
 import com.codestates.user.mapper.UserMapper;
+import com.codestates.user.service.CommentLikeService;
+import com.codestates.user.service.ReviewBoardWishService;
 import com.codestates.user.service.UserService;
 import com.codestates.utils.UriComponent;
 import lombok.RequiredArgsConstructor;
@@ -49,12 +51,13 @@ public class UserController {
     private final ReviewBoardService reviewBoardService;
     private final UserMapper userMapper;
     private final ReviewBoardMapper reviewBoardMapper;
-    private final CommentService commentService;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
     private final TagService tagService;
     private final MoviePartyMapper moviePartyMapper;
     private final JwtTokenizer jwtTokenizer;
+//    private final CommentLikeService commentLikeService;
+//    private final ReviewBoardWishService reviewBoardWishService;
 
     @PostMapping // 회원가입
     public ResponseEntity postUser(@Valid @RequestBody UserDto.Post userPostDto) {
@@ -163,6 +166,7 @@ public class UserController {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         userService.createReviewBoardWish(email, reviewId);
         ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(userService.findVerifiedUserByEmail(email), reviewId);
+
         return new ResponseEntity<>(
                 new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
                 HttpStatus.OK
@@ -174,7 +178,10 @@ public class UserController {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         userService.deleteReviewBoardWish(email, reviewId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        User user = userService.findVerifiedUserByEmail(email);
+        ReviewBoard reviewBoard = reviewBoardService.findReviewBoard(user, reviewId);
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(reviewBoardMapper.reviewBoardToWishResponse(reviewBoard)),
+                HttpStatus.OK);
     }
 
     @PostMapping("/comments/{comment-id}") //댓글 좋아요
