@@ -63,6 +63,7 @@ const SingleItemMeta = styled.div<SingleItemType>`
   }
   & > div {
     width: 100%;
+    padding-top: 0.5rem;
     display: flex;
     justify-content: space-between;
   }

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { WriteContentType, Props } from './type';
+import { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
@@ -69,10 +71,10 @@ const Writecontent = () => {
 
   const [modalOn, setModalOn] = useState<boolean>(false);
 
-  const [titleErr, setTitleErr] = useState(true);
-  const [movieTitleErr, setMovieTitleErr] = useState(true);
-  const [TagErr, setTagErr] = useState(true);
-  const [contentErr, setContentErr] = useState(true);
+  const [titleErr, setTitleErr] = useState<boolean>(true);
+  const [movieTitleErr, setMovieTitleErr] = useState<boolean>(true);
+  const [TagErr, setTagErr] = useState<boolean>(true);
+  const [contentErr, setContentErr] = useState<boolean>(true);
 
   // 이미지 관련 함수
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,14 +100,16 @@ const Writecontent = () => {
       setTitle(event.target.value);
       setTitleErr(true);
     } else if (event.target.placeholder === '영화 제목을 입력하세요.') {
-      setMovieTitle(event.target.value);
       setMovieTitleErr(true);
     } else {
       setContent(event.target.value);
+      setContentErr(true);
     }
   };
 
-  const onClickTag: void = (event: WriteContentType) => {
+  console.log(movieTitle);
+
+  const onClickTag: void = event => {
     const element = document.getElementById(event.target.id).classList;
 
     const newTagId: number | string = event.target.id;
@@ -164,82 +168,86 @@ const Writecontent = () => {
   };
 
   return (
-    <WriteWrapper>
-      {modalOn ? (
-        <MovieTitleModal
-          setModalOn={setModalOn}
-          setMovieTitle={setMovieTitle}
-        />
-      ) : (
-        <></>
-      )}
-      <div>
-        <WriteImgDiv>
-          <img
-            src={fileURL ? fileURL : '/imgs/InputImg.png'}
-            alt="thumbnail"
-            onClick={onClickImg}
-          ></img>
-          <input
-            type="file"
-            accept="image/*"
-            required
-            ref={imgUploadInput}
-            onChange={onImageChange}
+    <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+      <WriteWrapper>
+        {modalOn ? (
+          <MovieTitleModal
+            setModalOn={setModalOn}
+            setMovieTitle={setMovieTitle}
           />
-        </WriteImgDiv>
+        ) : (
+          <></>
+        )}
+        <div>
+          <WriteImgDiv>
+            <img
+              src={fileURL ? fileURL : '/imgs/InputImg.png'}
+              alt="thumbnail"
+              onClick={onClickImg}
+            ></img>
+            <input
+              type="file"
+              accept="image/*"
+              required
+              ref={imgUploadInput}
+              onChange={onImageChange}
+            />
+          </WriteImgDiv>
 
-        <Input
-          value={title}
-          placeholder="게시글 제목을 입력하세요."
-          isvalid={titleErr}
-          onChange={onChangeInput}
-          width="80%"
-        ></Input>
-        <div className="movie--title--div" onClick={onClickMovieTitle}>
-          <Input
-            value={movieTitle}
-            placeholder="영화 제목을 입력하세요."
-            isvalid={movieTitleErr}
+          <div className="input--wrapper">
+            <Input
+              value={title}
+              placeholder="게시글 제목을 입력하세요."
+              isvalid={titleErr}
+              onChange={onChangeInput}
+              width="100%"
+            ></Input>
+            <div className="movie--title--div" onClick={onClickMovieTitle}>
+              <Input
+                value={movieTitle}
+                placeholder="영화 제목을 입력하세요."
+                isvalid={movieTitleErr}
+                onChange={onChangeInput}
+                width="100%"
+              ></Input>
+            </div>
+          </div>
+
+          <TagContainer>
+            <WriteTagMeta isvalid={TagErr.toString()}>
+              <h3>태그</h3>
+              <p>최소 1개 이상의 태그를 선택해 주세요.</p>
+            </WriteTagMeta>
+            <WriteTagList>
+              {tags.map((tag, idx) => {
+                return (
+                  <li key={idx}>
+                    <Button
+                      value={`#${tag.tagName}`}
+                      id={tag.tagId}
+                      width={'100%'}
+                      onClick={onClickTag}
+                    />
+                  </li>
+                );
+              })}
+            </WriteTagList>
+          </TagContainer>
+
+          <WriteContentInput
+            placeholder="이 영화는 어땠나요?"
             onChange={onChangeInput}
-            width="80%"
-          ></Input>
+            isvalid={contentErr.toString()}
+          ></WriteContentInput>
+
+          <Button
+            value={'등록하기'}
+            width={'80%'}
+            onClick={onClickSubmitButton}
+          ></Button>
         </div>
-
-        <TagContainer>
-          <WriteTagMeta isValid={TagErr}>
-            <h3>태그</h3>
-            <p>최소 1개 이상의 태그를 선택해 주세요.</p>
-          </WriteTagMeta>
-          <WriteTagList>
-            {tags.map((tag, idx) => {
-              return (
-                <li key={idx}>
-                  <Button
-                    value={`#${tag.tagName}`}
-                    id={tag.tagId}
-                    width={'100%'}
-                    onClick={onClickTag}
-                  />
-                </li>
-              );
-            })}
-          </WriteTagList>
-        </TagContainer>
-
-        <WriteContentInput
-          placeholder="이 영화는 어땠나요?"
-          onChange={onChangeInput}
-          isValid={contentErr}
-        ></WriteContentInput>
-
-        <Button
-          value={'등록하기'}
-          width={'80%'}
-          onClick={onClickSubmitButton}
-        ></Button>
-      </div>
-    </WriteWrapper>
+      </WriteWrapper>
+    </StyleSheetManager>
   );
 };
 
@@ -268,9 +276,13 @@ const WriteWrapper = styled.div`
       margin-top: 2rem;
     }
 
-    & > .movie--title--div {
-      width: 100%;
-      margin-top: 1rem;
+    & > .input--wrapper {
+      width: 70%;
+
+      & > .movie--title--div {
+        width: 100%;
+        margin-top: 1rem;
+      }
     }
   }
 `;
@@ -321,7 +333,7 @@ const WriteTagMeta = styled.div<Props>`
   }
 
   & > p {
-    color: ${({ isValid }) => (isValid ? '#666666' : '#fe2000')};
+    color: ${({ isvalid }) => (isvalid === 'true' ? '#666666' : '#fe2000')};
     padding-top: 0.5rem;
     font-size: 0.8rem;
   }
@@ -340,7 +352,7 @@ const WriteTagList = styled.ul`
   }
 `;
 
-const WriteContentInput = styled.textarea<WriteContentType, Props>`
+const WriteContentInput = styled.textarea<Props>`
   width: 80%;
   min-height: 30rem;
   margin-top: 2rem;
@@ -353,7 +365,8 @@ const WriteContentInput = styled.textarea<WriteContentType, Props>`
   /* border: none; */
   resize: none;
 
-  border: ${({ isValid }) => (isValid ? 'none' : '2px solid #fe2000')};
+  border: ${({ isvalid }) =>
+    isvalid === 'true' ? 'none' : '2px solid #fe2000'};
 
   &:focus {
     outline: none;

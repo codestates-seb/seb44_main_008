@@ -13,7 +13,7 @@ export interface WriteContentType {
   };
 
   placeholder?: string;
-  isValid?: boolean;
+  isvalid?: boolean;
 
   map?(callback: (value: MapItem) => MapItem): string[];
 
@@ -22,5 +22,6 @@ export interface WriteContentType {
 }
 
 export interface Props {
-  isValid?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  isvalid?: string;
 }
