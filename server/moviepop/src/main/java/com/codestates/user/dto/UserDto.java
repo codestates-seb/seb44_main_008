@@ -24,8 +24,6 @@ public class UserDto {
         @NotBlank
         private String nickname;
 
-        private String profileImage;
-
         @NotBlank
         private String name;
 
@@ -47,7 +45,6 @@ public class UserDto {
         private String email;
         @NotBlank
         private String nickname;
-        private String profileImage;
         @NotNull
         private List<TagDto.UserRequest> tags;
     }
