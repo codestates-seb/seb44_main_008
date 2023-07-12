@@ -117,6 +117,7 @@ public class ReviewBoardDto {
     @Getter
     @Builder
     public static class MainResponse {
+        private List<EntireResponse> recommendBoards;
         private List<EntireResponse> popularBoards;
         private List<EntireResponse> boards;
     }
