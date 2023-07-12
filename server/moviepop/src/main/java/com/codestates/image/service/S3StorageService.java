@@ -1,6 +1,7 @@
 package com.codestates.image.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -12,9 +13,12 @@ import java.nio.file.Path;
 
 @Slf4j
 public class S3StorageService implements StorageService {
-    private static final String BUCKET_NAME = "be44-009";
-    private static final String BUCKET_PROFILE_IMAGE_PATH = "profile-image";
-    private static final String BUCKET_THUMBNAIL_IMAGE_PATH = "thumbnail";
+    @Value("${cloud.aws.s3.bucket}")
+    private String BUCKET_NAME;
+    @Value("${cloud.aws.s3.profile-path}")
+    private String BUCKET_PROFILE_IMAGE_PATH;
+    @Value("${cloud.aws.s3.thumbnail-path}")
+    private String BUCKET_THUMBNAIL_IMAGE_PATH;
     private final S3Client s3Client;
 
     public S3StorageService(S3Client s3Client) {
@@ -34,9 +38,10 @@ public class S3StorageService implements StorageService {
             log.info("# File uploaded successfully. ETag: " + response.eTag());
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            s3Client.close();
         }
+//        finally {
+//            s3Client.close();
+//        }
     }
 
     @Override
@@ -52,9 +57,10 @@ public class S3StorageService implements StorageService {
             log.info("# File uploaded successfully. ETag: " + response.eTag());
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            s3Client.close();
         }
+//        finally {
+//            s3Client.close();
+//        }
     }
 
     private String makeS3OBjectKey(String bucketCoffeeImagePath, MultipartFile multipartFile) {
