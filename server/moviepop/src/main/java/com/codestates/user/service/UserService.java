@@ -88,6 +88,7 @@ public class UserService {
     public User createUser(User user, MultipartFile profileImage) {
         if(!verifyEmail(user))
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+        verifyNickname(user.getNickname());
 
         //UserTag에 user를 넣어줘야한다.
         for(UserTag userTag : user.getUserTags()){
@@ -120,6 +121,11 @@ public class UserService {
         return false;
     }
 
+    private void verifyNickname(String nickname) {
+        if(userRepository.existsByNickname(nickname))
+            throw new BusinessLogicException(ExceptionCode.USER_NICKNAME_EXISTS);
+    }
+
     public User findVerifiedUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if(user == null)
@@ -130,6 +136,8 @@ public class UserService {
 
     public User updateUser(User user, MultipartFile profileImage) {
         User findUser = findVerifiedUserByEmail(user.getEmail());
+        if(user.getNickname() != null) verifyNickname(user.getNickname());
+
         Optional.ofNullable(user.getNickname())
                 .ifPresent(nickname -> findUser.setNickname(nickname));
         findUser.getUserTags().clear();
@@ -150,10 +158,11 @@ public class UserService {
 
     public User updateUserPassword(String email, String currentPassword, String newPassword) {
         User findUser = findVerifiedUserByEmail(email);
-        if(!findUser.getPassword().equals(currentPassword))
-            throw new BusinessLogicException(ExceptionCode.PASSWORD_INCORRECT);
+        checkPassword(currentPassword, findUser.getPassword());
 
-        findUser.setPassword(newPassword);
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+
+        findUser.setPassword(encryptedPassword);
         return userRepository.save(findUser);
     }
 
