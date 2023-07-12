@@ -14,7 +14,7 @@ interface SignupType {
   name: string;
   nickname: string;
   birth: string;
-  profileImage: string;
+  // profileImage: string;
 }
 
 const SignupForm = (props: any) => {
@@ -91,19 +91,19 @@ const SignupForm = (props: any) => {
     },
   ];
 
-  const [imagePreview, setImagePreview] = useState('');
-  const image = watch('profileImage');
-  useEffect(() => {
-    if (image && image.length > 0) {
-      if (typeof image[0] === 'string') {
-        const file = image[0] as string;
-        setImagePreview(file);
-      } else {
-        const file = image[0] as Blob;
-        setImagePreview(URL.createObjectURL(file));
-      }
-    }
-  }, [image]);
+  // const [imagePreview, setImagePreview] = useState('');
+  // const image = watch('profileImage');
+  // useEffect(() => {
+  //   if (image && image.length > 0) {
+  //     if (typeof image[0] === 'string') {
+  //       const file = image[0] as string;
+  //       setImagePreview(file);
+  //     } else {
+  //       const file = image[0] as Blob;
+  //       setImagePreview(URL.createObjectURL(file));
+  //     }
+  //   }
+  // }, [image]);
 
   const SignupMutation = useMutation({
     mutationFn: (newUser: SignupType) => Signup(newUser),
@@ -122,8 +122,8 @@ const SignupForm = (props: any) => {
   });
 
   const onVaild: SubmitHandler<SignupType> = (data: any) => {
-    console.log(data);
-    setPostData(data);
+    SignupMutation.mutate();
+    // console.log(data);
   };
 
   return (
@@ -131,11 +131,11 @@ const SignupForm = (props: any) => {
       <form onSubmit={handleSubmit(onVaild)}>
         {page === 1 && (
           <div>
-            <div className="signImg">
+            {/* <div className="signImg">
               <label htmlFor="picture" />
               {image ? <img src={imagePreview} /> : <img src={noImg} />}
               <input {...register('profileImage')} id="picture" type="file" />
-            </div>
+            </div> */}
             <input
               id="email"
               type="text"
