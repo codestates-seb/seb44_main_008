@@ -8,7 +8,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -34,3 +34,9 @@ mail:
     admin: admin@gmail.com
 jwt:
   secret: ${JWT_SECRET_KEY}
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+      profile-path: ${S3_PROFILE_IMAGE_PATH}
+      thumbnail-path: ${S3_THUMBNAIL_IMAGE_PATH}
