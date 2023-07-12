@@ -10,6 +10,7 @@ export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'isvalid'> {
   value?: InputValue;
   onChange?: (e: InputChangeEvent) => void;
+  onReset?: React.FormEventHandler<HTMLInputElement>;
   placeholder?: Placeholder;
   isvalid?: boolean | string;
   width?: number | string;

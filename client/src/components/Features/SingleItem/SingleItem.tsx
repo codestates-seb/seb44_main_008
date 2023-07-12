@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import { SingleItemType } from './type';
+import { useNavigate } from 'react-router';
 
-const SingleItem = ({
-  src,
-  title,
-  date,
-  author,
-  isMain,
-  onClick,
-}: SingleItemType) => {
+const SingleItem = ({ src, title, date, author, isMain }: SingleItemType) => {
+  const navigate = useNavigate();
+
+  const onClickSingleItem = () => {
+    navigate('/detail/content');
+  };
+
   return (
-    <SingleItemDiv isMain={isMain} onClick={onClick}>
+    <SingleItemDiv isMain={isMain} onClick={onClickSingleItem}>
       <ImgDiv isMain={isMain}>
         <SingleItemImg src={src} isMain={isMain} />
       </ImgDiv>
@@ -63,6 +63,7 @@ const SingleItemMeta = styled.div<SingleItemType>`
   }
   & > div {
     width: 100%;
+    padding-top: 0.5rem;
     display: flex;
     justify-content: space-between;
   }

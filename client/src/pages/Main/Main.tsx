@@ -1,114 +1,17 @@
 import styled, { StyleSheetManager } from 'styled-components';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import isPropValid from '@emotion/is-prop-valid';
+import ErrorPage from '../ErrorPage/ErrorPage';
+import Loading from '../../components/Common/Loading/Loading';
+
+import { getMainItems } from '../../api/reviewItem/reviewItem';
+import { useQuery } from '@tanstack/react-query';
 
 const Main = () => {
-  const dummyData = {
-    recommendBoards: [
-      {
-        reviewBoardId: 1,
-        title: '사용자 맞춤 추천 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 2,
-        title: '사용자 맞춤 추천 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 3,
-        title: '사용자 맞춤 추천 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 4,
-        title: '사용자 맞춤 추천 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-    ],
-    popularBoards: [
-      {
-        reviewBoardId: 1,
-        title: '인기 리뷰 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 2,
-        title: '인기 리뷰 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 3,
-        title: '인기 리뷰 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-      {
-        reviewBoardId: 4,
-        title: '인기 리뷰 게시글',
-        thumbnail:
-          'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-        createdAt: '2023-06-30',
-        user: {
-          userId: 1,
-          nickname: '홍길동',
-        },
-      },
-    ],
-  };
-
-  const navigate = useNavigate();
-
-  const onClickSingleItem = () => {
-    navigate('/detail/content');
-  };
-
   const responsive = {
     0: {
       items: 1,
@@ -124,124 +27,119 @@ const Main = () => {
     },
   };
 
-  const popularItems = dummyData.popularBoards.map(item => {
-    return (
-      <StyleSheetManager
-        key={item.reviewBoardId}
-        shouldForwardProp={prop => isPropValid(prop)}
-      >
-        <SpecialContainer>
-          <SliderContainer>
-            <SingleItem
-              src={item.thumbnail}
-              title={item.title}
-              date={item.createdAt}
-              author={item.user.nickname}
-              isMain={false}
-              onClick={onClickSingleItem}
-            ></SingleItem>
-          </SliderContainer>
-        </SpecialContainer>
-      </StyleSheetManager>
-    );
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['mainItems'],
+    queryFn: () => getMainItems(),
   });
 
-  const recommendItems = dummyData.recommendBoards.map(item => {
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isSuccess) {
+    // 캐러셀 item 변수
+    const popularItems = data.popularBoards.map(item => {
+      return (
+        <StyleSheetManager
+          key={item.reviewBoardId}
+          shouldForwardProp={prop => isPropValid(prop)}
+        >
+          <SpecialContainer>
+            <SliderContainer>
+              <SingleItem
+                src={item.thumbnail}
+                title={item.title}
+                date={item.createdAt}
+                author={item.user.nickname}
+                isMain={false}
+              ></SingleItem>
+            </SliderContainer>
+          </SpecialContainer>
+        </StyleSheetManager>
+      );
+    });
+
+    const recommendItems = data.recommendBoards.map(item => {
+      return (
+        <StyleSheetManager
+          key={item.reviewBoardId}
+          shouldForwardProp={prop => isPropValid(prop)}
+        >
+          <SpecialContainer>
+            <SliderContainer>
+              <SingleItem
+                src={item.thumbnail}
+                title={item.title}
+                date={item.createdAt}
+                author={item.user.nickname}
+                isMain={false}
+              ></SingleItem>
+            </SliderContainer>
+          </SpecialContainer>
+        </StyleSheetManager>
+      );
+    });
+
+    // 여기서 부터 return
     return (
-      <StyleSheetManager
-        key={item.reviewBoardId}
-        shouldForwardProp={prop => isPropValid(prop)}
-      >
+      <MainWrapper>
         <SpecialContainer>
-          <SliderContainer>
-            <SingleItem
-              src={item.thumbnail}
-              title={item.title}
-              date={item.createdAt}
-              author={item.user.nickname}
-              isMain={false}
-              onClick={onClickSingleItem}
-            ></SingleItem>
-          </SliderContainer>
+          <h1>홍길동님 맞춤 추천 리뷰 게시글✨</h1>
+          <AliceCarousel
+            mouseTracking
+            infinite={true}
+            animationDuration={2000}
+            disableButtonsControls
+            controlsStrategy="alternate"
+            responsive={responsive}
+            autoPlay
+            items={recommendItems}
+          />
         </SpecialContainer>
-      </StyleSheetManager>
+
+        <SpecialContainer>
+          <h1>인기 리뷰 게시글✨</h1>
+          <AliceCarousel
+            mouseTracking
+            infinite={true}
+            animationDuration={2000}
+            controlsStrategy="alternate"
+            disableButtonsControls
+            responsive={responsive}
+            autoPlay
+            items={popularItems}
+          />
+        </SpecialContainer>
+
+        <DefaultContainer>
+          <div>
+            <h1>전체 리뷰 게시글</h1>
+            <Link to="/main/contents">더 보기</Link>
+          </div>
+          <StaticContainer>
+            {data.boards.map(item => {
+              return (
+                <StyleSheetManager
+                  key={item.reviewBoardId}
+                  shouldForwardProp={prop => isPropValid(prop)}
+                >
+                  <SingleItem
+                    src={item.thumbnail}
+                    title={item.title}
+                    date={item.createdAt}
+                    author={item.user.nickname}
+                    isMain={true}
+                  ></SingleItem>
+                </StyleSheetManager>
+              );
+            })}
+          </StaticContainer>
+        </DefaultContainer>
+      </MainWrapper>
     );
-  });
-
-  return (
-    <MainWrapper>
-      <SpecialContainer>
-        <h1>홍길동님 맞춤 추천 리뷰 게시글✨</h1>
-        <AliceCarousel
-          mouseTracking
-          infinite={true}
-          animationDuration={2000}
-          disableButtonsControls
-          controlsStrategy="alternate"
-          responsive={responsive}
-          autoPlay
-          items={recommendItems}
-        />
-      </SpecialContainer>
-
-      <SpecialContainer>
-        <h1>인기 리뷰 게시글✨</h1>
-        <AliceCarousel
-          mouseTracking
-          infinite={true}
-          animationDuration={2000}
-          controlsStrategy="alternate"
-          disableButtonsControls
-          responsive={responsive}
-          autoPlay
-          items={popularItems}
-        />
-      </SpecialContainer>
-
-      <DefaultContainer>
-        <div>
-          <h1>전체 리뷰 게시글</h1>
-          <Link to="/main/contents">더 보기</Link>
-        </div>
-        <StaticContainer>
-          {dummyData.recommendBoards.map(item => {
-            return (
-              <StyleSheetManager
-                key={item.reviewBoardId}
-                shouldForwardProp={prop => isPropValid(prop)}
-              >
-                <SingleItem
-                  src={item.thumbnail}
-                  title={item.title}
-                  date={item.createdAt}
-                  author={item.user.nickname}
-                  isMain={true}
-                  onClick={onClickSingleItem}
-                ></SingleItem>
-              </StyleSheetManager>
-            );
-          })}
-          {dummyData.popularBoards.map(item => {
-            return (
-              <StyleSheetManager
-                key={item.reviewBoardId}
-                shouldForwardProp={prop => isPropValid(prop)}
-              >
-                <SingleItem
-                  src={item.thumbnail}
-                  title={item.title}
-                  date={item.createdAt}
-                  author={item.user.nickname}
-                  isMain={true}
-                  onClick={onClickSingleItem}
-                ></SingleItem>
-              </StyleSheetManager>
-            );
-          })}
-        </StaticContainer>
-      </DefaultContainer>
-    </MainWrapper>
-  );
+  }
 };
 
 export default Main;
