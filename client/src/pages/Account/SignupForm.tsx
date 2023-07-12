@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../../components/Common/Button/Button';
-import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import noImg from '../../assets/images/account/noImg.png';
 import { useMutation } from '@tanstack/react-query';
@@ -112,17 +111,21 @@ const SignupForm = (props: any) => {
       if (data.status === 201) {
         navigate(`${import.meta.env.VITE_BASE_URL}/users/login`);
       }
+      console.log('성공');
     },
     onError(error: any) {
       if (error.response && error.response.status === 409) {
         alert(error.response.message);
       }
+      console.log('실패');
     },
   });
+
   const onVaild: SubmitHandler<SignupType> = (data: any) => {
-    SignupMutation;
     console.log(data);
+    setPostData(data);
   };
+
   return (
     <AccountWrap>
       <form onSubmit={handleSubmit(onVaild)}>
@@ -133,15 +136,10 @@ const SignupForm = (props: any) => {
               {image ? <img src={imagePreview} /> : <img src={noImg} />}
               <input {...register('profileImage')} id="picture" type="file" />
             </div>
-            <Input
+            <input
               id="email"
               type="text"
-              isvalid="true"
-              width="100%"
-              value={email}
-              onChange={e => {
-                setEmail(e.target.value);
-              }}
+              placeholder="test@email.com"
               {...register('email', {
                 required: '이메일은 필수 입력입니다.',
                 pattern: {
@@ -150,51 +148,36 @@ const SignupForm = (props: any) => {
                   message: '이메일 형식에 맞지 않습니다.',
                 },
               })}
-              placeholder="이메일"
             />
-            <Input
+            <input
               id="password"
               type="password"
-              isvalid="true"
-              width="100%"
-              value={passWord}
-              onChange={e => {
-                setPassword(e.target.value);
-                register('password', {
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 7,
-                    message: '7자리 이상 비밀번호를 입력하세요.',
-                  },
-                });
-              }}
+              {...register('password', {
+                required: '비밀번호는 필수 입력입니다.',
+                minLength: {
+                  value: 7,
+                  message: '7자리 이상 비밀번호를 입력하세요.',
+                },
+              })}
               placeholder="비밀번호"
             />
-            <Input
+            <input
               id="passwordCheck"
               type="password"
-              isvalid="true"
-              width="100%"
-              value={checkPassWord}
-              onChange={e => {
-                setCheckPassword(e.target.value),
-                  {
-                    ...register('passwordCheck', {
-                      required: '비밀번호는 필수 입력입니다.',
-                      minLength: {
-                        value: 7,
-                        message: '7자리 이상 비밀번호를 입력하세요.',
-                      },
-                      validate: {
-                        check: val => {
-                          if (passWord !== val) {
-                            return '비밀번호가 일치하지 않습니다.';
-                          }
-                        },
-                      },
-                    }),
-                  };
-              }}
+              {...register('passwordCheck', {
+                required: '비밀번호는 필수 입력입니다.',
+                minLength: {
+                  value: 7,
+                  message: '7자리 이상 비밀번호를 입력하세요.',
+                },
+                validate: {
+                  check: val => {
+                    if (passWord !== val) {
+                      return '비밀번호가 일치하지 않습니다.';
+                    }
+                  },
+                },
+              })}
               placeholder="비밀번호 확인"
             />
             <Button
@@ -226,46 +209,28 @@ const SignupForm = (props: any) => {
               </ul>
               <input type="hidden" value={tag} readOnly />
             </div>
-            <Input
+            <input
               id="name"
               type="text"
-              isvalid="true"
-              width="100%"
-              value={name}
-              onChange={e => {
-                setName(e.target.value);
-                register('name', {
-                  required: '이름은 필수 입력입니다.',
-                });
-              }}
+              {...register('name', {
+                required: '이름은 필수 입력입니다.',
+              })}
               placeholder="이름"
             />
-            <Input
+            <input
               id="nickname"
               type="text"
-              isvalid="true"
-              width="100%"
-              value={nickName}
-              onChange={e => {
-                setNickName(e.target.value);
-                register('nickname', {
-                  required: '닉네임은 필수 입력입니다.',
-                });
-              }}
+              {...register('nickname', {
+                required: '닉네임은 필수 입력입니다.',
+              })}
               placeholder="닉네임"
             />
-            <Input
+            <input
               id="birth"
               type="date"
-              isvalid="true"
-              width="100%"
-              value={birth}
-              onChange={e => {
-                setBirth(e.target.value);
-                register('birth', {
-                  required: '생년월일은 필수 입력입니다.',
-                });
-              }}
+              {...register('birth', {
+                required: '생년월일은 필수 입력입니다.',
+              })}
             />
             <Button width="100%" type="submit" value="회원가입" />
           </div>
