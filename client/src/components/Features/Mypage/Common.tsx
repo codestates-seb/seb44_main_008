@@ -23,7 +23,7 @@ const Common = (): JSX.Element => {
   if (isSuccess) {
     return (
       <>
-        {/* <TotalContainer>
+        <TotalContainer>
           <TopContainer>
             <UserTopContainer>
               <User>
@@ -63,7 +63,7 @@ const Common = (): JSX.Element => {
               </UserInfo>
             </UserBotContainer>
           </BotContainer>
-        </TotalContainer> */}
+        </TotalContainer>
       </>
     );
   }
