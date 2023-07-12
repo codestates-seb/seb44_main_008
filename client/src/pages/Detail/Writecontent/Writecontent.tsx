@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { WriteContentType, Props } from './type';
+import { WriteContentType, Props, TagType } from './type';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
@@ -109,7 +109,7 @@ const Writecontent = () => {
 
   console.log(movieTitle);
 
-  const onClickTag: void = event => {
+  const onClickTag: void = (event: MouseEvent<HTMLButtonElement>) => {
     const element = document.getElementById(event.target.id).classList;
 
     const newTagId: number | string = event.target.id;
