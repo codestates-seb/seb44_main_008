@@ -203,6 +203,16 @@ public class ReviewBoardService {
 //            return reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
     }
 
+    public List<ReviewBoard> findRecommendReviewBoards(User user, List<Tag> tags) {
+        Period age = UserUtils.getAge(user);
+        if(age.getYears() >= 19)
+            return reviewBoardRepository.findTop8ByReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
+        else {
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByAdultedIsFalseOrderReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
+            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
+        }
+    }
+
     public Page<ReviewBoard> findSpecificTagReviewBoards(User user, Tag tag, int page, int size) {
         Period age = UserUtils.getAge(user);
 
