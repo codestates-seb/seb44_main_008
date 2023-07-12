@@ -24,6 +24,7 @@ import com.codestates.user.mapper.UserMapper;
 import com.codestates.user.service.ReviewBoardWishService;
 import com.codestates.user.service.UserService;
 
+import com.codestates.user.service.UserTagService;
 import com.codestates.utils.UriComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -59,8 +60,9 @@ public class ReviewBoardController {
     private final MoviePartyService moviePartyService;
     private final MoviePartyMapper moviePartyMapper;
     private final ReviewBoardWishService reviewBoardWishService;
+    private final UserTagService userTagService;
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper, ReviewBoardWishService reviewBoardWishService) {
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper, ReviewBoardWishService reviewBoardWishService, UserTagService userTagService) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
@@ -72,6 +74,7 @@ public class ReviewBoardController {
         this.moviePartyService = moviePartyService;
         this.moviePartyMapper = moviePartyMapper;
         this.reviewBoardWishService = reviewBoardWishService;
+        this.userTagService = userTagService;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -128,11 +131,14 @@ public class ReviewBoardController {
     public ResponseEntity getMainReviewBoards() {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         User user = userService.findVerifiedUserByEmail(email);
+        List<Tag> tags = userTagService.findTagByUserTag(user.getUserTags());
         List<ReviewBoard> reviewBoards = reviewBoardService.findReviewBoards(user);
         List<ReviewBoard> popularBoards = reviewBoardService.findPopularReviewBoards(user);
+        List<ReviewBoard> recommendBoards = reviewBoardService.findRecommendReviewBoards(user, tags);
+
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards)),
+                new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards, recommendBoards)),
                 HttpStatus.OK
         );
     }
