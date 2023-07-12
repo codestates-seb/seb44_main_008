@@ -2,67 +2,71 @@ import { styled } from 'styled-components';
 import Button from '../../Common/Button/Button';
 // import UserAva from '@/assets/images/user-info/userAvatar.png';
 import { useNavigate } from 'react-router-dom';
-
-const data: dataType = {
-  userId: 1,
-  name: '홍길동',
-  nickname: '팝콘즈',
-  email: 'hgd123@gmail.com',
-  profileImage: 'https://s3.....',
-  myTags: [
-    { tagId: 1, tagName: '로맨스' },
-    { tagId: 2, tagName: '공포' },
-    { tagId: 3, tagName: '스릴러' },
-  ],
-};
+import { useQuery } from '@tanstack/react-query';
+import { GetUser } from '../../../api/user/userInfo/userInfo';
+import ErrorPage from '../../../pages/ErrorPage/ErrorPage';
+import Loading from '../../Common/Loading/Loading';
 
 const Common = (): JSX.Element => {
   const navigate = useNavigate();
-  return (
-    <>
-      <TotalContainer>
-        <TopContainer>
-          <UserTopContainer>
-            <User>
-              <img src={data.profileImage} alt="사용자 이미지" />
-              <span>{data.name}님</span>
-            </User>
-            <Button
-              value={'회원 정보 수정'}
-              type="variant"
-              onClick={() => {
-                navigate('/mypage/edit');
-              }}
-            />
-          </UserTopContainer>
-        </TopContainer>
-        <BotContainer>
-          <UserBotContainer>
-            <UserInfo>
-              <span className="title">닉네임</span>
-              <span className="desc">{data.nickname}</span>
-            </UserInfo>
-          </UserBotContainer>
-          <UserBotContainer>
-            <UserInfo>
-              <span className="title">이메일</span>
-              <span className="desc">{data.email}</span>
-            </UserInfo>
-          </UserBotContainer>
-          <UserBotContainer>
-            <UserInfo>
-              <span className="title">태그</span>
-              <span className="last-desc">
-                {data.myTags.map(tag => (
-                  <span key={tag.tagId}>{`#${tag.tagName} `}</span>
-                ))}
-              </span>
-            </UserInfo>
-          </UserBotContainer>
-        </BotContainer>
-      </TotalContainer>
-    </>
-  );
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['UserInfo'],
+    queryFn: () => GetUser(),
+  });
+  console.log(data);
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isSuccess) {
+    return (
+      <>
+        {/* <TotalContainer>
+          <TopContainer>
+            <UserTopContainer>
+              <User>
+                <img src={data.profileImage} alt="사용자 이미지" />
+                <span>{data.name}님</span>
+              </User>
+              <Button
+                value={'회원 정보 수정'}
+                type="variant"
+                onClick={() => {
+                  navigate('/mypage/edit');
+                }}
+              />
+            </UserTopContainer>
+          </TopContainer>
+          <BotContainer>
+            <UserBotContainer>
+              <UserInfo>
+                <span className="title">닉네임</span>
+                <span className="desc">{data.nickname}</span>
+              </UserInfo>
+            </UserBotContainer>
+            <UserBotContainer>
+              <UserInfo>
+                <span className="title">이메일</span>
+                <span className="desc">{data.email}</span>
+              </UserInfo>
+            </UserBotContainer>
+            <UserBotContainer>
+              <UserInfo>
+                <span className="title">태그</span>
+                <span className="last-desc">
+                  {data.myTags.map(tag => (
+                    <span key={tag.tagId}>{`#${tag.tagName} `}</span>
+                  ))}
+                </span>
+              </UserInfo>
+            </UserBotContainer>
+          </BotContainer>
+        </TotalContainer> */}
+      </>
+    );
+  }
 };
 
 const TotalContainer = styled.div`
