@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../../components/Common/Button/Button';
-import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import noImg from '../../assets/images/account/noImg.png';
 import { useMutation } from '@tanstack/react-query';
