@@ -127,13 +127,15 @@ public interface ReviewBoardMapper {
 //        return detailResponse;
 //    }
 
-    default ReviewBoardDto.MainResponse reviewBoardsToDetailResponses(List<ReviewBoard> reviewBoards, List<ReviewBoard> popularBoards) {
+    default ReviewBoardDto.MainResponse reviewBoardsToDetailResponses(List<ReviewBoard> reviewBoards, List<ReviewBoard> popularBoards, List<ReviewBoard> recommendBoards) {
         List<ReviewBoardDto.EntireResponse> reviewBoardEntire = reviewBoardsToEntireResponses(reviewBoards);
         List<ReviewBoardDto.EntireResponse> popularReviewBoardEntire = reviewBoardsToEntireResponses(popularBoards);
+        List<ReviewBoardDto.EntireResponse> recommendBoardEntire = reviewBoardsToEntireResponses(recommendBoards);
 
         return ReviewBoardDto.MainResponse.builder()
                 .popularBoards(popularReviewBoardEntire)
                 .boards(reviewBoardEntire)
+                .recommendBoards(recommendBoardEntire)
                 .build();
     }
 
