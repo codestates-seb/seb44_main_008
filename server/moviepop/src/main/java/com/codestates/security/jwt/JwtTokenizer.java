@@ -45,7 +45,7 @@ public class JwtTokenizer {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        long userId = getUserId(token);
+//        long userId = getUserId(token);
         String email = getEmail(token);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
@@ -64,7 +64,7 @@ public class JwtTokenizer {
     }
 
     public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class);
+        return extractAllClaims(token).get("username", String.class);
     }
 
     public long getUserId(String token) {
