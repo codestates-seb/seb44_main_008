@@ -4,12 +4,14 @@ import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import { ReactComponent as IcoGoogle } from '@/assets/images/account/icoGoogle.svg';
+import { useMutation } from '@tanstack/react-query';
+import { Login } from '../../api/auth/account/login';
 interface LoginType {
   email: string;
   password: string;
 }
 
-const Login = (props: any) => {
+const LoginForm = () => {
   const {
     register,
     handleSubmit,
@@ -19,9 +21,35 @@ const Login = (props: any) => {
   const [email, setEmail] = useState('');
   const [passWord, setPassword] = useState('');
 
+  const LoginMutations = useMutation({
+    mutationFn: (user: LoginType) => Login(user),
+    onSuccess(data) {
+      if (data.status === 200) {
+        const accessToken = data.headers.Authorization;
+        const refreshToken = data.headers.Refresh;
+        if (accessToken) {
+          localStorage.setItem('token', accessToken);
+        }
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+        }
+        window.location.href = `${import.meta.env.VITE_BASE_URL}/main`;
+      }
+    },
+    onError(error: any) {
+      if (error.response && error.response.status === 401) {
+        alert(error.response.message);
+      }
+    },
+  });
+
+  const onValid = (data: any) => {
+    LoginMutations;
+    console.log(data);
+  };
   return (
     <AccountWrap>
-      <form onSubmit={handleSubmit(props.onSubmit)}>
+      <form onSubmit={handleSubmit(onValid)}>
         <Input
           id="email"
           type="text"
@@ -68,4 +96,4 @@ const Login = (props: any) => {
   );
 };
 
-export default Login;
+export default LoginForm;
