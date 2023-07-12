@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import noImg from '../../assets/images/account/noImg.png';
+import { useMutation } from '@tanstack/react-query';
+import { Signup } from '../../api/auth/account/login';
+import { useNavigate } from 'react-router-dom';
 interface SignupType {
   email: string;
   password: string;
@@ -15,7 +18,7 @@ interface SignupType {
   profileImage: string;
 }
 
-const Signup = (props: any) => {
+const SignupForm = (props: any) => {
   const {
     watch,
     register,
@@ -23,9 +26,7 @@ const Signup = (props: any) => {
     formState: { errors },
   } = useForm<SignupType>({ mode: 'onChange' });
 
-  const onVaild = (data: any) => {
-    console.log(data);
-  };
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
   const [email, setEmail] = useState('');
@@ -105,6 +106,23 @@ const Signup = (props: any) => {
     }
   }, [image]);
 
+  const SignupMutation = useMutation({
+    mutationFn: (newUser: SignupType) => Signup(newUser),
+    onSuccess(data) {
+      if (data.status === 201) {
+        navigate(`${import.meta.env.VITE_BASE_URL}/users/login`);
+      }
+    },
+    onError(error: any) {
+      if (error.response && error.response.status === 409) {
+        alert(error.response.message);
+      }
+    },
+  });
+  const onVaild: SubmitHandler<SignupType> = (data: any) => {
+    SignupMutation;
+    console.log(data);
+  };
   return (
     <AccountWrap>
       <form onSubmit={handleSubmit(onVaild)}>
@@ -123,15 +141,15 @@ const Signup = (props: any) => {
               value={email}
               onChange={e => {
                 setEmail(e.target.value);
-                register('email', {
-                  required: '이메일은 필수 입력입니다.',
-                  pattern: {
-                    value:
-                      /^[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-                    message: '이메일 형식에 맞지 않습니다.',
-                  },
-                });
               }}
+              {...register('email', {
+                required: '이메일은 필수 입력입니다.',
+                pattern: {
+                  value:
+                    /^[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                  message: '이메일 형식에 맞지 않습니다.',
+                },
+              })}
               placeholder="이메일"
             />
             <Input
@@ -159,21 +177,23 @@ const Signup = (props: any) => {
               width="100%"
               value={checkPassWord}
               onChange={e => {
-                setCheckPassword(e.target.value);
-                register('passwordCheck', {
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 7,
-                    message: '7자리 이상 비밀번호를 입력하세요.',
-                  },
-                  validate: {
-                    check: val => {
-                      if (passWord !== val) {
-                        return '비밀번호가 일치하지 않습니다.';
-                      }
-                    },
-                  },
-                });
+                setCheckPassword(e.target.value),
+                  {
+                    ...register('passwordCheck', {
+                      required: '비밀번호는 필수 입력입니다.',
+                      minLength: {
+                        value: 7,
+                        message: '7자리 이상 비밀번호를 입력하세요.',
+                      },
+                      validate: {
+                        check: val => {
+                          if (passWord !== val) {
+                            return '비밀번호가 일치하지 않습니다.';
+                          }
+                        },
+                      },
+                    }),
+                  };
               }}
               placeholder="비밀번호 확인"
             />
@@ -255,4 +275,4 @@ const Signup = (props: any) => {
   );
 };
 
-export default Signup;
+export default SignupForm;

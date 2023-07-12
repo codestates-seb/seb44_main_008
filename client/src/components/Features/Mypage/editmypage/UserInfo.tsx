@@ -3,19 +3,24 @@ import { styled } from 'styled-components';
 import { FileData, UserInfoType } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
+import { getEditUser } from '../../../../api/user/userInfo/editUserInfo';
+import { useQuery } from '@tanstack/react-query';
+import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
+import Loading from '../../../Common/Loading/Loading';
 
 const UserInfo = () => {
   const defaultImage =
     'http://localhost:5173/src/assets/images/user-info/userAvatar.png';
   const [Image, setImage] = useState<FileData | null | string>(defaultImage);
-  const fileInput = useRef(null);
+
   const data: UserInfoType = {
     userId: 1,
     email: 'hgd123@gmail.com',
-    nickname: '홍길동 2',
+    nickname: '홍길동2',
     profileImage: Image,
   };
 
+  const fileInput = useRef(null);
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const imageFile = event.target.files[0];
@@ -39,13 +44,24 @@ const UserInfo = () => {
       return;
     }
   };
-  const [inputValue, setInputValue] = useState(data.nickname);
 
+  // const { data, isLoading, error, isSuccess } = useQuery({
+  //   queryKey: ['EditUser'],
+  //   queryFn: () => getEditUser(),
+  // });
+  // console.log(data);
+  // if (error) {
+  //   return <ErrorPage />;
+  // }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
+  // if (isSuccess)
+  const [inputValue, setInputValue] = useState(data.nickname);
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     onChange && onChange(e);
   };
-
   return (
     <>
       <Container>
