@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { WriteContentType } from './type';
+import { WriteContentType, Props, TagType } from './type';
+import { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
@@ -69,6 +71,11 @@ const Writecontent = () => {
 
   const [modalOn, setModalOn] = useState<boolean>(false);
 
+  const [titleErr, setTitleErr] = useState<boolean>(true);
+  const [movieTitleErr, setMovieTitleErr] = useState<boolean>(true);
+  const [TagErr, setTagErr] = useState<boolean>(true);
+  const [contentErr, setContentErr] = useState<boolean>(true);
+
   // 이미지 관련 함수
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -91,16 +98,18 @@ const Writecontent = () => {
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.placeholder === '게시글 제목을 입력하세요.') {
       setTitle(event.target.value);
-      console.log(' title set 함수 작동함');
+      setTitleErr(true);
     } else if (event.target.placeholder === '영화 제목을 입력하세요.') {
-      setMovieTitle(event.target.value);
-      console.log(' movieTitle set 함수 작동함');
+      setMovieTitleErr(true);
     } else {
       setContent(event.target.value);
+      setContentErr(true);
     }
   };
 
-  const onClickTag: void = (event: WriteContentType) => {
+  console.log(movieTitle);
+
+  const onClickTag: void = (event: MouseEvent<HTMLButtonElement>) => {
     const element = document.getElementById(event.target.id).classList;
 
     const newTagId: number | string = event.target.id;
@@ -121,6 +130,7 @@ const Writecontent = () => {
         tagName: newTagName,
       };
       setSelectedTags([...selectedTags, newTag]);
+      setTagErr(true);
     }
   };
 
@@ -128,15 +138,28 @@ const Writecontent = () => {
 
   const onClickSubmitButton = () => {
     // 이미지는 formData로 보내야 하기 때문에 추후 수정
-    const submitData = {
-      title: title,
-      movieTitle: movieTitle,
-      review: content,
-      tags: selectedTags,
-      image: file,
-    };
+    if (title.length === 0) {
+      setTitleErr(false);
+    }
+    if (movieTitle.length === 0) {
+      setMovieTitleErr(false);
+    }
+    if (selectedTags[0] === undefined) {
+      setTagErr(false);
+    }
+    if (content.length === 0) {
+      setContentErr(false);
+    } else {
+      const submitData = {
+        title: title,
+        movieTitle: movieTitle,
+        review: content,
+        tags: selectedTags,
+        image: file,
+      };
 
-    console.log(submitData);
+      console.log(submitData);
+    }
   };
 
   const onClickMovieTitle = () => {
@@ -145,81 +168,86 @@ const Writecontent = () => {
   };
 
   return (
-    <WriteWrapper>
-      {modalOn ? (
-        <MovieTitleModal
-          setModalOn={setModalOn}
-          setMovieTitle={setMovieTitle}
-        />
-      ) : (
-        <></>
-      )}
-      <div>
-        <WriteImgDiv>
-          <img
-            src={fileURL ? fileURL : '/imgs/InputImg.png'}
-            alt="thumbnail"
-            onClick={onClickImg}
-          ></img>
-          <input
-            type="file"
-            accept="image/*"
-            required
-            ref={imgUploadInput}
-            onChange={onImageChange}
+    <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+      <WriteWrapper>
+        {modalOn ? (
+          <MovieTitleModal
+            setModalOn={setModalOn}
+            setMovieTitle={setMovieTitle}
           />
-        </WriteImgDiv>
+        ) : (
+          <></>
+        )}
+        <div>
+          <WriteImgDiv>
+            <img
+              src={fileURL ? fileURL : '/imgs/InputImg.png'}
+              alt="thumbnail"
+              onClick={onClickImg}
+            ></img>
+            <input
+              type="file"
+              accept="image/*"
+              required
+              ref={imgUploadInput}
+              onChange={onImageChange}
+            />
+          </WriteImgDiv>
 
-        <Input
-          value={title}
-          placeholder="게시글 제목을 입력하세요."
-          isvalid={true}
-          onChange={onChangeInput}
-          width="80%"
-        ></Input>
-        <div className="movie--title--div" onClick={onClickMovieTitle}>
-          <Input
-            value={movieTitle}
-            placeholder="영화 제목을 입력하세요."
-            isvalid={true}
+          <div className="input--wrapper">
+            <Input
+              value={title}
+              placeholder="게시글 제목을 입력하세요."
+              isvalid={titleErr}
+              onChange={onChangeInput}
+              width="100%"
+            ></Input>
+            <div className="movie--title--div" onClick={onClickMovieTitle}>
+              <Input
+                value={movieTitle}
+                placeholder="영화 제목을 입력하세요."
+                isvalid={movieTitleErr}
+                onChange={onChangeInput}
+                width="100%"
+              ></Input>
+            </div>
+          </div>
+
+          <TagContainer>
+            <WriteTagMeta isvalid={TagErr.toString()}>
+              <h3>태그</h3>
+              <p>최소 1개 이상의 태그를 선택해 주세요.</p>
+            </WriteTagMeta>
+            <WriteTagList>
+              {tags.map((tag, idx) => {
+                return (
+                  <li key={idx}>
+                    <Button
+                      value={`#${tag.tagName}`}
+                      id={tag.tagId}
+                      width={'100%'}
+                      onClick={onClickTag}
+                    />
+                  </li>
+                );
+              })}
+            </WriteTagList>
+          </TagContainer>
+
+          <WriteContentInput
+            placeholder="이 영화는 어땠나요?"
             onChange={onChangeInput}
-            width="80%"
-          ></Input>
+            isvalid={contentErr.toString()}
+          ></WriteContentInput>
+
+          <Button
+            value={'등록하기'}
+            width={'80%'}
+            onClick={onClickSubmitButton}
+          ></Button>
         </div>
-
-        <TagContainer>
-          <WriteTagMeta>
-            <h3>태그</h3>
-            <p>최소 1개 이상의 태그를 선택해 주세요.</p>
-          </WriteTagMeta>
-          <WriteTagList>
-            {tags.map((tag, idx) => {
-              return (
-                <li key={idx}>
-                  <Button
-                    value={`#${tag.tagName}`}
-                    id={tag.tagId}
-                    width={'100%'}
-                    onClick={onClickTag}
-                  />
-                </li>
-              );
-            })}
-          </WriteTagList>
-        </TagContainer>
-
-        <WriteContentInput
-          placeholder="이 영화는 어땠나요?"
-          onChange={onChangeInput}
-        ></WriteContentInput>
-
-        <Button
-          value={'등록하기'}
-          width={'80%'}
-          onClick={onClickSubmitButton}
-        ></Button>
-      </div>
-    </WriteWrapper>
+      </WriteWrapper>
+    </StyleSheetManager>
   );
 };
 
@@ -248,9 +276,13 @@ const WriteWrapper = styled.div`
       margin-top: 2rem;
     }
 
-    & > .movie--title--div {
-      width: 100%;
-      margin-top: 1rem;
+    & > .input--wrapper {
+      width: 70%;
+
+      & > .movie--title--div {
+        width: 100%;
+        margin-top: 1rem;
+      }
     }
   }
 `;
@@ -285,7 +317,7 @@ const TagContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const WriteTagMeta = styled.div`
+const WriteTagMeta = styled.div<Props>`
   display: flex;
   flex-direction: column;
 
@@ -301,6 +333,7 @@ const WriteTagMeta = styled.div`
   }
 
   & > p {
+    color: ${({ isvalid }) => (isvalid === 'true' ? '#666666' : '#fe2000')};
     padding-top: 0.5rem;
     font-size: 0.8rem;
   }
@@ -319,7 +352,7 @@ const WriteTagList = styled.ul`
   }
 `;
 
-const WriteContentInput = styled.textarea<WriteContentType>`
+const WriteContentInput = styled.textarea<Props>`
   width: 80%;
   min-height: 30rem;
   margin-top: 2rem;
@@ -329,8 +362,11 @@ const WriteContentInput = styled.textarea<WriteContentType>`
   background-color: #232323;
   border-radius: 0.5rem;
   font-size: 1.4rem;
-  border: none;
+  /* border: none; */
   resize: none;
+
+  border: ${({ isvalid }) =>
+    isvalid === 'true' ? 'none' : '2px solid #fe2000'};
 
   &:focus {
     outline: none;

@@ -37,11 +37,11 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
 
   const onClickBackground = () => {
     document.body.style.overflow = 'unset';
-    setModalOn(false);
+    setModalOn && setModalOn(false);
   };
 
-  const onChangeMovieTitle = e => {
-    setSearchTitle(e.target.value);
+  const onChangeMovieTitle = event => {
+    setSearchTitle(event.target.value);
   };
 
   // axios 통신
@@ -49,15 +49,16 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
     const postData = {};
   };
 
-  const onClickMovieTitle = e => {
-    setMovieTitle(e.target.innerHTML);
-    setModalOn(false);
+  const onClickMovieTitle = event => {
+    console.log(event.target.innerHTML);
+    setMovieTitle && setMovieTitle(event.target.innerHTML);
+    setModalOn && setModalOn(false);
     document.body.style.overflow = 'unset';
   };
   return (
     <MovieTitleModalWrapper>
       <ModalBackground onClick={onClickBackground}>
-        <ModalContainer onClick={e => e.stopPropagation()}>
+        <ModalContainer onClick={event => event.stopPropagation()}>
           <div className="search--bar">
             <div>
               <Input
