@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
 import { dummyData } from './dummyData';
@@ -7,6 +7,7 @@ import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 
 import isPropValid from '@emotion/is-prop-valid';
+import axios from 'axios';
 
 const Allcontents = () => {
   //로딩 테스트를 위한 가짜 fetch 함수를 넣었다.
@@ -58,6 +59,14 @@ const Allcontents = () => {
   const onClickSingleItem = () => {
     navigate('/detail/content');
   };
+
+  useEffect(() => {
+    axios
+      .get('https://cd6b-59-12-7-60.ngrok-free.app/reviewBoards/main')
+      .then(res => {
+        console.log(res);
+      });
+  }, []);
 
   return (
     <DefaultContainer>
