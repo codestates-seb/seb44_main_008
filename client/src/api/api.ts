@@ -14,8 +14,3 @@ instance.interceptors.request.use(config => {
   config.headers.Authorization = token || '';
   return config;
 });
-
-export const Login = data =>
-  axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, data);
-
-export const PathUser = data => instance.patch('/');
