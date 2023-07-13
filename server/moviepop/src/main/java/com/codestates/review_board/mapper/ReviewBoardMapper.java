@@ -1,5 +1,6 @@
 package com.codestates.review_board.mapper;
 
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie.entity.Movie;
 import com.codestates.review_board.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
@@ -75,16 +76,23 @@ public interface ReviewBoardMapper {
 //    }
     ReviewBoardDto.WishResponse reviewBoardToWishResponse(ReviewBoard reviewBoard);
 //    List<ReviewBoardDto.Response> reviewBoardsToResponses(List<ReviewBoard> reviewBoards);
-    default ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard) {
-        UserDto.totalReviewBoardResponse userResponse = new UserDto.totalReviewBoardResponse(
-                reviewBoard.getUser().getUserId(),
-                reviewBoard.getUser().getNickname()
-        );
+    default ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard, UserMapper userMapper, ImageUtil imageUtil) {
+//        UserDto.totalReviewBoardResponse userResponse = new UserDto.totalReviewBoardResponse(
+//                reviewBoard.getUser().getUserId(),
+//                reviewBoard.getUser().getNickname()
+//        );
+        UserDto.totalReviewBoardResponse userResponse = userMapper.userToTotalReviewBoardResponseDto(reviewBoard.getUser());
+
+        String thumbnail = reviewBoard.getThumbnail();
+        if(thumbnail == null)
+            thumbnail = imageUtil.getUrl() + imageUtil.getDefaultThumbnail();
+        else
+            thumbnail = imageUtil.getUrl() + thumbnail;
 
         ReviewBoardDto.EntireResponse response = ReviewBoardDto.EntireResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
                 .title(reviewBoard.getTitle())
-                .thumbnail(reviewBoard.getThumbnail())
+                .thumbnail(thumbnail)
                 .createdAt(reviewBoard.getCreatedAt())
                 .user(userResponse)
                 .build();
@@ -140,12 +148,14 @@ public interface ReviewBoardMapper {
     }
 
     List<ReviewBoardDto.UserResponse> reviewBoardToUserResponses(List<ReviewBoard> reviewBoards); // UserResponse를 가져오기 위한 mapper
-    default ReviewBoardDto.UserResponse reviewBoardToUserResponse(ReviewBoard reviewBoard, TagMapper tagMapper) { // UserResponse를 가져오기 위한 mapper
-        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
-                reviewBoard.getUser().getUserId(),
-                reviewBoard.getUser().getNickname(),
-                reviewBoard.getUser().getProfileImage()
-        );
+    default ReviewBoardDto.UserResponse reviewBoardToUserResponse(ReviewBoard reviewBoard, TagMapper tagMapper, UserMapper userMapper, ImageUtil imageUtil) { // UserResponse를 가져오기 위한 mapper
+//        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
+//                reviewBoard.getUser().getUserId(),
+//                reviewBoard.getUser().getNickname(),
+//                reviewBoard.getUser().getProfileImage()
+//        );
+
+        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoard.getUser(), imageUtil);
 
         ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
@@ -158,12 +168,14 @@ public interface ReviewBoardMapper {
     }
 
     List<ReviewBoardDto.UserResponse> reviewBoardWishToUserResponses(List<ReviewBoardWish> reviewBoardWishes);
-    default ReviewBoardDto.UserResponse reviewBoardWishToUserResponse(ReviewBoardWish reviewBoardWish) {
-        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
-                reviewBoardWish.getUser().getUserId(),
-                reviewBoardWish.getUser().getNickname(),
-                reviewBoardWish.getUser().getProfileImage()
-        );
+    default ReviewBoardDto.UserResponse reviewBoardWishToUserResponse(ReviewBoardWish reviewBoardWish, UserMapper userMapper, ImageUtil imageUtil) {
+//        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
+//                reviewBoardWish.getUser().getUserId(),
+//                reviewBoardWish.getUser().getNickname(),
+//                reviewBoardWish.getUser().getProfileImage()
+//        );
+
+        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoardWish.getUser(), imageUtil);
 
         ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
                 .reviewBoardId(reviewBoardWish.getReviewBoard().getReviewBoardId())
