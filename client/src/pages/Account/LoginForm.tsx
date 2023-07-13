@@ -44,7 +44,7 @@ const LoginForm = () => {
   });
 
   const onValid = (data: any) => {
-    LoginMutations;
+    LoginMutations.mutate;
     console.log(data);
   };
   return (
