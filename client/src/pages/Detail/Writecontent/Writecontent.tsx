@@ -7,62 +7,14 @@ import isPropValid from '@emotion/is-prop-valid';
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
 import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { postNewReview } from '../../../api/reviewItem/reviewItem';
+import { getAllTags } from '../../../api/tags/gettags';
 
 const Writecontent = () => {
   const [fileURL, setFileURL] = useState<string>('');
   const [file, setFile] = useState<FileList | null>();
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
-
-  const tags = [
-    {
-      tagId: 1,
-      tagName: '로맨스',
-    },
-    {
-      tagId: 2,
-      tagName: '호러',
-    },
-    {
-      tagId: 3,
-      tagName: '판타지',
-    },
-    {
-      tagId: 4,
-      tagName: '스포츠',
-    },
-    {
-      tagId: 5,
-      tagName: 'SF',
-    },
-    {
-      tagId: 6,
-      tagName: '액션',
-    },
-    {
-      tagId: 7,
-      tagName: '애니메이션',
-    },
-    {
-      tagId: 8,
-      tagName: '범죄',
-    },
-    {
-      tagId: 9,
-      tagName: '힐링',
-    },
-    {
-      tagId: 10,
-      tagName: '미스테리',
-    },
-    {
-      tagId: 11,
-      tagName: '뮤지컬',
-    },
-    {
-      tagId: 12,
-      tagName: '코미디',
-    },
-  ];
 
   const [title, setTitle] = useState<string>('');
   const [movieTitle, setMovieTitle] = useState<string>('');
@@ -75,6 +27,13 @@ const Writecontent = () => {
   const [movieTitleErr, setMovieTitleErr] = useState<boolean>(true);
   const [TagErr, setTagErr] = useState<boolean>(true);
   const [contentErr, setContentErr] = useState<boolean>(true);
+
+  const {
+    data: tagData,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery(['tags'], () => getAllTags());
 
   // 이미지 관련 함수
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,8 +66,6 @@ const Writecontent = () => {
     }
   };
 
-  console.log(movieTitle);
-
   const onClickTag: void = (event: MouseEvent<HTMLButtonElement>) => {
     const element = document.getElementById(event.target.id).classList;
 
@@ -134,10 +91,18 @@ const Writecontent = () => {
     }
   };
 
-  console.log(selectedTags);
+  const writeMutations = useMutation({
+    mutationFn: postData => postNewReview(postData),
+    onSuccess(data) {
+      console.log(data);
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
 
   const onClickSubmitButton = () => {
-    // 이미지는 formData로 보내야 하기 때문에 추후 수정
+    // 유효성 검사
     if (title.length === 0) {
       setTitleErr(false);
     }
@@ -147,18 +112,20 @@ const Writecontent = () => {
     if (selectedTags[0] === undefined) {
       setTagErr(false);
     }
-    if (content.length === 0) {
+    if (content.length <= 10) {
       setContentErr(false);
     } else {
       const submitData = {
-        title: title,
-        movieTitle: movieTitle,
-        review: content,
-        tags: selectedTags,
-        image: file,
+        post: {
+          title: title,
+          movieId: 1,
+          review: content,
+          tags: selectedTags,
+        },
+        thumbnail: file[0],
       };
 
-      console.log(submitData);
+      writeMutations.mutate(submitData);
     }
   };
 
@@ -219,18 +186,19 @@ const Writecontent = () => {
               <p>최소 1개 이상의 태그를 선택해 주세요.</p>
             </WriteTagMeta>
             <WriteTagList>
-              {tags.map((tag, idx) => {
-                return (
-                  <li key={idx}>
-                    <Button
-                      value={`#${tag.tagName}`}
-                      id={tag.tagId}
-                      width={'100%'}
-                      onClick={onClickTag}
-                    />
-                  </li>
-                );
-              })}
+              {isSuccess &&
+                tagData.data.map((tag, idx) => {
+                  return (
+                    <li key={idx}>
+                      <Button
+                        value={`#${tag.tagName}`}
+                        id={tag.tagId}
+                        width={'100%'}
+                        onClick={onClickTag}
+                      />
+                    </li>
+                  );
+                })}
             </WriteTagList>
           </TagContainer>
 
