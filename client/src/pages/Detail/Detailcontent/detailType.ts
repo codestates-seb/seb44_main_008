@@ -1,12 +1,12 @@
 export type DetailData = {
   reviewBoardId?: number;
   title?: string;
-  movieTitle?: string;
   review?: string;
   thumbnail?: string;
   wish?: number;
+  isWish?: boolean;
   createdAt?: string;
-  tags?: { tagId: number }[];
+  tags?: { tagId: number; tagName: string }[];
   user?: User1;
   comments?: Comments[];
   groups?: Group[];

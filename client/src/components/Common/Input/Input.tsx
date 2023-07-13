@@ -35,7 +35,7 @@ const Input = ({
           width={width}
           type={type}
         />
-        <StyledResetButton onClick={onReset}>
+        <StyledResetButton type="button" onClick={onReset}>
           <GrClose />
         </StyledResetButton>
       </InputCoverStyled>
