@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
-import { dummyData } from './dummyData';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 
 import isPropValid from '@emotion/is-prop-valid';
-import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { getAllItems } from '../../api/reviewItem/reviewItem';
 
 const Allcontents = () => {
+  const {
+    data: allReviews,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery(['allItems'], () => getAllItems());
+
+  console.log(allReviews);
+
   //로딩 테스트를 위한 가짜 fetch 함수를 넣었다.
-  const testFetch = (delay = 1000) =>
-    new Promise(res => setTimeout(res, delay));
+  const testFetch = (delay = 500) => new Promise(res => setTimeout(res, delay));
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
-  const [data, setData] = useState(dummyData.boards.slice(0, 12));
+  const [allReviewItems, setAllReviewItems] = useState([]);
 
   //현재 목업 데이터를 사용하고 있기 때문에, 최대한 데이터를 재활용하는 코드를 작성.
   //(0~4번 게시물, 1~5번 게시물, 2~6번 게시물 이런 식으로 가져와서 5개씩 concat함수로 붙였다.)
@@ -26,7 +34,12 @@ const Allcontents = () => {
     setIsLoaded(true);
     await testFetch();
     setItemIndex(i => i + 1);
-    setData(data.concat(dummyData.boards.slice(itemIndex, itemIndex + 4)));
+
+    allReviews &&
+      setAllReviewItems(
+        allReviewItems.concat(allReviews.data.slice(itemIndex, itemIndex + 4)),
+      );
+
     setIsLoaded(false);
   };
 
@@ -60,37 +73,32 @@ const Allcontents = () => {
     navigate('/detail/content');
   };
 
-  useEffect(() => {
-    axios
-      .get('https://cd6b-59-12-7-60.ngrok-free.app/reviewBoards/main')
-      .then(res => {
-        console.log(res);
-      });
-  }, []);
-
+  if (isSuccess) {
+  }
   return (
     <DefaultContainer>
       <div>
         <h1>전체 리뷰 게시글</h1>
       </div>
       <StaticContainer>
-        {data.map(item => {
-          return (
-            <StyleSheetManager
-              key={item.reviewBoardId}
-              shouldForwardProp={prop => isPropValid(prop)}
-            >
-              <SingleItem
-                src={item.thumbnail}
-                title={item.title}
-                date={item.createdAt}
-                author={item.user.nickname}
-                isMain={true}
-                onClick={onClickSingleItem}
-              ></SingleItem>
-            </StyleSheetManager>
-          );
-        })}
+        {allReviewItems &&
+          allReviewItems.map(item => {
+            return (
+              <StyleSheetManager
+                key={item.reviewBoardId}
+                shouldForwardProp={prop => isPropValid(prop)}
+              >
+                <SingleItem
+                  src={item.thumbnail}
+                  title={item.title}
+                  date={item.createdAt}
+                  author={item.user.nickname}
+                  isMain={true}
+                  onClick={onClickSingleItem}
+                ></SingleItem>
+              </StyleSheetManager>
+            );
+          })}
       </StaticContainer>
       <div ref={setTarget}>
         {isLoaded && (

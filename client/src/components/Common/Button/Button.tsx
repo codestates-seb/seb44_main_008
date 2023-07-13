@@ -10,7 +10,7 @@ const ButtonStyle = styled.button<ButtonType>`
   border: none;
   border-radius: 0.5rem;
   background-color: ${props =>
-    props.type === 'variant' ? '#f20000' : '#232323'};
+    props.theme === 'variant' ? '#f20000' : '#232323'};
   color: #ffffff;
   padding: 0.7rem 1.3rem;
 
@@ -18,11 +18,11 @@ const ButtonStyle = styled.button<ButtonType>`
 
   &:hover {
     background-color: ${props =>
-      props.type === 'variant' ? '#c20000' : '#f20000'};
+      props.theme === 'variant' ? '#c20000' : '#f20000'};
   }
 `;
 
-const Button = ({ id, value, type, width, onClick }: ButtonType) => {
+const Button = ({ id, value, type, width, onClick, theme }: ButtonType) => {
   return (
     <ButtonStyle
       id={id}
@@ -30,6 +30,7 @@ const Button = ({ id, value, type, width, onClick }: ButtonType) => {
       type={type}
       onClick={onClick}
       name={value}
+      theme={theme}
     >
       {value}
     </ButtonStyle>

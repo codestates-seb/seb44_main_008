@@ -4,4 +4,5 @@ export interface ButtonType {
   type?: string;
   width?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | void;
+  theme?: string;
 }

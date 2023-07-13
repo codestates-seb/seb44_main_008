@@ -24,6 +24,7 @@ interface SignupType {
   profileImage: string;
 }
 
+
 const SignupForm = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(2);
@@ -37,6 +38,7 @@ const SignupForm = () => {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
+  const [profileImage, setProfileImage] = useState('');
 
   //오류메시지 상태저장
   const [emailMsg, setEmailMsg] = useState<string>('');
@@ -89,7 +91,7 @@ const SignupForm = () => {
     }
   };
 
-  const tags = [
+  const tagsArr = [
     {
       tagId: 1,
       tagName: '로맨스',
@@ -204,7 +206,6 @@ const SignupForm = () => {
   //   setNickNameError(null);
   //   return true;
   // };
-
   // const checkPassword = () => {
   //   const passwordRegex =
   //     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,}$/;
@@ -386,7 +387,7 @@ const SignupForm = () => {
           <div>
             <div className="tagBtnWrap">
               <ul>
-                {tags.map(tag => {
+                {tagsArr.map(tag => {
                   return (
                     <li key={tag.tagId}>
                       <Button
@@ -400,7 +401,6 @@ const SignupForm = () => {
                   );
                 })}
               </ul>
-
               <input type="hidden" value={tag} readOnly />
             </div>
 
@@ -412,9 +412,7 @@ const SignupForm = () => {
               value={nickname}
               placeholder="닉네임"
             />
-
             <input id="birth" type="date" value={birth} /> */}
-
             <Button width="100%" type="submit" value="회원가입" />
           </div>
         )}
