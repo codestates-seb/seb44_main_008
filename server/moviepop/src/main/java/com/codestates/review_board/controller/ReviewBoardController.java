@@ -87,14 +87,15 @@ public class ReviewBoardController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{review-id}")
+    @PatchMapping(value = "/{review-id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchReviewBoard(@PathVariable("review-id") @Positive long reviewId,
-                                           @Valid @RequestBody ReviewBoardDto.Patch patch) {
+                                           @Valid @RequestPart ReviewBoardDto.Patch patch,
+                                           @RequestPart MultipartFile thumbnail) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         User user = userService.findVerifiedUserByEmail(email);
         patch.setReviewBoardId(reviewId);
 
-        ReviewBoardDto.DetailResponse response = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch, tagMapper));
+        ReviewBoardDto.DetailResponse response = reviewBoardService.updateReviewBoard(user, mapper.PatchToReviewBoard(patch, tagMapper), thumbnail);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
