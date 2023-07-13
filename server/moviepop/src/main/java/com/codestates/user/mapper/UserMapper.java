@@ -1,5 +1,6 @@
 package com.codestates.user.mapper;
 
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.mapper.ReviewBoardMapper;
 import com.codestates.tag.dto.TagDto;
@@ -42,14 +43,20 @@ public interface UserMapper {
 
         return user;
     }
-    default UserDto.PatchResponse userToUserPatchDto(User user, TagMapper tagMapper) {
+    default UserDto.PatchResponse userToUserPatchDto(User user, TagMapper tagMapper, ImageUtil imageUtil) {
         List<TagDto.UserRequest> requests = tagMapper.userTagsToUserRequest(user.getUserTags());
+
+        String profileImage = user.getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
 
         UserDto.PatchResponse response = UserDto.PatchResponse.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
-                .profileImage(user.getProfileImage())
+                .profileImage(profileImage)
                 .tags(requests)
                 .build();
 
@@ -61,13 +68,19 @@ public interface UserMapper {
         return userTags;
     }
 
-    default UserDto.PatchPageResponse userToUserPatchPageResponse(User user, TagMapper tagMapper, List<TagDto.Response> tags) {
+    default UserDto.PatchPageResponse userToUserPatchPageResponse(User user, TagMapper tagMapper, List<TagDto.Response> tags, ImageUtil imageUtil) {
         List<TagDto.UserRequest> requests = tagMapper.userTagsToUserRequest(user.getUserTags());
+
+        String profileImage = user.getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
 
         UserDto.PatchPageResponse response = UserDto.PatchPageResponse.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
-                .profileImage(user.getProfileImage())
+                .profileImage(profileImage)
                 .tags(tags)
                 .myTags(requests)
                 .build();
@@ -75,7 +88,7 @@ public interface UserMapper {
         return response;
     }
 
-    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper) {
+    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, ImageUtil imageUtil) {
         List<TagDto.UserRequest> userTags = tagMapper.userTagsToUserRequest(user.getUserTags());
         List<ReviewBoardDto.UserResponse> wishBoards = reviewBoardMapper.reviewBoardWishToUserResponses(user.getReviewBoardWishes());
         List<ReviewBoardDto.UserResponse> myBoards = reviewBoardMapper.reviewBoardToUserResponses(user.getReviewBoards());
@@ -91,12 +104,18 @@ public interface UserMapper {
 //
 //        return response;
 
+        String profileImage = user.getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
+
         UserResponseDto response = new UserResponseDto(
                 user.getUserId(),
                 user.getName(),
                 user.getNickname(),
                 user.getEmail(),
-                user.getProfileImage(),
+                profileImage,
                 userTags,
                 myBoards,
                 wishBoards,
@@ -105,7 +124,29 @@ public interface UserMapper {
 
         return response;
     }
-    UserDto.MoviePartyResponse userToMoviePartyResponseDto(User user);
+    default UserDto.MoviePartyResponse userToMoviePartyResponseDto(User user, ImageUtil imageUtil) {
+        String profileImage = user.getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
+
+        UserDto.MoviePartyResponse response = new UserDto.MoviePartyResponse(user.getUserId(), profileImage);
+
+        return response;
+    }
     List<UserDto.MoviePartyResponse> usersToMoviePartyResponseDtos(List<User> users);
     //default UserResponseDto
+
+    UserDto.totalReviewBoardResponse userToTotalReviewBoardResponseDto(User user);
+
+    default UserDto.ReviewBoardResponse userToReviewBoardResponseDto(User user, ImageUtil imageUtil) {
+        String profileImage = user.getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
+
+        return new UserDto.ReviewBoardResponse(user.getUserId(), user.getNickname(), profileImage);
+    }
 }
