@@ -6,6 +6,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
@@ -61,8 +62,9 @@ public class ReviewBoardController {
     private final MoviePartyMapper moviePartyMapper;
     private final ReviewBoardWishService reviewBoardWishService;
     private final UserTagService userTagService;
+    private final ImageUtil imageUtil;
 
-    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper, ReviewBoardWishService reviewBoardWishService, UserTagService userTagService) {
+    public ReviewBoardController(ReviewBoardService reviewBoardService, ReviewBoardMapper mapper, UserService userService, UserMapper userMapper, CommentService commentService, CommentMapper commentMapper, TagMapper tagMapper, TagService tagService, MoviePartyService moviePartyService, MoviePartyMapper moviePartyMapper, ReviewBoardWishService reviewBoardWishService, UserTagService userTagService, ImageUtil imageUtil) {
         this.reviewBoardService = reviewBoardService;
         this.mapper = mapper;
         this.userService = userService;
@@ -75,6 +77,7 @@ public class ReviewBoardController {
         this.moviePartyMapper = moviePartyMapper;
         this.reviewBoardWishService = reviewBoardWishService;
         this.userTagService = userTagService;
+        this.imageUtil = imageUtil;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -117,7 +120,7 @@ public class ReviewBoardController {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findAllReviewBoards(user, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil), pageReviewBoards), HttpStatus.OK);
     }
 
     @DeleteMapping("/{review-id}")
@@ -139,7 +142,7 @@ public class ReviewBoardController {
 
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards, recommendBoards)),
+                new ResponseDto.SingleResponseDto<>(mapper.reviewBoardsToDetailResponses(reviewBoards, popularBoards, recommendBoards, userMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -150,7 +153,7 @@ public class ReviewBoardController {
                                              @Positive @RequestParam int size) {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSearchedReviewBoards(title, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil), pageReviewBoards), HttpStatus.OK);
     }
 
     @GetMapping("/tags/{tag-id}")
@@ -163,7 +166,7 @@ public class ReviewBoardController {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(user, tag, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil), pageReviewBoards), HttpStatus.OK);
     }
 
     @PostMapping("/{review-id}/comments")
