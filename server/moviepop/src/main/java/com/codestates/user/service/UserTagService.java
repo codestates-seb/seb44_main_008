@@ -11,12 +11,6 @@ import java.util.List;
 @Transactional
 @Service
 public class UserTagService {
-    private final UserTagService userTagService;
-
-    public UserTagService(UserTagService userTagService) {
-        this.userTagService = userTagService;
-    }
-
     public List<Tag> findTagByUserTag(List<UserTag> userTags) {
         List<Tag> tags = new ArrayList<>();
 
