@@ -18,6 +18,7 @@ import com.codestates.user.entity.ReviewBoardWish;
 import com.codestates.user.mapper.UserMapper;
 import org.mapstruct.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,7 +103,16 @@ public interface ReviewBoardMapper {
 //    @Mapping(source = "user.userId", target = "user.userId")
 //    @Mapping(source = "user.nickname", target = "user.nickname")
 //    ReviewBoardDto.EntireResponse reviewBoardToEntireResponse(ReviewBoard reviewBoard);
-    List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards);
+    default List<ReviewBoardDto.EntireResponse> reviewBoardsToEntireResponses(List<ReviewBoard> reviewBoards, UserMapper userMapper, ImageUtil imageUtil) {
+        List<ReviewBoardDto.EntireResponse> response = new ArrayList<>();
+
+        for(ReviewBoard reviewBoard : reviewBoards) {
+            ReviewBoardDto.EntireResponse entireResponse = reviewBoardToEntireResponse(reviewBoard, userMapper, imageUtil);
+            response.add(entireResponse);
+        }
+
+        return response;
+    }
 
 //    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper, boolean iswished) {
 //        MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
@@ -135,10 +145,10 @@ public interface ReviewBoardMapper {
 //        return detailResponse;
 //    }
 
-    default ReviewBoardDto.MainResponse reviewBoardsToDetailResponses(List<ReviewBoard> reviewBoards, List<ReviewBoard> popularBoards, List<ReviewBoard> recommendBoards) {
-        List<ReviewBoardDto.EntireResponse> reviewBoardEntire = reviewBoardsToEntireResponses(reviewBoards);
-        List<ReviewBoardDto.EntireResponse> popularReviewBoardEntire = reviewBoardsToEntireResponses(popularBoards);
-        List<ReviewBoardDto.EntireResponse> recommendBoardEntire = reviewBoardsToEntireResponses(recommendBoards);
+    default ReviewBoardDto.MainResponse reviewBoardsToDetailResponses(List<ReviewBoard> reviewBoards, List<ReviewBoard> popularBoards, List<ReviewBoard> recommendBoards, UserMapper userMapper, ImageUtil imageUtil) {
+        List<ReviewBoardDto.EntireResponse> reviewBoardEntire = reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil);
+        List<ReviewBoardDto.EntireResponse> popularReviewBoardEntire = reviewBoardsToEntireResponses(popularBoards, userMapper, imageUtil);
+        List<ReviewBoardDto.EntireResponse> recommendBoardEntire = reviewBoardsToEntireResponses(recommendBoards, userMapper, imageUtil);
 
         return ReviewBoardDto.MainResponse.builder()
                 .popularBoards(popularReviewBoardEntire)
