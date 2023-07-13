@@ -86,6 +86,7 @@ public class ReviewBoardDto {
 
     @Getter
     @Builder
+    @AllArgsConstructor
     public static class EntireResponse {
         private long reviewBoardId;
         private String title;
