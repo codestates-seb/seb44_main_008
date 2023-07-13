@@ -5,6 +5,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
 import com.codestates.review_board.entity.ReviewBoard;
@@ -58,6 +59,7 @@ public class UserController {
     private final TagService tagService;
     private final MoviePartyMapper moviePartyMapper;
     private final JwtTokenizer jwtTokenizer;
+    private final ImageUtil imageUtil;
 //    private final CommentLikeService commentLikeService;
 //    private final ReviewBoardWishService reviewBoardWishService;
 
@@ -80,7 +82,7 @@ public class UserController {
         User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper), profileImage);
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchDto(user, tagMapper)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchDto(user, tagMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -99,7 +101,7 @@ public class UserController {
         User user = userService.findVerifiedUserByEmail(email);
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user, reviewBoardMapper, tagMapper, moviePartyMapper)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user, reviewBoardMapper, tagMapper, moviePartyMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -109,7 +111,7 @@ public class UserController {
         User user = userService.findUser(userId);
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper, moviePartyMapper)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper, moviePartyMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -121,7 +123,7 @@ public class UserController {
         List<TagDto.Response> tags = tagMapper.tagsToResponses(tagService.getTags());
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchPageResponse(user, tagMapper, tags)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserPatchPageResponse(user, tagMapper, tags, imageUtil)),
                 HttpStatus.OK
         );
     }
