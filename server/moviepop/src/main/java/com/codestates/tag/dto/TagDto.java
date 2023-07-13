@@ -20,5 +20,6 @@ public class TagDto {
     @Setter
     public static class UserRequest {
         private long tagId;
+        private String tagName;
     }
 }
