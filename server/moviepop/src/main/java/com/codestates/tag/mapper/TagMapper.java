@@ -31,6 +31,7 @@ public interface TagMapper {
     List<UserTag> usersRequestToUserTags(List<TagDto.UserRequest> requests);
 
     @Mapping(source = "tag.tagId", target = "tagId")
+    @Mapping(source = "tag.tagName", target = "tagName")
     TagDto.UserRequest userTagToUserRequest(UserTag userTag);
     List<TagDto.UserRequest> userTagsToUserRequest(List<UserTag> userTags);
 }
