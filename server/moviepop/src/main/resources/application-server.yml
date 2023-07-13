@@ -40,3 +40,7 @@ cloud:
       bucket: ${S3_BUCKET}
       profile-path: ${S3_PROFILE_IMAGE_PATH}
       thumbnail-path: ${S3_THUMBNAIL_IMAGE_PATH}
+      url: ${S3_URL}
+aws:
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
