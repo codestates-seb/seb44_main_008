@@ -102,7 +102,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .addPathPatterns("/reviewBoards/**")
                 .addPathPatterns("/groups/**")
                 .addPathPatterns("/comments/**")
-                .addPathPatterns("/movies/**")
-                .addPathPatterns("/tags/**");
+                .addPathPatterns("/movies/**");
     }
 }
