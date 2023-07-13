@@ -6,6 +6,7 @@ import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.image.service.StorageService;
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie.dto.MovieDto;
 import com.codestates.movie.entity.Movie;
 import com.codestates.movie.service.MovieService;
@@ -51,8 +52,9 @@ public class ReviewBoardService {
     private final MoviePartyMapper moviePartyMapper;
     private final UserMapper userMapper;
     private final StorageService storageService;
+    private final ImageUtil imageUtil;
 
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService, ReviewBoardWishService reviewBoardWishService, CommentMapper commentMapper, TagMapper tagMapper, CommentLikeRepository commentLikeRepository, MoviePartyMapper moviePartyMapper, UserMapper userMapper, StorageService storageService) {
+    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService, ReviewBoardWishService reviewBoardWishService, CommentMapper commentMapper, TagMapper tagMapper, CommentLikeRepository commentLikeRepository, MoviePartyMapper moviePartyMapper, UserMapper userMapper, StorageService storageService, ImageUtil imageUtil) {
         this.reviewBoardRepository = reviewBoardRepository;
         this.tagService = tagService;
         this.movieService = movieService;
@@ -63,6 +65,7 @@ public class ReviewBoardService {
         this.moviePartyMapper = moviePartyMapper;
         this.userMapper = userMapper;
         this.storageService = storageService;
+        this.imageUtil = imageUtil;
     }
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard, MultipartFile thumbnail) {
@@ -77,9 +80,10 @@ public class ReviewBoardService {
 
         reviewBoard.setUser(user);
 
-        storageService.storeThumbnailImage(thumbnail);
-
-        // reviewBoard에 썸네일 파일 이름 저장
+        if(thumbnail != null) {
+            String imageUrl = storageService.storeThumbnailImage(thumbnail);
+            reviewBoard.setThumbnail(imageUrl);
+        }
 
         return reviewBoardRepository.save(reviewBoard);
     }
@@ -104,8 +108,8 @@ public class ReviewBoardService {
         getReviewboard.getReviewBoardTags().clear();
         getReviewboard.getReviewBoardTags().addAll(newTags);
 
-        //영화제목, 태그, 썸네일 설정해야함.
-        reviewBoardRepository.save(getReviewboard);
+        String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
+        getReviewboard.setThumbnail(imageUrl);
 
         storageService.storeThumbnailImage(thumbnail);
 
@@ -127,7 +131,13 @@ public class ReviewBoardService {
         boolean isWished = reviewBoardWishService.isExistReviewBoardWish(reviewBoard, user);
 
         MovieDto.Response movieResponse = new MovieDto.Response(reviewBoard.getMovie().getMovieId(), reviewBoard.getMovie().getTitle());
-        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), reviewBoard.getUser().getProfileImage());
+
+        String profileImage = reviewBoard.getUser().getProfileImage();
+        if(profileImage == null)
+            profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
+        else
+            profileImage = imageUtil.getUrl() + profileImage;
+        UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(reviewBoard.getUser().getUserId(), reviewBoard.getUser().getNickname(), profileImage);
 
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> {
@@ -139,16 +149,22 @@ public class ReviewBoardService {
                 .collect(Collectors.toList());
 
         List<TagDto.Response> tagResponse = reviewBoard.getReviewBoardTags().stream()
-                    .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
-                    .collect(Collectors.toList());
+                .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
+                .collect(Collectors.toList());
 
         List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
+
+        String thumbnail = reviewBoard.getThumbnail();
+        if(thumbnail == null)
+            thumbnail = imageUtil.getUrl() + imageUtil.getDefaultThumbnail();
+        else
+            thumbnail = imageUtil.getUrl() + thumbnail;
 
         ReviewBoardDto.DetailResponse detailResponse = ReviewBoardDto.DetailResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
                 .title(reviewBoard.getTitle())
                 .review(reviewBoard.getReview())
-                .thumbnail(reviewBoard.getThumbnail())
+                .thumbnail(thumbnail)
                 .wish(reviewBoard.getWish())
                 .wished(isWished)
                 .createdAt(reviewBoard.getCreatedAt())
@@ -176,6 +192,9 @@ public class ReviewBoardService {
         ReviewBoard reviewBoard = findReviewBoard(user, reviewId);
         if(reviewBoard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
+
+        if(reviewBoard.getThumbnail() != null)
+            storageService.deleteThumbnailImage(reviewBoard);
 
         reviewBoardRepository.delete(reviewBoard);
     }
