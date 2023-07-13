@@ -150,10 +150,8 @@ public class ReviewBoardController {
                                              @Positive @RequestParam int size) {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSearchedReviewBoards(title, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
-        System.out.println("reviewBoards = " + reviewBoards);
         return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards), pageReviewBoards), HttpStatus.OK);
     }
-
 
     @GetMapping("/tags/{tag-id}")
     public ResponseEntity getSpecificTag(@PathVariable("tag-id") @Positive long tagId,
