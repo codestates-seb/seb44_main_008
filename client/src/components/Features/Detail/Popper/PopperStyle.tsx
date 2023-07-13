@@ -133,11 +133,13 @@ export const PopperBox = styled.div`
     .popTextArea {
       width: 100%;
       background-color: var(--main-dark-color);
-      color: #888;
+      color: var(--white-color);
       font-size: 1.1rem;
       border: 0;
       border-bottom: 2px solid var(--ghost-color);
       padding: 0.7rem;
+      resize: none;
+      height: 10rem;
       &:focus {
         outline: none;
       }
