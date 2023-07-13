@@ -24,10 +24,9 @@ interface SignupType {
   profileImage: string;
 }
 
-
 const SignupForm = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
 
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);
@@ -39,6 +38,8 @@ const SignupForm = () => {
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
   const [profileImage, setProfileImage] = useState('');
+
+  const [selectedTags, setSelectedTags] = useState<Object[]>([]);
 
   //오류메시지 상태저장
   const [emailMsg, setEmailMsg] = useState<string>('');
@@ -91,58 +92,61 @@ const SignupForm = () => {
     }
   };
 
-  const tagsArr = [
-    {
-      tagId: 1,
-      tagName: '로맨스',
-    },
-    {
-      tagId: 2,
-      tagName: '호러',
-    },
-    {
-      tagId: 3,
-      tagName: '판타지',
-    },
-    {
-      tagId: 4,
-      tagName: '스포츠',
-    },
-    {
-      tagId: 5,
-      tagName: 'SF',
-    },
-    {
-      tagId: 6,
-      tagName: '액션',
-    },
-    {
-      tagId: 7,
-      tagName: '애니메이션',
-    },
-    {
-      tagId: 8,
-      tagName: '범죄',
-    },
-    {
-      tagId: 9,
-      tagName: '힐링',
-    },
-    {
-      tagId: 10,
-      tagName: '미스테리',
-    },
-    {
-      tagId: 11,
-      tagName: '뮤지컬',
-    },
-    {
-      tagId: 12,
-      tagName: '코미디',
-    },
-  ];
+  //태그 관련
+  //백엔드 api 헤더에서 토근을 요청하여 못보냄..!
 
-  //이메일 체크
+  // const tagsArr = [
+  //   {
+  //     tagId: 1,
+  //     tagName: '로맨스',
+  //   },
+  //   {
+  //     tagId: 2,
+  //     tagName: '호러',
+  //   },
+  //   {
+  //     tagId: 3,
+  //     tagName: '판타지',
+  //   },
+  //   {
+  //     tagId: 4,
+  //     tagName: '스포츠',
+  //   },
+  //   {
+  //     tagId: 5,
+  //     tagName: 'SF',
+  //   },
+  //   {
+  //     tagId: 6,
+  //     tagName: '액션',
+  //   },
+  //   {
+  //     tagId: 7,
+  //     tagName: '애니메이션',
+  //   },
+  //   {
+  //     tagId: 8,
+  //     tagName: '범죄',
+  //   },
+  //   {
+  //     tagId: 9,
+  //     tagName: '힐링',
+  //   },
+  //   {
+  //     tagId: 10,
+  //     tagName: '미스테리',
+  //   },
+  //   {
+  //     tagId: 11,
+  //     tagName: '뮤지컬',
+  //   },
+  //   {
+  //     tagId: 12,
+  //     tagName: '코미디',
+  //   },
+  // ];
+
+  //이메일 유효성검사
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const emailRegex =
@@ -159,7 +163,7 @@ const SignupForm = () => {
     [],
   );
 
-  //비밀번호 체크
+  //비밀번호 유효성검사
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const passwordRegex =
@@ -194,59 +198,50 @@ const SignupForm = () => {
     [password],
   );
 
-  const onChangeTag = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    const clickTag = e.target.tagId;
-    console.log(clickTag);
+  const onChangeTag = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {},
+    [],
+  );
+
+  //이름 유효성 검사
+  const onChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    if (e.target.value.length < 2 || e.target.value.length > 5) {
+      setNameMsg('2글자 이상 5글자 미만으로 입력해주세요.');
+      setIsName(false);
+    } else {
+      setIsName(true);
+    }
   }, []);
-  // const checkNickName = () => {
-  //   if (!nickname) {
-  //     setNickNameError('닉네임을 입력해야 합니다.');
-  //     return false;
-  //   }
-  //   setNickNameError(null);
-  //   return true;
-  // };
-  // const checkPassword = () => {
-  //   const passwordRegex =
-  //     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[a-zA-Z\d!@#$%^&*()_+]{8,}$/;
-  //   if (!password) {
-  //     setPasswordError('');
-  //     return false;
-  //   }
-  //   if (!passwordRegex.test(password)) {
-  //     setPasswordError('올바른 비밀번호 형식에 맞지 않습니다.');
-  //     return false;
-  //   }
-  //   setPasswordError(null);
-  //   return true;
-  // };
-  // const checkConfirmPassword = () => {
-  //   if (!passwordCheck) {
-  //     setPasswordCheckError('확인 비밀번호를 입력해주세요.');
-  //     return false;
-  //   } else if (password !== passwordCheck) {
-  //     setPasswordCheckError('비밀번호와 확인 비밀번호가 다릅니다.');
-  //     return false;
-  //   }
-  //   setPasswordCheckError(null);
-  //   return true;
-  // };
-  // const checkname = () => {
-  //   if (!name) {
-  //     setNameError('이름을 입력해야 합니다.');
-  //     return false;
-  //   }
-  //   setNameError(null);
-  //   return true;
-  // };
-  // const checkBirth = () => {
-  //   if (!birth) {
-  //     setBirthError('생년월일을 입력해야 합니다.');
-  //     return false;
-  //   }
-  //   setBirthError(null);
-  //   return true;
-  // };
+
+  //닉네임 유효성 검사
+  const onChangeNickName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNickname(e.target.value);
+      if (!e.target.value) {
+        setnickNameMsg('닉네임은 필수입력입니다.');
+        setIsnickName(false);
+      } else {
+        setIsnickName(true);
+      }
+    },
+    [],
+  );
+
+  //생년월일 유효성 검사
+  const onChangeBirth = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setBirth(e.target.value);
+      if (!e.target.value) {
+        setBirthMsg('생년월일은 필수입력입니다.');
+        setIsBirth(false);
+      } else {
+        setIsBirth(true);
+      }
+    },
+    [],
+  );
+
   const [preview, setPreview] = useState<string | null>('');
 
   const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -299,7 +294,7 @@ const SignupForm = () => {
       }
 
       const result = await axios.post(
-        'http://ec2-3-36-105-246.ap-northeast-2.compute.amazonaws.com:8080/users',
+        'http://ec2-13-124-233-228.ap-northeast-2.compute.amazonaws.com:8080/users',
         formData,
         {
           headers: {
@@ -307,7 +302,9 @@ const SignupForm = () => {
           },
         },
       );
+
       console.log(result);
+      navigate('/account/login');
     } catch (err) {
       console.log(err);
     }
@@ -315,7 +312,7 @@ const SignupForm = () => {
 
   return (
     <AccountWrap>
-      <form>
+      <form onSubmit={SubmitEvent}>
         {page === 1 && (
           <div>
             <div className="inputBox">
@@ -387,7 +384,7 @@ const SignupForm = () => {
           <div>
             <div className="tagBtnWrap">
               <ul>
-                {tagsArr.map(tag => {
+                {/* {tagsArr.map(tag => {
                   return (
                     <li key={tag.tagId}>
                       <Button
@@ -399,20 +396,44 @@ const SignupForm = () => {
                       />
                     </li>
                   );
-                })}
+                })} */}
               </ul>
               <input type="hidden" value={tag} readOnly />
             </div>
-
-            {/* <input id="name" type="text" value={name} placeholder="이름" />
-
-            <input
-              id="nickname"
-              type="text"
-              value={nickname}
-              placeholder="닉네임"
-            />
-            <input id="birth" type="date" value={birth} /> */}
+            <div className="inputBox">
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                placeholder="이름"
+                isvalid={isName}
+                onChange={onChangeName}
+              />
+              {name.length > 0 && !isName ? <span>{nameMsg}</span> : null}
+            </div>
+            <div className="inputBox">
+              <Input
+                id="nickname"
+                type="text"
+                value={nickname}
+                placeholder="닉네임"
+                isvalid={isnickName}
+                onChange={onChangeNickName}
+              />
+              {nickname.length > 0 && !isnickName ? (
+                <span>{nicknameMsg}</span>
+              ) : null}
+            </div>
+            <div className="inputBox">
+              <Input
+                id="birth"
+                type="date"
+                value={birth}
+                isvalid={isBirth}
+                onChange={onChangeBirth}
+              />
+              {!isBirth ? <span>{birthMsg}</span> : null}
+            </div>
             <Button width="100%" type="submit" value="회원가입" />
           </div>
         )}
