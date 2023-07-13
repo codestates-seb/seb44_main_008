@@ -3,36 +3,10 @@ import React, { useState } from 'react';
 import { WriteModalType } from './type';
 
 import Input from '../../../Common/Input/Input';
-import Button from '../../../Common/Button/Button';
+import { useQuery } from '@tanstack/react-query';
+import { getMovie } from '../../../../api/movie/movie';
 
 const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
-  const dummyData = {
-    data: {
-      movies: [
-        {
-          movieId: 1,
-          movieTitle: '고양이의 보은',
-        },
-        {
-          movieId: 2,
-          movieTitle: '옥탑방 고양이',
-        },
-        {
-          movieId: 3,
-          movieTitle: '건축학 고양이',
-        },
-        {
-          movieId: 4,
-          movieTitle: '고양이가 세상을 구한다',
-        },
-        {
-          movieId: 5,
-          movieTitle: '고양이는 내 친구',
-        },
-      ],
-    },
-  };
-
   const [searchTitle, setSearchTitle] = useState('');
 
   const onClickBackground = () => {
@@ -44,10 +18,12 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
     setSearchTitle(event.target.value);
   };
 
-  // axios 통신
-  const onClickSearchButton = () => {
-    const postData = {};
-  };
+  // api 통신
+  const { data, isLoading, error, isSuccess } = useQuery(
+    ['movies', searchTitle],
+    () => getMovie(searchTitle),
+    { enabled: !!searchTitle },
+  );
 
   const onClickMovieTitle = event => {
     console.log(event.target.innerHTML);
@@ -55,38 +31,38 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
     setModalOn && setModalOn(false);
     document.body.style.overflow = 'unset';
   };
+
   return (
     <MovieTitleModalWrapper>
       <ModalBackground onClick={onClickBackground}>
         <ModalContainer onClick={event => event.stopPropagation()}>
           <div className="search--bar">
-            <div>
-              <Input
-                value={searchTitle}
-                onChange={onChangeMovieTitle}
-                placeholder="영화 제목을 검색하세요"
-                isvalid={true}
-                width="100%"
-              ></Input>
+            <Input
+              value={searchTitle}
+              onChange={onChangeMovieTitle}
+              placeholder="영화 제목을 검색하세요"
+              isvalid={true}
+              width="100%"
+            ></Input>
+          </div>
+          {isSuccess && (
+            <div className="result--section">
+              <SearchResultContainer>
+                {data.data &&
+                  data.data.map(item => {
+                    return (
+                      <SearchResult
+                        key={item.movieId}
+                        value={item.title}
+                        onClick={onClickMovieTitle}
+                      >
+                        {item.title}
+                      </SearchResult>
+                    );
+                  })}
+              </SearchResultContainer>
             </div>
-            <Button value="검색하기" type="variant" width="5.5rem"></Button>
-          </div>
-          <div className="result--section">
-            <SearchResultContainer>
-              {dummyData &&
-                dummyData.data.movies.map(item => {
-                  return (
-                    <SearchResult
-                      key={item.movieId}
-                      value={item.movieTitle}
-                      onClick={onClickMovieTitle}
-                    >
-                      {item.movieTitle}
-                    </SearchResult>
-                  );
-                })}
-            </SearchResultContainer>
-          </div>
+          )}
         </ModalContainer>
       </ModalBackground>
     </MovieTitleModalWrapper>
@@ -101,6 +77,9 @@ const MovieTitleModalWrapper = styled.div`
 `;
 
 const ModalBackground = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -130,18 +109,10 @@ const ModalContainer = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: 100%;
+    width: 80%;
 
     margin-top: 2rem;
     margin-bottom: 1rem;
-
-    & > div {
-      width: 54%;
-    }
-
-    & > button {
-      margin-left: 1.5rem;
-    }
   }
 
   & > .result--section {
