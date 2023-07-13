@@ -108,9 +108,10 @@ public class UserService {
                 .collect(Collectors.toSet());
         user.setAuthorities(authorities);
 
-        storageService.storeProfileImage(profileImage);
-
-        // user에 프로필 이미지 제목 저장
+        if(profileImage != null) {
+            String imageUrl = storageService.storeProfileImage(profileImage);
+            user.setProfileImage(imageUrl);
+        }
 
         return userRepository.save(user);
     }
@@ -128,6 +129,8 @@ public class UserService {
 
     public User findVerifiedUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
+        if(user.getUserStatus() == User.UserStatus.USER_WITHDRAW)
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         if(user == null)
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
 
@@ -136,7 +139,8 @@ public class UserService {
 
     public User updateUser(User user, MultipartFile profileImage) {
         User findUser = findVerifiedUserByEmail(user.getEmail());
-        if(user.getNickname() != null) verifyNickname(user.getNickname());
+        if(user.getNickname() != null && !user.getNickname().equals(findUser.getNickname()))
+            verifyNickname(user.getNickname());
 
         Optional.ofNullable(user.getNickname())
                 .ifPresent(nickname -> findUser.setNickname(nickname));
@@ -148,10 +152,8 @@ public class UserService {
             userTag.setUser(findUser);
         }
 
-//        findUser.setProfileImage(user.getProfileImage());
-        storageService.storeProfileImage(profileImage);
-
-        // user에 프로필 이미지 제목 저장
+        String imageUrl = storageService.updateProfileImage(profileImage, findUser);
+        findUser.setProfileImage(imageUrl);
 
         return userRepository.save(findUser);
     }
@@ -173,10 +175,23 @@ public class UserService {
 
     public void deleteUser(String email) {
         User findUser = findVerifiedUserByEmail(email);
+        if(findUser.getUserStatus() == User.UserStatus.USER_WITHDRAW)
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+
+        if(findUser.getProfileImage() != null)
+            storageService.deleteProfileImage(findUser);
+
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
+        userRepository.save(findUser);
     }
 
     private User verifyUserId(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        if(user.getUserStatus() == User.UserStatus.USER_WITHDRAW)
+            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+
         return userRepository.findById(userId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
