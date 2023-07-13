@@ -4,18 +4,8 @@ import Button from '../../components/Common/Button/Button';
 import { AccountWrap } from './AccountStyle';
 import noImg from '../../assets/images/account/noImg.png';
 import { useMutation } from '@tanstack/react-query';
-import { Signup } from '../../api/auth/account/login';
+import { Signup, SignupType } from '../../api/auth/account/login';
 import { useNavigate } from 'react-router-dom';
-interface SignupType {
-  email: string;
-  password: string;
-  passwordCheck: string;
-  tags: { tagId: number }[];
-  name: string;
-  nickname: string;
-  birth: string;
-  // profileImage: string;
-}
 
 const SignupForm = (props: any) => {
   const {
@@ -31,16 +21,17 @@ const SignupForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [passWord, setPassword] = useState('');
   const [checkPassWord, setCheckPassword] = useState('');
-  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState<{ tagId: number }[]>([]);
   const [name, setName] = useState('');
   const [nickName, setNickName] = useState('');
   const [birth, setBirth] = useState('');
+  const [profileImage, setProfileImage] = useState('');
 
   const ChangePage = () => {
     setPage(2);
   };
 
-  const tags = [
+  const tagsArr = [
     {
       tagId: 1,
       tagName: '로맨스',
@@ -91,20 +82,32 @@ const SignupForm = (props: any) => {
     },
   ];
 
-  // const [imagePreview, setImagePreview] = useState('');
-  // const image = watch('profileImage');
-  // useEffect(() => {
-  //   if (image && image.length > 0) {
-  //     if (typeof image[0] === 'string') {
-  //       const file = image[0] as string;
-  //       setImagePreview(file);
-  //     } else {
-  //       const file = image[0] as Blob;
-  //       setImagePreview(URL.createObjectURL(file));
-  //     }
-  //   }
-  // }, [image]);
+  const [imagePreview, setImagePreview] = useState('');
+  const image = watch('profileImage');
+  useEffect(() => {
+    if (image && image.length > 0) {
+      if (typeof image[0] === 'string') {
+        const file = image[0] as string;
+        setImagePreview(file);
+      } else {
+        const file = image[0] as Blob;
+        setImagePreview(URL.createObjectURL(file));
+      }
+    }
+  }, [image]);
 
+  // const data = methods.getValues();
+  // const formData = new FormData();
+
+  // formData.append(
+  //   'data',
+  //   new Blob([JSON.stringify(data)], { type: 'application/json' }),
+  // );
+  // Object.entries(data).forEach(([key, value]) => {
+  //   if (value.type === 'file') {
+  //     formData.append(key, value.value);
+  //   }
+  // });
   const SignupMutation = useMutation({
     mutationFn: (newUser: SignupType) => Signup(newUser),
     onSuccess(data) {
@@ -122,8 +125,8 @@ const SignupForm = (props: any) => {
   });
 
   const onVaild: SubmitHandler<SignupType> = (data: any) => {
-    SignupMutation.mutate();
-    // console.log(data);
+    SignupMutation.mutate({ ...data, tags });
+    console.log('data', data);
   };
 
   return (
@@ -131,16 +134,16 @@ const SignupForm = (props: any) => {
       <form onSubmit={handleSubmit(onVaild)}>
         {page === 1 && (
           <div>
-            {/* <div className="signImg">
+            <div className="signImg">
               <label htmlFor="picture" />
               {image ? <img src={imagePreview} /> : <img src={noImg} />}
               <input {...register('profileImage')} id="picture" type="file" />
-            </div> */}
+            </div>
             <input
               id="email"
               type="text"
               placeholder="test@email.com"
-              {...register('email', {
+              {...register('userPostDto.email', {
                 required: '이메일은 필수 입력입니다.',
                 pattern: {
                   value:
@@ -152,7 +155,7 @@ const SignupForm = (props: any) => {
             <input
               id="password"
               type="password"
-              {...register('password', {
+              {...register('userPostDto.password', {
                 required: '비밀번호는 필수 입력입니다.',
                 minLength: {
                   value: 7,
@@ -161,10 +164,10 @@ const SignupForm = (props: any) => {
               })}
               placeholder="비밀번호"
             />
-            <input
+            {/* <input
               id="passwordCheck"
               type="password"
-              {...register('passwordCheck', {
+              {...register('userPostDto.passwordCheck', {
                 required: '비밀번호는 필수 입력입니다.',
                 minLength: {
                   value: 7,
@@ -179,7 +182,7 @@ const SignupForm = (props: any) => {
                 },
               })}
               placeholder="비밀번호 확인"
-            />
+            /> */}
             <Button
               width="100%"
               type="variant"
@@ -192,27 +195,26 @@ const SignupForm = (props: any) => {
           <div>
             <div className="tagBtnWrap">
               <ul>
-                {tags.map(tag => {
+                {tagsArr.map(tag => {
                   return (
                     <li key={tag.tagId}>
                       <Button
                         value={`#${tag.tagName}`}
                         id={tag.tagId}
                         width={'100%'}
-                        onClick={e => {
-                          setTag(tag.tagName);
+                        onClick={() => {
+                          setTags([...tags, { tagId: tag.tagId }]);
                         }}
                       />
                     </li>
                   );
                 })}
               </ul>
-              <input type="hidden" value={tag} readOnly />
             </div>
             <input
               id="name"
               type="text"
-              {...register('name', {
+              {...register('userPostDto.name', {
                 required: '이름은 필수 입력입니다.',
               })}
               placeholder="이름"
@@ -220,7 +222,7 @@ const SignupForm = (props: any) => {
             <input
               id="nickname"
               type="text"
-              {...register('nickname', {
+              {...register('userPostDto.nickname', {
                 required: '닉네임은 필수 입력입니다.',
               })}
               placeholder="닉네임"
@@ -228,7 +230,7 @@ const SignupForm = (props: any) => {
             <input
               id="birth"
               type="date"
-              {...register('birth', {
+              {...register('userPostDto.birth', {
                 required: '생년월일은 필수 입력입니다.',
               })}
             />

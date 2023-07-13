@@ -41,7 +41,7 @@ type ReviewType = {
 };
 
 export const getMainItems = (): Promise<ReviewType> =>
-  instance.get('/main').then(res => res.data);
+  instance.get('/reviewBoards/main').then(res => res.data);
 
 export const postNewReview = (data: ItemType) =>
   instance.post('/reviewBoards', data);
