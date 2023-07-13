@@ -208,9 +208,9 @@ public class ReviewBoardService {
     public List<ReviewBoard> findRecommendReviewBoards(User user, List<Tag> tags) {
         Period age = UserUtils.getAge(user);
         if(age.getYears() >= 19)
-            return reviewBoardRepository.findTop8ByReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
+            return reviewBoardRepository.findDistinctTop8ByReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
         else {
-            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByAdultedIsFalseOrderReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
+            List<ReviewBoard> reviewBoards = reviewBoardRepository.findDistinctTop8ByAdultedIsFalseAndReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
             return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
         }
     }
