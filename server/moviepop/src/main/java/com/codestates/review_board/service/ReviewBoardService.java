@@ -84,7 +84,7 @@ public class ReviewBoardService {
         return reviewBoardRepository.save(reviewBoard);
     }
 
-    public ReviewBoardDto.DetailResponse updateReviewBoard(User user, ReviewBoard reviewBoard) {
+    public ReviewBoardDto.DetailResponse updateReviewBoard(User user, ReviewBoard reviewBoard, MultipartFile thumbnail) {
         ReviewBoard getReviewboard = findReviewBoard(user, reviewBoard.getReviewBoardId());
         if(getReviewboard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
@@ -106,6 +106,8 @@ public class ReviewBoardService {
 
         //영화제목, 태그, 썸네일 설정해야함.
         reviewBoardRepository.save(getReviewboard);
+
+        storageService.storeThumbnailImage(thumbnail);
 
         return findDetailReviewBoard(user, reviewBoard.getReviewBoardId());
     }
