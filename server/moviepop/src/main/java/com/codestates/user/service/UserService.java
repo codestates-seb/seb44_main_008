@@ -17,6 +17,7 @@ import com.codestates.security.redis.repository.RefreshTokenRedisRepository;
 import com.codestates.security.redis.token.LogoutAccessToken;
 import com.codestates.security.redis.token.RefreshToken;
 import com.codestates.security.utils.CustomAuthorityUtils;
+import com.codestates.security.utils.JwtExpirationEnums;
 import com.codestates.security.vo.Login;
 import com.codestates.security.vo.Token;
 import com.codestates.user.entity.CommentLike;
@@ -28,6 +29,9 @@ import com.codestates.user.repository.MoviePartyUserRepository;
 import com.codestates.user.repository.UserRepository;
 import com.codestates.utils.CustomBeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -232,6 +236,44 @@ public class UserService {
         long remainMilliSeconds = jwtTokenizer.getRemainMilliSeconds(accessToken);
         refreshTokenRedisRepository.deleteById(username);
         logoutAccessTokenRedisRepository.save(LogoutAccessToken.of(accessToken, username, remainMilliSeconds));
+    }
+
+    public Map<String, String> reissue(String refreshToken) {
+        refreshToken = resolveToken(refreshToken);
+        String username = getCurrentUsername();
+        RefreshToken redisRefreshToken = refreshTokenRedisRepository.findById(username).orElseThrow(NoSuchElementException::new);
+
+        if(refreshToken.equals(redisRefreshToken.getRefreshToken())) {
+            return reissueRefreshToken(refreshToken, username);
+        }
+
+        throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        return principal.getUsername();
+    }
+
+    private Map<String, String> reissueRefreshToken(String refreshToken, String username) {
+        Map<String, String> tokens = new HashMap<>();
+        if(lessThanReissueExpirationTimesLeft(refreshToken)) {
+            String accessToken = jwtTokenizer.generateRefreshToken(username);
+
+            tokens.put("Authorization", accessToken);
+            tokens.put("Refresh", saveRefreshToken(username).getRefreshToken());
+
+            return tokens;
+        }
+
+        tokens.put("Authorization", jwtTokenizer.generateAccessToken(username));
+        tokens.put("Refresh", refreshToken);
+        return tokens;
+    }
+
+    private boolean lessThanReissueExpirationTimesLeft(String refreshToken) {
+        return jwtTokenizer.getRemainMilliSeconds(refreshToken) < JwtExpirationEnums.REISSUE_EXPIRATION_TIME.getValue();
     }
 
     private String resolveToken(String token) {
