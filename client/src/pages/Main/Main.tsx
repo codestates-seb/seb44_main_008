@@ -31,7 +31,6 @@ const Main = () => {
     queryKey: ['mainItems'],
     queryFn: () => getMainItems(),
   });
-  console.log(data);
 
   if (error) {
     return <ErrorPage />;

@@ -8,7 +8,7 @@ type ItemType = {
     movieId: number;
     tags: { tagId: number }[];
   };
-  thumbnail?: string | undefined;
+  thumbnail?: string | undefined | FileList;
 };
 
 type ReviewType = {
@@ -66,8 +66,15 @@ type AllItemType = {
 export const getMainItems = (): Promise<ReviewType> =>
   instance.get('/reviewBoards/main').then(res => res.data);
 
-export const getAllItems = (): Promise<AllItemType> => {
-  return instance.get('/reviewBoards?page=1&size=16').then(res => res.data);
+export const getAllItems = async (pageParam: number): Promise<AllItemType> => {
+  return instance
+    .get(`/reviewBoards`, {
+      params: {
+        page: pageParam,
+        size: 8,
+      },
+    })
+    .then(res => res.data);
 };
 
 export const postNewReview = (data: ItemType) => {
