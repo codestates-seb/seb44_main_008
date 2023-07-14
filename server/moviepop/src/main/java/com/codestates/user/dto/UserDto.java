@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class UserDto {
         @NotBlank
         private String nickname;
         @NotNull
+        @Size(min = 1, max = 3, message = "태그는 최소 1개 이상 3개 이하 선택되어야 합니다")
         private List<TagDto.UserRequest> tags;
     }
 
