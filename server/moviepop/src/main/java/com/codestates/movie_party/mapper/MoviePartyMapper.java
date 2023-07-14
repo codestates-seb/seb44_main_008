@@ -1,5 +1,6 @@
 package com.codestates.movie_party.mapper;
 
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.user.dto.UserDto;
@@ -24,11 +25,11 @@ public interface MoviePartyMapper {
     @Mapping(source = "moviePartyId", target = "groupId")
     MoviePartyDto.MyPageResponse moviePartyToMyPageResponse(MovieParty movieParty);
     List<MoviePartyDto.MyPageResponse> moviePartiesToMyPageResponses(List<MovieParty> movieParties);
-    default MoviePartyDto.EntireResponse moviePartyToEntireResponseDto(MovieParty movieParty, UserMapper userMapper) {
+    default MoviePartyDto.EntireResponse moviePartyToEntireResponseDto(MovieParty movieParty, UserMapper userMapper, ImageUtil imageUtil) {
         List<User> participatingUsers = movieParty.getMoviePartyUsers().stream()
                 .map(moviePartyUser -> moviePartyUser.getUser())
                 .collect(Collectors.toList());
-        List<UserDto.MoviePartyResponse> users = userMapper.usersToMoviePartyResponseDtos(participatingUsers);
+        List<UserDto.MoviePartyResponse> users = userMapper.usersToMoviePartyResponseDtos(participatingUsers, imageUtil);
 
         MoviePartyDto.EntireResponse response = MoviePartyDto.EntireResponse.builder()
                 .groupId(movieParty.getMoviePartyId())
@@ -43,10 +44,10 @@ public interface MoviePartyMapper {
         return response;
     }
 //    List<MoviePartyDto.EntireResponse> moviePartiesToEntireResponseDtos(List<MovieParty> movieParties, UserMapper userMapper);
-    default List<MoviePartyDto.EntireResponse> moviePartiesToEntireResponseDtos(List<MovieParty> movieParties, UserMapper userMapper) {
+    default List<MoviePartyDto.EntireResponse> moviePartiesToEntireResponseDtos(List<MovieParty> movieParties, UserMapper userMapper, ImageUtil imageUtil) {
         List<MoviePartyDto.EntireResponse> responses = new ArrayList<>();
         for(MovieParty movieParty : movieParties)
-            responses.add(moviePartyToEntireResponseDto(movieParty, userMapper));
+            responses.add(moviePartyToEntireResponseDto(movieParty, userMapper, imageUtil));
 
         return responses;
     }

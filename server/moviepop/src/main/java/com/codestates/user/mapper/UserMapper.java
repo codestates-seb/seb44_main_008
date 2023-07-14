@@ -15,6 +15,7 @@ import com.codestates.user.entity.UserTag;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,10 +89,10 @@ public interface UserMapper {
         return response;
     }
 
-    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, ImageUtil imageUtil) {
+    default UserResponseDto userToUserResponseDto(User user, ReviewBoardMapper reviewBoardMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper, ImageUtil imageUtil) {
         List<TagDto.UserRequest> userTags = tagMapper.userTagsToUserRequest(user.getUserTags());
-        List<ReviewBoardDto.UserResponse> wishBoards = reviewBoardMapper.reviewBoardWishToUserResponses(user.getReviewBoardWishes());
-        List<ReviewBoardDto.UserResponse> myBoards = reviewBoardMapper.reviewBoardToUserResponses(user.getReviewBoards());
+        List<ReviewBoardDto.UserResponse> wishBoards = reviewBoardMapper.reviewBoardWishToUserResponses(user.getReviewBoardWishes(), userMapper, imageUtil);
+        List<ReviewBoardDto.UserResponse> myBoards = reviewBoardMapper.reviewBoardToUserResponses(user.getReviewBoards(), tagMapper, userMapper, imageUtil);
 
         List<MoviePartyDto.MyPageResponse> myRecruitingGroup = moviePartyMapper.moviePartiesToMyPageResponses(user.getParties());
 
@@ -135,7 +136,15 @@ public interface UserMapper {
 
         return response;
     }
-    List<UserDto.MoviePartyResponse> usersToMoviePartyResponseDtos(List<User> users);
+    default List<UserDto.MoviePartyResponse> usersToMoviePartyResponseDtos(List<User> users, ImageUtil imageUtil) {
+        List<UserDto.MoviePartyResponse> moviePartyResponses = new ArrayList<>();
+        for(User user : users) {
+            UserDto.MoviePartyResponse moviePartyResponse = userToMoviePartyResponseDto(user, imageUtil);
+            moviePartyResponses.add(moviePartyResponse);
+        }
+
+        return moviePartyResponses;
+    }
     //default UserResponseDto
 
     UserDto.totalReviewBoardResponse userToTotalReviewBoardResponseDto(User user);
