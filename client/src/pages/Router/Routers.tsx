@@ -13,6 +13,7 @@ import Mypage from '../MyPage/Mypage';
 import Editmypage from '../MyPage/Editmypage';
 import Editpassword from '../MyPage/Editpassword';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import TagContents from '../Main/TagContents';
 
 const Routers = () => {
   const hideNavbar = ['/', '/start'];
@@ -32,6 +33,7 @@ const Routers = () => {
         <Route path="/account/login" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/main/contents" element={<Allcontents />} />
+        <Route path="/main/contents/:tagIdParam" element={<TagContents />} />
         <Route path="/detail/write" element={<Writecontent />} />
         <Route path="/detail/content" element={<Detailcontent />} />
         <Route path="/mypage" element={<Mypage />} />

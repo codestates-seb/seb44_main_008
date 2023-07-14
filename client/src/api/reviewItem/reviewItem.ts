@@ -64,7 +64,7 @@ type AllItemType = {
 };
 
 export const getMainItems = (): Promise<ReviewType> =>
-  instance.get('/reviewBoards/main').then(res => res.data);
+  instance.get('/reviewBoards/main').then(res => res.data.data);
 
 export const getAllItems = async (pageParam: number): Promise<AllItemType> => {
   return instance
