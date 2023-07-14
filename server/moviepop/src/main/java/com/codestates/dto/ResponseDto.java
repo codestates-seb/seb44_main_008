@@ -23,4 +23,15 @@ public class ResponseDto {
             this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
         }
     }
+
+    @Getter
+    public static class MultipleInfoResponseDto<T> {
+        private T data;
+        private PageInfo pageInfo;
+
+        public MultipleInfoResponseDto(T data, Page page) {
+            this.data = data;
+            this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
+        }
+    }
 }
