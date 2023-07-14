@@ -20,7 +20,7 @@ public class ResponseDto {
 
         public MultipleResponseDto(List<T> data, Page page) {
             this.data = data;
-            this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
+            this.pageInfo = new PageInfo(page.getNumber() + 1, page.getSize(), page.getTotalElements(), page.getTotalPages());
         }
     }
 
@@ -31,7 +31,7 @@ public class ResponseDto {
 
         public MultipleInfoResponseDto(T data, Page page) {
             this.data = data;
-            this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
+            this.pageInfo = new PageInfo(page.getNumber() + 1, page.getSize(), page.getTotalElements(), page.getTotalPages());
         }
     }
 }
