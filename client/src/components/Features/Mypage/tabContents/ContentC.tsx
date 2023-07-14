@@ -1,10 +1,8 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
-import { data2 } from './tabCD';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
-import axios from 'axios';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -16,8 +14,20 @@ import axios from 'axios';
 // useEffect(() => {
 //   getData();
 // }, [page]);
+type tabCType = {
+  data2: {
+    groupId: number;
+    title: string;
+    location: string;
+    maxCapacity: number;
+    currentParticipant: number;
+    meetingDate: string;
+    movieTitle: string;
+  }[];
+};
 
-const ContentC = () => {
+const ContentC = ({ data2 }: tabCType) => {
+  console.log('data3', data2);
   const [totalElements, setTotalElements] = useState(data2.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
@@ -64,9 +74,9 @@ const ContentC = () => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <p>일시 : {item.date}</p>
+              <p>일시 : {item.meetingDate}</p>
               <p>장소 : {item.location}</p>
-              <p>{`모집 인원 : ${item.current}/${item.max}`}</p>
+              <p>{`모집 인원 : ${item.currentParticipant}/${item.maxCapacity}`}</p>
             </ListTail>
           </ListOnce>
         </ListContainer>

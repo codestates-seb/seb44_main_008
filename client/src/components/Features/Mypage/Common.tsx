@@ -20,7 +20,6 @@ const Common = () => {
     return <Loading />;
   }
   if (isSuccess) {
-    console.log(data);
     return (
       <>
         <TotalContainer>
@@ -32,7 +31,8 @@ const Common = () => {
               </User>
               <Button
                 value={'회원 정보 수정'}
-                type="variant"
+                type="button"
+                theme="variant"
                 onClick={() => {
                   navigate('/mypage/edit');
                 }}
