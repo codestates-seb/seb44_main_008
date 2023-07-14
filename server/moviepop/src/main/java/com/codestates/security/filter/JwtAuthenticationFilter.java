@@ -31,30 +31,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String username = null, accessToken = getToken(request);
         if(request.getRequestURI().equals("/users/reissue") && getRefreshToken(request) == null)
             throw new JwtException("재발행시 리프레시 토큰이 없습니다.");
-        if(!request.getRequestURI().equals("/users/reissue")) {
-            String accessToken = getToken(request);
-            if(accessToken != null) {
-                if(jwtTokenizer.isTokenExpired(accessToken))
-                    throw new BusinessLogicException(ExceptionCode.EXPIRED_ACCESS_TOKEN);
-                checkLogout(accessToken);
-                String username = jwtTokenizer.getEmail(accessToken);
+        else if(request.getRequestURI().equals("/users/reissue") && getRefreshToken(request) != null) {
+            String refreshToken = getRefreshToken(request);
 
-                if(username != null) {
-                    UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-                    equalsUsernameFromTokenAndUserDetails(userDetails.getUsername(), username);
-                    validateAccessToken(accessToken, userDetails);
-                    processSecurity(request, userDetails);
+            username = jwtTokenizer.getEmail(refreshToken);
+        } else {
+            if(accessToken != null) {
+                if(lessThanReissueExpirationTimesLeft(accessToken)) {
+                    response.setHeader("exceptionCode", String.valueOf(498));
+                    response.setHeader("exceptionMessage", "access token is expired!");
+                    throw new BusinessLogicException(ExceptionCode.EXPIRED_ACCESS_TOKEN);
                 }
+                checkLogout(accessToken);
+                username = jwtTokenizer.getEmail(accessToken);
             }
+        }
+
+        if(username != null) {
+            UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+            equalsUsernameFromTokenAndUserDetails(userDetails.getUsername(), username);
+            validateAccessToken(accessToken, userDetails);
+            processSecurity(request, userDetails);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private boolean lessThanExpirationTimesLeft(String accessToken) {
-        return jwtTokenizer.getRemainMilliSeconds(accessToken) < JwtExpirationEnums.ACCESS_TOKEN_EXPIRATION_TIME.getValue();
+    private boolean lessThanReissueExpirationTimesLeft(String accessToken) {
+        return jwtTokenizer.getRemainMilliSeconds(accessToken) < JwtExpirationEnums.ACCESS_TOKEN_REISSUE_EXPIRATION_TIME.getValue();
     }
 
     private String getToken(HttpServletRequest request) {
