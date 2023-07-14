@@ -76,7 +76,7 @@ public class UserController {
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}) // 회원정보 수정 -> jwt적용하지 않았을 경우 userId가 필요해보임
     public ResponseEntity patchUser(@Valid @RequestPart UserDto.Patch userPatchDto,
-                                    @RequestPart MultipartFile profileImage) {
+                                    @RequestPart(required = false) MultipartFile profileImage) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         userPatchDto.setEmail(email);
         User user = userService.updateUser(userMapper.userPatchDtoToUser(userPatchDto, tagMapper), profileImage);
