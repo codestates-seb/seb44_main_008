@@ -45,15 +45,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     response.setHeader("exceptionMessage", "access token is expired!");
                     throw new BusinessLogicException(ExceptionCode.EXPIRED_ACCESS_TOKEN);
                 }
-                checkLogout(accessToken);
+                checkLogout(accessToken, response);
                 username = jwtTokenizer.getEmail(accessToken);
             }
         }
 
         if(username != null) {
             UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-            equalsUsernameFromTokenAndUserDetails(userDetails.getUsername(), username);
-            validateAccessToken(accessToken, userDetails);
+            equalsUsernameFromTokenAndUserDetails(userDetails.getUsername(), username, response);
+            validateAccessToken(accessToken, userDetails, response);
             processSecurity(request, userDetails);
         }
 
@@ -80,19 +80,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private void checkLogout(String accessToken) {
-        if(logoutAccessTokenRedisRepository.existsById(accessToken))
+    private void checkLogout(String accessToken, HttpServletResponse response) {
+        if(logoutAccessTokenRedisRepository.existsById(accessToken)) {
+            response.setHeader("exceptionCode", String.valueOf(400));
+            response.setHeader("exceptionMessage", "you already logout!");
             throw new IllegalArgumentException("이미 로그아웃된 회원입니다.");
+        }
     }
 
-    private void equalsUsernameFromTokenAndUserDetails(String userDetailsUsername, String tokenUsername) {
-        if(!userDetailsUsername.equals(tokenUsername))
+    private void equalsUsernameFromTokenAndUserDetails(String userDetailsUsername, String tokenUsername, HttpServletResponse response) {
+        if(!userDetailsUsername.equals(tokenUsername)) {
+            response.setHeader("exceptionCode", String.valueOf(401));
+            response.setHeader("exceptionMessage", "invalid token!");
             throw new IllegalArgumentException("username이 토큰과 맞지 않습니다.");
+        }
     }
 
-    private void validateAccessToken(String accessToken, UserDetails userDetails) {
-        if(!jwtTokenizer.validateToken(accessToken, userDetails))
+    private void validateAccessToken(String accessToken, UserDetails userDetails, HttpServletResponse response) {
+        if(!jwtTokenizer.validateToken(accessToken, userDetails)) {
+            response.setHeader("exceptionCode", String.valueOf(401));
+            response.setHeader("exceptionMessage", "invalid token!");
             throw new IllegalArgumentException("토큰 검증 실패!");
+        }
     }
 
     private void processSecurity(HttpServletRequest request, UserDetails userDetails) {
