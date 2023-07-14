@@ -1,112 +1,240 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { styled } from 'styled-components';
 import { FileData, UserInfoType } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
-import { getEditUser } from '../../../../api/user/userInfo/editUserInfo';
-import { useQuery } from '@tanstack/react-query';
+import Button from '../../../Common/Button/Button';
+import { EditInfoType, Tag } from './type';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  PatchEditUser,
+  getEditUser,
+} from '../../../../api/user/userInfo/editUserInfo';
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
 
 const UserInfo = () => {
-  const defaultImage =
-    'http://localhost:5173/src/assets/images/user-info/userAvatar.png';
-  const [Image, setImage] = useState<FileData | null | string>(defaultImage);
+  const queryClient = useQueryClient();
+  const [userNickname, setUserNickname] = useState('');
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['EditUserInfo'],
+    queryFn: () => getEditUser(),
+  });
+  const nickNameIn = userNickname ? userNickname : data?.data.nickname;
+  const [tempImg, setTempImg] = useState('');
+  const mutationPatch = useMutation(PatchEditUser, {
+    onSuccess: data => {
+      queryClient.invalidateQueries(['EditUserInfo']),
+        console.log('data', data);
+    },
+  });
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  useEffect(() => {
+    if (data) {
+      setSelectedTags(data.data.myTags);
+      setTempImg(data.data.profileImage);
+    }
+  }, [data]);
 
-  const data: UserInfoType = {
-    userId: 1,
-    email: 'hgd123@gmail.com',
-    nickname: '홍길동2',
-    profileImage: Image,
+  const [image, setImage] = useState<FileData | null>();
+  const fileInput = useRef(null);
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserNickname(e.target.value);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    mutationPatch.mutate({
+      userPatchDto: {
+        nickname: nickNameIn,
+        tags: selectedTags.map(tag => ({ tagId: tag.tagId })),
+      },
+      profileImage: image,
+    });
   };
 
-  const fileInput = useRef(null);
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files !== null) {
-      const imageFile = event.target.files[0];
-      if (imageFile instanceof Blob) {
-        setImage(imageFile);
-        const reader = new FileReader();
-        reader.onload = () => {
-          if (reader.readyState === 2) {
-            const result = reader.result as string;
-            setImage(result);
-          }
-        };
-        reader.readAsDataURL(event.target.files[0]);
-      } else {
-        alert('파일 형식이 맞지 않습니다.');
-      }
-    } else {
-      setImage(
-        'http://localhost:5173/src/assets/images/user-info/userAvatar.png',
-      );
-      return;
+    if (event.target.files) {
+      setImage(event.target.files[0]);
+      const newFileUrl = URL.createObjectURL(event.target.files[0]);
+      setTempImg(newFileUrl);
+    }
+  };
+  const onClickImg = (
+    event: React.MouseEvent<HTMLImageElement, MouseEvent>,
+  ) => {
+    event?.preventDefault();
+    if (fileInput.current) {
+      fileInput.current.click();
     }
   };
 
-  // const { data, isLoading, error, isSuccess } = useQuery({
-  //   queryKey: ['EditUser'],
-  //   queryFn: () => getEditUser(),
-  // });
-  // console.log(data);
-  // if (error) {
-  //   return <ErrorPage />;
-  // }
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
-  // if (isSuccess)
-  const [inputValue, setInputValue] = useState(data.nickname);
-  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    onChange && onChange(e);
+  const onClickTag = (
+    event: EditInfoType,
+  ): void | MouseEvent<HTMLButtonElement> | undefined => {
+    const element = document.getElementById(event.target.id)?.classList;
+    const newTagId: number = Number(event.target.id);
+
+    const newTagName: string = event.target.name.substr(1);
+    const tagIdArray = selectedTags.map(tagObject => tagObject.tagId);
+    if (selectedTags.length === 1 && tagIdArray.indexOf(newTagId) !== -1) {
+      alert('태그는 한개 이상 선택해야 합니다.');
+    } else if (tagIdArray.indexOf(newTagId) !== -1) {
+      element?.toggle('clicked');
+      const deletedTagList = selectedTags.filter(tag => tag.tagId !== newTagId);
+      setSelectedTags(deletedTagList);
+    } else if (selectedTags.length >= 3) {
+      alert('태그는 최대 3개까지 선택 가능합니다.');
+    } else {
+      element?.toggle('clicked');
+      const newTag = {
+        tagId: newTagId,
+        tagName: newTagName,
+      };
+      setSelectedTags([...selectedTags, newTag]);
+    }
   };
-  return (
-    <>
-      <Container>
-        <ImgContainer>
-          {typeof Image === 'string' ? (
-            <img
-              src={data.profileImage}
-              alt="사용자 이미지"
-              className="userImage"
-            />
-          ) : (
-            <span>이미지가 없습니다.</span>
-          )}
-          <label htmlFor="user_info">
-            <div className="editCover">
+  const navigate = useNavigate();
+
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isSuccess) {
+    const tags = data.data.tags;
+    return (
+      <>
+        <Container>
+          <form onSubmit={handleSubmit}>
+            <ImgContainer>
               <img
-                className="editImage"
-                src={editImage}
-                alt="사진 변경 이미지"
+                src={tempImg}
+                alt="사용자 이미지"
+                className="userImage"
+                onClick={onClickImg}
               />
-            </div>
-          </label>
-          <input
-            type="file"
-            accept="image/jpg,image/png,image/jpeg"
-            onChange={onChange}
-            ref={fileInput}
-            id="user_info"
-          />
-        </ImgContainer>
-        <EditInputContainer>
-          <NicknameContainer>
-            <p>닉네임</p>
-            <Input
-              placeholder="닉네임"
-              value={inputValue}
-              onChange={changeHandler}
-              isvalid={'false'}
-            />
-          </NicknameContainer>
-        </EditInputContainer>
-      </Container>
-    </>
-  );
+              <label htmlFor="user_info">
+                <div className="editCover">
+                  <img
+                    className="editImage"
+                    src={editImage}
+                    alt="사진 변경 이미지"
+                  />
+                </div>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onChange}
+                ref={fileInput}
+                id="user_info"
+              />
+            </ImgContainer>
+            <EditInputContainer>
+              <NicknameContainer>
+                <p>닉네임</p>
+                <Input
+                  placeholder="닉네임"
+                  value={data.data.nickname && data.data.nickname}
+                  onChange={handleInput}
+                  isvalid={'false'}
+                />
+              </NicknameContainer>
+            </EditInputContainer>
+            <TopContainer>
+              <p>태그</p>
+              <ButtonList>
+                {tags.map(tag => {
+                  const isMyTag = selectedTags.some(
+                    myTag => myTag.tagId === tag.tagId,
+                  );
+
+                  return (
+                    <li key={tag.tagId}>
+                      {isMyTag ? (
+                        <Button
+                          value={`#${tag.tagName}`}
+                          id={tag.tagId}
+                          width={'100%'}
+                          onClick={onClickTag}
+                          type="button"
+                          theme="variant"
+                        />
+                      ) : (
+                        <Button
+                          value={`#${tag.tagName}`}
+                          id={tag.tagId}
+                          width={'100%'}
+                          onClick={onClickTag}
+                          type="button"
+                        />
+                      )}
+                    </li>
+                  );
+                })}
+              </ButtonList>
+            </TopContainer>
+            <TailContainer>
+              <Button
+                width="47%"
+                value="비밀번호 수정"
+                onClick={() => navigate('/mypage/edit/pass')}
+              />
+              <Button width="47%" value="회원정보 저장" type="variant" />
+            </TailContainer>
+          </form>
+        </Container>
+      </>
+    );
+  }
 };
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  & > p {
+    align-self: flex-start;
+    padding-bottom: 1rem;
+    font-size: 0.8rem;
+    color: var(--footer-icon-color);
+  }
+`;
+
+const ButtonList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 5rem;
+  & > li {
+    width: 15.5%;
+  }
+  li .clicked {
+    background-color: var(--theme-color);
+  }
+  li .clicked:hover {
+    background-color: var(--theme-hover-color) !important;
+  }
+`;
+const TailContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 5rem;
+`;
 
 const Container = styled.div`
   display: flex;
