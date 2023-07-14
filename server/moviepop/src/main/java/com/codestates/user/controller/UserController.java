@@ -167,8 +167,8 @@ public class UserController {
     public ResponseEntity reissue(@RequestHeader("Refresh") String refreshToken, HttpServletResponse response) {
         Map<String, String> tokens = userService.reissue(refreshToken);
 
-        response.setHeader("Authorization", tokens.get("Authorization"));
-        response.setHeader("Refresh", tokens.get("Refresh"));
+        response.setHeader("Authorization", "Bearer " + tokens.get("Authorization"));
+        response.setHeader("Refresh", "Bearer " + tokens.get("Refresh"));
 
         return new ResponseEntity(HttpStatus.OK);
     }
