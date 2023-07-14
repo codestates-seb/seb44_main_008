@@ -152,7 +152,7 @@ public class ReviewBoardService {
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper);
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper, imageUtil);
 
         String thumbnail = reviewBoard.getThumbnail();
         if(thumbnail == null)
