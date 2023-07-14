@@ -7,8 +7,8 @@ phases:
   build:
     commands:
       - echo Build Starting on `date`
-      - cd server
-      - sudo chmod +x ./gradlew
+      - cd server/moviepop
+      - chmod +x ./gradlew
       - ./gradlew build
   post_build:
     commands:
