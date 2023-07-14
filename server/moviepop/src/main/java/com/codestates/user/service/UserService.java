@@ -156,8 +156,10 @@ public class UserService {
             userTag.setUser(findUser);
         }
 
-        String imageUrl = storageService.updateProfileImage(profileImage, findUser);
-        findUser.setProfileImage(imageUrl);
+        if(profileImage != null) {
+            String imageUrl = storageService.updateProfileImage(profileImage, findUser);
+            findUser.setProfileImage(imageUrl);
+        }
 
         return userRepository.save(findUser);
     }
