@@ -4,6 +4,7 @@ import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie.entity.Movie;
 import com.codestates.review_board.entity.ReviewBoardTag;
 import com.codestates.tag.dto.TagDto;
+import com.codestates.tag.entity.Tag;
 import com.codestates.tag.mapper.TagMapper;
 import com.codestates.movie.dto.MovieDto;
 import com.codestates.movie_party.dto.MoviePartyDto;
@@ -112,6 +113,13 @@ public interface ReviewBoardMapper {
         }
 
         return response;
+    }
+
+    default ReviewBoardDto.TagResponse reviewBoardsToTagResponseDto(List<ReviewBoard> reviewBoards, UserMapper userMapper, Tag tag, ImageUtil imageUtil) {
+        List<ReviewBoardDto.EntireResponse> responses = reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil);
+        ReviewBoardDto.TagResponse tagResponse = new ReviewBoardDto.TagResponse(tag.getTagName(), responses);
+
+        return tagResponse;
     }
 
 //    default ReviewBoardDto.DetailResponse reviewBoardToDetailResponse(ReviewBoard reviewBoard, CommentMapper commentMapper, TagMapper tagMapper, MoviePartyMapper moviePartyMapper, UserMapper userMapper, boolean iswished) {
