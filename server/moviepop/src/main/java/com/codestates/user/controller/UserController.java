@@ -101,7 +101,7 @@ public class UserController {
         User user = userService.findVerifiedUserByEmail(email);
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user, reviewBoardMapper, tagMapper, moviePartyMapper, imageUtil)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user, reviewBoardMapper, tagMapper, moviePartyMapper, userMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -111,7 +111,7 @@ public class UserController {
         User user = userService.findUser(userId);
 
         return new ResponseEntity<>(
-                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper, moviePartyMapper, imageUtil)),
+                new ResponseDto.SingleResponseDto<>(userMapper.userToUserResponseDto(user,reviewBoardMapper,tagMapper, moviePartyMapper, userMapper, imageUtil)),
                 HttpStatus.OK
         );
     }
@@ -159,6 +159,16 @@ public class UserController {
                                  @RequestHeader("Refresh") String refreshToken) {
         String username = jwtTokenizer.getUsername(resolveToken(accessToken));
         userService.logout(new Token(accessToken, refreshToken), username);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity reissue(@RequestHeader("Refresh") String refreshToken, HttpServletResponse response) {
+        Map<String, String> tokens = userService.reissue(refreshToken);
+
+        response.setHeader("Authorization", tokens.get("Authorization"));
+        response.setHeader("Refresh", tokens.get("Refresh"));
 
         return new ResponseEntity(HttpStatus.OK);
     }
