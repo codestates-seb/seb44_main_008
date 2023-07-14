@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
 import Button from '../../Common/Button/Button';
-// import UserAva from '@/assets/images/user-info/userAvatar.png';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetUser } from '../../../api/user/userInfo/userInfo';
@@ -28,7 +27,7 @@ const Common = () => {
           <TopContainer>
             <UserTopContainer>
               <User>
-                <img src={data.profileImage} alt="사용자 이미지" />
+                <img src={data.data.profileImage} alt="사용자 이미지" />
                 <span>{data.data.name}님</span>
               </User>
               <Button

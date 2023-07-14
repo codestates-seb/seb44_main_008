@@ -12,12 +12,13 @@ export interface EditUserType {
   };
   profileImage?: FileData | null | undefined;
 }
+export interface EditPasswordType {
+  currentPw: string;
+  newPw: string;
+}
 
 export const getEditUser = (): Promise<UserInfoType> =>
   instance.get('/users/brief').then(res => res.data);
-
-// export const PatchEditUser = (data: EditUserType) =>
-//   instance.patch(`/users`, data);
 
 export const PatchEditUser = (data: EditUserType) => {
   const formData = new FormData();
@@ -38,3 +39,6 @@ export const PatchEditUser = (data: EditUserType) => {
     },
   });
 };
+
+export const PatchEditUserPassword = (data: EditPasswordType) =>
+  instance.patch('/users/password', data);
