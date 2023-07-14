@@ -9,7 +9,7 @@ import Button from '../../../components/Common/Button/Button';
 import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { postNewReview } from '../../../api/reviewItem/reviewItem';
-import { getAllTags } from '../../../api/tags/gettags';
+import { getAllTags } from '../../../api/tags/getTags';
 
 const Writecontent = () => {
   const [fileURL, setFileURL] = useState<string>('');
