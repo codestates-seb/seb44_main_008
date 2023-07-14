@@ -13,15 +13,12 @@ export const AccountWrap = styled.div`
     display: flex;
     flex-direction: column;
     input {
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
     }
     .signImg {
       position: relative;
       width: 10rem;
       height: 10rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       border-radius: 100%;
       overflow: hidden;
       margin: 0 auto 3rem;
@@ -67,6 +64,12 @@ export const AccountWrap = styled.div`
       width: 100%;
       position: absolute;
       right: 0;
+    }
+  }
+  .inputBox {
+    margin-bottom: 1.5rem;
+    & > span {
+      color: var(--white-color);
     }
   }
 `;

@@ -31,6 +31,7 @@ const Main = () => {
     queryKey: ['mainItems'],
     queryFn: () => getMainItems(),
   });
+  console.log(data);
 
   if (error) {
     return <ErrorPage />;
@@ -40,47 +41,51 @@ const Main = () => {
   }
   if (isSuccess) {
     // 캐러셀 item 변수
-    const popularItems = data.popularBoards.map(item => {
-      return (
-        <StyleSheetManager
-          key={item.reviewBoardId}
-          shouldForwardProp={prop => isPropValid(prop)}
-        >
-          <SpecialContainer>
-            <SliderContainer>
-              <SingleItem
-                src={item.thumbnail}
-                title={item.title}
-                date={item.createdAt}
-                author={item.user.nickname}
-                isMain={false}
-              ></SingleItem>
-            </SliderContainer>
-          </SpecialContainer>
-        </StyleSheetManager>
-      );
-    });
+    const popularItems =
+      data.data.popularBoards &&
+      data.data.popularBoards.map(item => {
+        return (
+          <StyleSheetManager
+            key={item.reviewBoardId}
+            shouldForwardProp={prop => isPropValid(prop)}
+          >
+            <SpecialContainer>
+              <SliderContainer>
+                <SingleItem
+                  src={item.thumbnail}
+                  title={item.title}
+                  date={item.createdAt}
+                  author={item.user.nickname}
+                  isMain={false}
+                ></SingleItem>
+              </SliderContainer>
+            </SpecialContainer>
+          </StyleSheetManager>
+        );
+      });
 
-    const recommendItems = data.recommendBoards.map(item => {
-      return (
-        <StyleSheetManager
-          key={item.reviewBoardId}
-          shouldForwardProp={prop => isPropValid(prop)}
-        >
-          <SpecialContainer>
-            <SliderContainer>
-              <SingleItem
-                src={item.thumbnail}
-                title={item.title}
-                date={item.createdAt}
-                author={item.user.nickname}
-                isMain={false}
-              ></SingleItem>
-            </SliderContainer>
-          </SpecialContainer>
-        </StyleSheetManager>
-      );
-    });
+    const recommendItems =
+      data.data.recommendBoards &&
+      data.data.recommendBoards.map(item => {
+        return (
+          <StyleSheetManager
+            key={item.reviewBoardId}
+            shouldForwardProp={prop => isPropValid(prop)}
+          >
+            <SpecialContainer>
+              <SliderContainer>
+                <SingleItem
+                  src={item.thumbnail}
+                  title={item.title}
+                  date={item.createdAt}
+                  author={item.user.nickname}
+                  isMain={false}
+                ></SingleItem>
+              </SliderContainer>
+            </SpecialContainer>
+          </StyleSheetManager>
+        );
+      });
 
     // 여기서 부터 return
     return (
@@ -119,22 +124,23 @@ const Main = () => {
             <Link to="/main/contents">더 보기</Link>
           </div>
           <StaticContainer>
-            {data.boards.map(item => {
-              return (
-                <StyleSheetManager
-                  key={item.reviewBoardId}
-                  shouldForwardProp={prop => isPropValid(prop)}
-                >
-                  <SingleItem
-                    src={item.thumbnail}
-                    title={item.title}
-                    date={item.createdAt}
-                    author={item.user.nickname}
-                    isMain={true}
-                  ></SingleItem>
-                </StyleSheetManager>
-              );
-            })}
+            {data.data.boards &&
+              data.data.boards.map(item => {
+                return (
+                  <StyleSheetManager
+                    key={item.reviewBoardId}
+                    shouldForwardProp={prop => isPropValid(prop)}
+                  >
+                    <SingleItem
+                      src={item.thumbnail}
+                      title={item.title}
+                      date={item.createdAt}
+                      author={item.user.nickname}
+                      isMain={true}
+                    ></SingleItem>
+                  </StyleSheetManager>
+                );
+              })}
           </StaticContainer>
         </DefaultContainer>
       </MainWrapper>

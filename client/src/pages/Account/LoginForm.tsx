@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../../components/Common/Button/Button';
 import { AccountWrap } from './AccountStyle';
 import { ReactComponent as IcoGoogle } from '@/assets/images/account/icoGoogle.svg';
@@ -33,13 +34,14 @@ const LoginForm = () => {
       }
     },
     onError(error: any) {
+      console.log('err');
       if (error.response && error.response.status === 401) {
         alert(error.response.message);
       }
     },
   });
 
-  const onValid = (data: any) => {
+  const onValid: SubmitHandler<LoginType> = (data: any) => {
     LoginMutations.mutate({ ...data });
     console.log(data);
   };
