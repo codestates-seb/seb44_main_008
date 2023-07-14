@@ -5,6 +5,10 @@ import Element2 from './tabContents/ContentC';
 import Element3 from './tabContents/ContentD';
 import { useState } from 'react';
 import Button from '../../Common/Button/Button';
+import { useQuery } from '@tanstack/react-query';
+import { GetUser } from '../../../api/user/userInfo/userInfo';
+import ErrorPage from '../../../pages/ErrorPage/ErrorPage';
+import Loading from '../../Common/Loading/Loading';
 
 const tabTitle: string[] = [
   '찜한 게시글',
@@ -13,42 +17,58 @@ const tabTitle: string[] = [
   '내가 참여중인 팟',
 ];
 
-const tabContent: JSX.Element[] = [
-  <Element0 />,
-  <Element1 />,
-  <Element2 />,
-  <Element3 />,
-];
-
 const MypageMain = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  return (
-    <StyledContainer>
-      <StyledInnerContainer>
-        <TabList>
-          {tabTitle.map((title, idx) =>
-            idx === activeTab ? (
-              <Button
-                key={idx}
-                value={title}
-                onClick={() => setActiveTab(idx)}
-                type="variant"
-                width="8.5rem"
-              />
-            ) : (
-              <Button
-                key={idx}
-                value={title}
-                onClick={() => setActiveTab(idx)}
-                width="8.5rem"
-              />
-            ),
-          )}
-        </TabList>
-        <StyledContent>{tabContent[activeTab]}</StyledContent>
-      </StyledInnerContainer>
-    </StyledContainer>
-  );
+
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['TabUserInfo'],
+    queryFn: () => GetUser(),
+  });
+
+  const tabContent: JSX.Element[] = [
+    <Element0 data={data?.data.wishBoard} />,
+    <Element1 data={data?.data.myBoard} />,
+    <Element2 data2={data?.data.myRecruitingGroup} />,
+    <Element3 data2={data?.data.myParticipatingGroup} />,
+  ];
+
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (isSuccess) {
+    // console.log(data);
+    return (
+      <StyledContainer>
+        <StyledInnerContainer>
+          <TabList>
+            {tabTitle.map((title, idx) =>
+              idx === activeTab ? (
+                <Button
+                  key={idx}
+                  value={title}
+                  onClick={() => setActiveTab(idx)}
+                  type="button"
+                  theme="variant"
+                  width="8.5rem"
+                />
+              ) : (
+                <Button
+                  key={idx}
+                  value={title}
+                  onClick={() => setActiveTab(idx)}
+                  width="8.5rem"
+                />
+              ),
+            )}
+          </TabList>
+          <StyledContent>{tabContent[activeTab]}</StyledContent>
+        </StyledInnerContainer>
+      </StyledContainer>
+    );
+  }
 };
 
 const StyledContainer = styled.div`

@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { data } from './tabAB';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Button from '../../../Common/Button/Button';
 import { ButtonType } from '../../../Common/Button/type';
-import axios from 'axios';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -15,8 +13,21 @@ import axios from 'axios';
 // useEffect(() => {
 //   getData();
 // }, [page]);
+type tabBType = {
+  data: {
+    reviewBoardId: number;
+    title: string;
+    movieTitle: string;
+    user: {
+      userId: number;
+      nickname: string;
+      profileImage: string;
+    };
+  }[];
+};
 
-const ContentB = () => {
+const ContentB = ({ data }: tabBType) => {
+  console.log('data2', data);
   const [totalElements, setTotalElements] = useState(data.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
@@ -38,8 +49,8 @@ const ContentB = () => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <StyledButton value={'수정'} type="variant" />
-              <StyledButton value={'삭제'} type="variant" />
+              <StyledButton value={'수정'} theme="variant" />
+              <StyledButton value={'삭제'} theme="variant" />
             </ListTail>
           </ListOnce>
         </ListContainer>

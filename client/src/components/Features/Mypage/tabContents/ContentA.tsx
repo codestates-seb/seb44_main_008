@@ -1,9 +1,8 @@
 import { styled } from 'styled-components';
 import { useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
-import { data } from './tabAB';
+// import { data } from './tabAB';
 import Poplike from '../../../Common/PopIcons/Poplike';
-import axios from 'axios';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -14,8 +13,22 @@ import axios from 'axios';
 // useEffect(() => {
 //   getData();
 // }, [page]);
+type tabAType = {
+  data: {
+    reviewBoardId: number;
+    title: string;
+    movieTitle: string;
+    liked: boolean;
+    user: {
+      userId: number;
+      nickname: string;
+      profileImage: string;
+    };
+  }[];
+};
 
-const ContentA = () => {
+const ContentA = ({ data }: tabAType) => {
+  console.log('data1', data);
   const [like, setLike] = useState(true);
   const likeHandler = () => {
     setLike(!like);

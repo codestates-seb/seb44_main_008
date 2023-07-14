@@ -12,9 +12,7 @@ const Editpassword = () => {
   const [confirmPw, setConfirmPw] = useState('');
   const navigate = useNavigate();
   const mutationPatch = useMutation(PatchEditUserPassword, {
-    onSuccess: data => {
-      console.log(data);
-    },
+    onSuccess: data => {},
   });
 
   const pwChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +31,6 @@ const Editpassword = () => {
       newPw: editPw,
     });
   };
-  console.log(currentPw, editPw, confirmPw);
   return (
     <>
       <Container>

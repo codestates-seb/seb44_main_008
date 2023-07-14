@@ -1,6 +1,6 @@
 import { instance } from '../../api';
 
-type UserType = {
+export type UserType = {
   data: any;
   userId: number;
   name: string;
