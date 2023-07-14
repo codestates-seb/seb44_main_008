@@ -1,0 +1,6 @@
+aws:
+  paramstore:
+    enabled: true
+    prefix: /be44-009
+    name: preproject
+    profileSeparator: _
