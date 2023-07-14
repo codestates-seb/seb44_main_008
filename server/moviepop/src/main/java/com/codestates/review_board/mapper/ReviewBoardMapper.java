@@ -157,7 +157,6 @@ public interface ReviewBoardMapper {
                 .build();
     }
 
-    List<ReviewBoardDto.UserResponse> reviewBoardToUserResponses(List<ReviewBoard> reviewBoards); // UserResponse를 가져오기 위한 mapper
     default ReviewBoardDto.UserResponse reviewBoardToUserResponse(ReviewBoard reviewBoard, TagMapper tagMapper, UserMapper userMapper, ImageUtil imageUtil) { // UserResponse를 가져오기 위한 mapper
 //        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
 //                reviewBoard.getUser().getUserId(),
@@ -177,7 +176,16 @@ public interface ReviewBoardMapper {
         return userResponse;
     }
 
-    List<ReviewBoardDto.UserResponse> reviewBoardWishToUserResponses(List<ReviewBoardWish> reviewBoardWishes);
+    default List<ReviewBoardDto.UserResponse> reviewBoardToUserResponses(List<ReviewBoard> reviewBoards, TagMapper tagMapper, UserMapper userMapper, ImageUtil imageUtil) { // UserResponse를 가져오기 위한 mapper
+        List<ReviewBoardDto.UserResponse> userResponses = new ArrayList<>();
+        for(ReviewBoard reviewBoard : reviewBoards) {
+            ReviewBoardDto.UserResponse userResponse = reviewBoardToUserResponse(reviewBoard, tagMapper, userMapper, imageUtil);
+            userResponses.add(userResponse);
+        }
+
+        return userResponses;
+    }
+
     default ReviewBoardDto.UserResponse reviewBoardWishToUserResponse(ReviewBoardWish reviewBoardWish, UserMapper userMapper, ImageUtil imageUtil) {
 //        UserDto.ReviewBoardResponse user = new UserDto.ReviewBoardResponse(
 //                reviewBoardWish.getUser().getUserId(),
@@ -197,4 +205,13 @@ public interface ReviewBoardMapper {
         return userResponse;
     }
 
+    default List<ReviewBoardDto.UserResponse> reviewBoardWishToUserResponses(List<ReviewBoardWish> reviewBoardWishes, UserMapper userMapper, ImageUtil imageUtil) {
+        List<ReviewBoardDto.UserResponse> userResponses = new ArrayList<>();
+        for(ReviewBoardWish reviewBoardWish : reviewBoardWishes) {
+            ReviewBoardDto.UserResponse userResponse = reviewBoardWishToUserResponse(reviewBoardWish, userMapper, imageUtil);
+            userResponses.add(userResponse);
+        }
+
+        return userResponses;
+    }
 }
