@@ -166,7 +166,10 @@ public class ReviewBoardController {
         Page<ReviewBoard> pageReviewBoards = reviewBoardService.findSpecificTagReviewBoards(user, tag, page, size);
         List<ReviewBoard> reviewBoards = pageReviewBoards.getContent();
 
-        return new ResponseEntity<>(new ResponseDto.MultipleResponseDto<>(mapper.reviewBoardsToEntireResponses(reviewBoards, userMapper, imageUtil), pageReviewBoards), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ResponseDto.MultipleInfoResponseDto<>(mapper.reviewBoardsToTagResponseDto(reviewBoards, userMapper, tag, imageUtil), pageReviewBoards),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/{review-id}/comments")
