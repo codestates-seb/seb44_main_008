@@ -26,7 +26,8 @@ public enum ExceptionCode {
     MOVIE_NOT_FOUND(404, "영화가 존재하지 않습니다"),
     ALREADY_LIKE_EXIST(409, "이미 좋아요가 되어있습니다"),
     LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다"),
-    TAG_NOT_FOUND(404, "해당 태그가 존재하지 않습니다");
+    TAG_NOT_FOUND(404, "해당 태그가 존재하지 않습니다"),
+    EXPIRED_ACCESS_TOKEN(498, "토큰이 만료되었습니다");
 
     @Getter
     private int status;
