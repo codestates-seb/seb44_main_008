@@ -99,6 +99,14 @@ public class ReviewBoardDto {
 
     @Getter
     @Builder
+    @AllArgsConstructor
+    public static class TagResponse {
+        private String tagName;
+        private List<EntireResponse> boards;
+    }
+
+    @Getter
+    @Builder
     public static class DetailResponse {
         private long reviewBoardId;
         private String title;
