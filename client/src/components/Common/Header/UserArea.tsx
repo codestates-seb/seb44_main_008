@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { RootState } from '../../../redux/store/store';
 import styled from 'styled-components';
 import Button from '../Button/Button';
+import { useQuery } from '@tanstack/react-query';
+import { getAllTags } from '../../../api/tags/getTags';
 
 const UserArea = () => {
   const navigate = useNavigate();
@@ -11,56 +13,12 @@ const UserArea = () => {
   const [hashShow, setHashShow] = useState(false);
   const [myShow, setMyShow] = useState(false);
 
-  const tags = [
-    {
-      tagId: 1,
-      tagName: '로맨스',
-    },
-    {
-      tagId: 2,
-      tagName: '호러',
-    },
-    {
-      tagId: 3,
-      tagName: '판타지',
-    },
-    {
-      tagId: 4,
-      tagName: '스포츠',
-    },
-    {
-      tagId: 5,
-      tagName: 'SF',
-    },
-    {
-      tagId: 6,
-      tagName: '액션',
-    },
-    {
-      tagId: 7,
-      tagName: '애니메이션',
-    },
-    {
-      tagId: 8,
-      tagName: '범죄',
-    },
-    {
-      tagId: 9,
-      tagName: '힐링',
-    },
-    {
-      tagId: 10,
-      tagName: '미스테리',
-    },
-    {
-      tagId: 11,
-      tagName: '뮤지컬',
-    },
-    {
-      tagId: 12,
-      tagName: '코미디',
-    },
-  ];
+  const {
+    data: tagData,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery(['tags'], () => getAllTags());
 
   const userImg = useSelector(
     (state: RootState) => state.user.userInfo.user_img,
@@ -83,6 +41,12 @@ const UserArea = () => {
     //dispatch(resetUser());
     setMyShow(false);
   }, []);
+
+  const onClickTagButton = e => {
+    setHashShow(false);
+    console.log(e.target.id);
+    navigate(`/main/contents/${e.target.id}`);
+  };
   return (
     <UserAreaWrap>
       <div className="hashArea">
@@ -96,16 +60,14 @@ const UserArea = () => {
         {hashShow && (
           <div className="hashBtns">
             <ul>
-              {tags.map(tag => {
+              {tagData?.map(tag => {
                 return (
                   <li key={tag.tagId}>
                     <Button
                       value={`#${tag.tagName}`}
                       id={tag.tagId}
                       width={'100%'}
-                      onClick={e => {
-                        setHashShow(false);
-                      }}
+                      onClick={onClickTagButton}
                     />
                   </li>
                 );

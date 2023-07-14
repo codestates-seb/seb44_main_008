@@ -187,7 +187,7 @@ const Writecontent = () => {
             </WriteTagMeta>
             <WriteTagList>
               {isSuccess &&
-                tagData.data.map((tag, idx) => {
+                tagData?.map((tag, idx) => {
                   return (
                     <li key={idx}>
                       <Button

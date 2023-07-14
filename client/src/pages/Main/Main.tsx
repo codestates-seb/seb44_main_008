@@ -41,8 +41,8 @@ const Main = () => {
   if (isSuccess) {
     // 캐러셀 item 변수
     const popularItems =
-      data.data.popularBoards &&
-      data.data.popularBoards.map(item => {
+      data?.popularBoards &&
+      data?.popularBoards.map(item => {
         return (
           <StyleSheetManager
             key={item.reviewBoardId}
@@ -64,8 +64,8 @@ const Main = () => {
       });
 
     const recommendItems =
-      data.data.recommendBoards &&
-      data.data.recommendBoards.map(item => {
+      data?.recommendBoards &&
+      data?.recommendBoards.map(item => {
         return (
           <StyleSheetManager
             key={item.reviewBoardId}
@@ -123,8 +123,8 @@ const Main = () => {
             <Link to="/main/contents">더 보기</Link>
           </div>
           <StaticContainer>
-            {data.data.boards &&
-              data.data.boards.map(item => {
+            {data?.boards &&
+              data?.boards.map(item => {
                 return (
                   <StyleSheetManager
                     key={item.reviewBoardId}

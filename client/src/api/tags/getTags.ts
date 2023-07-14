@@ -8,5 +8,5 @@ type tagType = {
 };
 
 export const getAllTags = (): Promise<tagType> => {
-  return instance.get('/tags').then(res => res.data);
+  return instance.get('/tags').then(res => res.data.data);
 };
