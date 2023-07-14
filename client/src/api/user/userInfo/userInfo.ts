@@ -1,6 +1,7 @@
 import { instance } from '../../api';
 
 type UserType = {
+  data: any;
   userId: number;
   name: string;
   nickname: string;
@@ -57,9 +58,6 @@ type PassType = {
 export const GetUser = (): Promise<UserType> =>
   instance.get('/users').then(res => res.data);
 
-export const PatchUser = (data: any) => {
-  instance.patch(`/users`, data);
-};
 export const DeleteUser = () => instance.delete(`/users`);
 
 export const PatchPass = (data: PassType) => {

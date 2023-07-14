@@ -6,14 +6,14 @@ import { useQuery } from '@tanstack/react-query';
 import { GetUser } from '../../../api/user/userInfo/userInfo';
 import ErrorPage from '../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../Common/Loading/Loading';
+import { Key } from 'react';
 
-const Common = (): JSX.Element => {
+const Common = () => {
   const navigate = useNavigate();
   const { data, isLoading, error, isSuccess } = useQuery({
     queryKey: ['UserInfo'],
     queryFn: () => GetUser(),
   });
-  console.log(data);
   if (error) {
     return <ErrorPage />;
   }
@@ -21,6 +21,7 @@ const Common = (): JSX.Element => {
     return <Loading />;
   }
   if (isSuccess) {
+    console.log(data);
     return (
       <>
         <TotalContainer>
@@ -28,7 +29,7 @@ const Common = (): JSX.Element => {
             <UserTopContainer>
               <User>
                 <img src={data.profileImage} alt="사용자 이미지" />
-                <span>{data.name}님</span>
+                <span>{data.data.name}님</span>
               </User>
               <Button
                 value={'회원 정보 수정'}
@@ -43,22 +44,24 @@ const Common = (): JSX.Element => {
             <UserBotContainer>
               <UserInfo>
                 <span className="title">닉네임</span>
-                <span className="desc">{data.nickname}</span>
+                <span className="desc">{data.data.nickname}</span>
               </UserInfo>
             </UserBotContainer>
             <UserBotContainer>
               <UserInfo>
                 <span className="title">이메일</span>
-                <span className="desc">{data.email}</span>
+                <span className="desc">{data.data.email}</span>
               </UserInfo>
             </UserBotContainer>
             <UserBotContainer>
               <UserInfo>
                 <span className="title">태그</span>
                 <span className="last-desc">
-                  {data.myTags.map(tag => (
-                    <span key={tag.tagId}>{`#${tag.tagName} `}</span>
-                  ))}
+                  {data.data.myTags.map(
+                    (tag: { tagId: Key | null | undefined; tagName: any }) => (
+                      <span key={tag.tagId}>{`#${tag.tagName} `}</span>
+                    ),
+                  )}
                 </span>
               </UserInfo>
             </UserBotContainer>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../../components/Common/Button/Button';
-import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import { ReactComponent as IcoGoogle } from '@/assets/images/account/icoGoogle.svg';
 import { useMutation } from '@tanstack/react-query';
@@ -17,9 +16,6 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginType>({ mode: 'onChange' });
-
-  const [email, setEmail] = useState('');
-  const [passWord, setPassword] = useState('');
 
   const LoginMutations = useMutation({
     mutationFn: (user: LoginType) => Login(user),

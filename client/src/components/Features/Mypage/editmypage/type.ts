@@ -6,14 +6,14 @@ export interface FileData {
 }
 
 type MapItem = {
-  tagId: number | string;
+  tagId: number;
 };
 
 export interface EditInfoType {
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
   target: {
-    id: number | string;
+    id: number;
     name: string;
   };
 
@@ -24,7 +24,7 @@ export interface EditInfoType {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 export interface Tag {
-  tagId: number | string;
+  tagId: number;
   tagName: string;
 }
 export interface UserInfoType {
@@ -32,4 +32,17 @@ export interface UserInfoType {
   email: string;
   nickname: string;
   profileImage: string | FileData | null;
+  data: {
+    userId: number;
+    nickname: string;
+    email: string;
+    profileImage: string;
+    tags: {
+      tagId: number;
+      tagName: string;
+    }[];
+    myTags: {
+      tagId: number;
+    }[];
+  };
 }

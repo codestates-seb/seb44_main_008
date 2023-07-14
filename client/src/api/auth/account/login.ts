@@ -7,5 +7,3 @@ interface loginType {
 
 export const Login = (data: loginType) =>
   axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, data);
-
-
