@@ -1,17 +1,19 @@
-import React, {
-  useEffect,
-  useState,
-  ChangeEvent,
-  useRef,
-  useCallback,
-} from 'react';
-import Button from '../../components/Common/Button/Button';
-import { AccountWrap } from './AccountStyle';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import noImg from '../../assets/images/account/noImg.png';
-import axios from 'axios';
+import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
+import { AccountWrap } from './AccountStyle';
 
+const tagsArr = [
+  { tagId: 1, tagName: '로맨스' },
+  { tagId: 2, tagName: '호러' },
+  { tagId: 3, tagName: '판타지' },
+  { tagId: 4, tagName: '드라마' },
+  { tagId: 5, tagName: 'sf' },
+  { tagId: 6, tagName: '액션' },
+];
 interface SignupType {
   userPostDto: {
     email: string;
@@ -21,19 +23,18 @@ interface SignupType {
     nickname: string;
     birth: string;
   };
-  profileImage: string;
 }
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
 
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
-  const [tag, setTag] = useState([]);
+  const [tag, setTag] = useState<number[]>([]);
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
@@ -92,60 +93,6 @@ const SignupForm = () => {
     }
   };
 
-  //태그 관련
-  //백엔드 api 헤더에서 토근을 요청하여 못보냄..!
-
-  // const tagsArr = [
-  //   {
-  //     tagId: 1,
-  //     tagName: '로맨스',
-  //   },
-  //   {
-  //     tagId: 2,
-  //     tagName: '호러',
-  //   },
-  //   {
-  //     tagId: 3,
-  //     tagName: '판타지',
-  //   },
-  //   {
-  //     tagId: 4,
-  //     tagName: '스포츠',
-  //   },
-  //   {
-  //     tagId: 5,
-  //     tagName: 'SF',
-  //   },
-  //   {
-  //     tagId: 6,
-  //     tagName: '액션',
-  //   },
-  //   {
-  //     tagId: 7,
-  //     tagName: '애니메이션',
-  //   },
-  //   {
-  //     tagId: 8,
-  //     tagName: '범죄',
-  //   },
-  //   {
-  //     tagId: 9,
-  //     tagName: '힐링',
-  //   },
-  //   {
-  //     tagId: 10,
-  //     tagName: '미스테리',
-  //   },
-  //   {
-  //     tagId: 11,
-  //     tagName: '뮤지컬',
-  //   },
-  //   {
-  //     tagId: 12,
-  //     tagName: '코미디',
-  //   },
-  // ];
-
   //이메일 유효성검사
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,9 +145,23 @@ const SignupForm = () => {
     [password],
   );
 
-  const onChangeTag = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {},
-    [],
+  const onClickTag = useCallback(
+    (tagId: number) => {
+      const value = tagId;
+      const Index = tag.findIndex(x => x === value);
+      if (Index === -1) {
+        if (tag.length >= 3) {
+          alert('최대 3개까지만 선택 가능합니다.');
+        } else {
+          setTag([...tag, value]);
+        }
+      } else {
+        const newArr = [...tag];
+        newArr.splice(Index, 1);
+        setTag(newArr);
+      }
+    },
+    [tag],
   );
 
   //이름 유효성 검사
@@ -274,12 +235,13 @@ const SignupForm = () => {
         userPostDto: {
           email: email,
           password: password,
-          tags: [{ tagId: 1 }, { tagId: 2 }],
+          tags: tag.map(v => {
+            return { tagId: v };
+          }),
           name: name,
           nickname: nickname,
           birth: birth,
         },
-        profileImage: '',
       };
 
       const formData = new FormData();
@@ -309,7 +271,9 @@ const SignupForm = () => {
       console.log(err);
     }
   };
-
+  useEffect(() => {
+    console.log('tag is', tag);
+  }, [tag]);
   return (
     <AccountWrap>
       <form onSubmit={SubmitEvent}>
@@ -384,21 +348,24 @@ const SignupForm = () => {
           <div>
             <div className="tagBtnWrap">
               <ul>
-                {/* {tagsArr.map(tag => {
+                {tagsArr.map(tagItem => {
+                  const selected = tag.includes(tagItem.tagId);
                   return (
-                    <li key={tag.tagId}>
+                    <li key={tagItem.tagId}>
                       <Button
                         type="button"
-                        value={`#${tag.tagName}`}
-                        id={tag.tagId}
+                        value={`#${tagItem.tagName}`}
+                        id={tagItem.tagId}
                         width={'100%'}
-                        onClick={onChangeTag}
+                        theme={selected ? 'variant' : ''}
+                        onClick={() => {
+                          onClickTag(tagItem.tagId);
+                        }}
                       />
                     </li>
                   );
-                })} */}
+                })}
               </ul>
-              <input type="hidden" value={tag} readOnly />
             </div>
             <div className="inputBox">
               <Input
