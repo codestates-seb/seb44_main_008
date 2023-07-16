@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DetailData, Group } from './detailType';
 import { useQuery } from '@tanstack/react-query';
@@ -7,6 +7,9 @@ import styled from 'styled-components';
 import Detail from '../../../components/Features/Detail/Detail';
 import Comment from '../../../components/Features/Detail/Comment/Comment';
 import PopperBox from '../../../components/Features/Detail/Popper/PopperBox';
+import axios from 'axios';
+import ErrorPage from '../../ErrorPage/ErrorPage';
+import Loading from '../../../components/Common/Loading/Loading';
 
 const Detailcontent = (): JSX.Element => {
   const id = useParams().id ?? '';
@@ -14,11 +17,27 @@ const Detailcontent = (): JSX.Element => {
 
   const [groups, setGroups] = useState<Group[]>([]);
 
-  const {} = useQuery({
-    queryKey: ['ReviewInfo'],
-    queryFn: () => GetUser(),
+  const getItem = async ({ reviewId }: { reviewId: string }) => {
+    const result = await axios.get(`/reviewBoards/${reviewId}`);
+    return result.data;
+  };
+  const {
+    data: userData,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery({
+    queryKey: ['ReviewInfo', id],
+    queryFn: () => {
+      return getItem({ reviewId: id });
+    },
   });
-
+  // if (error) {
+  //   return <ErrorPage />;
+  // }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
   return (
     <DetailWrap>
       <div className="detailBox">
