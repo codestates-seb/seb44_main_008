@@ -3,6 +3,9 @@ import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Button from '../../../Common/Button/Button';
 import { ButtonType } from '../../../Common/Button/type';
+import { useNavigate } from 'react-router-dom';
+import { DeleteTabB } from '../../../../api/user/userTab/userTab';
+import { Mutation, useMutation } from '@tanstack/react-query';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -32,6 +35,15 @@ const ContentB = ({ data }: tabBType) => {
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+  const deletePostMutation = useMutation(DeleteTabB);
+  const deleteHandler = (postId: number) => {
+    const confirmed = window.confirm('정말 이 게시글을 삭제하시겠습니까?');
+    if (confirmed) {
+      deletePostMutation.mutate(postId);
+      alert('게시글이 삭제되었습니다.');
+    }
+  };
+  const navigate = useNavigate();
 
   return (
     <>
@@ -49,8 +61,16 @@ const ContentB = ({ data }: tabBType) => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <StyledButton value={'수정'} theme="variant" />
-              <StyledButton value={'삭제'} theme="variant" />
+              <StyledButton
+                value={'수정'}
+                theme="variant"
+                onClick={() => navigate(`/detail/edit/${item.reviewBoardId}`)}
+              />
+              <StyledButton
+                value={'삭제'}
+                theme="variant"
+                onClick={() => deleteHandler(item.reviewBoardId)}
+              />
             </ListTail>
           </ListOnce>
         </ListContainer>
