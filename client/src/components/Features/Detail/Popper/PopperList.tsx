@@ -26,7 +26,7 @@ const PopperList: React.FC<PopperListProps> = ({
       <div className="popperList">
         <ul>
           {groups.map(item => {
-            const itemDate = item.date;
+            const itemDate = item.meetingDate;
             const year = itemDate.split('-')[0];
             const month = itemDate.split('-')[1];
             const date = itemDate.split('-')[2];
@@ -41,7 +41,7 @@ const PopperList: React.FC<PopperListProps> = ({
                       </li>
                       <li>장소: {item.location}</li>
                       <li>
-                        모집 인원: {item.users.length}/{item.max}
+                        모집 인원: {item.users.length}/{item.maxCapacity}
                       </li>
                     </ol>
                     <div className="profileImgWrap">

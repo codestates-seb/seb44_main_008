@@ -19,9 +19,12 @@ interface potItemData extends data {
   currentParticipant: number;
 }
 
-export const PostPot = (reviewId: number | undefined): Promise<potData> => {
+export const PostPot = (
+  reviewId: number | undefined,
+  data,
+): Promise<potData> => {
   return instance
-    .post(`/reviewBoards/${reviewId}/groups`)
+    .post(`/reviewBoards/${reviewId}/groups`, data)
     .then(res => res.data);
 };
 
