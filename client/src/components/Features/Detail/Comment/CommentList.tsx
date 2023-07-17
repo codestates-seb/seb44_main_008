@@ -4,14 +4,14 @@ import { GrClose } from 'react-icons/gr';
 import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 
-const CommentList = ({ answer }: { answer: Comments[] }) => {
+const CommentList = (data?: Comments[]) => {
   const [like, setLike] = useState(false);
   const likeHandler = () => {
     setLike(!like);
   };
   return (
     <CommentListWrap>
-      {answer.map(answer => {
+      {data.data.map(answer => {
         return (
           <li key={answer.commentId}>
             <div>
@@ -35,7 +35,7 @@ const CommentList = ({ answer }: { answer: Comments[] }) => {
               <p>{answer.content}</p>
               <div className="buttonWrap">
                 <Poplike onClick={likeHandler} like={like} />
-                <span>{answer.like} Pops</span>
+                <span>{answer.liked} Pops</span>
               </div>
             </div>
           </li>

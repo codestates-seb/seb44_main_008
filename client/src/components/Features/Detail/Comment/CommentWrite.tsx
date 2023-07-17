@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { PostComment } from '../../../../api/comment/comment';
@@ -7,6 +7,7 @@ import Button from '../../../Common/Button/Button';
 const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
   reviewId,
 }) => {
+  const queryClient = useQueryClient();
   const [body, setBody] = useState('');
   const [checkBody, setCheckBody] = useState(false);
 
@@ -16,9 +17,10 @@ const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
   };
 
   const writeMutations = useMutation({
-    mutationFn: postData => PostComment(reviewId),
+    mutationFn: postData => PostComment(reviewId, body),
     onSuccess(data) {
-      console.log('성공');
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+      setBody('');
     },
     onError(err) {
       console.log(err);
@@ -35,6 +37,7 @@ const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
         placeholder="리뷰에 대한 소감을 남겨보세요!"
         onChange={bodyChange}
         className={`${checkBody ? 'noText' : ''}`}
+        value={body}
       ></textarea>
       <Button
         type="variant"

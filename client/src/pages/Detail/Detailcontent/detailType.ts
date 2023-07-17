@@ -31,7 +31,8 @@ interface User2 {
 export interface Comments {
   commentId: number;
   content: string;
-  like: number;
+  liked: boolean;
+  likes: number;
   createdAt: string;
   user: User1;
 }

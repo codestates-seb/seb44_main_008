@@ -256,7 +256,7 @@ const SignupForm = () => {
       }
 
       const result = await axios.post(
-        'http://ec2-3-36-90-214.ap-northeast-2.compute.amazonaws.com:8080/users',
+        `${import.meta.env.VITE_BASE_URL}/users`,
         formData,
         {
           headers: {
