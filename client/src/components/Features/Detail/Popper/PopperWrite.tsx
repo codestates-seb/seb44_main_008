@@ -3,20 +3,29 @@ import Button from '../../../Common/Button/Button';
 import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { PostPot } from '../../../../api/pot/pot';
+import { useNavigate } from 'react-router-dom';
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
+const PopperWrite: React.FC<PopperWriteProps> = ({
+  setCurrentRender,
+  reviewId,
+  movie,
+}) => {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [person, setPerson] = useState<number>();
+  const [body, setBody] = useState<string>('');
   const [checkTitle, setCheckTitle] = useState<boolean>(false);
   const [checkLocation, setCheckLocation] = useState<boolean>(false);
   const [checkPerson, setCheckPerson] = useState<boolean>(false);
   const today = getTodayDate();
   const [saleStartDate, setSaleStartDate] = useState(today);
-  console.log(today);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckTitle(false);
@@ -32,7 +41,33 @@ const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
     if (isNaN(value)) return;
     setPerson(value);
   };
+  const bodyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBody(e.currentTarget.value);
+  };
 
+  console.log('reviewId', reviewId);
+  const submitData = {
+    title: title,
+    meetingDate: saleStartDate,
+    location: location,
+    maxCapacity: person,
+    content: body,
+    movieTitle: movie,
+  };
+  const SubmitEvent = () => {
+    console.log(submitData);
+    writeMutations.mutate(submitData);
+  };
+  const writeMutations = useMutation({
+    mutationFn: () => PostPot(reviewId, submitData),
+    onSuccess(data) {
+      console.log(data);
+      setCurrentRender('List');
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
   return (
     <PopperBox>
       <h2 className="popperTitle">다른 팝퍼들과 함께 보면 재미가 2배!🍿</h2>
@@ -76,6 +111,8 @@ const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
         <textarea
           className="popTextArea"
           placeholder="간단한 팟 소개글을 작성해보세요!"
+          value={body}
+          onChange={bodyChange}
         ></textarea>
       </div>
       <div className="popperButtonWrap">
@@ -90,6 +127,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({ setCurrentRender }) => {
           value="팟 모집하기"
           width="calc(100% - 3.5rem)"
           type="variant"
+          onClick={SubmitEvent}
         />
       </div>
     </PopperBox>
