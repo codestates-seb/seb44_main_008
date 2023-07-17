@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
 // import { data } from './tabAB';
 import Poplike from '../../../Common/PopIcons/Poplike';
+import { useMutation } from '@tanstack/react-query';
+import { DeleteTabA } from '../../../../api/user/userTab/userTab';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -28,20 +30,26 @@ type tabAType = {
 };
 
 const ContentA = ({ data }: tabAType) => {
+  const [tabAPost, setAPost] = useState(data);
   console.log('data1', data);
   const [like, setLike] = useState(true);
-  const likeHandler = () => {
-    setLike(!like);
+  const deletePostMutation = useMutation(DeleteTabA);
+  const likeHandler = (reviewId: number) => {
+    const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
+    if (confirmed) {
+      deletePostMutation.mutate(reviewId);
+      alert('게시글이 찜 해제되었습니다.');
+    }
   };
 
-  const [totalElements, setTotalElements] = useState(data.length);
+  const [totalElements, setTotalElements] = useState(tabAPost.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
   return (
     <>
-      {data.slice(offset, offset + limit).map(item => (
+      {tabAPost.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce>
             <ListHead>
@@ -55,7 +63,10 @@ const ContentA = ({ data }: tabAType) => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <Poplike onClick={likeHandler} like={like} />
+              <Poplike
+                onClick={() => likeHandler(item.reviewBoardId)}
+                like={like}
+              />
             </ListTail>
           </ListOnce>
         </ListContainer>
