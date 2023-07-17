@@ -1,20 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { PopperDetailData } from './popperType';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
-
-const response = {
-  data: {
-    groupId: 1,
-    title: '맥주 두 캔들고 같이 봐요!',
-    meetingDate: '2023-06-30T20:00',
-    location: 'Watcha Party',
-    maxCapacity: 5,
-    content: ` 안녕하세요! 사회에 찌든 직장인 입니다. 리뷰 읽으니 집사로서 보지
-    않으면 안될 것 같더라구요! 저랑 같이 저녁 드시고 맥주 한 캔 까면서
-    고양이의 보은 같이 보실 5분 모집합니다! 편하게 신청해주세요!`,
-  },
-};
+import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
+import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
+import Loading from '../../../Common/Loading/Loading';
 
 type PopperDetailProps = {
   currentId: number;
@@ -37,17 +28,42 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     setCurrentID(id);
   };
 
-  const getData = useCallback(async () => {
-    try {
-      // const response = await axios.get(`/groups/${id}`);
-      setGroups(response.data);
-    } catch (err) {
-      console.log('err', err);
-    }
-  }, [id]);
-  useEffect(() => {
-    getData();
-  }, []);
+  const joinPotData = {
+    groupId: id,
+    currentParticipant: 10,
+  };
+  const SubmitEvent = () => {
+    writeMutations.mutate(joinPotData);
+  };
+  const writeMutations = useMutation({
+    mutationFn: () => JoinPot(id, joinPotData),
+    onSuccess(data) {
+      setCurrentRender('List');
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+  const {
+    data: dataItem,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery({
+    queryKey: ['groupInfo', id],
+    queryFn: () => {
+      return GetPotItem(id);
+    },
+  });
+
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  console.log(id);
 
   return (
     <PopperBox>
@@ -56,13 +72,13 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
         같이 보고 싶어하는 팝퍼🍿
       </h2>
       <div className="popperDetail">
-        <h4>{groups.title}</h4>
+        <h4>{dataItem.data.title}</h4>
         <ol>
-          <li>일시 : {groups.meetingDate}</li>
-          <li>장소: {groups.location}</li>
-          <li>모집 인원: 최대 {groups.maxCapacity}명</li>
+          <li>일시 : {dataItem.data.meetingDate}</li>
+          <li>장소: {dataItem.data.location}</li>
+          <li>모집 인원: 최대 {dataItem.data.maxCapacity}명</li>
         </ol>
-        <p>{groups.content}</p>
+        <p>{dataItem.data.content}</p>
       </div>
       <div className="popperButtonWrap">
         {currentPage === 'popDetail' && (
@@ -75,7 +91,13 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
               width="2.438rem"
             />
             <div className="popDetailButtonBox">
-              <Button value="모집 신청" width="100%" type="variant" />
+              <Button
+                value="모집 신청"
+                width="100%"
+                theme="variant"
+                type="button"
+                onClick={SubmitEvent}
+              />
             </div>
           </>
         )}
