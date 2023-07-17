@@ -42,7 +42,7 @@ const Routers = () => {
         />
         <Route path="/detail/write" element={<Writecontent />} />
         <Route path="/detail/edit" element={<EditContent />} />
-        <Route path="/detail/content" element={<Detailcontent />} />
+        <Route path="/detail/content/:reviewId" element={<Detailcontent />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<Editmypage />} />
         <Route path="/mypage/edit/pass" element={<Editpassword />} />

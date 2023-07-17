@@ -97,6 +97,10 @@ export const postNewReview = (data: ItemType) => {
   });
 };
 
+export const getItem = (reviewId: string | undefined) => {
+  return instance.get(`/reviewBoards/${reviewId}`).then(res => res.data);
+};
+
 export const editReview = (data: ItemType) => {
   instance.patch('/reviewBoards/{review-id}', data);
 };
