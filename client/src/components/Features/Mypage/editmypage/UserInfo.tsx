@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   MouseEvent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -45,20 +46,35 @@ const UserInfo = () => {
 
   const [image, setImage] = useState<FileData | null>();
   const fileInput = useRef(null);
+  const [nicknameMsg, setnickNameMsg] = useState<string>('');
+  const [isnickName, setIsnickName] = useState(true);
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserNickname(e.target.value);
-  };
+  const onChangeNickName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUserNickname(e.target.value);
+      if (!e.target.value) {
+        setnickNameMsg('닉네임은 필수입력입니다.');
+        setIsnickName(false);
+      } else {
+        setIsnickName(true);
+      }
+    },
+    [],
+  );
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    mutationPatch.mutate({
-      userPatchDto: {
-        nickname: nickNameIn,
-        tags: selectedTags.map(tag => ({ tagId: tag.tagId })),
-      },
-      profileImage: image,
-    });
+    const confirmed = window.confirm('회원정보를 저장하시겠습니까?');
+    if (confirmed) {
+      mutationPatch.mutate({
+        userPatchDto: {
+          nickname: nickNameIn,
+          tags: selectedTags.map(tag => ({ tagId: tag.tagId })),
+        },
+        profileImage: image,
+      });
+      alert('회원정보가 저장되었습니다.');
+    }
   };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +131,7 @@ const UserInfo = () => {
     return (
       <>
         <Container>
-          <form onSubmit={handleSubmit}>
+          <FormContainer onSubmit={handleSubmit}>
             <ImgContainer>
               <img
                 src={tempImg}
@@ -143,12 +159,17 @@ const UserInfo = () => {
             <EditInputContainer>
               <NicknameContainer>
                 <p>닉네임</p>
-                <Input
-                  placeholder="닉네임"
-                  value={data.data.nickname && data.data.nickname}
-                  onChange={handleInput}
-                  isvalid={'false'}
-                />
+                <NicknameInner>
+                  <Input
+                    placeholder="닉네임"
+                    value={data.data.nickname && data.data.nickname}
+                    onChange={onChangeNickName}
+                    isvalid={isnickName!.toString()}
+                  />
+                  {userNickname.length === 0 && !isnickName ? (
+                    <span>{nicknameMsg}</span>
+                  ) : null}
+                </NicknameInner>
               </NicknameContainer>
             </EditInputContainer>
             <TopContainer>
@@ -190,14 +211,31 @@ const UserInfo = () => {
                 value="비밀번호 수정"
                 onClick={() => navigate('/mypage/edit/pass')}
               />
-              <Button width="47%" value="회원정보 저장" type="variant" />
+              <Button width="47%" value="회원정보 저장" theme="variant" />
             </TailContainer>
-          </form>
+          </FormContainer>
         </Container>
       </>
     );
   }
 };
+
+const NicknameInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & > span {
+    margin-top: 0.4rem;
+    color: var(--white-color);
+  }
+`;
+
+const FormContainer = styled.form`
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,9 +243,10 @@ const TopContainer = styled.div`
   align-items: center;
   width: 100%;
   & > p {
+    margin-top: 1rem;
     align-self: flex-start;
     padding-bottom: 1rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: var(--footer-icon-color);
   }
 `;
@@ -291,10 +330,12 @@ const NicknameContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
+  margin: 0.5rem 0 1rem 0;
   p {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #cfcfcf;
     width: 100%;
+    margin-top: 0.3rem;
     padding-right: 1.5rem;
   }
 `;

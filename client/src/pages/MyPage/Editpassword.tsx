@@ -12,7 +12,9 @@ const Editpassword = () => {
   const [confirmPw, setConfirmPw] = useState('');
   const navigate = useNavigate();
   const mutationPatch = useMutation(PatchEditUserPassword, {
-    onSuccess: data => {},
+    onError: () => {
+      alert('현재 비밀번호가 일치하지 않습니다.');
+    },
   });
 
   const pwChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,10 +28,18 @@ const Editpassword = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutationPatch.mutate({
-      currentPw: currentPw,
-      newPw: editPw,
-    });
+    if (editPw !== confirmPw) {
+      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다!!');
+    } else {
+      const confirmed = window.confirm('비밀번호를 변경하시겠습니까?');
+      if (confirmed) {
+        mutationPatch.mutate({
+          currentPw: currentPw,
+          newPw: editPw,
+        });
+        alert('비밀번호가 변경되었습니다.');
+      }
+    }
   };
   return (
     <>
