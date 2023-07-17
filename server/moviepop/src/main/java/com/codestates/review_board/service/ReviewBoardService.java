@@ -142,7 +142,7 @@ public class ReviewBoardService {
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> {
                     boolean isLiked = commentLikeRepository.existsByCommentAndUser(comment,user);
-                    CommentDto.Response responseDto = commentMapper.commentToCommentResponseDto(comment);
+                    CommentDto.Response responseDto = commentMapper.commentToCommentResponseDto(comment, imageUtil);
                     responseDto.setLiked(isLiked);
                     return responseDto;
                 })
