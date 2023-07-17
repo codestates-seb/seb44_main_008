@@ -14,6 +14,7 @@ export const AccountWrap = styled.div`
     flex-direction: column;
     input {
       margin-bottom: 0.5rem;
+      width: 100%;
     }
     .signImg {
       position: relative;
@@ -21,7 +22,7 @@ export const AccountWrap = styled.div`
       height: 10rem;
       border-radius: 100%;
       overflow: hidden;
-      margin: 0 auto 3rem;
+      margin: 0 auto 0;
       label {
         position: absolute;
         left: 0;
@@ -68,6 +69,13 @@ export const AccountWrap = styled.div`
   }
   .inputBox {
     margin-bottom: 1.5rem;
+    &.imgBox {
+      text-align: center;
+      span {
+        display: block;
+        padding-top: 1rem;
+      }
+    }
     & > span {
       color: var(--white-color);
     }

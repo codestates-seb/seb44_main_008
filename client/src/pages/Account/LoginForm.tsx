@@ -1,26 +1,79 @@
-import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import Button from '../../components/Common/Button/Button';
-import { AccountWrap } from './AccountStyle';
 import { ReactComponent as IcoGoogle } from '@/assets/images/account/icoGoogle.svg';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Login } from '../../api/auth/account/login';
+import Button from '../../components/Common/Button/Button';
+import Input from '../../components/Common/Input/Input';
+import { AccountWrap } from './AccountStyle';
+import { useCallback, useState } from 'react';
 interface LoginType {
   email: string;
   password: string;
 }
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const {
-    register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginType>({ mode: 'onChange' });
+  } = useForm<LoginType>();
+  const [email, setEmail] = useState<string>('');
+  const [emailMsg, setEmailMsg] = useState<string>('');
+  const [isEmail, setIsEmail] = useState<boolean>(true);
 
-  const LoginMutations = useMutation({
+  const [password, setPassword] = useState<string>('');
+  const [isPassword, setIsPassword] = useState<boolean>(true);
+
+  //이메일 유효성검사
+  const onChangeEmail = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const emailRegex =
+        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      const emailCurrent = e.target.value;
+      setEmail(emailCurrent);
+      if (!emailRegex.test(emailCurrent)) {
+        setEmailMsg('이메일 형식이 틀렸습니다.');
+        setIsEmail(false);
+      } else {
+        setEmailMsg('');
+        setIsEmail(true); // 유효성 검사 통과 시 true로 설정
+      }
+    },
+    [],
+  );
+
+  const onChangePassword = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const passwordCurrent = e.target.value;
+      setPassword(passwordCurrent);
+    },
+    [],
+  );
+
+  const onSubmit: SubmitHandler<LoginType> = data => {
+    if (email.length === 0 || emailMsg) {
+      setIsEmail(false);
+      return;
+    } else {
+      setIsEmail(true);
+    }
+    if (password.length === 0) {
+      setIsPassword(false);
+      return;
+    } else {
+      setIsPassword(true);
+    }
+    SubmitEvent.mutate({
+      email: email,
+      password: password,
+    });
+  };
+
+  const SubmitEvent = useMutation({
     mutationFn: (user: LoginType) => Login(user),
     onSuccess(data) {
-      console.log(data);
+      console.log('da', data);
       if (data.status === 200) {
         const accessToken = data.headers.authorization;
         const refreshToken = data.headers.refresh;
@@ -30,7 +83,9 @@ const LoginForm = () => {
         if (refreshToken) {
           localStorage.setItem('refreshToken', refreshToken);
         }
-        // window.location.href = `${import.meta.env.VITE_BASE_URL}/main`;
+        navigate('/main');
+      } else {
+        alert('로그인 실패');
       }
     },
     onError(error: any) {
@@ -41,38 +96,30 @@ const LoginForm = () => {
     },
   });
 
-  const onValid: SubmitHandler<LoginType> = (data: any) => {
-    LoginMutations.mutate({ ...data });
-    console.log(data);
-  };
   return (
     <AccountWrap>
-      <form onSubmit={handleSubmit(onValid)}>
-        <input
-          id="email"
-          type="text"
-          {...register('email', {
-            required: '이메일은 필수 입력입니다.',
-            pattern: {
-              value:
-                /^[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-              message: '이메일 형식에 맞지 않습니다.',
-            },
-          })}
-          placeholder="이메일"
-        />
-        <input
-          id="password"
-          type="password"
-          {...register('password', {
-            required: '비밀번호는 필수 입력입니다.',
-            minLength: {
-              value: 7,
-              message: '7자리 이상 비밀번호를 입력하세요.',
-            },
-          })}
-          placeholder="비밀번호"
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="inputBox">
+          <Input
+            id="email"
+            type="text"
+            placeholder="이메일"
+            isvalid={isEmail}
+            value={email}
+            onChange={onChangeEmail}
+          />
+          {email.length > 0 && !isEmail ? <span>{emailMsg}</span> : null}
+        </div>
+        <div className="inputBox">
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            placeholder="비밀번호"
+            isvalid={isPassword}
+            onChange={onChangePassword}
+          />
+        </div>
         <Button value="로그인" width="100%" type="submit" />
       </form>
       <button type="button" className="snsButton">
