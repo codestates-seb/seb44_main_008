@@ -27,7 +27,7 @@ interface SignupType {
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
 
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);
@@ -256,7 +256,7 @@ const SignupForm = () => {
       }
 
       const result = await axios.post(
-        'http://ec2-13-124-233-228.ap-northeast-2.compute.amazonaws.com:8080/users',
+        'http://ec2-3-36-90-214.ap-northeast-2.compute.amazonaws.com:8080/users',
         formData,
         {
           headers: {
@@ -279,7 +279,7 @@ const SignupForm = () => {
       <form onSubmit={SubmitEvent}>
         {page === 1 && (
           <div>
-            <div className="inputBox">
+            <div className="inputBox imgBox">
               <div className="signImg">
                 <label htmlFor="picture" />
                 {imgfile ? (
