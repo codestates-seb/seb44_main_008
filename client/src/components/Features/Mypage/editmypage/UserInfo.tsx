@@ -22,6 +22,7 @@ import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
 
 const UserInfo = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [userNickname, setUserNickname] = useState('');
   const { data, isLoading, error, isSuccess } = useQuery({
@@ -74,6 +75,7 @@ const UserInfo = () => {
         profileImage: image,
       });
       alert('회원정보가 저장되었습니다.');
+      navigate('/mypage');
     }
   };
 
@@ -118,7 +120,6 @@ const UserInfo = () => {
       setSelectedTags([...selectedTags, newTag]);
     }
   };
-  const navigate = useNavigate();
 
   if (error) {
     return <ErrorPage />;
