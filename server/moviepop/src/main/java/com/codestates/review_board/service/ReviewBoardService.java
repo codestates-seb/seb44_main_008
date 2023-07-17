@@ -108,10 +108,10 @@ public class ReviewBoardService {
         getReviewboard.getReviewBoardTags().clear();
         getReviewboard.getReviewBoardTags().addAll(newTags);
 
-        String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
-        getReviewboard.setThumbnail(imageUrl);
-
-        storageService.storeThumbnailImage(thumbnail);
+        if(thumbnail == null) {
+            String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
+            getReviewboard.setThumbnail(imageUrl);
+        }
 
         return findDetailReviewBoard(user, reviewBoard.getReviewBoardId());
     }
