@@ -4,14 +4,19 @@ export type DetailData = {
   review?: string;
   thumbnail?: string;
   wish?: number;
-  isWish?: boolean;
+  wished?: boolean;
   createdAt?: string;
   tags?: { tagId: number; tagName: string }[];
+  movie?: Movie;
   user?: User1;
   comments?: Comments[];
   groups?: Group[];
 };
 
+interface Movie {
+  movieId: number;
+  title: string;
+}
 interface User1 {
   userId: number;
   nickname: string;
@@ -35,8 +40,8 @@ export interface Group {
   groupId: number;
   title: string;
   location: string;
-  date: string;
-  max: number;
-  current: number;
+  meetingDate: string;
+  maxCapacity: number;
+  currentParticipant: number;
   users: User2[];
 }

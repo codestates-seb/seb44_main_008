@@ -30,7 +30,7 @@ interface CommentDatas {
   }[];
 }
 
-export const PostComment = (reviewId: number | undefined) => {
+export const PostComment = (reviewId: string | number | undefined) => {
   return instance
     .post(`/reviewBoards/${reviewId}/comments`)
     .then(res => res.data);
