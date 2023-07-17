@@ -35,15 +35,19 @@ const Detailcontent = (): JSX.Element => {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(reviewId);
+  console.log(dataItem.reviewBoardId);
   return (
     <DetailWrap>
       <div className="detailBox">
-        <Detail data={dataItem} />-
+        <Detail data={dataItem} />
         <Comment reviewId={reviewId} data={dataItem.comments} />
       </div>
       <div className="popperBox">
-        <PopperBox groups={groups} />
+        <PopperBox
+          groups={dataItem.groups}
+          reviewId={dataItem.reviewBoardId}
+          movie={dataItem.movie.title}
+        />
       </div>
     </DetailWrap>
   );

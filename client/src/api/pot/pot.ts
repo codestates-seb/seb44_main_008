@@ -19,10 +19,7 @@ interface potItemData extends data {
   currentParticipant: number;
 }
 
-export const PostPot = (
-  reviewId: number | undefined,
-  data,
-): Promise<potData> => {
+export const PostPot = (reviewId: number | undefined, data: potData) => {
   return instance
     .post(`/reviewBoards/${reviewId}/groups`, data)
     .then(res => res.data);
@@ -49,4 +46,13 @@ export const GetPotItemAll = (
 
 export const DeletePot = (groupId: number | undefined) => {
   return instance.delete(`/groups/${groupId}`).then(res => res.data);
+};
+
+export const JoinPot = (
+  groupId: number | undefined,
+  joinPotData: potItemData,
+) => {
+  return instance
+    .post(`/users/groups/${groupId}`, joinPotData)
+    .then(res => res.data);
 };

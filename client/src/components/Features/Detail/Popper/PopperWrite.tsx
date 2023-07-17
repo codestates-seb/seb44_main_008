@@ -3,9 +3,9 @@ import Button from '../../../Common/Button/Button';
 import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { PostPot } from '../../../../api/pot/pot';
-import { useNavigate } from 'react-router-dom';
+
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -15,7 +15,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   reviewId,
   movie,
 }) => {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
@@ -61,7 +61,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   const writeMutations = useMutation({
     mutationFn: () => PostPot(reviewId, submitData),
     onSuccess(data) {
-      console.log(data);
+      queryClient.invalidateQueries(['popperInfo', reviewId]);
       setCurrentRender('List');
     },
     onError(err) {
