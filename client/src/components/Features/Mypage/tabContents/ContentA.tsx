@@ -35,8 +35,11 @@ const ContentA = ({ data }: tabAType) => {
   const [like, setLike] = useState(true);
   const deletePostMutation = useMutation(DeleteTabA);
   const likeHandler = (reviewId: number) => {
-    alert('정말 게시글을 찜 해제 하시겠습니까?');
-    deletePostMutation.mutate(reviewId);
+    const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
+    if (confirmed) {
+      deletePostMutation.mutate(reviewId);
+      alert('게시글이 찜 해제되었습니다.');
+    }
   };
 
   const [totalElements, setTotalElements] = useState(tabAPost.length);

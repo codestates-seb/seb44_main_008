@@ -6,3 +6,6 @@ export const GetTabA = (): Promise<UserType> =>
 
 export const DeleteTabA = (postId: number) =>
   instance.delete(`/users/reviewBoards/${postId}`).then(res => res.data);
+
+export const DeleteTabB = (postId: number) =>
+  instance.delete(`/reviewBoards/${postId}`).then(res => res.data);
