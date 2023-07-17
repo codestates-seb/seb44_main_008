@@ -38,8 +38,12 @@ const UserArea = () => {
     setMyShow(false);
   }, []);
   const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    //dispatch(resetUser());
+    // dispatch(resetUser());
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setMyShow(false);
+    navigate('/');
+    location.reload();
   }, []);
 
   const onClickTagButton = e => {
