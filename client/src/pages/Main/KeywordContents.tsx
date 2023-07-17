@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
 
@@ -6,20 +8,23 @@ import SingleItem from '../../components/Features/SingleItem/SingleItem';
 
 import isPropValid from '@emotion/is-prop-valid';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getAllItems } from '../../api/reviewItem/reviewItem';
+import { getKeywordSearchItems } from '../../api/reviewItem/searchItem';
 import InfiniteScroll from 'react-infinite-scroller';
 import ErrorPage from '../ErrorPage/ErrorPage';
 
-const Allcontents = () => {
+const KeywordContents = () => {
+  const { keywordParam } = useParams<{ keywordParam: string }>();
+  //   const [isReLoad, setIsReLoad] = useState(false);
+
   const {
-    data: allReviews,
+    data: keywordSearchItems,
     fetchNextPage,
     hasNextPage,
     isLoading,
     isError,
   } = useInfiniteQuery(
-    ['allItems'],
-    ({ pageParam = 1 }) => getAllItems(pageParam),
+    ['keywordSearchItems'],
+    ({ pageParam = 1 }) => getKeywordSearchItems(pageParam, keywordParam),
     {
       getNextPageParam: currentPage => {
         const nextPage = currentPage.pageInfo.page + 1;
@@ -28,22 +33,16 @@ const Allcontents = () => {
     },
   );
 
-  // const [isLoading, setIsLoading] = useState(true);
-  //
-  // useEffect(() => {
-  //   let timer;
-  //   if (isLoading) {
-  //     timer = setTimeout(() => {
-  //       setIsLoading(false);
-  //     }, 5000); // 5초의 딜레이 설정
-  //   }
+  console.log(keywordParam);
+  console.log(keywordSearchItems);
 
-  //   return () => clearTimeout(timer);
-  // }, [isLoading]);
+  //   useEffect(() => {
+  //     setIsReLoad(!isReLoad);
+  //   }, [Param]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  // }, [fetchNextPage]); // 다음 페이지 로드 시 isLoading을 true로 설정
+  //   useEffect(() => {
+  //     setIsReLoad(!isReLoad);
+  //   }, [keywordSearchItems]);
 
   const navigate = useNavigate();
 
@@ -54,7 +53,7 @@ const Allcontents = () => {
   return (
     <DefaultContainer>
       <div>
-        <h1>전체 리뷰 게시글</h1>
+        <h1>{keywordParam} 관련 리뷰 게시글</h1>
       </div>
       <InfiniteScroll
         hasMore={hasNextPage}
@@ -63,8 +62,8 @@ const Allcontents = () => {
         }}
       >
         <StaticContainer>
-          {allReviews?.pages.map(pages => {
-            return pages?.data.map(page => {
+          {keywordSearchItems?.pages.map(pages => {
+            return pages?.data?.map(page => {
               return (
                 <StyleSheetManager
                   key={page.reviewBoardId}
@@ -102,7 +101,7 @@ const Allcontents = () => {
   );
 };
 
-export default Allcontents;
+export default KeywordContents;
 
 const DefaultContainer = styled.div`
   display: flex;

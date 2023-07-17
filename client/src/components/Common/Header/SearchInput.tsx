@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 
 const SearchInput = () => {
   const [thisText, setThisText] = useState('');
+  const navigate = useNavigate();
   const onChangeThis = (e: React.ChangeEvent<HTMLInputElement>) => {
     setThisText(e.currentTarget.value);
   };
-  const submitQuery = () => {};
+  const submitQuery = () => {
+    navigate(`/main/search/${thisText}`);
+  };
   return (
     <SearchInputBox>
       <input
