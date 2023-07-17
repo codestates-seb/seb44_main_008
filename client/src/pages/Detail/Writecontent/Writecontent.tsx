@@ -18,6 +18,7 @@ const Writecontent = () => {
 
   const [title, setTitle] = useState<string>('');
   const [movieTitle, setMovieTitle] = useState<string>('');
+  const [movieId, setMovieId] = useState<number>(0);
   const [selectedTags, setSelectedTags] = useState<Object[]>([]);
   const [content, setContent] = useState<string>('');
 
@@ -118,13 +119,13 @@ const Writecontent = () => {
       const submitData = {
         post: {
           title: title,
-          movieId: 1,
+          movieId: movieId,
           review: content,
           tags: selectedTags,
         },
         thumbnail: file[0],
       };
-
+      console.log(submitData);
       writeMutations.mutate(submitData);
     }
   };
@@ -141,6 +142,7 @@ const Writecontent = () => {
           <MovieTitleModal
             setModalOn={setModalOn}
             setMovieTitle={setMovieTitle}
+            setMovieId={setMovieId}
           />
         ) : (
           <></>

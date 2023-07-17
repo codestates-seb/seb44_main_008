@@ -8,12 +8,14 @@ import Login from '../Account/LoginForm';
 import Main from '../Main/Main';
 import Allcontents from '../Main/Allcontents';
 import Writecontent from '../Detail/Writecontent/Writecontent';
+import EditContent from '../Detail/Writecontent/EditContent';
 import Detailcontent from '../Detail/Detailcontent/Detailcontent';
 import Mypage from '../MyPage/Mypage';
 import Editmypage from '../MyPage/Editmypage';
 import Editpassword from '../MyPage/Editpassword';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import TagContents from '../Main/TagContents';
+import KeywordContents from '../Main/KeywordContents';
 
 const Routers = () => {
   const hideNavbar = ['/', '/start'];
@@ -34,7 +36,12 @@ const Routers = () => {
         <Route path="/main" element={<Main />} />
         <Route path="/main/contents" element={<Allcontents />} />
         <Route path="/main/contents/:tagIdParam" element={<TagContents />} />
+        <Route
+          path="/main/search/:keywordParam"
+          element={<KeywordContents />}
+        />
         <Route path="/detail/write" element={<Writecontent />} />
+        <Route path="/detail/edit" element={<EditContent />} />
         <Route path="/detail/content" element={<Detailcontent />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<Editmypage />} />

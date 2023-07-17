@@ -6,7 +6,11 @@ import Input from '../../../Common/Input/Input';
 import { useQuery } from '@tanstack/react-query';
 import { getMovie } from '../../../../api/movie/movie';
 
-const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
+const MovieTitleModal = ({
+  setModalOn,
+  setMovieTitle,
+  setMovieId,
+}: WriteModalType) => {
   const [searchTitle, setSearchTitle] = useState('');
 
   const onClickBackground = () => {
@@ -28,6 +32,7 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
   const onClickMovieTitle = event => {
     console.log(event.target.innerHTML);
     setMovieTitle && setMovieTitle(event.target.innerHTML);
+    setMovieId && setMovieId(event.target.id);
     setModalOn && setModalOn(false);
     document.body.style.overflow = 'unset';
   };
@@ -53,6 +58,7 @@ const MovieTitleModal = ({ setModalOn, setMovieTitle }: WriteModalType) => {
                     return (
                       <SearchResult
                         key={item.movieId}
+                        id={item.movieId}
                         value={item.title}
                         onClick={onClickMovieTitle}
                       >
