@@ -108,7 +108,7 @@ public class ReviewBoardService {
         getReviewboard.getReviewBoardTags().clear();
         getReviewboard.getReviewBoardTags().addAll(newTags);
 
-        if(thumbnail == null) {
+        if(thumbnail != null) {
             String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
             getReviewboard.setThumbnail(imageUrl);
         }
