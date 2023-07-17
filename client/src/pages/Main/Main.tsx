@@ -51,6 +51,7 @@ const Main = () => {
             <SpecialContainer>
               <SliderContainer>
                 <SingleItem
+                  reviewId={item.reviewBoardId}
                   src={item.thumbnail}
                   title={item.title}
                   date={item.createdAt}
@@ -74,6 +75,7 @@ const Main = () => {
             <SpecialContainer>
               <SliderContainer>
                 <SingleItem
+                  reviewId={item.reviewBoardId}
                   src={item.thumbnail}
                   title={item.title}
                   date={item.createdAt}
@@ -131,6 +133,7 @@ const Main = () => {
                     shouldForwardProp={prop => isPropValid(prop)}
                   >
                     <SingleItem
+                      reviewId={item.reviewBoardId}
                       src={item.thumbnail}
                       title={item.title}
                       date={item.createdAt}

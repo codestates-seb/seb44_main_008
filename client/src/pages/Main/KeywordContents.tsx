@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useNavigate } from 'react-router';
@@ -14,7 +14,6 @@ import ErrorPage from '../ErrorPage/ErrorPage';
 
 const KeywordContents = () => {
   const { keywordParam } = useParams<{ keywordParam: string }>();
-  //   const [isReLoad, setIsReLoad] = useState(false);
 
   const {
     data: keywordSearchItems,
@@ -28,27 +27,12 @@ const KeywordContents = () => {
     {
       getNextPageParam: currentPage => {
         const nextPage = currentPage.pageInfo.page + 1;
-        return nextPage > currentPage.pageInfo?.totalPages ? null : nextPage;
+        return nextPage > currentPage.pageInfo?.totalPages
+          ? undefined
+          : nextPage;
       },
     },
   );
-
-  console.log(keywordParam);
-  console.log(keywordSearchItems);
-
-  //   useEffect(() => {
-  //     setIsReLoad(!isReLoad);
-  //   }, [Param]);
-
-  //   useEffect(() => {
-  //     setIsReLoad(!isReLoad);
-  //   }, [keywordSearchItems]);
-
-  const navigate = useNavigate();
-
-  const onClickSingleItem = () => {
-    navigate('/detail/content');
-  };
 
   return (
     <DefaultContainer>
@@ -70,12 +54,12 @@ const KeywordContents = () => {
                   shouldForwardProp={prop => isPropValid(prop)}
                 >
                   <SingleItem
+                    reviewId={page.reviewBoardId}
                     src={page.thumbnail}
                     title={page.title}
                     date={page.createdAt}
                     author={page?.user.nickname}
                     isMain={true}
-                    onClick={onClickSingleItem}
                   ></SingleItem>
                 </StyleSheetManager>
               );

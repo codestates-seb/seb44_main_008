@@ -28,7 +28,9 @@ const TagContents = () => {
     {
       getNextPageParam: currentPage => {
         const nextPage = currentPage.pageInfo.page + 1;
-        return nextPage > currentPage.pageInfo?.totalPages ? null : nextPage;
+        return nextPage > currentPage.pageInfo?.totalPages
+          ? undefined
+          : nextPage;
       },
       enabled: !!isReLoad,
     },
@@ -68,6 +70,7 @@ const TagContents = () => {
                   shouldForwardProp={prop => isPropValid(prop)}
                 >
                   <SingleItem
+                    reviewId={page.reviewBoardId}
                     src={page.thumbnail}
                     title={page.title}
                     date={page.createdAt}
