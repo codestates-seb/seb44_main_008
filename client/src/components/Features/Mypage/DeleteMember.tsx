@@ -1,9 +1,19 @@
+import { useMutation } from '@tanstack/react-query';
 import { styled } from 'styled-components';
+import { DeleteUser } from '../../../api/user/userInfo/userInfo';
 
 const DeleteMember = () => {
+  const mutationDelete = useMutation(DeleteUser);
+  const deletehandler = () => {
+    const confirmed = window.confirm('회원 탈퇴를 하시겠습니까?');
+    if (confirmed) {
+      mutationDelete.mutate();
+      alert('회원 탈퇴가 정상적으로 완료되었습니다.');
+    }
+  };
   return (
     <Container>
-      <DeleteButton>회원 탈퇴</DeleteButton>
+      <DeleteButton onClick={deletehandler}>회원 탈퇴</DeleteButton>
     </Container>
   );
 };
