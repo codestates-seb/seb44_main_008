@@ -1,26 +1,26 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { User, UserInfo } from './usertype';
+import { User } from './usertype';
 
 const initialState: User = {
-  isLoggedIn: true,
+  isLoggedIn: false,
   userInfo: {
-    id: 1,
-    user_img:
-      'https://i.pinimg.com/564x/c6/75/37/c67537a607e37016cd65de01fb4bf437.jpg',
+    id: 0,
+    name: '',
+    nickname: '',
+    user_img: '',
   },
 };
 
 const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: { value: initialState },
   reducers: {
-    setUser: (state, action: PayloadAction<UserInfo>) => {
-      state.userInfo = action.payload;
+    setUser: (state, action) => {
+      state.value = action.payload;
     },
   },
 });
 
-const userActions = userSlice.actions;
-export { userActions };
+export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;

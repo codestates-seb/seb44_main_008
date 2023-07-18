@@ -7,7 +7,9 @@ import UserArea from './UserArea';
 import SearchInput from './SearchInput';
 
 const Header = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const userCheck = useSelector(
+    (state: RootState) => state.user.value.isLoggedIn,
+  );
   return (
     <HeaderWrapper>
       <div className="headerInner">
@@ -15,7 +17,7 @@ const Header = () => {
           <Link to="/main">MoviePOP</Link>
         </Logo>
 
-        {user.isLoggedIn ? (
+        {userCheck ? (
           <>
             <SearchInput />
             <UserArea />

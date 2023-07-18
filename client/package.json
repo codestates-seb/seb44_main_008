@@ -16,6 +16,7 @@
     "@tanstack/react-query": "^4.29.19",
     "@types/react-redux": "^7.1.25",
     "@types/react-router-dom": "^5.3.3",
+    "@types/redux-persist": "^4.3.1",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.4.0",
     "react": "^18.2.0",
@@ -28,6 +29,7 @@
     "react-query": "^3.39.3",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.0",
+    "redux-persist": "^6.0.0",
     "styled-components": "^6.0.1",
     "vite-plugin-svgr": "^3.2.0"
   },
