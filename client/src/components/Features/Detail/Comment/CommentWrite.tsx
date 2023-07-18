@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import { PostComment } from '../../../../api/comment/comment';
 import Button from '../../../Common/Button/Button';
 
-const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
-  reviewId,
-}) => {
+const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
   const queryClient = useQueryClient();
   const [body, setBody] = useState('');
   const [checkBody, setCheckBody] = useState(false);
