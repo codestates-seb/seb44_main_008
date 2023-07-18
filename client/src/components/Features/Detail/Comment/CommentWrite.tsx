@@ -1,9 +1,13 @@
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { PostComment } from '../../../../api/comment/comment';
 import Button from '../../../Common/Button/Button';
-import axios from 'axios';
 
-const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
+const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
+  reviewId,
+}) => {
+  const queryClient = useQueryClient();
   const [body, setBody] = useState('');
   const [checkBody, setCheckBody] = useState(false);
 
@@ -11,17 +15,21 @@ const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
     setCheckBody(false);
     setBody(e.currentTarget.value);
   };
-  const submitHandler = async () => {
-    setCheckBody(body === '');
-    try {
-      // const result = await axios.post(
-      //   `/reviewBoards/${reviewId}/comments`
-      // )
-    } catch (err) {
-      console.log('err', err);
-    }
-  };
 
+  const writeMutations = useMutation({
+    mutationFn: postData => PostComment(reviewId, body),
+    onSuccess(data) {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+      setBody('');
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+  const submitHandler = () => {
+    setCheckBody(body === '');
+    writeMutations.mutate({ content: body });
+  };
   return (
     <CommentWriteWrap>
       <textarea
@@ -29,6 +37,7 @@ const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
         placeholder="리뷰에 대한 소감을 남겨보세요!"
         onChange={bodyChange}
         className={`${checkBody ? 'noText' : ''}`}
+        value={body}
       ></textarea>
       <Button
         type="variant"

@@ -30,10 +30,11 @@ interface CommentDatas {
   }[];
 }
 
-export const PostComment = (reviewId: number | undefined) => {
-  return instance
-    .post(`/reviewBoards/${reviewId}/comments`)
-    .then(res => res.data);
+export const PostComment = (
+  reviewId: string | number | undefined,
+  content: string,
+) => {
+  return instance.post(`/reviewBoards/${reviewId}/comments`, content);
 };
 
 export const PatchComment = (commentId: number | undefined): Promise<data> => {
@@ -43,7 +44,9 @@ export const PatchComment = (commentId: number | undefined): Promise<data> => {
 export const GetCommentItem = (
   commentId: number | undefined,
 ): Promise<CommentData> => {
-  return instance.get(`/comments/${commentId}`).then(res => res.data);
+  return instance
+    .get(`/reviewBoards/${commentId}/comments`)
+    .then(res => res.data);
 };
 
 export const GetCommentAll = (

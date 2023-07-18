@@ -5,10 +5,16 @@ import AliceCarousel from 'react-alice-carousel';
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import popbg from '../../assets/images/pop-icons/popbg.jpg';
 import { SectionsContainer, Section } from 'react-fullpage';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const Start = () => {
+  const navigate = useNavigate();
+  const clickHandler = () => {
+    navigate('/account/login');
+    window.location.reload();
+  };
+
   //carousel
   const responsive = {
     0: {
@@ -113,7 +119,7 @@ const Start = () => {
       <SectionsContainer {...options}>
         <Section className="page1 Section">
           <div className="landingHeader">
-            <Button value="Login" type="variant" />
+            <Button value="Login" type="variant" onClick={clickHandler} />
           </div>
           <div className="titlebox">
             <h1 className="title">

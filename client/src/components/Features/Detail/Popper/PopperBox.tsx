@@ -7,12 +7,15 @@ import PopperEdit from './PopperEdit';
 
 type PopperBoxProps = {
   groups: Group[];
+  reviewId: number;
+  movie: string;
 };
-const PopperBox: React.FC<PopperBoxProps> = ({ groups }) => {
+const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {
   const [currentRender, setCurrentRender] = useState('List');
   const [currentId, setCurrentID] = useState(0);
   const [currentPage, setCurrentPage] = useState('');
 
+  console.log('groups', groups);
   return (
     <>
       {currentRender === 'List' && (
@@ -31,7 +34,11 @@ const PopperBox: React.FC<PopperBoxProps> = ({ groups }) => {
         />
       )}
       {currentRender === 'Write' && (
-        <PopperWrite setCurrentRender={setCurrentRender} />
+        <PopperWrite
+          setCurrentRender={setCurrentRender}
+          reviewId={reviewId}
+          movie={movie}
+        />
       )}
       {currentRender === 'Edit' && (
         <PopperEdit

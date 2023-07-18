@@ -1,51 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DetailData, Group } from './detailType';
-import { useQuery } from '@tanstack/react-query';
 
 import styled from 'styled-components';
-import Detail from '../../../components/Features/Detail/Detail';
-import Comment from '../../../components/Features/Detail/Comment/Comment';
-import PopperBox from '../../../components/Features/Detail/Popper/PopperBox';
-import axios from 'axios';
-import ErrorPage from '../../ErrorPage/ErrorPage';
+import { getItem } from '../../../api/reviewItem/reviewItem';
 import Loading from '../../../components/Common/Loading/Loading';
+import Comment from '../../../components/Features/Detail/Comment/Comment';
+import Detail from '../../../components/Features/Detail/Detail';
+import PopperBox from '../../../components/Features/Detail/Popper/PopperBox';
+import ErrorPage from '../../ErrorPage/ErrorPage';
 
 const Detailcontent = (): JSX.Element => {
-  const id = useParams().id ?? '';
+  const { reviewId } = useParams();
   const [data, setData] = useState<DetailData>({});
 
   const [groups, setGroups] = useState<Group[]>([]);
 
-  const getItem = async ({ reviewId }: { reviewId: string }) => {
-    const result = await axios.get(`/reviewBoards/${reviewId}`);
-    return result.data;
-  };
   const {
-    data: userData,
+    data: dataItem,
     isLoading,
     error,
     isSuccess,
   } = useQuery({
-    queryKey: ['ReviewInfo', id],
+    queryKey: ['ReviewInfo', reviewId],
     queryFn: () => {
-      return getItem({ reviewId: id });
+      return getItem(reviewId);
     },
   });
-  // if (error) {
-  //   return <ErrorPage />;
-  // }
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
+
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+  console.log(dataItem.reviewBoardId);
   return (
     <DetailWrap>
       <div className="detailBox">
-        <Detail data={data} />
-        <Comment reviewId={id} />
+        <Detail data={dataItem} />
+        <Comment reviewId={reviewId} data={dataItem.comments} />
       </div>
       <div className="popperBox">
-        <PopperBox groups={groups} />
+        <PopperBox
+          groups={dataItem.groups}
+          reviewId={dataItem.reviewBoardId}
+          movie={dataItem.movie.title}
+        />
       </div>
     </DetailWrap>
   );

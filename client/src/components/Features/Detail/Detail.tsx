@@ -4,10 +4,11 @@ import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 
 const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(data.wished);
   const handleLikeClick = () => {
     setLike(!like);
   };
+
   const date = data.createdAt;
   const reviewDate = date?.replace(/-/gi, '.');
 
@@ -15,10 +16,10 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
     <DetailSection>
       <h4>{data.title}</h4>
       <div className="movieInfo">
-        <p>{data.movieTitle}</p>
+        <p>{data.movie?.title}</p>
         <ul>
           {data.tags?.map(tag => {
-            return <li key={tag.tagId}># {tag.tagId}</li>;
+            return <li key={tag.tagId}># {tag.tagName}</li>;
           })}
         </ul>
       </div>
@@ -30,13 +31,13 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
         <div>
           <span>{reviewDate}</span>
           <div className="userImg">
-            <img src={data.user?.profileImage} alt="유저명" />
+            <img src={data.user?.profileImage} alt={data.user?.nickname} />
           </div>
           <p>{data.user?.nickname}</p>
         </div>
       </div>
       <div className="imgWrap">
-        <img src={data.thumbnail} alt={data.movieTitle} />
+        <img src={data.thumbnail} alt={data.movie?.title} />
       </div>
       <p className="detailContent">{data.review}</p>
     </DetailSection>
