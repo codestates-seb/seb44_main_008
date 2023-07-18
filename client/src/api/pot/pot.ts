@@ -2,12 +2,12 @@
 import axios from 'axios';
 import { instance } from '../api';
 
-interface data {
-  title: string;
-  meetingDate: string;
-  location: string;
-  maxCapacity: number;
-  content: string;
+export interface data {
+  title: string | undefined;
+  meetingDate: string | undefined;
+  location: string | undefined;
+  maxCapacity: number | undefined;
+  content: string | undefined;
 }
 
 interface potData extends data {
