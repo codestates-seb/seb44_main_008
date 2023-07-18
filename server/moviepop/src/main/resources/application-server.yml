@@ -41,6 +41,8 @@ cloud:
       profile-path: ${S3_PROFILE_IMAGE_PATH}
       thumbnail-path: ${S3_THUMBNAIL_IMAGE_PATH}
       url: ${S3_URL}
+      default-profile: ${S3_DEFAULT_PROFILE_IMAGE}
+      default-thumbnail : ${S3_DEFAULT_THUMBNAIL}
 aws:
   accessKeyId: ${AWS_ACCESS_KEY_ID}
   secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
