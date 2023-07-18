@@ -32,9 +32,8 @@ const UserInfo = () => {
   const nickNameIn = userNickname ? userNickname : data?.data.nickname;
   const [tempImg, setTempImg] = useState('');
   const mutationPatch = useMutation(PatchEditUser, {
-    onSuccess: data => {
-      queryClient.invalidateQueries(['EditUserInfo']),
-        console.log('data', data);
+    onSuccess: () => {
+      queryClient.invalidateQueries(['EditUserInfo']), location.reload();
     },
   });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
