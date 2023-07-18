@@ -6,7 +6,10 @@ import Button from '../../../Common/Button/Button';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
-import { DeleteCModal } from '../../../../api/user/userTab/userTab';
+import {
+  DeleteCModal,
+  DeleteDModal,
+} from '../../../../api/user/userTab/userTab';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 
 type PopperDetailProps = {
@@ -32,6 +35,15 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     if (confirmed) {
       delPopMutation.mutate(groupId);
       alert('모집이 삭제되었습니다.');
+      openScroll();
+    }
+  };
+  const delPartyMutation = useMutation(DeleteDModal);
+  const deletePartyHandler = (groupId: number) => {
+    const confirmed = window.confirm('정말 이 파티를 나가시겠습니까?');
+    if (confirmed) {
+      delPartyMutation.mutate(groupId);
+      alert('파티에서 제외되었습니다.');
       openScroll();
     }
   };
@@ -131,7 +143,12 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
           {currentPage === 'myPageOtherPop' && (
             <>
               <div className="popDetailButtonBox w100">
-                <Button value="팟 참여 취소하기" width="100%" theme="variant" />
+                <Button
+                  value="팟 참여 취소하기"
+                  width="100%"
+                  theme="variant"
+                  onClick={() => deletePartyHandler(id)}
+                />
               </div>
             </>
           )}

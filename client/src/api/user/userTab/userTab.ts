@@ -1,3 +1,4 @@
+import { MutationFunction } from '@tanstack/react-query';
 import { PopperDetailData } from '../../../components/Features/Detail/Popper/popperType';
 import { instance } from '../../api';
 import { data } from '../../pot/pot';
@@ -27,3 +28,7 @@ export const PatchTabCModal = ({
 
 export const DeleteCModal = (groupId: number) =>
   instance.delete(`/groups/${groupId}`).then(res => res.data);
+
+export const DeleteDModal = (groupId: number) => {
+  instance.delete(`/users/groups/${groupId}`).then(res => res.data);
+};
