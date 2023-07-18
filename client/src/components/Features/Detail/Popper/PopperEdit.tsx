@@ -43,7 +43,10 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   const queryClient = useQueryClient();
   const mutationPatch = useMutation({
     mutationFn: (modalData: ModalData) => PatchTabCModal(modalData),
-    onSuccess: () => queryClient.invalidateQueries(['modalContent', currentId]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['modalContent', currentId]),
+        setCurrentRender('Detail');
+    },
   });
   useEffect(() => {
     if (data) {

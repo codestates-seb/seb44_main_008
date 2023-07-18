@@ -30,5 +30,5 @@ export const DeleteCModal = (groupId: number) =>
   instance.delete(`/groups/${groupId}`).then(res => res.data);
 
 export const DeleteDModal = (groupId: number) => {
-  instance.delete(`/users/groups/${groupId}`).then(res => res.data);
+  return instance.delete(`/users/groups/${groupId}`).then(res => res.data);
 };
