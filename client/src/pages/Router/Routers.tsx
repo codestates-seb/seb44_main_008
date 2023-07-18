@@ -18,7 +18,7 @@ import TagContents from '../Main/TagContents';
 import KeywordContents from '../Main/KeywordContents';
 
 const Routers = () => {
-  const hideNavbar = ['/', '/start'];
+  const hideNavbar = ['/', '/start', '', '/#page1'];
 
   const [isLayout, setIsLayout] = useState(
     hideNavbar.includes(window.location.pathname),
