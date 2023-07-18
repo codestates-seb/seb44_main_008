@@ -1,14 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
+import axios from 'axios';
+import { instance } from '../../../api/api';
 
 const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
   const [liked, setLiked] = useState(data.wished);
-  const [likeCount, setLikeCount] = useState(data.wish);
-  const apiCall = async () => {};
+  const [likeCount, setLikeCount] = useState<number>(data.wish ? data.wish : 0);
 
-  console.log(data);
+  const ClickLike = async () => {
+    try {
+      const url = `/users/reviewBoards/${data.reviewBoardId}`;
+      if (liked === false) {
+        const result = await instance.post(url);
+        setLikeCount(likeCount => likeCount + 1);
+      } else {
+        const result = await instance.delete(url);
+        setLikeCount(likeCount => likeCount - 1);
+      }
+      setLiked(prev => !prev);
+    } catch (err) {
+      console.log('err', err);
+    }
+  };
+
+  console.log('디테일 데이터', data);
+  console.log('좋아요', liked);
+  console.log('좋아요카운트', likeCount);
 
   const date = data.createdAt;
   const reviewDate = date?.replace(/-/gi, '.');
@@ -26,7 +45,7 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
       </div>
       <div className="writeInfo">
         <div>
-          <Popunlike onClick={apiCall} like={liked} />
+          <Popunlike onClick={ClickLike} like={liked} />
           <span>{likeCount}</span>
         </div>
         <div>
