@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Header from '../../components/Common/Header/Header';
 import Footer from '../../components/Common/Footer/Footer';
 import Start from '../Start/Start';
@@ -28,6 +28,7 @@ const Routers = () => {
   }, []);
   return (
     <BrowserRouter>
+      <LayoutController hideNavbar={hideNavbar} setIsLayout={setIsLayout} />
       {!isLayout && <Header />}
       <Routes>
         <Route path="/" element={<Start />} />
@@ -52,5 +53,14 @@ const Routers = () => {
     </BrowserRouter>
   );
 };
-
+const LayoutController: React.FC<{
+  hideNavbar: string[];
+  setIsLayout: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ hideNavbar, setIsLayout }) => {
+  const location = useLocation();
+  useEffect(() => {
+    setIsLayout(hideNavbar.includes(location.pathname));
+  }, [location]);
+  return null;
+};
 export default Routers;
