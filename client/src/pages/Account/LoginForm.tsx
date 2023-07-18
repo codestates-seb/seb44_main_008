@@ -6,7 +6,12 @@ import { Login } from '../../api/auth/account/login';
 import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/reducers/user';
+import axios from 'axios';
+import { instance } from '../../api/api';
+import { UserInfoType } from '../../components/Features/Mypage/editmypage/type';
 interface LoginType {
   email: string;
   password: string;
@@ -14,6 +19,7 @@ interface LoginType {
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     formState: { errors },
@@ -24,6 +30,8 @@ const LoginForm = () => {
 
   const [password, setPassword] = useState<string>('');
   const [isPassword, setIsPassword] = useState<boolean>(true);
+
+  const [userItem, setuserItem] = useState<UserInfoType>();
 
   //이메일 유효성검사
   const onChangeEmail = useCallback(
@@ -73,7 +81,6 @@ const LoginForm = () => {
   const SubmitEvent = useMutation({
     mutationFn: (user: LoginType) => Login(user),
     onSuccess(data) {
-      console.log('da', data);
       if (data.status === 200) {
         const accessToken = data.headers.authorization;
         const refreshToken = data.headers.refresh;
@@ -83,7 +90,33 @@ const LoginForm = () => {
         if (refreshToken) {
           localStorage.setItem('refreshToken', refreshToken);
         }
-        navigate('/main');
+        const getUser = async () => {
+          try {
+            const response = await axios.get(`https://moviepop.site/users`, {
+              headers: {
+                Authorization: accessToken,
+                Refresh: refreshToken,
+              },
+            });
+            setuserItem(response.data);
+            console.log(response.data);
+            dispatch(
+              setUser({
+                isLoggedIn: true,
+                userInfo: {
+                  id: response.data.data.userId,
+                  name: response.data.data.name,
+                  nickname: response.data.data.nickname,
+                  user_img: response.data.data.profileImage,
+                },
+              }),
+            );
+            navigate('/main');
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        getUser();
       } else {
         alert('로그인 실패');
       }
@@ -95,7 +128,6 @@ const LoginForm = () => {
       }
     },
   });
-
   return (
     <AccountWrap>
       <form onSubmit={handleSubmit(onSubmit)}>

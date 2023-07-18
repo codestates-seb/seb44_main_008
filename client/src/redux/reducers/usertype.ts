@@ -4,5 +4,7 @@ export interface User {
 }
 export interface UserInfo {
   id: number;
+  name: string;
+  nickname: string;
   user_img: string;
 }

@@ -10,8 +10,13 @@ import Loading from '../../components/Common/Loading/Loading';
 
 import { getMainItems } from '../../api/reviewItem/reviewItem';
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store/store';
 
 const Main = () => {
+  const userName = useSelector(
+    (state: RootState) => state.user.value.userInfo.name,
+  );
   const responsive = {
     0: {
       items: 1,
@@ -92,7 +97,7 @@ const Main = () => {
     return (
       <MainWrapper>
         <SpecialContainer>
-          <h1>홍길동님 맞춤 추천 리뷰 게시글✨</h1>
+          <h1>{userName}님 맞춤 추천 리뷰 게시글✨</h1>
           <AliceCarousel
             mouseTracking
             infinite={true}
