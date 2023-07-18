@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { PopperDetailData } from './popperType';
-import { PopperBox } from './PopperStyle';
-import Button from '../../../Common/Button/Button';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
-import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
-import Loading from '../../../Common/Loading/Loading';
-import { getDate } from '../../../../assets/commonts/common';
 import {
   DeleteCModal,
   DeleteDModal,
 } from '../../../../api/user/userTab/userTab';
+import { getDate } from '../../../../assets/commonts/common';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
+import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
+import Button from '../../../Common/Button/Button';
+import Loading from '../../../Common/Loading/Loading';
+import { PopperBox } from './PopperStyle';
+import { PopperDetailData } from './popperType';
 
 type PopperDetailProps = {
   currentId: number;
@@ -90,7 +90,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   }
 
   console.log(id);
-  
+
   if (isSuccess) {
     return (
       <PopperBox>
