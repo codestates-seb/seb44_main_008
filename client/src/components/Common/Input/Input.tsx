@@ -51,6 +51,7 @@ const InputCoverStyled = styled.div`
   justify-content: space-between;
   width: 100%;
   position: relative;
+  margin-bottom: 0.9rem;
 `;
 
 const InputStyled = styled.input<Props>`
