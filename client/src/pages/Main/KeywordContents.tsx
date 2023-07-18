@@ -1,16 +1,13 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
-
-import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
+import ErrorPage from '../ErrorPage/ErrorPage';
 
-import isPropValid from '@emotion/is-prop-valid';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getKeywordSearchItems } from '../../api/reviewItem/searchItem';
-import InfiniteScroll from 'react-infinite-scroller';
-import ErrorPage from '../ErrorPage/ErrorPage';
 
 const KeywordContents = () => {
   const { keywordParam } = useParams<{ keywordParam: string }>();
@@ -19,8 +16,9 @@ const KeywordContents = () => {
     data: keywordSearchItems,
     fetchNextPage,
     hasNextPage,
+    isSuccess,
     isLoading,
-    isError,
+    error,
   } = useInfiniteQuery(
     ['keywordSearchItems'],
     ({ pageParam = 1 }) => getKeywordSearchItems(pageParam, keywordParam),
@@ -34,55 +32,59 @@ const KeywordContents = () => {
     },
   );
 
-  return (
-    <DefaultContainer>
-      <div>
-        <h1>{keywordParam} 관련 리뷰 게시글</h1>
-      </div>
-      <InfiniteScroll
-        hasMore={hasNextPage}
-        loadMore={() => {
-          fetchNextPage();
-        }}
-      >
-        <StaticContainer>
-          {keywordSearchItems?.pages.map(pages => {
-            return pages?.data?.map(page => {
-              return (
-                <StyleSheetManager
-                  key={page.reviewBoardId}
-                  shouldForwardProp={prop => isPropValid(prop)}
-                >
-                  <SingleItem
-                    reviewId={page.reviewBoardId}
-                    src={page.thumbnail}
-                    title={page.title}
-                    date={page.createdAt}
-                    author={page?.user.nickname}
-                    isMain={true}
-                  ></SingleItem>
-                </StyleSheetManager>
-              );
-            });
-          })}
-        </StaticContainer>
-      </InfiniteScroll>
-      {isLoading && (
-        <Loader>
-          <p className="loadingTxt">
-            <span>L</span>
-            <span>o</span>
-            <span>a</span>
-            <span>d</span>
-            <span>i</span>
-            <span>n</span>
-            <span>g</span>
-          </p>
-        </Loader>
-      )}
-      {isError && <ErrorPage />}
-    </DefaultContainer>
-  );
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isSuccess) {
+    return (
+      <DefaultContainer>
+        <div>
+          <h1>{keywordParam} 관련 리뷰 게시글</h1>
+        </div>
+        <InfiniteScroll
+          hasMore={hasNextPage}
+          loadMore={() => {
+            fetchNextPage();
+          }}
+        >
+          <StaticContainer>
+            {keywordSearchItems?.pages.map(pages => {
+              return pages?.data?.map(page => {
+                return (
+                  <StyleSheetManager
+                    key={page.reviewBoardId}
+                    shouldForwardProp={prop => isPropValid(prop)}
+                  >
+                    <SingleItem
+                      reviewId={page.reviewBoardId}
+                      src={page.thumbnail}
+                      title={page.title}
+                      date={page.createdAt}
+                      author={page?.user.nickname}
+                      isMain={true}
+                    ></SingleItem>
+                  </StyleSheetManager>
+                );
+              });
+            })}
+          </StaticContainer>
+        </InfiniteScroll>
+        {isLoading && (
+          <Loader>
+            <p className="loadingTxt">
+              <span>L</span>
+              <span>o</span>
+              <span>a</span>
+              <span>d</span>
+              <span>i</span>
+              <span>n</span>
+              <span>g</span>
+            </p>
+          </Loader>
+        )}
+      </DefaultContainer>
+    );
+  }
 };
 
 export default KeywordContents;
@@ -123,7 +125,9 @@ const StaticContainer = styled.div`
 
 const Loader = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
+  align-items: center;
+
   width: 100%;
   padding: 3rem;
 

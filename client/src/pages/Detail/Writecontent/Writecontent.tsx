@@ -10,6 +10,7 @@ import MovieTitleModal from '../../../components/Features/Detail/Writecontent/Mo
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { postNewReview } from '../../../api/reviewItem/reviewItem';
 import { getAllTags } from '../../../api/tags/getTags';
+import { useNavigate } from 'react-router-dom';
 
 const Writecontent = () => {
   const [fileURL, setFileURL] = useState<string>('');
@@ -29,11 +30,13 @@ const Writecontent = () => {
   const [TagErr, setTagErr] = useState<boolean>(true);
   const [contentErr, setContentErr] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   const {
     data: tagData,
+    isSuccess,
     isLoading,
     error,
-    isSuccess,
   } = useQuery(['tags'], () => getAllTags());
 
   // 이미지 관련 함수
@@ -116,17 +119,22 @@ const Writecontent = () => {
     if (content.length <= 10) {
       setContentErr(false);
     } else {
-      const submitData = {
-        post: {
-          title: title,
-          movieId: movieId,
-          review: content,
-          tags: selectedTags,
-        },
-        thumbnail: file[0],
-      };
-      console.log(submitData);
-      writeMutations.mutate(submitData);
+      const confirmed = window.confirm('게시글을 등록하시겠습니까?');
+
+      if (confirmed) {
+        const submitData = {
+          post: {
+            title: title,
+            movieId: movieId,
+            review: content,
+            tags: selectedTags,
+          },
+          thumbnail: file[0],
+        };
+        writeMutations.mutate(submitData);
+      }
+      alert('게시글이 등록되었습니다.');
+      navigate('/main');
     }
   };
 
@@ -261,6 +269,8 @@ const WriteImgDiv = styled.div`
   width: 25rem;
   height: 18rem;
   margin-bottom: 2rem;
+
+  cursor: pointer;
 
   & > img {
     display: flex;

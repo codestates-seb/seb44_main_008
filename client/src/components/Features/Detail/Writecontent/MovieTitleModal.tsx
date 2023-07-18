@@ -30,7 +30,6 @@ const MovieTitleModal = ({
   );
 
   const onClickMovieTitle = event => {
-    console.log(event.target.innerHTML);
     setMovieTitle && setMovieTitle(event.target.innerHTML);
     setMovieId && setMovieId(event.target.id);
     setModalOn && setModalOn(false);
@@ -97,6 +96,10 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
   position: absolute;
   top: 55%;
   left: 50%;
@@ -111,14 +114,8 @@ const ModalContainer = styled.div`
   background-color: #17191c;
 
   & > .search--bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 80%;
-
     margin-top: 2rem;
-    margin-bottom: 1rem;
+    width: 80%;
   }
 
   & > .result--section {
@@ -126,6 +123,7 @@ const ModalContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
   }
 `;
 
@@ -155,7 +153,7 @@ const SearchResultContainer = styled.ul`
 `;
 
 const SearchResult = styled.li`
-  width: 90%;
+  width: 100%;
 
   margin: 1rem 0;
   padding: 1rem;

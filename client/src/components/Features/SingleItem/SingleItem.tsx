@@ -40,6 +40,8 @@ const SingleItemDiv = styled.div<SingleItemType>`
   width: ${props => (props.isMain ? '17rem' : '20rem')};
   display: flex;
   flex-direction: column;
+
+  cursor: pointer;
 `;
 
 const ImgDiv = styled.div<SingleItemType>`

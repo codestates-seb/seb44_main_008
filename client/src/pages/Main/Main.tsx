@@ -2,9 +2,10 @@ import styled, { StyleSheetManager } from 'styled-components';
 import { Link } from 'react-router-dom';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
+import isPropValid from '@emotion/is-prop-valid';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
-import isPropValid from '@emotion/is-prop-valid';
+
 import ErrorPage from '../ErrorPage/ErrorPage';
 import Loading from '../../components/Common/Loading/Loading';
 
@@ -184,9 +185,6 @@ const SpecialContainer = styled.div`
   }
 
   & .alice-carousel__dots {
-    position: absolute;
-    top: -50px;
-    left: 1200px;
     & > .__active {
       background-color: #f20000;
     }

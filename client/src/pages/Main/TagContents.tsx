@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
-
-import SingleItem from '../../components/Features/SingleItem/SingleItem';
 
 import isPropValid from '@emotion/is-prop-valid';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getTagSearchItems } from '../../api/reviewItem/searchItem';
 import InfiniteScroll from 'react-infinite-scroller';
+
+import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import ErrorPage from '../ErrorPage/ErrorPage';
 
 const TagContents = () => {
@@ -20,8 +18,9 @@ const TagContents = () => {
     data: tagSearchItems,
     fetchNextPage,
     hasNextPage,
+    isSuccess,
     isLoading,
-    isError,
+    error,
   } = useInfiniteQuery(
     ['tagSearchItems'],
     ({ pageParam = 1 }) => getTagSearchItems(pageParam, tagIdParam),
@@ -44,62 +43,59 @@ const TagContents = () => {
     setIsReLoad(!isReLoad);
   }, [tagSearchItems]);
 
-  const navigate = useNavigate();
-
-  const onClickSingleItem = () => {
-    navigate('/detail/content');
-  };
-
-  return (
-    <DefaultContainer>
-      <div>
-        <h1>#{tagSearchItems?.pages[0].data.tagName} 관련 리뷰 게시글</h1>
-      </div>
-      <InfiniteScroll
-        hasMore={hasNextPage}
-        loadMore={() => {
-          fetchNextPage();
-        }}
-      >
-        <StaticContainer>
-          {tagSearchItems?.pages.map(pages => {
-            return pages?.data.boards.map(page => {
-              return (
-                <StyleSheetManager
-                  key={page.reviewBoardId}
-                  shouldForwardProp={prop => isPropValid(prop)}
-                >
-                  <SingleItem
-                    reviewId={page.reviewBoardId}
-                    src={page.thumbnail}
-                    title={page.title}
-                    date={page.createdAt}
-                    author={page?.user.nickname}
-                    isMain={true}
-                    onClick={onClickSingleItem}
-                  ></SingleItem>
-                </StyleSheetManager>
-              );
-            });
-          })}
-        </StaticContainer>
-      </InfiniteScroll>
-      {isLoading && (
-        <Loader>
-          <p className="loadingTxt">
-            <span>L</span>
-            <span>o</span>
-            <span>a</span>
-            <span>d</span>
-            <span>i</span>
-            <span>n</span>
-            <span>g</span>
-          </p>
-        </Loader>
-      )}
-      {isError && <ErrorPage />}
-    </DefaultContainer>
-  );
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isSuccess) {
+    return (
+      <DefaultContainer>
+        <div>
+          <h1>#{tagSearchItems?.pages[0].data.tagName} 관련 리뷰 게시글</h1>
+        </div>
+        <InfiniteScroll
+          hasMore={hasNextPage}
+          loadMore={() => {
+            fetchNextPage();
+          }}
+        >
+          <StaticContainer>
+            {tagSearchItems?.pages.map(pages => {
+              return pages?.data.boards.map(page => {
+                return (
+                  <StyleSheetManager
+                    key={page.reviewBoardId}
+                    shouldForwardProp={prop => isPropValid(prop)}
+                  >
+                    <SingleItem
+                      reviewId={page.reviewBoardId}
+                      src={page.thumbnail}
+                      title={page.title}
+                      date={page.createdAt}
+                      author={page?.user.nickname}
+                      isMain={true}
+                    ></SingleItem>
+                  </StyleSheetManager>
+                );
+              });
+            })}
+          </StaticContainer>
+        </InfiniteScroll>
+        {isLoading && (
+          <Loader>
+            <p className="loadingTxt">
+              <span>L</span>
+              <span>o</span>
+              <span>a</span>
+              <span>d</span>
+              <span>i</span>
+              <span>n</span>
+              <span>g</span>
+            </p>
+          </Loader>
+        )}
+      </DefaultContainer>
+    );
+  }
 };
 
 export default TagContents;
@@ -140,7 +136,9 @@ const StaticContainer = styled.div`
 
 const Loader = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
+  align-items: center;
+
   width: 100%;
   padding: 3rem;
 

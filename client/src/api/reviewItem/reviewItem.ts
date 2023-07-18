@@ -8,7 +8,17 @@ type ItemType = {
     movieId: number;
     tags: { tagId: number }[];
   };
-  thumbnail?: string | undefined | FileList;
+  thumbnail?: FileList;
+};
+
+type PostItemType = {
+  reviewId: number | string;
+  patch: {
+    title: string;
+    review: string;
+    tags: { tagId: number }[];
+  };
+  thumbnail?: FileList;
 };
 
 type ReviewType = {
@@ -101,6 +111,26 @@ export const getItem = (reviewId: string | undefined) => {
   return instance.get(`/reviewBoards/${reviewId}`).then(res => res.data);
 };
 
-export const editReview = (data: ItemType) => {
-  instance.patch('/reviewBoards/{review-id}', data);
+export const editReview = (postData: PostItemType) => {
+  const formData = new FormData();
+
+  formData.append(
+    'patch',
+    new Blob([JSON.stringify(postData.patch)], { type: 'application/json' }),
+  );
+  if (postData.thumbnail) {
+    formData.append('thumbnail', postData.thumbnail);
+  }
+
+  return axios.patch(
+    `${import.meta.env.VITE_BASE_URL}/reviewBoards/${postData.reviewId}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: localStorage.getItem('token'),
+        Refresh: localStorage.getItem('refreshToken'),
+      },
+    },
+  );
 };
