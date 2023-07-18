@@ -1,3 +1,4 @@
+import { PopperDetailData } from '../../../components/Features/Detail/Popper/popperType';
 import { instance } from '../../api';
 import { UserType } from '../userInfo/userInfo';
 
@@ -10,3 +11,7 @@ export const DeleteTabA = (postId: number) =>
 
 export const DeleteTabB = (postId: number) =>
   instance.delete(`/reviewBoards/${postId}`).then(res => res.data);
+
+export const GetTabCModal = (groupId: number): Promise<PopperDetailData> => {
+  return instance.get(`/groups/${groupId}`).then(res => res.data.data);
+};
