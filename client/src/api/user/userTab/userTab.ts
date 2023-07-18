@@ -24,3 +24,6 @@ export const PatchTabCModal = ({
   groupId: number;
   modalData: data;
 }) => instance.patch(`/groups/${groupId}`, modalData);
+
+export const DeleteCModal = (groupId: number) =>
+  instance.delete(`/groups/${groupId}`).then(res => res.data);
