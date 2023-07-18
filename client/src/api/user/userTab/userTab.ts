@@ -1,5 +1,6 @@
 import { PopperDetailData } from '../../../components/Features/Detail/Popper/popperType';
 import { instance } from '../../api';
+import { data } from '../../pot/pot';
 import { UserType } from '../userInfo/userInfo';
 
 export const GetTabA = (): Promise<UserType> => {
@@ -15,3 +16,11 @@ export const DeleteTabB = (postId: number) =>
 export const GetTabCModal = (groupId: number): Promise<PopperDetailData> => {
   return instance.get(`/groups/${groupId}`).then(res => res.data.data);
 };
+
+export const PatchTabCModal = ({
+  modalData,
+  groupId,
+}: {
+  groupId: number;
+  modalData: data;
+}) => instance.patch(`/groups/${groupId}`, modalData);
