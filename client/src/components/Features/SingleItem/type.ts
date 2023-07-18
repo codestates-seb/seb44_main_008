@@ -1,4 +1,5 @@
 export interface SingleItemType {
+  reviewId?: string;
   src?: string;
   title?: string;
   date?: string;

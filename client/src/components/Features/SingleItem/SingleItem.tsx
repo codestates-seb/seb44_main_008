@@ -2,15 +2,23 @@ import styled from 'styled-components';
 import { SingleItemType } from './type';
 import { useNavigate } from 'react-router';
 
-const SingleItem = ({ src, title, date, author, isMain }: SingleItemType) => {
+const SingleItem = ({
+  reviewId,
+  src,
+  title,
+  date,
+  author,
+  isMain,
+}: SingleItemType) => {
   const navigate = useNavigate();
 
-  const onClickSingleItem = () => {
-    navigate('/detail/content');
+  const onClickSingleItem = e => {
+    const reviewId = e.currentTarget.id;
+    navigate(`/detail/content/${reviewId}`);
   };
 
   return (
-    <SingleItemDiv isMain={isMain} onClick={onClickSingleItem}>
+    <SingleItemDiv id={reviewId} isMain={isMain} onClick={onClickSingleItem}>
       <ImgDiv isMain={isMain}>
         <SingleItemImg src={src} isMain={isMain} />
       </ImgDiv>
@@ -32,6 +40,8 @@ const SingleItemDiv = styled.div<SingleItemType>`
   width: ${props => (props.isMain ? '17rem' : '20rem')};
   display: flex;
   flex-direction: column;
+
+  cursor: pointer;
 `;
 
 const ImgDiv = styled.div<SingleItemType>`

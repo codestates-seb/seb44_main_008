@@ -41,7 +41,7 @@ const Routers = () => {
           element={<KeywordContents />}
         />
         <Route path="/detail/write" element={<Writecontent />} />
-        <Route path="/detail/edit" element={<EditContent />} />
+        <Route path="/detail/edit/:reviewId" element={<EditContent />} />
         <Route path="/detail/content/:reviewId" element={<Detailcontent />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<Editmypage />} />

@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 import styled, { StyleSheetManager } from 'styled-components';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
@@ -15,8 +13,9 @@ const Allcontents = () => {
     data: allReviews,
     fetchNextPage,
     hasNextPage,
+    isSuccess,
     isLoading,
-    isError,
+    error,
   } = useInfiniteQuery(
     ['allItems'],
     ({ pageParam = 1 }) => getAllItems(pageParam),
@@ -28,78 +27,59 @@ const Allcontents = () => {
     },
   );
 
-  // const [isLoading, setIsLoading] = useState(true);
-  //
-  // useEffect(() => {
-  //   let timer;
-  //   if (isLoading) {
-  //     timer = setTimeout(() => {
-  //       setIsLoading(false);
-  //     }, 5000); // 5초의 딜레이 설정
-  //   }
-
-  //   return () => clearTimeout(timer);
-  // }, [isLoading]);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  // }, [fetchNextPage]); // 다음 페이지 로드 시 isLoading을 true로 설정
-
-  const navigate = useNavigate();
-
-  const onClickSingleItem = () => {
-    navigate('/detail/content');
-  };
-
-  return (
-    <DefaultContainer>
-      <div>
-        <h1>전체 리뷰 게시글</h1>
-      </div>
-      <InfiniteScroll
-        hasMore={hasNextPage}
-        loadMore={() => {
-          fetchNextPage();
-        }}
-      >
-        <StaticContainer>
-          {allReviews?.pages.map(pages => {
-            return pages?.data.map(page => {
-              return (
-                <StyleSheetManager
-                  key={page.reviewBoardId}
-                  shouldForwardProp={prop => isPropValid(prop)}
-                >
-                  <SingleItem
-                    src={page.thumbnail}
-                    title={page.title}
-                    date={page.createdAt}
-                    author={page?.user.nickname}
-                    isMain={true}
-                    onClick={onClickSingleItem}
-                  ></SingleItem>
-                </StyleSheetManager>
-              );
-            });
-          })}
-        </StaticContainer>
-      </InfiniteScroll>
-      {isLoading && (
-        <Loader>
-          <p className="loadingTxt">
-            <span>L</span>
-            <span>o</span>
-            <span>a</span>
-            <span>d</span>
-            <span>i</span>
-            <span>n</span>
-            <span>g</span>
-          </p>
-        </Loader>
-      )}
-      {isError && <ErrorPage />}
-    </DefaultContainer>
-  );
+  if (error) {
+    return <ErrorPage />;
+  }
+  if (isSuccess) {
+    return (
+      <DefaultContainer>
+        <div>
+          <h1>전체 리뷰 게시글</h1>
+        </div>
+        <InfiniteScroll
+          hasMore={hasNextPage}
+          loadMore={() => {
+            fetchNextPage();
+          }}
+        >
+          <StaticContainer>
+            {allReviews?.pages.map(pages => {
+              return pages?.data.map(page => {
+                return (
+                  <StyleSheetManager
+                    key={page.reviewBoardId}
+                    shouldForwardProp={prop => isPropValid(prop)}
+                  >
+                    <SingleItem
+                      reviewId={page.reviewBoardId}
+                      src={page.thumbnail}
+                      title={page.title}
+                      date={page.createdAt}
+                      author={page?.user.nickname}
+                      isMain={true}
+                    ></SingleItem>
+                  </StyleSheetManager>
+                );
+              });
+            })}
+          </StaticContainer>
+        </InfiniteScroll>
+        {isLoading && (
+          <Loader>
+            <p className="loadingTxt">
+              <span>L</span>
+              <span>o</span>
+              <span>a</span>
+              <span>d</span>
+              <span>i</span>
+              <span>n</span>
+              <span>g</span>
+            </p>
+          </Loader>
+        )}
+      </DefaultContainer>
+    );
+  }
 };
 
 export default Allcontents;
@@ -140,7 +120,9 @@ const StaticContainer = styled.div`
 
 const Loader = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
+  align-items: center;
+
   width: 100%;
   padding: 3rem;
 
