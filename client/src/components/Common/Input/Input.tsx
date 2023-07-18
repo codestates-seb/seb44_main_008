@@ -23,7 +23,6 @@ const Input = ({
     setInputValue(e.target.value);
     onChange && onChange(e);
   };
-  console.log(inputValue);
   return (
     <StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
       <InputCoverStyled>

@@ -4,10 +4,11 @@ import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 
 const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
-  const [like, setLike] = useState(data.wished);
-  const handleLikeClick = () => {
-    setLike(!like);
-  };
+  const [liked, setLiked] = useState(data.wished);
+  const [likeCount, setLikeCount] = useState(data.wish);
+  const apiCall = async () => {};
+
+  console.log(data);
 
   const date = data.createdAt;
   const reviewDate = date?.replace(/-/gi, '.');
@@ -25,8 +26,8 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
       </div>
       <div className="writeInfo">
         <div>
-          <Popunlike onClick={handleLikeClick} like={like} />
-          <span>{data.wish}</span>
+          <Popunlike onClick={apiCall} like={liked} />
+          <span>{likeCount}</span>
         </div>
         <div>
           <span>{reviewDate}</span>

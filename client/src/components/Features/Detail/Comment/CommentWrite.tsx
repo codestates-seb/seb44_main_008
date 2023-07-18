@@ -40,7 +40,8 @@ const CommentWrite: React.FC<{ reviewId: string | undefined }> = ({
         value={body}
       ></textarea>
       <Button
-        type="variant"
+        type="button"
+        theme="variant"
         width="4.3rem"
         value="등록"
         onClick={submitHandler}

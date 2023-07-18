@@ -3,11 +3,27 @@ import styled from 'styled-components';
 import { GrClose } from 'react-icons/gr';
 import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store/store';
+import { useMutation } from '@tanstack/react-query';
+import { DeleteComment } from '../../../../api/comment/comment';
 
 const CommentList = (data?: Comments[]) => {
   const [like, setLike] = useState(false);
   const likeHandler = () => {
     setLike(!like);
+  };
+  const userId = useSelector(
+    (state: RootState) => state.user.value.userInfo.id,
+  );
+  console.log(data);
+  const mutationDelete = useMutation(DeleteComment(data.commentId));
+  const commentDelete = () => {
+    const confirmed = window.confirm('댓글을 삭제하시겠습니까?');
+    if (confirmed) {
+      mutationDelete.mutate();
+      alert('댓글이 정상적으로 삭제되었습니다.');
+    }
   };
   return (
     <CommentListWrap>
@@ -27,9 +43,11 @@ const CommentList = (data?: Comments[]) => {
                   <span>{answer.createdAt}</span>
                 </p>
               </div>
-              <button className="closeBtn">
-                <GrClose />
-              </button>
+              {userId === answer.user.userId && (
+                <button className="closeBtn" onClick={commentDelete}>
+                  <GrClose />
+                </button>
+              )}
             </div>
             <div className="commetTxt">
               <p>{answer.content}</p>
