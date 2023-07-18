@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { RootState } from '../../../redux/store/store';
@@ -8,6 +8,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '../../../api/tags/getTags';
 
 const UserArea = () => {
+  const hashMenu = useRef<HTMLDivElement>(null);
+  const hashRef = useRef<HTMLButtonElement>(null);
+  const myMenu = useRef<HTMLDivElement>(null);
+  const myRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [hashShow, setHashShow] = useState(false);
@@ -21,18 +25,9 @@ const UserArea = () => {
   } = useQuery(['tags'], () => getAllTags());
 
   const userImg = useSelector(
-    (state: RootState) => state.user.userInfo.user_img,
+    (state: RootState) => state.user.value.userInfo.user_img,
   );
 
-  // const getHashData = useCallback(async () => {
-  //   try {
-  //     // const {data : { result}} = axios.get("/api/v1/hash");
-  //     // setHashArray(result)
-
-  //   } catch (err) {
-  //     console.log('err', err);
-  //   }
-  // }, []);
   const btnMypage = useCallback(() => {
     navigate('/mypage');
     setMyShow(false);
@@ -46,23 +41,51 @@ const UserArea = () => {
     location.reload();
   }, []);
 
-  const onClickTagButton = e => {
+  const onClickTagButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     setHashShow(false);
-    console.log(e.target.id);
-    navigate(`/main/contents/${e.target.id}`);
+    console.log(e.currentTarget.id);
+    navigate(`/main/contents/${e.currentTarget.id}`);
   };
+  const clickHash = () => {
+    setHashShow(prev => !prev);
+  };
+  const clickMy = () => {
+    setMyShow(prev => !prev);
+  };
+  const clickBody = useCallback(
+    (e: MouseEvent) => {
+      if (
+        hashShow &&
+        !hashMenu.current?.contains(e.target as Node) &&
+        !hashRef.current?.contains(e.target as Node)
+      ) {
+        setHashShow(false);
+      }
+      if (
+        myShow &&
+        !myMenu.current?.contains(e.target as Node) &&
+        !myRef.current?.contains(e.target as Node)
+      ) {
+        setMyShow(false);
+      }
+    },
+    [hashShow, myShow],
+  );
+  useEffect(() => {
+    window.addEventListener('mousedown', clickBody);
+    return () => {
+      window.removeEventListener('mousedown', clickBody);
+    };
+  }, [hashShow, myShow]);
+
   return (
     <UserAreaWrap>
       <div className="hashArea">
-        <button
-          onClick={() => {
-            setHashShow(prev => !prev);
-          }}
-        >
+        <button onClick={clickHash} ref={hashRef}>
           #
         </button>
         {hashShow && (
-          <div className="hashBtns">
+          <div className="hashBtns" ref={hashMenu}>
             <ul>
               {tagData?.map(tag => {
                 return (
@@ -84,15 +107,11 @@ const UserArea = () => {
         리뷰 작성
       </Link>
       <div className="myArea">
-        <button
-          onClick={() => {
-            setMyShow(prev => !prev);
-          }}
-        >
+        <button ref={myRef} onClick={clickMy}>
           <img src={userImg} alt="사용자 프로필 사진" />
         </button>
         {myShow && (
-          <div className="myBtns">
+          <div className="myBtns" ref={myMenu}>
             <button onClick={btnMypage}>MyPage</button>
             <button onClick={BtnLogout}>Logout</button>
           </div>
