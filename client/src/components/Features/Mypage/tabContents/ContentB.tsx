@@ -44,10 +44,10 @@ const ContentB = ({ data }: tabBType) => {
     }
   };
   const navigate = useNavigate();
-
+  const reverseData = data.reverse();
   return (
     <>
-      {data.slice(offset, offset + limit).map(item => (
+      {reverseData.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce>
             <ListHead>
