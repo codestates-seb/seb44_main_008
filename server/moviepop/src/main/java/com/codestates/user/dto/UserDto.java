@@ -55,10 +55,10 @@ public class UserDto {
     @AllArgsConstructor
     public static class PatchPassword{
         @NotBlank
-        private String currentPassword;
+        private String currentPw;
 
         @NotBlank
-        private String newPassword;
+        private String newPw;
     }
 
     @Getter

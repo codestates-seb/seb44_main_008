@@ -159,6 +159,9 @@ public class UserService {
         if(profileImage != null) {
             String imageUrl = storageService.updateProfileImage(profileImage, findUser);
             findUser.setProfileImage(imageUrl);
+
+            for(MoviePartyUser moviePartyUser : findUser.getMoviePartyUsers())
+                moviePartyUser.setProfileImage(imageUrl);
         }
 
         return userRepository.save(findUser);

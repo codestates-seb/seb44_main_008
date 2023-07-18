@@ -5,6 +5,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
 import com.codestates.dto.ResponseDto;
+import com.codestates.image.utils.ImageUtil;
 import com.codestates.security.interceptor.JwtParseInterceptor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,12 @@ public class CommentController {
     public static final String COMMENT_DEFAULT_URL = "/comments";
     private final CommentService commentService;
     private final CommentMapper mapper;
+    private final ImageUtil imageUtil;
 
-    public CommentController(CommentService commentService, CommentMapper mapper) {
+    public CommentController(CommentService commentService, CommentMapper mapper, ImageUtil imageUtil) {
         this.commentService = commentService;
         this.mapper = mapper;
+        this.imageUtil = imageUtil;
     }
 
     //    @PostMapping
@@ -55,7 +58,7 @@ public class CommentController {
         Comment comment = commentService.findComment(commentId);
 
         return new ResponseEntity(
-                new ResponseDto.SingleResponseDto<>(mapper.commentToCommentResponseDto(comment)),
+                new ResponseDto.SingleResponseDto<>(mapper.commentToCommentResponseDto(comment, imageUtil)),
                 HttpStatus.OK
         );
     }

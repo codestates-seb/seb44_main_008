@@ -90,7 +90,7 @@ public class UserController {
     @PatchMapping("/password") // 비밀번호 수정
     public ResponseEntity patchUserPassword(@Valid @RequestBody UserDto.PatchPassword userPatchPasswordDto) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
-        User user = userService.updateUserPassword(email, userPatchPasswordDto.getCurrentPassword(), userPatchPasswordDto.getNewPassword());
+        User user = userService.updateUserPassword(email, userPatchPasswordDto.getCurrentPw(), userPatchPasswordDto.getNewPw());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

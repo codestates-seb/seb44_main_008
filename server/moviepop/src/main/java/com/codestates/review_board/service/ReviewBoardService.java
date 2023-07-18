@@ -108,10 +108,10 @@ public class ReviewBoardService {
         getReviewboard.getReviewBoardTags().clear();
         getReviewboard.getReviewBoardTags().addAll(newTags);
 
-        String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
-        getReviewboard.setThumbnail(imageUrl);
-
-        storageService.storeThumbnailImage(thumbnail);
+        if(thumbnail != null) {
+            String imageUrl = storageService.updateThumbnailImage(thumbnail, getReviewboard);
+            getReviewboard.setThumbnail(imageUrl);
+        }
 
         return findDetailReviewBoard(user, reviewBoard.getReviewBoardId());
     }
@@ -142,7 +142,7 @@ public class ReviewBoardService {
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> {
                     boolean isLiked = commentLikeRepository.existsByCommentAndUser(comment,user);
-                    CommentDto.Response responseDto = commentMapper.commentToCommentResponseDto(comment);
+                    CommentDto.Response responseDto = commentMapper.commentToCommentResponseDto(comment, imageUtil);
                     responseDto.setLiked(isLiked);
                     return responseDto;
                 })
