@@ -312,6 +312,7 @@ const ImgContainer = styled.div`
     width: 8rem;
     height: 8rem;
     border-radius: 50%;
+    object-fit: cover;
   }
   input {
     position: absolute;
