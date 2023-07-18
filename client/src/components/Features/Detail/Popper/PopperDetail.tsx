@@ -105,7 +105,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
           <>
             <div className="popDetailButtonBox w100">
               <Button value="수정하기" width="49%" onClick={clickEdit} />
-              <Button value="모집 삭제" width="49%" type="variant" />
+              <Button value="모집 삭제" width="49%" theme="variant" />
             </div>
           </>
         )}
@@ -113,7 +113,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
         {currentPage === 'myPageOtherPop' && (
           <>
             <div className="popDetailButtonBox w100">
-              <Button value="팟 참여 취소하기" width="100%" type="variant" />
+              <Button value="팟 참여 취소하기" width="100%" theme="variant" />
             </div>
           </>
         )}
