@@ -61,12 +61,12 @@ const ContentB = ({ data }: tabBType) => {
               </AuthorInfo>
             </ListHead>
             <ListTail>
-              <StyledButton
+              <Button
                 value={'수정'}
                 theme="variant"
                 onClick={() => navigate(`/detail/edit/${item.reviewBoardId}`)}
               />
-              <StyledButton
+              <Button
                 value={'삭제'}
                 theme="variant"
                 onClick={() => deleteHandler(item.reviewBoardId)}
@@ -144,6 +144,5 @@ const ListTail = styled.div`
   width: 8.7rem;
   justify-content: space-between;
 `;
-const StyledButton = styled(Button)<ButtonType>``;
 
 export default ContentB;

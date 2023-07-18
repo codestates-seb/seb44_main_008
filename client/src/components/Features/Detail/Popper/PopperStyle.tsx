@@ -100,7 +100,6 @@ export const PopperBox = styled.div`
     background-color: var(--main-dark-color);
     border-radius: 7px;
     input {
-      margin-bottom: 0.9rem;
     }
     input::-webkit-inner-spin-button {
       appearance: none;
@@ -118,6 +117,7 @@ export const PopperBox = styled.div`
         border-bottom: 2px solid var(--ghost-color);
         padding: 0.7rem;
         height: 100%;
+        margin-bottom: 0.9rem;
         &::-webkit-calendar-picker-indicator {
           color: #fff;
           opacity: 0;
