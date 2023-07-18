@@ -92,7 +92,6 @@ export const PopperBox = styled.div`
     p {
       font-size: 0.9rem;
       line-height: 1.3rem;
-      word-break: keep-all;
     }
   }
   .popperWrite {

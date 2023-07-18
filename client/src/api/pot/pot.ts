@@ -14,12 +14,12 @@ interface potData extends data {
   movieTitle: string;
 }
 
-interface potItemData extends data {
+export interface potItemData extends data {
   groupId: number;
   currentParticipant: number;
 }
 
-export const PostPot = (reviewId: number | undefined, data: potData) => {
+export const PostPot = (reviewId: string, data: potData) => {
   return instance
     .post(`/reviewBoards/${reviewId}/groups`, data)
     .then(res => res.data);
