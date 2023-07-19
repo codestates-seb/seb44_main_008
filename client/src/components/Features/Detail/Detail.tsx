@@ -4,25 +4,36 @@ import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 import axios from 'axios';
 import { instance } from '../../../api/api';
+import { deleteLike, getLike } from '../../../api/like/detailLike';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
+const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
+  data,
+  reviewId,
+}) => {
+  const queryClient = useQueryClient();
   const [liked, setLiked] = useState(data.wished);
   const [likeCount, setLikeCount] = useState<number>(data.wish ? data.wish : 0);
+  const mutationLike = useMutation(getLike, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+    },
+  });
+  const mutationUnLike = useMutation(deleteLike, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+    },
+  });
 
-  const ClickLike = async () => {
-    try {
-      const url = `/users/reviewBoards/${data.reviewBoardId}`;
-      if (liked === false) {
-        const result = await instance.post(url);
-        setLikeCount(likeCount => likeCount + 1);
-      } else {
-        const result = await instance.delete(url);
-        setLikeCount(likeCount => likeCount - 1);
-      }
-      setLiked(prev => !prev);
-    } catch (err) {
-      console.log('err', err);
+  const ClickLike = (Id: string) => {
+    if (liked === false) {
+      mutationLike.mutate(Id);
+      setLikeCount(likeCount => likeCount + 1);
+    } else {
+      mutationUnLike.mutate(Id);
+      setLikeCount(likeCount => likeCount - 1);
     }
+    setLiked(prev => !prev);
   };
 
   const date = data.createdAt;
@@ -41,7 +52,10 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
       </div>
       <div className="writeInfo">
         <div>
-          <Popunlike onClick={ClickLike} like={liked} />
+          <Popunlike
+            onClick={() => ClickLike(data.reviewBoardId)}
+            like={liked}
+          />
           <span>{likeCount}</span>
         </div>
         <div>
