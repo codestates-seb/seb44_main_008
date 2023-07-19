@@ -59,7 +59,7 @@ const LoginForm = () => {
     [],
   );
 
-  const onSubmit: SubmitHandler<LoginType> = data => {
+  const onSubmit: SubmitHandler<LoginType> = () => {
     if (email.length === 0 || emailMsg) {
       setIsEmail(false);
       return;
@@ -81,9 +81,9 @@ const LoginForm = () => {
   const SubmitEvent = useMutation({
     mutationFn: (user: LoginType) => Login(user),
     onSuccess(data) {
-      if (data.status === 200) {
-        const accessToken = data.headers.authorization;
-        const refreshToken = data.headers.refresh;
+      if (data?.status === 200) {
+        const accessToken = data?.headers.authorization;
+        const refreshToken = data?.headers.refresh;
         if (accessToken) {
           localStorage.setItem('token', accessToken);
         }
@@ -99,7 +99,6 @@ const LoginForm = () => {
               },
             });
             setuserItem(response.data);
-            console.log(response.data);
             dispatch(
               setUser({
                 isLoggedIn: true,
@@ -117,15 +116,11 @@ const LoginForm = () => {
           }
         };
         getUser();
-      } else {
-        alert('로그인 실패');
       }
     },
     onError(error: any) {
-      console.log('err');
-      if (error.response && error.response.status === 401) {
-        alert(error.response.message);
-      }
+      const errMsg = error.response.data.message;
+      alert(errMsg);
     },
   });
   return (
@@ -152,7 +147,7 @@ const LoginForm = () => {
             onChange={onChangePassword}
           />
         </div>
-        <Button value="로그인" width="100%" type="submit" />
+        <Button value="로그인" width="100%" type="submit" theme="variant" />
       </form>
       <button type="button" className="snsButton">
         <IcoGoogle /> <span>Sign in with Google</span>

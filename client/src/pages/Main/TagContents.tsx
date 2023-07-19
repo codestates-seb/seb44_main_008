@@ -40,7 +40,9 @@ const TagContents = () => {
   }, [tagIdParam]);
 
   useEffect(() => {
-    setIsReLoad(!isReLoad);
+    if (isReLoad === true) {
+      setIsReLoad(false);
+    }
   }, [tagSearchItems]);
 
   if (error) {

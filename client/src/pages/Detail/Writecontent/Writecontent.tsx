@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { WriteContentType, Props, TagType } from './type';
 import { StyleSheetManager } from 'styled-components';
@@ -72,6 +72,7 @@ const Writecontent = () => {
       setContentErr(true);
     }
   };
+  console.log(movieTitle);
 
   const onClickTag = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -103,6 +104,7 @@ const Writecontent = () => {
 
   const onClickSubmitButton = () => {
     // 유효성 검사
+
     if (title.length === 0) {
       setTitleErr(false);
     }
@@ -114,8 +116,10 @@ const Writecontent = () => {
     }
     if (content.length <= 10) {
       setContentErr(false);
-    } else {
+    }
+    if (titleErr && movieTitle && TagErr && contentErr) {
       const confirmed = window.confirm('게시글을 등록하시겠습니까?');
+      console.log(confirmed);
 
       if (confirmed) {
         const submitData = {
@@ -128,9 +132,9 @@ const Writecontent = () => {
           thumbnail: file ? file[0] : undefined,
         };
         writeMutations.mutate(submitData);
+        alert('게시글이 등록되었습니다.');
+        navigate('/main');
       }
-      alert('게시글이 등록되었습니다.');
-      navigate('/main');
     }
   };
 
