@@ -82,7 +82,7 @@ public class ReviewBoardController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postReviewBoard(@Valid @RequestPart ReviewBoardDto.Post post,
-                                          @RequestPart MultipartFile thumbnail) {
+                                          @RequestPart(required = false) MultipartFile thumbnail) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();
         User user = userService.findVerifiedUserByEmail(email);
         ReviewBoard reviewBoard = reviewBoardService.createReviewBoard(user, mapper.PostToReviewBoard(post, tagMapper), thumbnail);
