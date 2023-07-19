@@ -1,6 +1,5 @@
 package com.codestates.review_board.entity;
 
-import com.codestates.tag.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +15,7 @@ public class RecommendReviewBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recommendReviewBoardId;
     @OneToOne
-    @JoinColumn(name = "review_board_id")
+    @JoinColumn(name = "review_board_id", nullable = false)
     private ReviewBoard reviewBoard;
     private Integer age;
     private Integer score;

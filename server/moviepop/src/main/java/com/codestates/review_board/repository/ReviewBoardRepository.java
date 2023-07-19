@@ -2,6 +2,7 @@ package com.codestates.review_board.repository;
 
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.tag.entity.Tag;
+import com.codestates.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,5 @@ public interface ReviewBoardRepository extends JpaRepository<ReviewBoard,Long> {
 
 //    @Query(value = "select * from review_board where movie_id in :movieIds", nativeQuery = true)
     Page<ReviewBoard> findByMovieMovieIdIn(List<Long> movieIds, Pageable pageable);
+    List<ReviewBoard> findTop5ByUserOrderByCreatedAtDesc(User user);
 }

@@ -17,6 +17,13 @@ public class MovieScorePerAgeService {
         this.movieScorePerAgeRepository = movieScorePerAgeRepository;
     }
 
+    public MovieScorePerAge createMovieScorePerAge(Movie movie) {
+        MovieScorePerAge movieScorePerAge = new MovieScorePerAge();
+        movieScorePerAge.setMovie(movie);
+
+        return movieScorePerAgeRepository.save(movieScorePerAge);
+    }
+
     public MovieScorePerAge addMovieScorePerAge(Movie movie, int ageRange) {
         MovieScorePerAge movieScorePerAge = findMovieScorePerAgeByMovie(movie);
 

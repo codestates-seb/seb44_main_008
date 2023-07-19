@@ -9,7 +9,6 @@ import com.codestates.utils.UserUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -73,6 +72,10 @@ public class RecommendReviewBoardService {
 
     public List<RecommendReviewBoard> findRecommendReviewBoards() {
         return recommendReviewBoardRepository.findAll();
+    }
+
+    public List<RecommendReviewBoard> findRecommendReviewBoardsNotAdulted() {
+        return recommendReviewBoardRepository.findAllByReviewBoardAdultedIsFalseOrderByScore();
     }
 
     public List<RecommendReviewBoard> findTop5MyReviewBoards(User user) { //내가 작성한 리뷰게시글 작성기준 top5
