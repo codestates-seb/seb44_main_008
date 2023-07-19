@@ -109,6 +109,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
           onChange={personChange}
           isvalid={true}
           width="100%"
+          pattern="[0-9]+"
         />
         <textarea
           className="popTextArea"

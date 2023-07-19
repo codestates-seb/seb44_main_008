@@ -68,6 +68,12 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     onSuccess: () => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setCurrentRender('List');
+      alert('모집신청이 완료되었습니다.');
+    },
+    onError(err) {
+      const errMsg = err.response.data.message;
+      alert(errMsg);
+      console.log('err', err);
     },
   });
   const SubmitEvent = (groupId: number) => {
