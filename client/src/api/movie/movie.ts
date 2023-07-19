@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { instance } from '../api';
 
 type MovieType = {
@@ -9,5 +8,5 @@ type MovieType = {
 };
 
 export const getMovie = (movieName: string): Promise<MovieType> => {
-  return instance.get(`/movies?q=${movieName}`).then(res => res.data);
+  return instance.get(`/movies?q=${movieName}`).then(res => res.data.data);
 };

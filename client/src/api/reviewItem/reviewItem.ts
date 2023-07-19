@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { instance } from '../api';
 
-type ItemType = {
+type PostItemType = {
   post: {
     title: string;
     review: string;
@@ -11,7 +11,7 @@ type ItemType = {
   thumbnail?: FileList;
 };
 
-type PostItemType = {
+type EditItemType = {
   reviewId: number | string;
   patch: {
     title: string;
@@ -87,7 +87,7 @@ export const getAllItems = async (pageParam: number): Promise<AllItemType> => {
     .then(res => res.data);
 };
 
-export const postNewReview = (data: ItemType) => {
+export const postNewReview = (data: PostItemType) => {
   const formData = new FormData();
 
   formData.append(
@@ -111,7 +111,7 @@ export const getItem = (reviewId: string | undefined) => {
   return instance.get(`/reviewBoards/${reviewId}`).then(res => res.data);
 };
 
-export const editReview = (postData: PostItemType) => {
+export const editReview = (postData: EditItemType) => {
   const formData = new FormData();
 
   formData.append(

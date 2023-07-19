@@ -7,7 +7,7 @@ import isPropValid from '@emotion/is-prop-valid';
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
 import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postNewReview } from '../../../api/reviewItem/reviewItem';
 import { getAllTags } from '../../../api/tags/getTags';
 import { useNavigate } from 'react-router-dom';
@@ -31,13 +31,16 @@ const Writecontent = () => {
   const [contentErr, setContentErr] = useState<boolean>(true);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const {
-    data: tagData,
-    isSuccess,
-    isLoading,
-    error,
-  } = useQuery(['tags'], () => getAllTags());
+  const { data: tagData, isSuccess } = useQuery(['tags'], () => getAllTags());
+
+  const writeMutations = useMutation({
+    mutationFn: postData => postNewReview(postData),
+    onSuccess() {
+      queryClient.invalidateQueries(['mainItems']);
+    },
+  });
 
   // 이미지 관련 함수
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,22 +73,25 @@ const Writecontent = () => {
     }
   };
 
-  const onClickTag: void = (event: MouseEvent<HTMLButtonElement>) => {
-    const element = document.getElementById(event.target.id).classList;
+  const onClickTag = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    const target = event.target as HTMLButtonElement;
+    const element = document.getElementById(target.id)?.classList;
 
-    const newTagId: number | string = event.target.id;
-    const newTagName: string = event.target.name.substr(1);
+    const newTagId: number | string = target.id;
+    const newTagName: string = target.name.substr(1);
 
-    const tagIdArray = selectedTags.map(tagObject => tagObject.tagId);
+    const tagIdArray: string[] = selectedTags.map(tagObject => tagObject.tagId);
 
     if (tagIdArray.indexOf(newTagId) != -1) {
-      element.toggle('clicked');
+      element?.toggle('clicked');
       const deletedTagList = selectedTags.filter(tag => tag.tagId != newTagId);
       setSelectedTags(deletedTagList);
     } else if (selectedTags.length >= 3) {
       alert('태그는 최대 3개까지 선택 가능합니다.');
     } else {
-      element.toggle('clicked');
+      element?.toggle('clicked');
       const newTag = {
         tagId: newTagId,
         tagName: newTagName,
@@ -94,16 +100,6 @@ const Writecontent = () => {
       setTagErr(true);
     }
   };
-
-  const writeMutations = useMutation({
-    mutationFn: postData => postNewReview(postData),
-    onSuccess(data) {
-      console.log(data);
-    },
-    onError(err) {
-      console.log(err);
-    },
-  });
 
   const onClickSubmitButton = () => {
     // 유효성 검사
@@ -125,7 +121,7 @@ const Writecontent = () => {
         const submitData = {
           post: {
             title: title,
-            movieId: movieId,
+            movieId: Number(movieId),
             review: content,
             tags: selectedTags,
           },

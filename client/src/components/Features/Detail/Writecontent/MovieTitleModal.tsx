@@ -18,20 +18,24 @@ const MovieTitleModal = ({
     setModalOn && setModalOn(false);
   };
 
-  const onChangeMovieTitle = event => {
-    setSearchTitle(event.target.value);
+  const onChangeMovieTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    setSearchTitle(target.value);
   };
 
   // api 통신
-  const { data, isLoading, error, isSuccess } = useQuery(
+  const { data, isSuccess } = useQuery(
     ['movies', searchTitle],
     () => getMovie(searchTitle),
     { enabled: !!searchTitle },
   );
 
-  const onClickMovieTitle = event => {
-    setMovieTitle && setMovieTitle(event.target.innerHTML);
-    setMovieId && setMovieId(event.target.id);
+  const onClickMovieTitle = (
+    event: React.MouseEvent<HTMLUListElement, MouseEvent>,
+  ) => {
+    const target = event.target as HTMLUListElement;
+    setMovieTitle && setMovieTitle(target.innerHTML);
+    setMovieId && setMovieId(target.id);
     setModalOn && setModalOn(false);
     document.body.style.overflow = 'unset';
   };
@@ -39,7 +43,11 @@ const MovieTitleModal = ({
   return (
     <MovieTitleModalWrapper>
       <ModalBackground onClick={onClickBackground}>
-        <ModalContainer onClick={event => event.stopPropagation()}>
+        <ModalContainer
+          onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+            event.stopPropagation()
+          }
+        >
           <div className="search--bar">
             <Input
               value={searchTitle}
@@ -52,19 +60,18 @@ const MovieTitleModal = ({
           {isSuccess && (
             <div className="result--section">
               <SearchResultContainer>
-                {data.data &&
-                  data.data.map(item => {
-                    return (
-                      <SearchResult
-                        key={item.movieId}
-                        id={item.movieId}
-                        value={item.title}
-                        onClick={onClickMovieTitle}
-                      >
-                        {item.title}
-                      </SearchResult>
-                    );
-                  })}
+                {data?.map(item => {
+                  return (
+                    <SearchResult
+                      key={item.movieId}
+                      id={item.movieId}
+                      value={item.title}
+                      onClick={onClickMovieTitle}
+                    >
+                      {item.title}
+                    </SearchResult>
+                  );
+                })}
               </SearchResultContainer>
             </div>
           )}

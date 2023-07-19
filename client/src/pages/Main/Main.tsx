@@ -15,6 +15,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store/store';
 
 const Main = () => {
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['mainItems'],
+    queryFn: () => getMainItems(),
+  });
+
   const userName = useSelector(
     (state: RootState) => state.user.value.userInfo.name,
   );
@@ -32,11 +37,6 @@ const Main = () => {
       items: 4,
     },
   };
-
-  const { data, isLoading, error, isSuccess } = useQuery({
-    queryKey: ['mainItems'],
-    queryFn: () => getMainItems(),
-  });
 
   if (error) {
     return <ErrorPage />;
