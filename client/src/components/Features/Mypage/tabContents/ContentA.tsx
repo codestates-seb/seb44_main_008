@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import Pagenation from '../Pagenation';
 // import { data } from './tabAB';
 import Poplike from '../../../Common/PopIcons/Poplike';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteTabA } from '../../../../api/user/userTab/userTab';
+import { useNavigate } from 'react-router-dom';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -30,11 +31,16 @@ type tabAType = {
 };
 
 const ContentA = ({ data }: tabAType) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [tabAPost, setAPost] = useState(data);
   console.log('data1', data);
   const [like, setLike] = useState(true);
   const deletePostMutation = useMutation(DeleteTabA, {
-    onSuccess: () => location.reload(),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['TabUserInfo']);
+      location.reload();
+    },
   });
   const likeHandler = (reviewId: number) => {
     const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
@@ -42,6 +48,9 @@ const ContentA = ({ data }: tabAType) => {
       deletePostMutation.mutate(reviewId);
       alert('게시글이 찜 해제되었습니다.');
     }
+  };
+  const moveHandler = (reviewId: number) => {
+    navigate(`/detail/content/${reviewId}`);
   };
 
   const [totalElements, setTotalElements] = useState(tabAPost.length);
@@ -53,7 +62,7 @@ const ContentA = ({ data }: tabAType) => {
     <>
       {tabAPost.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
-          <ListOnce>
+          <ListOnce onClick={() => moveHandler(item.reviewBoardId)}>
             <ListHead>
               <Titles>
                 <p className="title">{item.title}</p>
@@ -64,13 +73,13 @@ const ContentA = ({ data }: tabAType) => {
                 <p className="author">{item.user.nickname}</p>
               </AuthorInfo>
             </ListHead>
-            <ListTail>
-              <Poplike
-                onClick={() => likeHandler(item.reviewBoardId)}
-                like={like}
-              />
-            </ListTail>
           </ListOnce>
+          <ListTail>
+            <Poplike
+              onClick={() => likeHandler(item.reviewBoardId)}
+              like={like}
+            />
+          </ListTail>
         </ListContainer>
       ))}
       <Pagenation

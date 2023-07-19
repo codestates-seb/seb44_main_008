@@ -95,8 +95,8 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
     const confirmed = window.confirm('팟 정보를 수정하시겠습니까?');
     if (confirmed) {
       mutationPatch.mutate({ groupId: currentId, modalData: modalData });
+      alert('팟 정보가 수정되었습니다.');
     }
-    alert('팟 정보가 수정되었습니다.');
   };
 
   if (error) {
