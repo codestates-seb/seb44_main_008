@@ -13,5 +13,7 @@ export const getAllTags = (): Promise<tagType> => {
 };
 
 export const getAccountTags = (): Promise<tagType> => {
-  return axios.get('/tags').then(res => res.data.data);
+  return axios
+    .get(`${import.meta.env.VITE_BASE_URL}/tags`)
+    .then(res => res.data.data);
 };

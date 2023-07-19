@@ -7,15 +7,7 @@ import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
 import { useQuery } from '@tanstack/react-query';
 import { getAccountTags } from '../../api/tags/getTags';
-
-// const tagsArr = [
-//   { tagId: 1, tagName: '로맨스' },
-//   { tagId: 2, tagName: '호러' },
-//   { tagId: 3, tagName: '판타지' },
-//   { tagId: 4, tagName: '드라마' },
-//   { tagId: 5, tagName: 'sf' },
-//   { tagId: 6, tagName: '액션' },
-// ];
+import { useLocation } from 'react-router-dom';
 interface SignupType {
   userPostDto: {
     email: string;
@@ -29,6 +21,7 @@ interface SignupType {
 
 const SignupForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [page, setPage] = useState(1);
 
   const {
@@ -40,7 +33,9 @@ const SignupForm = () => {
 
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>(
+    location.state.value ? location.state.value : '',
+  );
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const [tag, setTag] = useState<number[]>([]);
@@ -72,25 +67,19 @@ const SignupForm = () => {
 
   // 2페이지로 넘어가는 버튼
   const ClickNextHandle = () => {
-    if (email.length === 0 || emailMsg) {
-      setIsEmail(false);
-    } else {
-      setIsEmail(true);
-    }
     if (!imgfile) {
       setIsImg(false);
     } else {
       setIsImg(true);
     }
-    if (password.length === 0 || passwordMsg) {
-      setIsPassword(false);
-    } else {
-      setIsPassword(true);
+    if (email.length === 0) {
+      setIsEmail(false);
     }
-    if (passwordConfirm.length === 0 || passwordConfirmMsg) {
+    if (password.length === 0) {
+      setIsPassword(false);
+    }
+    if (passwordConfirm.length === 0) {
       setIsPasswordConfirm(false);
-    } else {
-      setIsPasswordConfirm(true);
     }
     if (
       imgfile &&
@@ -169,6 +158,7 @@ const SignupForm = () => {
         newArr.splice(Index, 1);
         setTag(newArr);
       }
+      setIsTag(true);
     },
     [tag],
   );
@@ -239,50 +229,71 @@ const SignupForm = () => {
 
   const SubmitEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const data: SignupType = {
-        userPostDto: {
-          email: email,
-          password: password,
-          tags: tag.map(v => {
-            return { tagId: v };
-          }),
-          name: name,
-          nickname: nickname,
-          birth: birth,
-        },
-      };
 
-      const formData = new FormData();
-      formData.append(
-        'userPostDto',
-        new Blob([JSON.stringify(data.userPostDto)], {
-          type: 'application/json',
-        }),
-      );
-      if (imgfile) {
-        formData.append('profileImage', imgfile);
-      }
-
-      const result = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/users`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+    if (tag.length === 0) {
+      setIsTag(false);
+    } else {
+      setIsTag(true);
+    }
+    if (name.length === 0) {
+      setIsName(false);
+    }
+    if (nickname.length === 0) {
+      setIsnickName(false);
+    }
+    if (birth.length === 0) {
+      setIsBirth(false);
+    }
+    if (
+      tag.length !== 0 &&
+      name.length !== 0 &&
+      nickname.length !== 0 &&
+      birth.length !== 0
+    ) {
+      try {
+        const data: SignupType = {
+          userPostDto: {
+            email: email,
+            password: password,
+            tags: tag.map(v => {
+              return { tagId: v };
+            }),
+            name: name,
+            nickname: nickname,
+            birth: birth,
           },
-        },
-      );
+        };
 
-      console.log(result);
-      navigate('/account/login');
-    } catch (err) {
-      console.log(err);
+        const formData = new FormData();
+        formData.append(
+          'userPostDto',
+          new Blob([JSON.stringify(data.userPostDto)], {
+            type: 'application/json',
+          }),
+        );
+        if (imgfile) {
+          formData.append('profileImage', imgfile);
+        }
+
+        const result = await axios.post(
+          `${import.meta.env.VITE_BASE_URL}/users`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+
+        console.log(result);
+        navigate('/account/login');
+      } catch (err) {
+        const errMsg = err.response.data.message;
+        alert(errMsg);
+        console.log('err', err);
+      }
     }
   };
-  useEffect(() => {
-    console.log('tag is', tag);
-  }, [tag]);
   return (
     <AccountWrap>
       <form onSubmit={SubmitEvent}>
@@ -355,9 +366,9 @@ const SignupForm = () => {
 
         {page === 2 && (
           <div>
-            <div className="tagBtnWrap">
+            <div className="tagBtnWrap inputBox">
               <ul>
-                {tagsArr.map(tagItem => {
+                {tagsArr?.map(tagItem => {
                   const selected = tag.includes(tagItem.tagId);
                   return (
                     <li key={tagItem.tagId}>
@@ -375,6 +386,7 @@ const SignupForm = () => {
                   );
                 })}
               </ul>
+              {!isTag ? <span>태그는 한개이상 선택해야 합니다.</span> : null}
             </div>
             <div className="inputBox">
               <Input
