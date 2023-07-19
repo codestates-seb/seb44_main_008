@@ -5,7 +5,7 @@ import Button from '../../../Common/Button/Button';
 import { ButtonType } from '../../../Common/Button/type';
 import { useNavigate } from 'react-router-dom';
 import { DeleteTabB } from '../../../../api/user/userTab/userTab';
-import { Mutation, useMutation } from '@tanstack/react-query';
+import { Mutation, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // const getData = async () => {
 //   const response = await axios.get('/url/groups', {
@@ -28,30 +28,50 @@ type tabBType = {
     };
   }[];
 };
-
 const ContentB = ({ data }: tabBType) => {
+  const queryClient = useQueryClient();
   console.log('data2', data);
+  const navigate = useNavigate();
   const [totalElements, setTotalElements] = useState(data.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-  const deletePostMutation = useMutation(DeleteTabB);
-  const deleteHandler = (postId: number) => {
-    const confirmed = window.confirm('정말 이 게시글을 삭제하시겠습니까?');
-    if (confirmed) {
-      deletePostMutation.mutate(postId);
-      alert('게시글이 삭제되었습니다.');
-    }
-  };
-  const navigate = useNavigate();
+  const deletePostMutation = useMutation(DeleteTabB, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['TabUserInfo']);
+    },
+  });
 
   const reverseData = data.slice().reverse();
-
+  const moveHandler = (reviewId: number) => {
+    navigate(`/detail/content/${reviewId}`);
+  };
+  const editBtn = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    reviewBoardId: number,
+  ) => {
+    event.stopPropagation();
+    navigate(`/detail/edit/${reviewBoardId}`);
+  };
+  const delBtn = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    reviewBoardId: number,
+  ) => {
+    event.stopPropagation();
+    const deleteHandler = (postId: number) => {
+      const confirmed = window.confirm('정말 이 게시글을 삭제하시겠습니까?');
+      if (confirmed) {
+        deletePostMutation.mutate(postId);
+        alert('게시글이 삭제되었습니다.');
+      }
+    };
+    deleteHandler(reviewBoardId);
+  };
   return (
     <>
       {reverseData.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
-          <ListOnce>
+          <ListOnce onClick={() => moveHandler(item.reviewBoardId)}>
             <ListHead>
               <Titles>
                 <p className="title">{item.title}</p>
@@ -66,12 +86,12 @@ const ContentB = ({ data }: tabBType) => {
               <Button
                 value={'수정'}
                 theme="variant"
-                onClick={() => navigate(`/detail/edit/${item.reviewBoardId}`)}
+                onClick={event => editBtn(event, item.reviewBoardId)}
               />
               <Button
                 value={'삭제'}
                 theme="variant"
-                onClick={() => deleteHandler(item.reviewBoardId)}
+                onClick={event => delBtn(event, item.reviewBoardId)}
               />
             </ListTail>
           </ListOnce>

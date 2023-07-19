@@ -5,7 +5,7 @@ import Element2 from './tabContents/ContentC';
 import Element3 from './tabContents/ContentD';
 import { useState } from 'react';
 import Button from '../../Common/Button/Button';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { GetUser } from '../../../api/user/userInfo/userInfo';
 import ErrorPage from '../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../Common/Loading/Loading';
