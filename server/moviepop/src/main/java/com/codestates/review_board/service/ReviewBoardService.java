@@ -9,6 +9,7 @@ import com.codestates.image.service.StorageService;
 import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie.dto.MovieDto;
 import com.codestates.movie.entity.Movie;
+import com.codestates.movie.service.MovieScorePerAgeService;
 import com.codestates.movie.service.MovieService;
 import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
@@ -26,6 +27,7 @@ import com.codestates.user.mapper.UserMapper;
 import com.codestates.utils.UserUtils;
 import com.codestates.user.repository.CommentLikeRepository;
 import com.codestates.user.service.ReviewBoardWishService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +42,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReviewBoardService {
 
     private final ReviewBoardRepository reviewBoardRepository;
@@ -53,20 +56,7 @@ public class ReviewBoardService {
     private final UserMapper userMapper;
     private final StorageService storageService;
     private final ImageUtil imageUtil;
-
-    public ReviewBoardService(ReviewBoardRepository reviewBoardRepository, TagService tagService, MovieService movieService, ReviewBoardWishService reviewBoardWishService, CommentMapper commentMapper, TagMapper tagMapper, CommentLikeRepository commentLikeRepository, MoviePartyMapper moviePartyMapper, UserMapper userMapper, StorageService storageService, ImageUtil imageUtil) {
-        this.reviewBoardRepository = reviewBoardRepository;
-        this.tagService = tagService;
-        this.movieService = movieService;
-        this.reviewBoardWishService = reviewBoardWishService;
-        this.commentMapper = commentMapper;
-        this.tagMapper = tagMapper;
-        this.commentLikeRepository = commentLikeRepository;
-        this.moviePartyMapper = moviePartyMapper;
-        this.userMapper = userMapper;
-        this.storageService = storageService;
-        this.imageUtil = imageUtil;
-    }
+    private final MovieScorePerAgeService movieScorePerAgeService;
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard, MultipartFile thumbnail) {
         Movie movie = movieService.findMovie(reviewBoard.getMovie().getMovieId());
@@ -84,6 +74,10 @@ public class ReviewBoardService {
             String imageUrl = storageService.storeThumbnailImage(thumbnail);
             reviewBoard.setThumbnail(imageUrl);
         }
+
+        int age = UserUtils.getAge(user).getYears();
+        int ageRange = age / 10;
+        movieScorePerAgeService.addMovieScorePerAge(movie, ageRange);
 
         return reviewBoardRepository.save(reviewBoard);
     }
@@ -195,6 +189,8 @@ public class ReviewBoardService {
 
         if(reviewBoard.getThumbnail() != null)
             storageService.deleteThumbnailImage(reviewBoard);
+
+        movieScorePerAgeService.subtractMovieScorePerAge(reviewBoard.getMovie(), UserUtils.getAge(user).getYears() / 10);
 
         reviewBoardRepository.delete(reviewBoard);
     }
