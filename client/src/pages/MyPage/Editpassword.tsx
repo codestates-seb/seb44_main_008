@@ -10,9 +10,15 @@ const Editpassword = () => {
   const [currentPw, setCurrentPw] = useState('');
   const [editPw, setEditPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
+
+  const [currentPwErr, setCurrentPwErr] = useState(true);
+  const [editPwErr, setEditPwErr] = useState(true);
+  const [confirmPwErr, setConfirmPwErr] = useState(true);
+
   const navigate = useNavigate();
   const mutationPatch = useMutation(PatchEditUserPassword, {
-    onError: () => {
+    onError: err => {
+      console.log(err);
       alert('현재 비밀번호가 일치하지 않습니다.');
     },
   });
@@ -28,20 +34,35 @@ const Editpassword = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (editPw !== confirmPw) {
-      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다!!');
-    } else {
-      const confirmed = window.confirm('비밀번호를 변경하시겠습니까?');
-      if (confirmed) {
-        mutationPatch.mutate({
-          currentPw: currentPw,
-          newPw: editPw,
-        });
-        alert('비밀번호가 변경되었습니다.');
-        navigate('/mypage');
-      }
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    {
+      currentPw.length === 0
+        ? setCurrentPwErr(!currentPwErr)
+        : editPw.length === 0
+        ? setEditPwErr(!editPwErr)
+        : confirmPw.length === 0
+        ? setConfirmPwErr(!confirmPwErr)
+        : editPw !== confirmPw
+        ? alert('비밀번호와 비밀번호 확인이 일치하지 않습니다!!')
+        : !passwordRegex.test(editPw)
+        ? alert('비밀번호는 영문, 숫자, 특수문자 조합 8~16글자여야 합니다.')
+        : editPw === currentPw
+        ? alert('현재 비밀번호와 동일한 값으로의 변경은 불가능 합니다.')
+        : (() => {
+            const confirmed = window.confirm('비밀번호를 변경하시겠습니까?');
+            if (confirmed) {
+              mutationPatch.mutate({
+                currentPw: currentPw,
+                newPw: editPw,
+              });
+              alert('비밀번호가 변경되었습니다.');
+              navigate('/mypage');
+            }
+          })();
     }
   };
+
   return (
     <>
       <Container>
@@ -53,21 +74,21 @@ const Editpassword = () => {
                 onChange={pwChangeHandler}
                 type="password"
                 placeholder="현재 비밀번호"
-                isvalid={'true'}
+                isvalid={currentPwErr}
               />
               <Input
                 value={editPw}
                 onChange={editChangeHandler}
                 type="password"
                 placeholder="변경 비밀번호 (영문, 숫자, 특수문자 조합 8~16글자)"
-                isvalid={'true'}
+                isvalid={editPwErr}
               />
               <Input
                 value={confirmPw}
                 onChange={confirmChangeHandler}
                 type="password"
                 placeholder="변경 비밀번호 확인"
-                isvalid={'true'}
+                isvalid={confirmPwErr}
               />
             </InputWrapper>
             <ButtonWrapper>
