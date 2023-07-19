@@ -13,9 +13,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editReview } from '../../../api/reviewItem/reviewItem';
 import { getAllTags } from '../../../api/tags/getTags';
 import { getItem } from '../../../api/reviewItem/reviewItem';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EditContent = () => {
+  const navigate = useNavigate();
   const { reviewId } = useParams();
 
   const [fileURL, setFileURL] = useState<string>('');
@@ -43,8 +44,8 @@ const EditContent = () => {
   const queryClient = useQueryClient();
 
   const mutationPatch = useMutation(editReview, {
-    onSuccess: data => {
-      queryClient.invalidateQueries(['EditReview']), console.log('data', data);
+    onSuccess: () => {
+      queryClient.invalidateQueries(['EditReview']), navigate(`/mypage`);
     },
   });
 
