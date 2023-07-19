@@ -38,6 +38,7 @@ const Editpassword = () => {
           newPw: editPw,
         });
         alert('비밀번호가 변경되었습니다.');
+        navigate('/mypage');
       }
     }
   };

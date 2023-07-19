@@ -1,14 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import { styled } from 'styled-components';
 import { DeleteUser } from '../../../api/user/userInfo/userInfo';
+import { useNavigate } from 'react-router-dom';
 
 const DeleteMember = () => {
+  const navigate = useNavigate();
   const mutationDelete = useMutation(DeleteUser);
   const deletehandler = () => {
     const confirmed = window.confirm('회원 탈퇴를 하시겠습니까?');
     if (confirmed) {
       mutationDelete.mutate();
       alert('회원 탈퇴가 정상적으로 완료되었습니다.');
+      navigate('/start');
     }
   };
   return (

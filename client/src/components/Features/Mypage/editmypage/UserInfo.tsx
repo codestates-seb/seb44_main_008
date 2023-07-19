@@ -34,6 +34,7 @@ const UserInfo = () => {
   const mutationPatch = useMutation(PatchEditUser, {
     onSuccess: () => {
       queryClient.invalidateQueries(['EditUserInfo']);
+      navigate('/mypage');
     },
   });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -74,7 +75,6 @@ const UserInfo = () => {
         profileImage: image,
       });
       alert('회원정보가 저장되었습니다.');
-      navigate('/mypage');
     }
   };
 
