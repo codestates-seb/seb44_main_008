@@ -1,19 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { PopperDetailData } from './popperType';
-import { PopperBox } from './PopperStyle';
-import Button from '../../../Common/Button/Button';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
-import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
-import Loading from '../../../Common/Loading/Loading';
-import { getDate } from '../../../../assets/commonts/common';
 import {
   DeleteCModal,
   DeleteDModal,
 } from '../../../../api/user/userTab/userTab';
+import { getDate } from '../../../../assets/commonts/common';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
+import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
+import Button from '../../../Common/Button/Button';
+import Loading from '../../../Common/Loading/Loading';
+import { PopperBox } from './PopperStyle';
+import { PopperDetailData } from './popperType';
 
 type PopperDetailProps = {
+  reviewId: string;
   currentId: number;
   setCurrentID: React.Dispatch<React.SetStateAction<number>>;
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
@@ -21,12 +22,14 @@ type PopperDetailProps = {
 };
 
 const PopperDetail: React.FC<PopperDetailProps> = ({
+  reviewId,
   currentId,
   setCurrentID,
   setCurrentRender,
   currentPage,
 }) => {
   const id = currentId;
+  const queryClient = useQueryClient();
   const [groups, setGroups] = useState<PopperDetailData>({});
   const { openScroll } = useBodyScrollLock();
 
@@ -54,22 +57,16 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     setCurrentID(id);
   };
 
-  const joinPotData = {
-    groupId: id,
-    currentParticipant: 10,
-  };
-  const SubmitEvent = () => {
-    writeMutations.mutate(joinPotData);
-  };
-  const writeMutations = useMutation({
-    mutationFn: () => JoinPot(id, joinPotData),
-    onSuccess(data) {
+  const mutationJoin = useMutation(JoinPot, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setCurrentRender('List');
     },
-    onError(err) {
-      console.log(err);
-    },
   });
+  const SubmitEvent = (groupId: number) => {
+    mutationJoin.mutate(groupId);
+  };
+
   const {
     data: dataItem,
     isLoading,
@@ -90,7 +87,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   }
 
   console.log(id);
-  
+
   if (isSuccess) {
     return (
       <PopperBox>
@@ -123,7 +120,9 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
                   width="100%"
                   theme="variant"
                   type="button"
-                  onClick={SubmitEvent}
+                  onClick={() => {
+                    SubmitEvent(dataItem.data.groupId);
+                  }}
                 />
               </div>
             </>

@@ -25,10 +25,6 @@ const Detail: React.FC<{ data: DetailData }> = ({ data }) => {
     }
   };
 
-  console.log('디테일 데이터', data);
-  console.log('좋아요', liked);
-  console.log('좋아요카운트', likeCount);
-
   const date = data.createdAt;
   const reviewDate = date?.replace(/-/gi, '.');
 

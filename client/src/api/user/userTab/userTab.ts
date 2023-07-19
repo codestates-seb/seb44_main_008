@@ -1,4 +1,3 @@
-import { MutationFunction } from '@tanstack/react-query';
 import { PopperDetailData } from '../../../components/Features/Detail/Popper/popperType';
 import { instance } from '../../api';
 import { data } from '../../pot/pot';

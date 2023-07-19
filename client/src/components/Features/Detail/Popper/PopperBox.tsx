@@ -15,7 +15,6 @@ const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {
   const [currentId, setCurrentID] = useState(0);
   const [currentPage, setCurrentPage] = useState('');
 
-  console.log('groups', groups);
   return (
     <>
       {currentRender === 'List' && (
@@ -27,6 +26,7 @@ const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {
       )}
       {currentRender === 'Detail' && (
         <PopperDetail
+          reviewId={reviewId}
           currentId={currentId}
           setCurrentID={setCurrentID}
           setCurrentRender={setCurrentRender}

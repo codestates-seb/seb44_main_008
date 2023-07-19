@@ -14,11 +14,6 @@ interface potData extends data {
   movieTitle: string;
 }
 
-export interface potItemData extends data {
-  groupId: number;
-  currentParticipant: number;
-}
-
 export const PostPot = (reviewId: string, data: potData) => {
   return instance
     .post(`/reviewBoards/${reviewId}/groups`, data)
@@ -48,11 +43,6 @@ export const DeletePot = (groupId: number | undefined) => {
   return instance.delete(`/groups/${groupId}`).then(res => res.data);
 };
 
-export const JoinPot = (
-  groupId: number | undefined,
-  joinPotData: potItemData,
-) => {
-  return instance
-    .post(`/users/groups/${groupId}`, joinPotData)
-    .then(res => res.data);
+export const JoinPot = (groupId: number | undefined) => {
+  return instance.post(`/users/groups/${groupId}`).then(res => res.data);
 };
