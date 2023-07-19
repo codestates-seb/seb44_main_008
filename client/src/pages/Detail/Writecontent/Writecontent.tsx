@@ -129,7 +129,7 @@ const Writecontent = () => {
             review: content,
             tags: selectedTags,
           },
-          thumbnail: file[0],
+          thumbnail: file ? file[0] : undefined,
         };
         writeMutations.mutate(submitData);
       }
