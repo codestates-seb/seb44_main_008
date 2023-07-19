@@ -58,6 +58,9 @@ export const GetCommentAll = (
     .then(res => res.data);
 };
 
-export const DeleteComment = (commentId: number | undefined) => {
+export const LikeComment = (commentId: number) => {
+  return instance.post(`/users/comments/${commentId}`).then(res => res.data);
+};
+export const DeleteComment = (commentId: number) => {
   return instance.delete(`/comments/${commentId}`).then(res => res.data);
 };

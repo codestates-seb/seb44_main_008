@@ -7,7 +7,7 @@ import PopperEdit from './PopperEdit';
 
 type PopperBoxProps = {
   groups: Group[];
-  reviewId: number;
+  reviewId: string;
   movie: string;
 };
 const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {

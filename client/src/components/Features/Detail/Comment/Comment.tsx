@@ -3,13 +3,13 @@ import CommentList from './CommentList';
 import CommentWrite from './CommentWrite';
 
 const Comment: React.FC<{
-  reviewId: string | undefined;
-  data: Comments[] | undefined;
+  reviewId: string;
+  data: Comments[];
 }> = ({ reviewId, data }) => {
   return (
     <>
       <CommentWrite reviewId={reviewId} />
-      <CommentList data={data} />
+      <CommentList data={data} reviewId={reviewId} />
     </>
   );
 };

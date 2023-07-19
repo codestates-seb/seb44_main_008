@@ -6,6 +6,7 @@ import Button from '../../../Common/Button/Button';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
+import { getDate } from '../../../../assets/commonts/common';
 import {
   DeleteCModal,
   DeleteDModal,
@@ -89,6 +90,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   }
 
   console.log(id);
+  
   if (isSuccess) {
     return (
       <PopperBox>
@@ -99,7 +101,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
         <div className="popperDetail">
           <h4>{dataItem.data.title}</h4>
           <ol>
-            <li>일시 : {dataItem.data.meetingDate}</li>
+            <li>일시 :{getDate(dataItem.data.meetingDate)}</li>
             <li>장소: {dataItem.data.location}</li>
             <li>모집 인원: 최대 {dataItem.data.maxCapacity}명</li>
           </ol>

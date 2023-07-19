@@ -5,64 +5,98 @@ import Poplike from '../../../Common/PopIcons/Poplike';
 import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
-import { useMutation } from '@tanstack/react-query';
-import { DeleteComment } from '../../../../api/comment/comment';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DeleteComment, LikeComment } from '../../../../api/comment/comment';
+import { getDate } from '../../../../assets/commonts/common';
 
-const CommentList = (data?: Comments[]) => {
-  const [like, setLike] = useState(false);
-  const likeHandler = () => {
-    setLike(!like);
-  };
+const CommentList = ({
+  data,
+  reviewId,
+}: {
+  data: Comments[];
+  reviewId: string;
+}) => {
   const userId = useSelector(
     (state: RootState) => state.user.value.userInfo.id,
   );
-  console.log(data);
-  const mutationDelete = useMutation(DeleteComment(data.commentId));
-  const commentDelete = () => {
+
+  return (
+    <CommentListWrap>
+      {data &&
+        data.map(answer => {
+          return (
+            <Li
+              key={answer.commentId}
+              answer={answer}
+              userId={userId}
+              reviewId={reviewId}
+            />
+          );
+        })}
+    </CommentListWrap>
+  );
+};
+const Li: React.FC<{
+  answer: Comments;
+  userId: number;
+  reviewId: string;
+}> = ({ answer, userId, reviewId }) => {
+  const queryClient = useQueryClient();
+  const mutationLike = useMutation(LikeComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+    },
+  });
+  const commentLike = (commentId: number) => {
+    mutationLike.mutate(commentId);
+  };
+
+  const mutationDelete = useMutation(DeleteComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+    },
+  });
+  const commentDelete = (commentId: number) => {
     const confirmed = window.confirm('댓글을 삭제하시겠습니까?');
     if (confirmed) {
-      mutationDelete.mutate();
+      mutationDelete.mutate(commentId);
       alert('댓글이 정상적으로 삭제되었습니다.');
     }
   };
   return (
-    <CommentListWrap>
-      {data.data.map(answer => {
-        return (
-          <li key={answer.commentId}>
-            <div>
-              <div className="userBox">
-                <div className="userImg">
-                  <img
-                    src={answer.user.profileImage}
-                    alt={answer.user.nickname}
-                  />
-                </div>
-                <p>
-                  <span>{answer.user.nickname}</span>
-                  <span>{answer.createdAt}</span>
-                </p>
-              </div>
-              {userId === answer.user.userId && (
-                <button className="closeBtn" onClick={commentDelete}>
-                  <GrClose />
-                </button>
-              )}
-            </div>
-            <div className="commetTxt">
-              <p>{answer.content}</p>
-              <div className="buttonWrap">
-                <Poplike onClick={likeHandler} like={like} />
-                <span>{answer.liked} Pops</span>
-              </div>
-            </div>
-          </li>
-        );
-      })}
-    </CommentListWrap>
+    <li>
+      <div>
+        <div className="userBox">
+          <div className="userImg">
+            <img src={answer.user.profileImage} alt={answer.user.nickname} />
+          </div>
+          <p>
+            <span>{answer.user.nickname}</span>
+            <span>{getDate(answer.createdAt)}</span>
+          </p>
+        </div>
+        {userId === answer.user.userId && (
+          <button
+            className="closeBtn"
+            onClick={() => commentDelete(answer.commentId)}
+          >
+            <GrClose />
+          </button>
+        )}
+      </div>
+      <div className="commetTxt">
+        <p>{answer.content}</p>
+        <div className="buttonWrap">
+          <Poplike
+            onClick={() => commentLike(answer.commentId)}
+            like={answer.liked}
+          />
+          <span>{answer.liked} Pops</span>
+        </div>
+      </div>
+    </li>
   );
 };
-
 const CommentListWrap = styled.ul`
   li {
     background-color: var(--main-gray-color);

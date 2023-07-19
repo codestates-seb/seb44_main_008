@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
 import { Group } from '../../../../pages/Detail/Detailcontent/detailType';
+import { getDate } from '../../../../assets/commonts/common';
 
 type PopperListProps = {
   groups: Group[];
@@ -26,19 +27,13 @@ const PopperList: React.FC<PopperListProps> = ({
       <div className="popperList">
         <ul>
           {groups.map(item => {
-            const itemDate = item.meetingDate;
-            const year = itemDate.split('-')[0];
-            const month = itemDate.split('-')[1];
-            const date = itemDate.split('-')[2];
             return (
               <li key={item.groupId}>
                 <button onClick={clickList} value={item.groupId}>
                   <h4>{item.title}</h4>
                   <div>
                     <ol>
-                      <li>
-                        일시 : {year}년 {month}월 {date}일 저녁 8시
-                      </li>
+                      <li>일시 : {getDate(item.meetingDate)}</li>
                       <li>장소: {item.location}</li>
                       <li>
                         모집 인원: {item.users.length}/{item.maxCapacity}

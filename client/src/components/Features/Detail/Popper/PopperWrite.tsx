@@ -8,6 +8,8 @@ import { PostPot } from '../../../../api/pot/pot';
 
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+  reviewId: string;
+  movie: string;
 };
 
 const PopperWrite: React.FC<PopperWriteProps> = ({
@@ -41,7 +43,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     if (isNaN(value)) return;
     setPerson(value);
   };
-  const bodyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const bodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.currentTarget.value);
   };
 
@@ -54,20 +56,20 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     content: body,
     movieTitle: movie,
   };
+  const writeMutations = useMutation(
+    () => {
+      return PostPot(reviewId, submitData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+        setCurrentRender('List');
+      },
+    },
+  );
   const SubmitEvent = () => {
-    console.log(submitData);
-    writeMutations.mutate(submitData);
+    writeMutations.mutate();
   };
-  const writeMutations = useMutation({
-    mutationFn: () => PostPot(reviewId, submitData),
-    onSuccess(data) {
-      queryClient.invalidateQueries(['popperInfo', reviewId]);
-      setCurrentRender('List');
-    },
-    onError(err) {
-      console.log(err);
-    },
-  });
   return (
     <PopperBox>
       <h2 className="popperTitle">다른 팝퍼들과 함께 보면 재미가 2배!🍿</h2>

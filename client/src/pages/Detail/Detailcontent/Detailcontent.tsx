@@ -40,12 +40,12 @@ const Detailcontent = (): JSX.Element => {
     <DetailWrap>
       <div className="detailBox">
         <Detail data={dataItem} />
-        <Comment reviewId={reviewId} data={dataItem.comments} />
+        <Comment reviewId={reviewId ?? ''} data={dataItem.comments} />
       </div>
       <div className="popperBox">
         <PopperBox
           groups={dataItem.groups}
-          reviewId={dataItem.reviewBoardId}
+          reviewId={reviewId ?? ''}
           movie={dataItem.movie.title}
         />
       </div>
