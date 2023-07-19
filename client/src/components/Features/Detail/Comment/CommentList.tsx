@@ -151,13 +151,11 @@ const CommentListWrap = styled.ul`
     .commetTxt {
       margin-top: 1rem;
       display: flex;
-      align-items: self-end;
       p {
         color: var(--white-color);
         font-size: 1rem;
         line-height: 1.5rem;
         width: 80%;
-        word-break: keep-all;
       }
       .buttonWrap {
         display: flex;
