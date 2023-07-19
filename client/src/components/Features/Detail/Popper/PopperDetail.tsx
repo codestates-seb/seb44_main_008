@@ -39,7 +39,14 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
       openScroll();
     }
   };
-  const delPartyMutation = useMutation(DeleteDModal);
+  const delPartyMutation = useMutation(DeleteDModal, {
+    onError: () => {
+      alert(
+        "'내가 모집중인 팟'이기 때문에 '내가 모집중인 팟'에서 삭제해야합니다.",
+      ),
+        location.reload();
+    },
+  });
   const deletePartyHandler = (groupId: number) => {
     const confirmed = window.confirm('정말 이 파티를 나가시겠습니까?');
     if (confirmed) {
@@ -90,7 +97,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   }
 
   console.log(id);
-  
+
   if (isSuccess) {
     return (
       <PopperBox>
