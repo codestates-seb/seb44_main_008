@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import LoginBtns from './LoginBtns';
 import UserArea from './UserArea';
 import SearchInput from './SearchInput';
+import { useEffect } from 'react';
 
 const Header = () => {
-  const userCheck = useSelector(
-    (state: RootState) => state.user.value.isLoggedIn,
-  );
+  const userCheck = useSelector((state: RootState) => state.user.isLoggedIn);
+  console.log(userCheck);
+  useEffect(() => {
+    console.log(userCheck);
+  }, []);
   return (
     <HeaderWrapper>
       <div className="headerInner">
