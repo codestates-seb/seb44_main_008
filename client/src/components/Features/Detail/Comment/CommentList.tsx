@@ -6,8 +6,12 @@ import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DeleteComment, LikeComment } from '../../../../api/comment/comment';
+import { DeleteComment } from '../../../../api/comment/comment';
 import { getDate } from '../../../../assets/commonts/common';
+import {
+  deleteCommentLike,
+  getCommentLike,
+} from '../../../../api/like/commentLike';
 
 const CommentList = ({
   data,
@@ -30,6 +34,7 @@ const CommentList = ({
               answer={answer}
               userId={userId}
               reviewId={reviewId}
+              commentId={answer.commentId}
             />
           );
         })}
@@ -40,15 +45,33 @@ const Li: React.FC<{
   answer: Comments;
   userId: number;
   reviewId: string;
-}> = ({ answer, userId, reviewId }) => {
+  commentId: number;
+}> = ({ answer, userId, reviewId, commentId }) => {
   const queryClient = useQueryClient();
-  const mutationLike = useMutation(LikeComment, {
+  const [liked, setLiked] = useState(answer.liked);
+  const [likeCount, setLikeCount] = useState<number>(
+    answer.likes ? answer.likes : 0,
+  );
+
+  const mutationLike = useMutation(getCommentLike, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
     },
   });
-  const commentLike = (commentId: number) => {
-    mutationLike.mutate(commentId);
+  const mutationUnLike = useMutation(deleteCommentLike, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+    },
+  });
+  const ClickLike = (commentId: number) => {
+    if (liked === false) {
+      mutationLike.mutate(commentId);
+      setLikeCount(likeCount => likeCount + 1);
+    } else {
+      mutationUnLike.mutate(commentId);
+      setLikeCount(likeCount => likeCount - 1);
+    }
+    setLiked(prev => !prev);
   };
 
   const mutationDelete = useMutation(DeleteComment, {
@@ -63,6 +86,7 @@ const Li: React.FC<{
       alert('댓글이 정상적으로 삭제되었습니다.');
     }
   };
+
   return (
     <li>
       <div>
@@ -87,11 +111,8 @@ const Li: React.FC<{
       <div className="commetTxt">
         <p>{answer.content}</p>
         <div className="buttonWrap">
-          <Poplike
-            onClick={() => commentLike(answer.commentId)}
-            like={answer.liked}
-          />
-          <span>{answer.liked} Pops</span>
+          <Poplike onClick={() => ClickLike(answer.commentId)} like={liked} />
+          <span>{likeCount} Pops</span>
         </div>
       </div>
     </li>

@@ -39,7 +39,7 @@ const Detailcontent = (): JSX.Element => {
   return (
     <DetailWrap>
       <div className="detailBox">
-        <Detail data={dataItem} />
+        <Detail data={dataItem} reviewId={reviewId ?? ''} />
         <Comment reviewId={reviewId ?? ''} data={dataItem.comments} />
       </div>
       <div className="popperBox">
