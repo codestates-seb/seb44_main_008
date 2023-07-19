@@ -29,13 +29,21 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   const today = getTodayDate();
   const [saleStartDate, setSaleStartDate] = useState(today);
 
+  //유효성검사
+  const [istitle, setIsTitle] = useState<boolean>(true);
+  const [isLocation, setIsLocation] = useState<boolean>(true);
+  const [isPerson, setIsPerson] = useState<boolean>(true);
+  const [isBody, setIsBody] = useState<boolean>(true);
+
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckTitle(false);
     setTitle(e.currentTarget.value);
+    setIsTitle(true);
   };
   const locationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckLocation(false);
     setLocation(e.currentTarget.value);
+    setIsLocation(true);
   };
   const personChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckPerson(false);
@@ -47,7 +55,6 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     setBody(e.currentTarget.value);
   };
 
-  console.log('reviewId', reviewId);
   const submitData = {
     title: title,
     meetingDate: saleStartDate,
@@ -67,8 +74,29 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
       },
     },
   );
+
   const SubmitEvent = () => {
-    writeMutations.mutate();
+    if (title.length === 0) {
+      setIsTitle(false);
+    }
+    if (location.length === 0) {
+      setIsLocation(false);
+    }
+    if (person === undefined || person <= 1) {
+      setIsPerson(false);
+      alert('모집인원은 1명이상이여야 합니다.');
+    }
+    if (body.length === 0) {
+      setIsBody(false);
+    }
+    if (
+      title.length !== 0 &&
+      location.length !== 0 &&
+      person > 1 &&
+      body.length !== 0
+    ) {
+      writeMutations.mutate();
+    }
   };
   return (
     <PopperBox>
@@ -79,7 +107,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
           placeholder="팟 모집글 제목을 입력하세요."
           id="title"
           onChange={titleChange}
-          isvalid={true}
+          isvalid={istitle}
           width="100%"
         ></Input>
 
@@ -98,7 +126,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
           id="location"
           placeholder="장소를 입력하세요."
           onChange={locationChange}
-          isvalid={true}
+          isvalid={isLocation}
           width="100%"
         />
         <Input
@@ -107,12 +135,12 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
           value={person}
           placeholder="모집 인원을 선택하세요."
           onChange={personChange}
-          isvalid={true}
+          isvalid={isPerson}
           width="100%"
           pattern="[0-9]+"
         />
         <textarea
-          className="popTextArea"
+          className={`${isBody ? 'popTextArea' : 'popTextArea on'}`}
           placeholder="간단한 팟 소개글을 작성해보세요!"
           value={body}
           onChange={bodyChange}
