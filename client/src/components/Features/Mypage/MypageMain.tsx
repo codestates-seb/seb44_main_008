@@ -39,7 +39,6 @@ const MypageMain = () => {
     return <Loading />;
   }
   if (isSuccess) {
-    // console.log(data);
     return (
       <StyledContainer>
         <StyledInnerContainer>

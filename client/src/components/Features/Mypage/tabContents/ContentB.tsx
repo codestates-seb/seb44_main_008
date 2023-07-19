@@ -41,13 +41,14 @@ const ContentB = ({ data }: tabBType) => {
     if (confirmed) {
       deletePostMutation.mutate(postId);
       alert('게시글이 삭제되었습니다.');
+      location.reload();
     }
   };
   const navigate = useNavigate();
-  const reverseData = data.reverse();
+
   return (
     <>
-      {reverseData.slice(offset, offset + limit).map(item => (
+      {data.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce>
             <ListHead>
