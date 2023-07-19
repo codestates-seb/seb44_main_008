@@ -201,7 +201,7 @@ public interface ReviewBoardMapper {
 //                reviewBoardWish.getUser().getProfileImage()
 //        );
 
-        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoardWish.getUser(), imageUtil);
+        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoardWish.getReviewBoard().getUser(), imageUtil);
 
         ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
                 .reviewBoardId(reviewBoardWish.getReviewBoard().getReviewBoardId())
