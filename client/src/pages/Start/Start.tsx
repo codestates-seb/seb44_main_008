@@ -6,15 +6,25 @@ import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import popbg from '../../assets/images/pop-icons/popbg.jpg';
 import { SectionsContainer, Section } from 'react-fullpage';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Start = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState<string>('');
+
   const clickHandler = () => {
     navigate('/account/login');
-    window.location.reload();
   };
 
+  const ChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.currentTarget.value);
+  };
+
+  const getEmail = () => {
+    navigate('/account/signup', { state: { value: email } });
+  };
+
+  console.log(email);
   //carousel
   const responsive = {
     0: {
@@ -90,7 +100,6 @@ const Start = () => {
   });
 
   const location = useLocation();
-  //fullpage
   let options = {
     activeClass: 'active',
     anchors: ['page1', 'page2', 'page3'],
@@ -134,8 +143,9 @@ const Start = () => {
             <input
               type="text"
               placeholder="이메일 입력하고, Movie Pop 시작하기! "
+              onChange={ChangeEmail}
             />
-            <Button value="시작하기" type="variant" />
+            <Button value="시작하기" theme="variant" onClick={getEmail} />
           </form>
         </Section>
         <Section className="page2 Section landinBox">
