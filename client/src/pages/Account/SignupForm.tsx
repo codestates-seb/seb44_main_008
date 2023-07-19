@@ -5,15 +5,17 @@ import noImg from '../../assets/images/account/noImg.png';
 import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
+import { useQuery } from '@tanstack/react-query';
+import { getAccountTags } from '../../api/tags/getTags';
 
-const tagsArr = [
-  { tagId: 1, tagName: '로맨스' },
-  { tagId: 2, tagName: '호러' },
-  { tagId: 3, tagName: '판타지' },
-  { tagId: 4, tagName: '드라마' },
-  { tagId: 5, tagName: 'sf' },
-  { tagId: 6, tagName: '액션' },
-];
+// const tagsArr = [
+//   { tagId: 1, tagName: '로맨스' },
+//   { tagId: 2, tagName: '호러' },
+//   { tagId: 3, tagName: '판타지' },
+//   { tagId: 4, tagName: '드라마' },
+//   { tagId: 5, tagName: 'sf' },
+//   { tagId: 6, tagName: '액션' },
+// ];
 interface SignupType {
   userPostDto: {
     email: string;
@@ -28,6 +30,13 @@ interface SignupType {
 const SignupForm = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+
+  const {
+    data: tagsArr,
+    isLoading,
+    error,
+    isSuccess,
+  } = useQuery(['tags'], () => getAccountTags());
 
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);

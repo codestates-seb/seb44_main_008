@@ -1,4 +1,5 @@
 import { instance } from '../api';
+import axios from 'axios';
 
 type tagType = {
   tags: {
@@ -9,4 +10,8 @@ type tagType = {
 
 export const getAllTags = (): Promise<tagType> => {
   return instance.get('/tags').then(res => res.data.data);
+};
+
+export const getAccountTags = (): Promise<tagType> => {
+  return axios.get('/tags').then(res => res.data.data);
 };
