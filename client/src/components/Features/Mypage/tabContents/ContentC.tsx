@@ -48,11 +48,10 @@ const ContentC = ({ data2 }: tabCType) => {
     setIsOpen(false);
     openScroll();
   };
-  const reverseData = data2.reverse();
 
   return (
     <>
-      {reverseData.slice(offset, offset + limit).map(item => (
+      {data2.slice(offset, offset + limit).map(item => (
         <ListContainer key={item.groupId}>
           <Modal
             id={item.groupId}

@@ -33,7 +33,9 @@ const ContentA = ({ data }: tabAType) => {
   const [tabAPost, setAPost] = useState(data);
   console.log('data1', data);
   const [like, setLike] = useState(true);
-  const deletePostMutation = useMutation(DeleteTabA);
+  const deletePostMutation = useMutation(DeleteTabA, {
+    onSuccess: () => location.reload(),
+  });
   const likeHandler = (reviewId: number) => {
     const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
     if (confirmed) {
