@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Button from '../Button/Button';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '../../../api/tags/getTags';
+import { clearUser } from '../../../redux/reducers/user';
 
 const UserArea = () => {
   const hashMenu = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ const UserArea = () => {
   } = useQuery(['tags'], () => getAllTags());
 
   const userImg = useSelector(
-    (state: RootState) => state.user.value.userInfo.user_img,
+    (state: RootState) => state.user.userInfo.user_img,
   );
 
   const btnMypage = useCallback(() => {
@@ -34,9 +35,10 @@ const UserArea = () => {
     location.reload();
   }, []);
   const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    // dispatch(resetUser());
+    dispatch(clearUser());
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+
     setMyShow(false);
     navigate('/');
     location.reload();

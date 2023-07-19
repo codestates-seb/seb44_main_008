@@ -31,11 +31,10 @@ const SignupForm = () => {
     isSuccess,
   } = useQuery(['tags'], () => getAccountTags());
 
+  const startEmail = location.state ? location.state.value : '';
   //상태 저장
   const [imgfile, setImgfile] = useState<File | null>(null);
-  const [email, setEmail] = useState<string>(
-    location.state.value ? location.state.value : '',
-  );
+  const [email, setEmail] = useState<string>(startEmail);
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const [tag, setTag] = useState<number[]>([]);
@@ -360,6 +359,7 @@ const SignupForm = () => {
               type="button"
               value="다음"
               onClick={ClickNextHandle}
+              theme="variant"
             ></Button>
           </div>
         )}
@@ -422,7 +422,12 @@ const SignupForm = () => {
               />
               {!isBirth ? <span>{birthMsg}</span> : null}
             </div>
-            <Button width="100%" type="submit" value="회원가입" />
+            <Button
+              width="100%"
+              type="submit"
+              theme="variant"
+              value="회원가입"
+            />
           </div>
         )}
       </form>

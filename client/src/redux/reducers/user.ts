@@ -13,16 +13,18 @@ const initialState: User = {
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: { value: initialState },
+  initialState: initialState,
   reducers: {
     setUser: (state, action) => {
-      state.value = action.payload;
+      state.isLoggedIn = action.payload.isLoggedIn;
+      state.userInfo = action.payload.userInfo;
     },
-    updateProfileImage: (state, action: PayloadAction<string | null>) => {
-      state.value.userInfo.user_img = action.payload;
+    updateProfileImage: (state, action: PayloadAction<string>) => {
+      state.userInfo.user_img = action.payload;
     },
     clearUser: state => {
-      return state.value.isLoggedIn;
+      state.isLoggedIn = false;
+      state.userInfo = initialState.userInfo;
     },
   },
 });

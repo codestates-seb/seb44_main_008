@@ -20,9 +20,7 @@ const CommentList = ({
   data: Comments[];
   reviewId: string;
 }) => {
-  const userId = useSelector(
-    (state: RootState) => state.user.value.userInfo.id,
-  );
+  const userId = useSelector((state: RootState) => state.user.userInfo.id);
 
   return (
     <CommentListWrap>
