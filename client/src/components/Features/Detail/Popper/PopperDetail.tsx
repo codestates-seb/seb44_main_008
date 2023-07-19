@@ -86,8 +86,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     return <Loading />;
   }
 
-  console.log(id);
-
   if (isSuccess) {
     return (
       <PopperBox>
