@@ -18,9 +18,15 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.value = action.payload;
     },
+    updateProfileImage: (state, action: PayloadAction<string | null>) => {
+      state.value.userInfo.user_img = action.payload;
+    },
+    clearUser: state => {
+      return state.value.isLoggedIn;
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, clearUser, updateProfileImage } = userSlice.actions;
 
 export default userSlice.reducer;

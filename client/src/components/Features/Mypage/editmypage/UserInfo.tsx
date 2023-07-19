@@ -20,8 +20,13 @@ import {
 } from '../../../../api/user/userInfo/editUserInfo';
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store/store';
+import { updateProfileImage } from '../../../../redux/reducers/user';
 
 const UserInfo = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [userNickname, setUserNickname] = useState('');
@@ -83,6 +88,7 @@ const UserInfo = () => {
       setImage(event.target.files[0]);
       const newFileUrl = URL.createObjectURL(event.target.files[0]);
       setTempImg(newFileUrl);
+      dispatch(updateProfileImage(newFileUrl));
     }
   };
   const onClickImg = (
