@@ -86,22 +86,24 @@ const EditContent = () => {
     [],
   );
 
-  const onClickTag: void = (event: MouseEvent<HTMLButtonElement>) => {
-    const element = document.getElementById(event.target.id).classList;
+  const onClickTag = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    const target = event.target as HTMLButtonElement;
 
-    const newTagId: number = Number(event.target.id);
-    const newTagName: string = event.target.name.substr(1);
-
+    const element = document.getElementById(target.id)?.classList;
+    const newTagId: number = Number(target.id);
+    const newTagName: string = target.name.substr(1);
     const tagIdArray = selectedTags.map(tagObject => tagObject.tagId);
 
     if (tagIdArray.indexOf(newTagId) != -1) {
-      element.toggle('clicked');
+      element?.toggle('clicked');
       const deletedTagList = selectedTags.filter(tag => tag.tagId != newTagId);
       setSelectedTags(deletedTagList);
     } else if (selectedTags.length >= 3) {
       alert('태그는 최대 3개까지 선택 가능합니다.');
     } else {
-      element.toggle('clicked');
+      element?.toggle('clicked');
       const newTag = {
         tagId: newTagId,
         tagName: newTagName,
