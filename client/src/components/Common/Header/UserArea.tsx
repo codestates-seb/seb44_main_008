@@ -31,6 +31,7 @@ const UserArea = () => {
   const btnMypage = useCallback(() => {
     navigate('/mypage');
     setMyShow(false);
+    location.reload();
   }, []);
   const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     // dispatch(resetUser());

@@ -42,13 +42,26 @@ const ContentA = ({ data }: tabAType) => {
       location.reload();
     },
   });
-  const likeHandler = (reviewId: number) => {
+  const likeHandler = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    reviewId: number,
+  ) => {
+    // 이벤트 버블링을 막습니다.
+    event.stopPropagation();
+
     const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
     if (confirmed) {
       deletePostMutation.mutate(reviewId);
       alert('게시글이 찜 해제되었습니다.');
     }
   };
+  // const likeHandler = (reviewId: number) => {
+  //   const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
+  //   if (confirmed) {
+  //     deletePostMutation.mutate(reviewId);
+  //     alert('게시글이 찜 해제되었습니다.');
+  //   }
+  // };
   const moveHandler = (reviewId: number) => {
     navigate(`/detail/content/${reviewId}`);
   };
@@ -73,13 +86,13 @@ const ContentA = ({ data }: tabAType) => {
                 <p className="author">{item.user.nickname}</p>
               </AuthorInfo>
             </ListHead>
+            <ListTail>
+              <Poplike
+                onClick={event => likeHandler(event, item.reviewBoardId)}
+                like={like}
+              />
+            </ListTail>
           </ListOnce>
-          <ListTail>
-            <Poplike
-              onClick={() => likeHandler(item.reviewBoardId)}
-              like={like}
-            />
-          </ListTail>
         </ListContainer>
       ))}
       <Pagenation
