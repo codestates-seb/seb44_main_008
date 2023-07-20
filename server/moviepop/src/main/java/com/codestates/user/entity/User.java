@@ -6,6 +6,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.review_board.entity.ReviewBoard;
+import com.codestates.review_board.entity.ReviewBoardRecentVisit;
 import com.codestates.security.entity.Authority;
 import com.codestates.utils.CustomBeanUtils;
 import lombok.Getter;
@@ -90,6 +91,9 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Authority> authorities = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<ReviewBoardRecentVisit> reviewBoardRecentVisits = new HashSet<>();
+
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceUser, this);
     }
@@ -124,6 +128,10 @@ public class User extends Auditable {
 
     public void addMoviePartyUser(MoviePartyUser moviePartyUser) {
         this.moviePartyUsers.add(moviePartyUser);
+    }
+
+    public void addReviewBoardRecentVisit(ReviewBoardRecentVisit reviewBoardRecentVisit) {
+        this.reviewBoardRecentVisits.add(reviewBoardRecentVisit);
     }
 
     public List<String> getRoles() {
