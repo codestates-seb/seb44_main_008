@@ -111,9 +111,7 @@ const LoginForm = () => {
               }),
             );
             navigate('/main');
-          } catch (error) {
-            console.error(error);
-          }
+          } catch (error) {}
         };
         getUser();
       }
