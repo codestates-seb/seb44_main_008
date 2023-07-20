@@ -203,12 +203,16 @@ public class ReviewBoardService {
         if(visit != null) {
             visit.setVisitedAt(LocalDateTime.now());
         } else {
-            if(reviewBoardRecentVisitRepository.findByUser(user).size() >= 5) {
+            List<ReviewBoardRecentVisit> reviewBoardRecentVisits = reviewBoardRecentVisitRepository.findByUser(user);
+            if(reviewBoardRecentVisits.size() >= 5) {
                 //가장 오래된 기록 삭제
                 ReviewBoardRecentVisit oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
 //                ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt.getVisitedAt());
-                if(oldestVisitedAt != null)
-                    reviewBoardRecentVisitRepository.delete(oldestVisitedAt);
+                if(oldestVisitedAt != null) {
+                    reviewBoardRecentVisitRepository.deleteById(oldestVisitedAt.getReviewBoardRecentVisitId());
+                    reviewBoard.getReviewBoardRecentVisits().remove(oldestVisitedAt);
+                    user.getReviewBoardRecentVisits().remove(oldestVisitedAt);
+                }
             }
             //가장 최근 기록
             visit = new ReviewBoardRecentVisit();
