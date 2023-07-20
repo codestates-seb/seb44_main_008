@@ -53,7 +53,8 @@ public class MovieScorePerAgeService {
     }
 
     public MovieScorePerAge findMovieScorePerAgeByMovie(Movie movie) {
-        return movieScorePerAgeRepository.findByMovie(movie).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_NOT_FOUND));
+        return movieScorePerAgeRepository.findByMovie(movie);
+//        return movieScorePerAgeRepository.findByMovie(movie).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MOVIE_NOT_FOUND));
     }
 
     public int getMovieScorePerAge(Movie movie, int ageRange) {
