@@ -18,7 +18,7 @@ public class ReviewBoardRecentVisit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewBoardRecentVisitId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
