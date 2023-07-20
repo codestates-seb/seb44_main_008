@@ -196,7 +196,7 @@ const UserAreaWrap = styled.div`
   .headerWriteBtn {
     height: 3.3rem;
     line-height: 100%;
-    border-radius: 20px;
+    border-radius: 50px;
     background-color: var(--main-gray-color);
     color: var(--white-color);
     display: flex;
