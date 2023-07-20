@@ -299,7 +299,6 @@ const SignupForm = () => {
         const axiosError = err as AxiosError;
         const errMsg = axiosError.response?.data.message;
         alert(errMsg);
-        console.log('err', err);
       }
     }
   };
