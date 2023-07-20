@@ -97,15 +97,14 @@ const UserInfo = () => {
     }
   };
 
-  const onClickTag: MouseEventHandler<HTMLButtonElement> = (
-    event: EditInfoType,
-  ) => {
+  const onClickTag: MouseEventHandler<HTMLButtonElement> = event => {
+    const { target } = event as unknown as EditInfoType;
     const element = document.getElementById(
-      event.target.id as unknown as string,
+      target.id as unknown as string,
     )?.classList;
-    const newTagId: number = Number(event.target.id);
+    const newTagId: number = Number(target.id);
 
-    const newTagName: string = event.target.name.substr(1);
+    const newTagName: string = target.name.substr(1);
     const tagIdArray = selectedTags.map(tagObject => tagObject.tagId);
     if (selectedTags.length === 1 && tagIdArray.indexOf(newTagId) !== -1) {
       alert('태그는 한개 이상 선택해야 합니다.');

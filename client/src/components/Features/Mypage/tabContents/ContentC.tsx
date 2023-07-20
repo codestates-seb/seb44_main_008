@@ -1,19 +1,9 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 
-// const getData = async () => {
-//   const response = await axios.get('/url/groups', {
-//     params: { page: page, size: limit },
-//   });
-//   setTotalElements(response.data.pageInfo.totalElements);
-// };
-
-// useEffect(() => {
-//   getData();
-// }, [page]);
 type tabCType = {
   data2: {
     groupId: number;
@@ -27,7 +17,6 @@ type tabCType = {
 };
 
 const ContentC = ({ data2 }: tabCType) => {
-  console.log('data3', data2);
   const [totalElements, setTotalElements] = useState(data2.length);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);

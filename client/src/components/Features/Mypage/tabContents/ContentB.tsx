@@ -1,21 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Button from '../../../Common/Button/Button';
-import { ButtonType } from '../../../Common/Button/type';
 import { useNavigate } from 'react-router-dom';
 import { DeleteTabB } from '../../../../api/user/userTab/userTab';
-import { Mutation, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// const getData = async () => {
-//   const response = await axios.get('/url/groups', {
-//     params: { page: page, size: limit },
-//   });
-//   setTotalElements(response.data.pageInfo.totalElements);
-// };
-// useEffect(() => {
-//   getData();
-// }, [page]);
 type tabBType = {
   data: {
     reviewBoardId: number;
@@ -30,7 +20,6 @@ type tabBType = {
 };
 const ContentB = ({ data }: tabBType) => {
   const queryClient = useQueryClient();
-  console.log('data2', data);
   const navigate = useNavigate();
   const [totalElements, setTotalElements] = useState(data.length);
   const [limit, setLimit] = useState(5);
