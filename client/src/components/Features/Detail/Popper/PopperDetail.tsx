@@ -31,7 +31,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
 }) => {
   const id = currentId;
   const queryClient = useQueryClient();
-  const [groups, setGroups] = useState<PopperDetailData>({});
   const { openScroll } = useBodyScrollLock();
 
   const delPopMutation = useMutation(DeleteCModal);
@@ -108,13 +107,13 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
           같이 보고 싶어하는 팝퍼🍿
         </h2>
         <div className="popperDetail">
-          <h4>{dataItem.data.title}</h4>
+          <h4>{dataItem.title}</h4>
           <ol>
-            <li>일시 :{getDate(dataItem.data.meetingDate)}</li>
-            <li>장소: {dataItem.data.location}</li>
-            <li>모집 인원: 최대 {dataItem.data.maxCapacity}명</li>
+            <li>일시 :{getDate(dataItem.meetingDate)}</li>
+            <li>장소: {dataItem.location}</li>
+            <li>모집 인원: 최대 {dataItem.maxCapacity}명</li>
           </ol>
-          <p>{dataItem.data.content}</p>
+          <p>{dataItem.content}</p>
         </div>
         <div className="popperButtonWrap">
           {currentPage === 'popDetail' && (
@@ -133,7 +132,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
                   theme="variant"
                   type="button"
                   onClick={() => {
-                    SubmitEvent(dataItem.data.groupId);
+                    SubmitEvent(dataItem.groupId);
                   }}
                 />
               </div>

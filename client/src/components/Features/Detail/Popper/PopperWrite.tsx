@@ -4,8 +4,7 @@ import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { PostPot } from '../../../../api/pot/pot';
-import { error } from 'console';
+import { PostPot, potData } from '../../../../api/pot/pot';
 
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +21,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
 
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
-  const [person, setPerson] = useState<number>();
+  const [person, setPerson] = useState<number | undefined>();
   const [body, setBody] = useState<string>('');
   const [checkTitle, setCheckTitle] = useState<boolean>(false);
   const [checkLocation, setCheckLocation] = useState<boolean>(false);
@@ -64,22 +63,17 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     content: body,
     movieTitle: movie,
   };
-  const writeMutations = useMutation(
-    () => {
-      return PostPot(reviewId, submitData);
+
+  const writeMutations = useMutation({
+    mutationFn: (data: potData) => PostPot(reviewId, submitData),
+    onSuccess(data) {
+      queryClient.invalidateQueries(['ReviewInfo', reviewId]);
+      setCurrentRender('List');
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['ReviewInfo', reviewId]);
-        setCurrentRender('List');
-      },
+    onError: err => {
+      console.log(err);
     },
-    {
-      onError: err => {
-        console.log(err);
-      },
-    },
-  );
+  });
 
   const SubmitEvent = () => {
     if (title.length === 0) {
@@ -98,10 +92,11 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     if (
       title.length !== 0 &&
       location.length !== 0 &&
+      person &&
       person > 1 &&
       body.length !== 0
     ) {
-      writeMutations.mutate();
+      writeMutations.mutate(submitData);
     }
   };
   return (
