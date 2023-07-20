@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface MoviePartyRepository extends JpaRepository<MovieParty, Long> {
 //    @Query(value = "select * from\n" +
 //            "movie_party p\n" +
@@ -23,4 +26,7 @@ public interface MoviePartyRepository extends JpaRepository<MovieParty, Long> {
 
     @Query(value = "select m from MovieParty m inner join m.reviewBoard r where r.adulted = :isAdulted order by m.moviePartyId desc")
     Page<MovieParty> findAllByAdulted(boolean isAdulted, Pageable pageable);
+
+    Page<MovieParty> findAllByMeetingDateIsAfter(LocalDateTime now, Pageable page);
+    List<MovieParty> findAllByReviewBoardAndMeetingDateIsAfter(ReviewBoard reviewBoard, LocalDateTime now);
 }
