@@ -33,29 +33,39 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   const queryClient = useQueryClient();
   const { openScroll } = useBodyScrollLock();
 
-  const delPopMutation = useMutation(DeleteCModal);
+  const delPopMutation = useMutation(DeleteCModal, {
+    onSuccess() {
+      alert('모집이 삭제되었습니다.');
+      openScroll();
+    },
+    onError() {
+      alert('모집 삭제 불가');
+    },
+  });
+
   const deleteHandler = (groupId: number) => {
     const confirmed = window.confirm('정말 이 모집을 삭제하시겠습니까?');
     if (confirmed) {
       delPopMutation.mutate(groupId);
-      alert('모집이 삭제되었습니다.');
-      openScroll();
     }
   };
-  const delPartyMutation = useMutation(DeleteDModal, {
+  const delPartyMutation = useMutation({
+    mutationFn: DeleteDModal,
+    onSuccess: () => {
+      alert('파티에서 제외되었습니다.');
+      openScroll();
+    },
     onError: () => {
       alert(
         "'내가 모집중인 팟'이기 때문에 '내가 모집중인 팟'에서 삭제해야합니다.",
-      ),
-        location.reload();
+      );
+      location.reload();
     },
   });
   const deletePartyHandler = (groupId: number) => {
     const confirmed = window.confirm('정말 이 파티를 나가시겠습니까?');
     if (confirmed) {
       delPartyMutation.mutate(groupId);
-      alert('파티에서 제외되었습니다.');
-      openScroll();
     }
   };
 
@@ -97,7 +107,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   if (isLoading) {
     return <Loading />;
   }
-
   if (isSuccess) {
     return (
       <PopperBox>
@@ -106,13 +115,13 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
           같이 보고 싶어하는 팝퍼🍿
         </h2>
         <div className="popperDetail">
-          <h4>{dataItem.title}</h4>
+          <h4>{dataItem.data.title}</h4>
           <ol>
-            <li>일시 :{getDate(dataItem.meetingDate)}</li>
-            <li>장소: {dataItem.location}</li>
-            <li>모집 인원: 최대 {dataItem.maxCapacity}명</li>
+            <li>일시 :{getDate(dataItem.data.meetingDate)}</li>
+            <li>장소: {dataItem.data.location}</li>
+            <li>모집 인원: 최대 {dataItem.data.maxCapacity}명</li>
           </ol>
-          <p>{dataItem.content}</p>
+          <p>{dataItem.data.content}</p>
         </div>
         <div className="popperButtonWrap">
           {currentPage === 'popDetail' && (
@@ -131,7 +140,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
                   theme="variant"
                   type="button"
                   onClick={() => {
-                    SubmitEvent(dataItem.groupId);
+                    SubmitEvent(dataItem.data.groupId);
                   }}
                 />
               </div>
