@@ -1,13 +1,13 @@
 import React, {
   ChangeEvent,
-  MouseEvent,
+  MouseEventHandler,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { styled } from 'styled-components';
-import { FileData, UserInfoType } from './type';
+import { FileData } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
 import Button from '../../../Common/Button/Button';
@@ -21,8 +21,6 @@ import {
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store/store';
 import { updateProfileImage } from '../../../../redux/reducers/user';
 
 const UserInfo = () => {
@@ -51,7 +49,8 @@ const UserInfo = () => {
   }, [data]);
 
   const [image, setImage] = useState<FileData | null>();
-  const fileInput = useRef(null);
+  const fileInput: React.RefObject<HTMLInputElement> =
+    useRef<HTMLInputElement>(null);
   const [nicknameMsg, setnickNameMsg] = useState<string>('');
   const [isnickName, setIsnickName] = useState(true);
 
@@ -91,19 +90,19 @@ const UserInfo = () => {
       dispatch(updateProfileImage(newFileUrl));
     }
   };
-  const onClickImg = (
-    event: React.MouseEvent<HTMLImageElement, MouseEvent>,
-  ) => {
+  const onClickImg: MouseEventHandler<HTMLImageElement> = event => {
     event?.preventDefault();
     if (fileInput.current) {
       fileInput.current.click();
     }
   };
 
-  const onClickTag = (
+  const onClickTag: MouseEventHandler<HTMLButtonElement> = (
     event: EditInfoType,
-  ): void | MouseEvent<HTMLButtonElement> | undefined => {
-    const element = document.getElementById(event.target.id)?.classList;
+  ) => {
+    const element = document.getElementById(
+      event.target.id as unknown as string,
+    )?.classList;
     const newTagId: number = Number(event.target.id);
 
     const newTagName: string = event.target.name.substr(1);
