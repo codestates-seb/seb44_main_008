@@ -188,6 +188,7 @@ public class UserService {
         if(findUser.getUserStatus() == User.UserStatus.USER_WITHDRAW)
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
 
+        findUser.getReviewBoardRecentVisits().clear();
         if(findUser.getProfileImage() != null)
             storageService.deleteProfileImage(findUser);
 
