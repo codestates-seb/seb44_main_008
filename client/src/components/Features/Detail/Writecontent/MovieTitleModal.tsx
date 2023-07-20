@@ -1,10 +1,10 @@
-import styled from 'styled-components';
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import { WriteModalType } from './type';
 
-import Input from '../../../Common/Input/Input';
 import { useQuery } from '@tanstack/react-query';
 import { getMovie } from '../../../../api/movie/movie';
+import Input from '../../../Common/Input/Input';
 
 const MovieTitleModal = ({
   setModalOn,
@@ -31,11 +31,11 @@ const MovieTitleModal = ({
   );
 
   const onClickMovieTitle = (
-    event: React.MouseEvent<HTMLUListElement, MouseEvent>,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
   ) => {
     const target = event.target as HTMLUListElement;
     setMovieTitle && setMovieTitle(target.innerHTML);
-    setMovieId && setMovieId(target.id);
+    setMovieId && setMovieId(Number(target.id));
     setModalOn && setModalOn(false);
     document.body.style.overflow = 'unset';
   };
@@ -64,7 +64,7 @@ const MovieTitleModal = ({
                   return (
                     <SearchResult
                       key={item.movieId}
-                      id={item.movieId}
+                      id={String(item.movieId)}
                       value={item.title}
                       onClick={onClickMovieTitle}
                     >

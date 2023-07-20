@@ -17,9 +17,12 @@ const Editpassword = () => {
 
   const navigate = useNavigate();
   const mutationPatch = useMutation(PatchEditUserPassword, {
+    onSuccess: () => {
+      alert('비밀번호가 변경되었습니다.');
+      navigate('/mypage');
+    },
     onError: err => {
-      console.log(err);
-      alert('현재 비밀번호가 일치하지 않습니다.');
+      alert(`현재 ${err.response.data.message}`);
     },
   });
 
@@ -56,8 +59,6 @@ const Editpassword = () => {
                 currentPw: currentPw,
                 newPw: editPw,
               });
-              alert('비밀번호가 변경되었습니다.');
-              navigate('/mypage');
             }
           })();
     }

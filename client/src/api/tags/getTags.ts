@@ -1,12 +1,12 @@
 import { instance } from '../api';
 import axios from 'axios';
 
-type tagType = {
+type tagType = [
   tags: {
     tagId: number;
     tagName: string;
-  }[];
-};
+  },
+];
 
 export const getAllTags = (): Promise<tagType> => {
   return instance.get('/tags').then(res => res.data.data);

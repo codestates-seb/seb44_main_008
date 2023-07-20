@@ -1,10 +1,5 @@
 import React from 'react';
 
-export type TagType = {
-  tagId: number;
-  tagName: string;
-};
-
 export interface WriteContentType {
   placeholder?: string;
   isvalid?: boolean;

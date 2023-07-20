@@ -62,6 +62,7 @@ const TagContents = () => {
         >
           <StaticContainer>
             {tagSearchItems?.pages.map(pages => {
+              console.log(pages);
               return pages?.data.boards.map(page => {
                 return (
                   <StyleSheetManager
@@ -69,7 +70,7 @@ const TagContents = () => {
                     shouldForwardProp={prop => isPropValid(prop)}
                   >
                     <SingleItem
-                      reviewId={page.reviewBoardId}
+                      reviewId={String(page.reviewBoardId)}
                       src={page.thumbnail}
                       title={page.title}
                       date={page.createdAt}

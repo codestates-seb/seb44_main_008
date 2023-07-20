@@ -4,21 +4,21 @@ import { instance } from '../api';
 type PostItemType = {
   post: {
     title: string;
-    review: string;
     movieId: number;
-    tags: { tagId: number }[];
+    review: string;
+    tags: { tagId: number; tagName: string }[];
   };
-  thumbnail?: FileList;
+  thumbnail: File | undefined;
 };
 
 type EditItemType = {
-  reviewId: number | string;
+  reviewId: string | undefined;
   patch: {
-    title: string;
+    title: string | undefined;
     review: string;
-    tags: { tagId: number }[];
+    tags: Object[];
   };
-  thumbnail?: FileList;
+  thumbnail: File | undefined;
 };
 
 type ReviewType = {
@@ -54,18 +54,41 @@ type ReviewType = {
   }[];
 };
 
+export type PageType = {
+  data: [
+    {
+      createdAt: string;
+      reviewBoardId: number;
+      thumbnail: string;
+      title: string;
+      user: {
+        nickname: string;
+        userId: number;
+      };
+    },
+  ];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+  };
+};
+
 type AllItemType = {
-  boards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-    };
-  }[];
-  pageInfo?: {
+  data: [
+    {
+      createdAt: string;
+      reviewBoardId: number;
+      thumbnail: string;
+      title: string;
+      user: {
+        nickname: string;
+        userId: number;
+      };
+    },
+  ];
+  pageInfo: {
     page: number;
     size: number;
     totalPages: number;

@@ -1,11 +1,11 @@
 import { instance } from '../api';
 
-type MovieType = {
+type MovieType = [
   movies: {
     movieId: number;
-    moveName: string;
-  }[];
-};
+    title: string;
+  },
+];
 
 export const getMovie = (movieName: string): Promise<MovieType> => {
   return instance.get(`/movies?q=${movieName}`).then(res => res.data.data);
