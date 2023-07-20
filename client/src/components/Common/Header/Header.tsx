@@ -17,7 +17,11 @@ const Header = () => {
     <HeaderWrapper>
       <div className="headerInner">
         <Logo>
-          <Link to="/">MoviePOP</Link>
+          {userCheck ? (
+            <Link to="/main">MoviePOP</Link>
+          ) : (
+            <Link to="/">MoviePOP</Link>
+          )}
         </Logo>
 
         {userCheck ? (
