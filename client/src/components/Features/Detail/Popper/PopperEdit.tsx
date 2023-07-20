@@ -90,7 +90,9 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
     maxCapacity: person,
     content: content,
   };
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
     const confirmed = window.confirm('팟 정보를 수정하시겠습니까?');
     if (confirmed) {

@@ -1,6 +1,6 @@
 //팟 모집글 등록, 수정, 특정 모집글 조회, 전체 모집글 검색, 삭제
-import axios from 'axios';
 import { instance } from '../api';
+import { PopperDetailData } from '../../components/Features/Detail/Popper/popperType';
 
 export interface data {
   title: string | undefined;
@@ -10,7 +10,7 @@ export interface data {
   content: string | undefined;
 }
 
-interface potData extends data {
+export interface potData extends data {
   movieTitle: string;
 }
 
@@ -26,14 +26,14 @@ export const PatchPot = (groupId: number | undefined): Promise<potData> => {
 
 export const GetPotItem = (
   groupId: number | undefined,
-): Promise<potItemData> => {
+): Promise<PopperDetailData> => {
   return instance.get(`/groups/${groupId}`).then(res => res.data);
 };
 
 export const GetPotItemAll = (
   page?: number,
   size?: number,
-): Promise<potItemData> => {
+): Promise<PopperDetailData> => {
   return instance
     .get(`/groups?page=${page}&size=${size}`)
     .then(res => res.data);
