@@ -32,8 +32,6 @@ const KeywordContents = () => {
     },
   );
 
-  console.log(keywordSearchItems);
-
   if (error) {
     return <ErrorPage />;
   }
@@ -51,7 +49,6 @@ const KeywordContents = () => {
         >
           <StaticContainer>
             {keywordSearchItems?.pages.map(pages => {
-              console.log(pages);
               return pages?.data?.map(page => {
                 return (
                   <StyleSheetManager

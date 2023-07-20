@@ -23,8 +23,6 @@ const Start = () => {
   const getEmail = () => {
     navigate('/account/signup', { state: { value: email } });
   };
-
-  console.log(email);
   //carousel
   const responsive = {
     0: {
