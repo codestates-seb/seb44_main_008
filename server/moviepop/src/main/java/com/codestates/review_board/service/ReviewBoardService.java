@@ -205,9 +205,10 @@ public class ReviewBoardService {
         } else {
             if(reviewBoardRecentVisitRepository.findByUser(user).size() >= 5) {
                 //가장 오래된 기록 삭제
-                LocalDateTime oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
-                ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt);
-                reviewBoardRecentVisitRepository.delete(oldestVisit);
+                ReviewBoardRecentVisit oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
+//                ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt.getVisitedAt());
+                if(oldestVisitedAt != null)
+                    reviewBoardRecentVisitRepository.delete(oldestVisitedAt);
             }
             //가장 최근 기록
             visit = new ReviewBoardRecentVisit();
@@ -215,6 +216,7 @@ public class ReviewBoardService {
             visit.setReviewBoard(reviewBoard);
             visit.setVisitedAt(LocalDateTime.now());
             reviewBoard.addReviewBoardRecentVisit(visit);
+            user.addReviewBoardRecentVisit(visit);
         }
 
         //변경사항 저장
