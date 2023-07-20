@@ -26,7 +26,7 @@ const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
   });
   const submitHandler = () => {
     setCheckBody(body === '');
-    writeMutations.mutate({ content: body });
+    writeMutations.mutate();
   };
   return (
     <CommentWriteWrap>
