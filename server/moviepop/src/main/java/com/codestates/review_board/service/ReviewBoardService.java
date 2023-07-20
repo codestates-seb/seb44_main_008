@@ -14,6 +14,7 @@ import com.codestates.movie.service.MovieScorePerAgeService;
 import com.codestates.movie.service.MovieService;
 import com.codestates.movie_party.dto.MoviePartyDto;
 import com.codestates.movie_party.mapper.MoviePartyMapper;
+import com.codestates.movie_party.repository.MoviePartyRepository;
 import com.codestates.review_board.dto.ReviewBoardDto;
 import com.codestates.review_board.entity.*;
 import com.codestates.review_board.repository.ReviewBoardRecentVisitRepository;
@@ -63,23 +64,29 @@ public class ReviewBoardService {
     private final ReviewBoardScoreService reviewBoardScoreService;
     private final RecommendReviewBoardService recommendReviewBoardService;
     private final ReviewBoardRecentVisitRepository reviewBoardRecentVisitRepository;
+    private final MoviePartyRepository moviePartyRepository;
 
     public ReviewBoard createReviewBoard(User user, ReviewBoard reviewBoard, MultipartFile thumbnail) {
         Movie movie = movieService.findMovie(reviewBoard.getMovie().getMovieId());
         reviewBoard.setMovie(movie);
+        reviewBoard.setAdulted(movie.isAdulted());
 
-        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags()) {
+        for(ReviewBoardTag reviewBoardTag : reviewBoard.getReviewBoardTags())
             reviewBoardTag.setReviewBoard(reviewBoard);
-        }
 
         user.addReviewBoard(reviewBoard);
 
         reviewBoard.setUser(user);
 
-        if(thumbnail != null) {
-            String imageUrl = storageService.storeThumbnailImage(thumbnail);
-            reviewBoard.setThumbnail(imageUrl);
+        String imageUrl = null;
+        if(thumbnail != null)
+            imageUrl = storageService.storeThumbnailImage(thumbnail);
+        else {
+            Random random = new Random();
+            int offset = random.nextInt(6) + 1;
+            imageUrl = imageUtil.getThumbnailPath() + "/" + imageUtil.getDefaultThumbnail() + offset + ".jpg";
         }
+        reviewBoard.setThumbnail(imageUrl);
 
         ReviewBoard newReviewBoard = reviewBoardRepository.save(reviewBoard);
         ReviewBoardScore reviewBoardScore = new ReviewBoardScore();
@@ -89,7 +96,8 @@ public class ReviewBoardService {
         int age = UserUtils.getAge(user).getYears();
         int ageRange = age / 10;
 
-        movieScorePerAgeService.createMovieScorePerAge(movie);
+        MovieScorePerAge movieScorePerAge = movieScorePerAgeService.findMovieScorePerAgeByMovie(movie);
+        if(movieScorePerAge == null) movieScorePerAge = movieScorePerAgeService.createMovieScorePerAge(movie);
         movieScorePerAgeService.addMovieScorePerAge(movie, ageRange);
 
         return reviewBoardRepository.save(reviewBoard);
@@ -126,9 +134,9 @@ public class ReviewBoardService {
     public ReviewBoard findReviewBoard(User user, long reviewId) {
         ReviewBoard reviewBoard = findReviewBoardById(reviewId);
 
-        Period age = UserUtils.getAge(user);
-        if(age.getYears() < 19 && reviewBoard.isAdulted())
-            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_REVIEW_BOARD);
+//        Period age = UserUtils.getAge(user);
+//        if(age.getYears() < 19 && reviewBoard.isAdulted())
+//            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_REVIEW_BOARD);
 
         return reviewBoard;
     }
@@ -148,7 +156,7 @@ public class ReviewBoardService {
 
         List<CommentDto.Response> commentResponse = reviewBoard.getComments().stream()
                 .map(comment -> {
-                    boolean isLiked = commentLikeRepository.existsByCommentAndUser(comment,user);
+                    boolean isLiked = commentLikeRepository.existsByCommentAndUser(comment, user);
                     CommentDto.Response responseDto = commentMapper.commentToCommentResponseDto(comment, imageUtil);
                     responseDto.setLiked(isLiked);
                     return responseDto;
@@ -159,7 +167,8 @@ public class ReviewBoardService {
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(reviewBoard.getParties(), userMapper, imageUtil);
+        LocalDateTime now = LocalDateTime.now().plusHours(9);
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, now), userMapper, imageUtil);
 
         String thumbnail = reviewBoard.getThumbnail();
         if(thumbnail == null)
@@ -211,13 +220,15 @@ public class ReviewBoardService {
     }
 
     public Page<ReviewBoard> findAllReviewBoards(User user, int page, int size) {
-        Period age = UserUtils.getAge(user);
-        if(age.getYears() >= 19)
-            return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
+        return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
                 Sort.by("reviewBoardId").descending()));
-        else
-            return reviewBoardRepository.findAllByAdultedIsFalse(PageRequest.of(page-1, size,
-                    Sort.by("reviewBoardId").descending()));
+//        Period age = UserUtils.getAge(user);
+//        if(age.getYears() >= 19)
+//            return reviewBoardRepository.findAll(PageRequest.of(page-1, size,
+//                Sort.by("reviewBoardId").descending()));
+//        else
+//            return reviewBoardRepository.findAllByAdultedIsFalse(PageRequest.of(page-1, size,
+//                    Sort.by("reviewBoardId").descending()));
     }
 
     public void deleteReviewBoard(User user, long reviewId) {
@@ -227,6 +238,7 @@ public class ReviewBoardService {
 
         if(reviewBoard.getThumbnail() != null)
             storageService.deleteThumbnailImage(reviewBoard);
+        reviewBoard.setThumbnail(null);
 
         movieScorePerAgeService.subtractMovieScorePerAge(reviewBoard.getMovie(), UserUtils.getAge(user).getYears() / 10);
 
@@ -234,70 +246,77 @@ public class ReviewBoardService {
     }
 
     public List<ReviewBoard> findReviewBoards(User user) {
-        Period age = UserUtils.getAge(user);
-        if(age.getYears() >= 19)
-            return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
-        else {
-            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop12ByAdultedIsFalseOrderByReviewBoardIdDesc();
-            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 12));
-        }
-
-//        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
-//            return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDescByIsAdulted(false);
+        return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+//        Period age = UserUtils.getAge(user);
+//        if(age.getYears() >= 19)
+//            return reviewBoardRepository.findTop12ByOrderByReviewBoardIdDesc();
+//        else {
+//            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop12ByAdultedIsFalseOrderByReviewBoardIdDesc();
+//            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 12));
+//        }
     }
 
     public List<ReviewBoard> findPopularReviewBoards(User user) {
-        Period age = UserUtils.getAge(user);
-        if(age.getYears() >= 19)
-            return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
-        else {
-            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByAdultedIsFalseOrderByWishDescReviewBoardIdDesc();
-            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
-        }
+        return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
+//        Period age = UserUtils.getAge(user);
+//        if(age.getYears() >= 19)
+//            return reviewBoardRepository.findTop8ByOrderByWishDescReviewBoardIdDesc();
+//        else {
+//            List<ReviewBoard> reviewBoards = reviewBoardRepository.findTop8ByAdultedIsFalseOrderByWishDescReviewBoardIdDesc();
+//            return reviewBoards.subList(0, Math.min(reviewBoards.size(), 8));
+//        }
 //        return reviewBoardRepository.findTop8ByOrderByWishDesc();
 //            return reviewBoardRepository.findTop8ByOrderByWishDescByIsAdulted(false);
     }
 
     public List<ReviewBoard> findRecommendReviewBoards(User user, List<Tag> tags) {
-        List<RecommendReviewBoard> recommendReviewBoards = null;
+        List<RecommendReviewBoard> recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoards();
+//        int age = UserUtils.getAge(user).getYears();
+//        if(age >= 19) recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoards();
+//        else recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoardsNotAdulted();
         int size = recommendReviewBoards.size();
 
-        int age = UserUtils.getAge(user).getYears();
-        if(age >= 19) recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoards();
-        else recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoardsNotAdulted();
-//        List<RecommendReviewBoard> recommendReviewBoards = recommendReviewBoardService.findRecommendReviewBoards();
         AtomicInteger index = new AtomicInteger();
-        List<RecommendReviewBoard> personalScore = recommendReviewBoards.stream()
-                .map(recommendReviewBoard -> {
-                    RecommendReviewBoard personalRecommendReviewBoard = new RecommendReviewBoard();
-                    personalRecommendReviewBoard.setReviewBoard(recommendReviewBoard.getReviewBoard());
-                    personalRecommendReviewBoard.setAge(recommendReviewBoard.getAge());
+        if(recommendReviewBoards != null && !recommendReviewBoards.isEmpty()) {
+            List<RecommendReviewBoard> personalScore = recommendReviewBoards.stream()
+                    .map(recommendReviewBoard -> {
+                        RecommendReviewBoard personalRecommendReviewBoard = new RecommendReviewBoard();
+                        personalRecommendReviewBoard.setReviewBoard(recommendReviewBoard.getReviewBoard());
+                        personalRecommendReviewBoard.setAge(recommendReviewBoard.getAge());
 
-                    int ranking = index.getAndIncrement();
-                    int initScore = (size - ranking) * 2;
-                    personalRecommendReviewBoard.setScore(initScore);
+                        int ranking = index.getAndIncrement();
+                        int initScore = (size - ranking) * 2;
+                        personalRecommendReviewBoard.setScore(initScore);
 
-                    // 1, ..., 6, 7, 8번째 게시글의 점수를 얻어옴
-                    // 9번째부터 for문 돌면서 같은 점수 게시글 얻어옴
-                    // 같은 점수 게시글을 reviewBoardScores에 있는 score 순으로 정렬
-                    // 거기서 하나 뽑음
-                    int totalScore = calculatePersonalScore(user, personalRecommendReviewBoard);
-                    personalRecommendReviewBoard.setScore(personalRecommendReviewBoard.getScore() + totalScore);
-                    return personalRecommendReviewBoard;
-                })
-                .collect(Collectors.toList());
+                        // 1, ..., 6, 7, 8번째 게시글의 점수를 얻어옴
+                        // 9번째부터 for문 돌면서 같은 점수 게시글 얻어옴
+                        // 같은 점수 게시글을 reviewBoardScores에 있는 score 순으로 정렬
+                        // 거기서 하나 뽑음
+                        int totalScore = calculatePersonalScore(user, personalRecommendReviewBoard);
+                        personalRecommendReviewBoard.setScore(personalRecommendReviewBoard.getScore() + totalScore);
+                        return personalRecommendReviewBoard;
+                    })
+                    .collect(Collectors.toList());
 
-        Collections.sort(personalScore, new Comparator<RecommendReviewBoard>() {
-            @Override
-            public int compare(RecommendReviewBoard o1, RecommendReviewBoard o2) {
-                return o2.getScore() - o1.getScore();
-            }
-        });
+            Collections.sort(personalScore, new Comparator<RecommendReviewBoard>() {
+                @Override
+                public int compare(RecommendReviewBoard o1, RecommendReviewBoard o2) {
+                    return o2.getScore() - o1.getScore();
+                }
+            });
 
-        List<RecommendReviewBoard> top8RecommendReviewBoards = personalScore.subList(0, Math.min(8, personalScore.size()));
-        return top8RecommendReviewBoards.stream()
-                .map(recommendReviewBoard -> recommendReviewBoard.getReviewBoard())
-                .collect(Collectors.toList());
+            List<RecommendReviewBoard> top8RecommendReviewBoards = personalScore.subList(0, Math.min(8, personalScore.size()));
+            return top8RecommendReviewBoards.stream()
+                    .map(recommendReviewBoard -> recommendReviewBoard.getReviewBoard())
+                    .collect(Collectors.toList());
+        }
+
+        return new ArrayList<>();
+
+//        List<RecommendReviewBoard> top8RecommendReviewBoards = personalScore.subList(0, Math.min(8, personalScore.size()));
+//        return top8RecommendReviewBoards.stream()
+//                .map(recommendReviewBoard -> recommendReviewBoard.getReviewBoard())
+//                .collect(Collectors.toList());
 //        Period age = UserUtils.getAge(user);
 //        if(age.getYears() >= 19)
 //            return reviewBoardRepository.findDistinctTop8ByReviewBoardTagsTagInOrderByWishDescReviewBoardIdDesc(tags);
@@ -400,14 +419,16 @@ public class ReviewBoardService {
     }
 
     public Page<ReviewBoard> findSpecificTagReviewBoards(User user, Tag tag, int page, int size) {
-        Period age = UserUtils.getAge(user);
+        return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
+                Sort.by("reviewBoardId").descending()));
+//        Period age = UserUtils.getAge(user);
 
-        if(age.getYears() >= 19)
-            return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
-                    Sort.by("reviewBoardId").descending()));
-        else
-            return reviewBoardRepository.findByAdultedIsFalseAndReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
-                    Sort.by("reviewBoardId").descending()));
+//        if(age.getYears() >= 19)
+//            return reviewBoardRepository.findByReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
+//                    Sort.by("reviewBoardId").descending()));
+//        else
+//            return reviewBoardRepository.findByAdultedIsFalseAndReviewBoardTagsTag(tag,PageRequest.of(page-1,size,
+//                    Sort.by("reviewBoardId").descending()));
     }
 
     public Page<ReviewBoard> findSearchedReviewBoards(String title, int page, int size) {
@@ -415,7 +436,6 @@ public class ReviewBoardService {
         List<Long> movieIds = movies.stream()
                 .map(Movie::getMovieId)
                 .collect(Collectors.toList());
-        System.out.println("movieIds = " + movieIds);
 
         return reviewBoardRepository.findByMovieMovieIdIn(movieIds, PageRequest.of(page-1,size,
                 Sort.by("reviewBoardId").descending()));
