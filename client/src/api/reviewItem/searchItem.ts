@@ -1,17 +1,22 @@
 import { instance } from '../api';
 
 type TagSearchResultType = {
-  boards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-    };
-  }[];
-  pageInfo?: {
+  data: {
+    tagName: string;
+    boards: [
+      {
+        createdAt: string;
+        reviewBoardId: number;
+        thumbnail: string;
+        title: string;
+        user: {
+          nickname: string;
+          userId: number;
+        };
+      },
+    ];
+  };
+  pageInfo: {
     page: number;
     size: number;
     totalPages: number;
@@ -20,24 +25,23 @@ type TagSearchResultType = {
 };
 
 type KeywordSearchResultType = {
-  boards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
+  data: {
     createdAt: string;
+    reviewBoardId: number;
+    thumbnail: string;
+    title: string;
     user: {
-      userId: number;
       nickname: string;
+      userId: number;
     };
   }[];
-  pageInfo?: {
+  pageInfo: {
     page: number;
     size: number;
     totalPages: number;
     totalElements: number;
   };
 };
-
 export const getTagSearchItems = async (
   pageParam: number,
   tagIdParam: string | undefined,
@@ -55,7 +59,7 @@ export const getTagSearchItems = async (
 export const getKeywordSearchItems = async (
   pageParam: number,
   keywordParam: string | undefined,
-): Promise<TagSearchResultType> => {
+): Promise<KeywordSearchResultType> => {
   return instance
     .get(`/reviewBoards/search?q=${keywordParam}`, {
       params: {

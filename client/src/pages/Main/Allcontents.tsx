@@ -7,6 +7,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAllItems } from '../../api/reviewItem/reviewItem';
 import InfiniteScroll from 'react-infinite-scroller';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import { PageType } from '../../api/reviewItem/reviewItem';
 
 const Allcontents = () => {
   const {
@@ -21,8 +22,9 @@ const Allcontents = () => {
     ({ pageParam = 1 }) => getAllItems(pageParam),
     {
       getNextPageParam: currentPage => {
-        const nextPage = currentPage.pageInfo.page + 1;
-        return nextPage > currentPage.pageInfo?.totalPages ? null : nextPage;
+        console.log(currentPage);
+        const nextPage = currentPage?.pageInfo?.page + 1;
+        return nextPage > currentPage?.pageInfo?.totalPages ? null : nextPage;
       },
     },
   );
@@ -51,7 +53,7 @@ const Allcontents = () => {
                     shouldForwardProp={prop => isPropValid(prop)}
                   >
                     <SingleItem
-                      reviewId={page.reviewBoardId}
+                      reviewId={String(page.reviewBoardId)}
                       src={page.thumbnail}
                       title={page.title}
                       date={page.createdAt}

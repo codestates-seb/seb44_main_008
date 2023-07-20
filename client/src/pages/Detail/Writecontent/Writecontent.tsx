@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
-import { WriteContentType, Props, TagType } from './type';
-import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+import React, { useRef, useState } from 'react';
+import { StyleSheetManager, styled } from 'styled-components';
+import { Props } from './type';
 
-import Input from '../../../components/Common/Input/Input';
-import Button from '../../../components/Common/Button/Button';
-import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { postNewReview } from '../../../api/reviewItem/reviewItem';
 import { getAllTags } from '../../../api/tags/getTags';
-import { useNavigate } from 'react-router-dom';
+import Button from '../../../components/Common/Button/Button';
+import Input from '../../../components/Common/Input/Input';
+import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
 
 const Writecontent = () => {
   const [fileURL, setFileURL] = useState<string>('');
@@ -20,7 +19,9 @@ const Writecontent = () => {
   const [title, setTitle] = useState<string>('');
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [movieId, setMovieId] = useState<number>(0);
-  const [selectedTags, setSelectedTags] = useState<Object[]>([]);
+  const [selectedTags, setSelectedTags] = useState<
+    { tagId: number; tagName: string }[]
+  >([]);
   const [content, setContent] = useState<string>('');
 
   const [modalOn, setModalOn] = useState<boolean>(false);
@@ -35,8 +36,7 @@ const Writecontent = () => {
 
   const { data: tagData, isSuccess } = useQuery(['tags'], () => getAllTags());
 
-  const writeMutations = useMutation({
-    mutationFn: postData => postNewReview(postData),
+  const writeMutations = useMutation(postNewReview, {
     onSuccess() {
       queryClient.invalidateQueries(['mainItems']);
     },
@@ -72,7 +72,6 @@ const Writecontent = () => {
       setContentErr(true);
     }
   };
-  console.log(movieTitle);
 
   const onClickTag = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -80,14 +79,16 @@ const Writecontent = () => {
     const target = event.target as HTMLButtonElement;
     const element = document.getElementById(target.id)?.classList;
 
-    const newTagId: number | string = target.id;
+    const newTagId: number = Number(target.id);
     const newTagName: string = target.name.substr(1);
 
-    const tagIdArray: string[] = selectedTags.map(tagObject => tagObject.tagId);
+    const tagIdArray: number[] = selectedTags.map(tagObject => tagObject.tagId);
 
-    if (tagIdArray.indexOf(newTagId) != -1) {
+    if (tagIdArray.indexOf(Number(newTagId)) != -1) {
       element?.toggle('clicked');
-      const deletedTagList = selectedTags.filter(tag => tag.tagId != newTagId);
+      const deletedTagList = selectedTags.filter(
+        tag => tag.tagId != Number(newTagId),
+      );
       setSelectedTags(deletedTagList);
     } else if (selectedTags.length >= 3) {
       alert('태그는 최대 3개까지 선택 가능합니다.');

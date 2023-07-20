@@ -32,6 +32,8 @@ const KeywordContents = () => {
     },
   );
 
+  console.log(keywordSearchItems);
+
   if (error) {
     return <ErrorPage />;
   }
@@ -49,6 +51,7 @@ const KeywordContents = () => {
         >
           <StaticContainer>
             {keywordSearchItems?.pages.map(pages => {
+              console.log(pages);
               return pages?.data?.map(page => {
                 return (
                   <StyleSheetManager
@@ -56,7 +59,7 @@ const KeywordContents = () => {
                     shouldForwardProp={prop => isPropValid(prop)}
                   >
                     <SingleItem
-                      reviewId={page.reviewBoardId}
+                      reviewId={String(page.reviewBoardId)}
                       src={page.thumbnail}
                       title={page.title}
                       date={page.createdAt}

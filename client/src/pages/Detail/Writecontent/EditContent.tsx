@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { styled } from 'styled-components';
-import { WriteContentType, Props, TagType } from './type';
+import { WriteContentType, Props } from './type';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
@@ -24,7 +24,9 @@ const EditContent = () => {
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
 
   const [title, setTitle] = useState<string | undefined>('');
-  const [selectedTags, setSelectedTags] = useState<Object[]>([]);
+  const [selectedTags, setSelectedTags] = useState<
+    { tagId: number; tagName: string }[]
+  >([]);
   const [content, setContent] = useState<string>('');
 
   // 유효성 검사
@@ -35,6 +37,7 @@ const EditContent = () => {
   // react-query
   const { data: tagData, isSuccess } = useQuery(['tags'], () => getAllTags());
 
+  console.log(tagData);
   const {
     data: oldData,
     isLoading,
@@ -51,6 +54,7 @@ const EditContent = () => {
 
   // useEffect
   useEffect(() => {
+    setTitle(oldData?.title);
     setContent(oldData?.review);
     setSelectedTags(oldData?.tags);
   }, [oldData]);
@@ -199,11 +203,10 @@ const EditContent = () => {
                 <p>최소 1개 이상의 태그를 선택해 주세요.</p>
               </WriteTagMeta>
               <WriteTagList>
-                {tagData.map(tag => {
+                {tagData?.map(tag => {
                   const isMyTag = selectedTags?.some(
                     myTag => myTag.tagId === tag.tagId,
                   );
-
                   return (
                     <li key={tag.tagId}>
                       {isMyTag ? (

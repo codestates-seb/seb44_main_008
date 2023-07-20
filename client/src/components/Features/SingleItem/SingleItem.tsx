@@ -1,6 +1,6 @@
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { SingleItemType } from './type';
-import { useNavigate } from 'react-router';
 
 const SingleItem = ({
   reviewId,
@@ -12,8 +12,10 @@ const SingleItem = ({
 }: SingleItemType) => {
   const navigate = useNavigate();
 
-  const onClickSingleItem = e => {
-    const reviewId = e.currentTarget.id;
+  const onClickSingleItem = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const reviewId = event.currentTarget.id;
     navigate(`/detail/content/${reviewId}`);
   };
 

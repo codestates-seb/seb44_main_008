@@ -5,6 +5,7 @@ import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { PostPot } from '../../../../api/pot/pot';
+import { error } from 'console';
 
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
@@ -71,6 +72,11 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
       onSuccess: () => {
         queryClient.invalidateQueries(['ReviewInfo', reviewId]);
         setCurrentRender('List');
+      },
+    },
+    {
+      onError: err => {
+        console.log(err);
       },
     },
   );
