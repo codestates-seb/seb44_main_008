@@ -9,8 +9,6 @@ type MapItem = {
   tagId: number;
 };
 
-// export type BtnEventHandler = MouseEventHandler<HTMLButtonElement>;
-
 export interface EditInfoType {
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
