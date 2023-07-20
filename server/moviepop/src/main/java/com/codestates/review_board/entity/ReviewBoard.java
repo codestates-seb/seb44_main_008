@@ -48,6 +48,15 @@ public class ReviewBoard extends Auditable {
     @JoinColumn(name = "MOVIE_ID")
     private Movie movie;
 
+    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private RecommendReviewBoard recommendReviewBoard;
+
+    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private ReviewBoardRecentVisit reviewBoardRecentVisit;
+
+    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private ReviewBoardScore reviewBoardScore;
+
     @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<MovieParty> parties = new ArrayList<>();
 
