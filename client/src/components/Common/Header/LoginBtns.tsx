@@ -7,20 +7,20 @@ const LoginBtns = () => {
   const [thisLocation, setThisLocation] = useState('');
   useEffect(() => {
     setThisLocation(window.location.pathname);
-  }, []);
+  }, [navigate]);
   const btnLogin = useCallback(() => {
-    navigate('/login');
+    navigate('/account/login');
   }, []);
   const btnRegister = useCallback(() => {
-    navigate('/register');
+    navigate('/account/signup');
   }, []);
   return (
     <>
-      {thisLocation === '/register' && (
-        <Button value="Login" onClick={btnLogin}></Button>
-      )}
-      {thisLocation === '/login' && (
+      {thisLocation === '/account/login' && (
         <Button value="Register" onClick={btnRegister}></Button>
+      )}
+      {thisLocation === '/account/signup' && (
+        <Button value="Login" onClick={btnLogin}></Button>
       )}
     </>
   );

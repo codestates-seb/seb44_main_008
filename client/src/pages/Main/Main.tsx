@@ -20,9 +20,7 @@ const Main = () => {
     queryFn: () => getMainItems(),
   });
 
-  const userName = useSelector(
-    (state: RootState) => state.user.value.userInfo.name,
-  );
+  const userName = useSelector((state: RootState) => state.user.userInfo.name);
   const responsive = {
     0: {
       items: 1,

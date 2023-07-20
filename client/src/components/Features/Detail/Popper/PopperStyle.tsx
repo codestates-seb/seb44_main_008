@@ -110,7 +110,7 @@ export const PopperBox = styled.div`
       input {
         width: 100%;
         background-color: var(--main-dark-color);
-        color: #888;
+        color: #fff;
         font-size: 1rem;
         border: 0;
         border-bottom: 2px solid var(--ghost-color);
@@ -139,6 +139,9 @@ export const PopperBox = styled.div`
       padding: 0.7rem;
       resize: none;
       height: 10rem;
+      &.on {
+        border-bottom: 2px solid var(--theme-color);
+      }
       &:focus {
         outline: none;
       }
