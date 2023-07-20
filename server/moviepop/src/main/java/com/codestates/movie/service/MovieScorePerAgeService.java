@@ -27,6 +27,9 @@ public class MovieScorePerAgeService {
     public MovieScorePerAge addMovieScorePerAge(Movie movie, int ageRange) {
         MovieScorePerAge movieScorePerAge = findMovieScorePerAgeByMovie(movie);
 
+        if(movieScorePerAge == null)
+            movieScorePerAge = createMovieScorePerAge(movie);
+
         if(ageRange == 0) movieScorePerAge.setZero(movieScorePerAge.getZero() + 1);
         else if(ageRange == 1) movieScorePerAge.setTen(movieScorePerAge.getTen() + 1);
         else if(ageRange == 2) movieScorePerAge.setTwenty(movieScorePerAge.getTwenty() + 1);
