@@ -62,7 +62,6 @@ const TagContents = () => {
         >
           <StaticContainer>
             {tagSearchItems?.pages.map(pages => {
-              console.log(pages);
               return pages?.data.boards.map(page => {
                 return (
                   <StyleSheetManager

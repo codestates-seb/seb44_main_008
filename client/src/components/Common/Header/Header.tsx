@@ -9,10 +9,7 @@ import { useEffect } from 'react';
 
 const Header = () => {
   const userCheck = useSelector((state: RootState) => state.user.isLoggedIn);
-  console.log(userCheck);
-  useEffect(() => {
-    console.log(userCheck);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <HeaderWrapper>
       <div className="headerInner">

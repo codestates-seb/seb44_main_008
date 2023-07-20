@@ -46,7 +46,6 @@ const UserArea = () => {
 
   const onClickTagButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     setHashShow(false);
-    console.log(e.currentTarget.id);
     navigate(`/main/contents/${e.currentTarget.id}`);
   };
   const clickHash = () => {

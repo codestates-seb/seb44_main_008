@@ -37,7 +37,6 @@ const EditContent = () => {
   // react-query
   const { data: tagData, isSuccess } = useQuery(['tags'], () => getAllTags());
 
-  console.log(tagData);
   const {
     data: oldData,
     isLoading,

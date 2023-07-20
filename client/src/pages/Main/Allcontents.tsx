@@ -22,7 +22,6 @@ const Allcontents = () => {
     ({ pageParam = 1 }) => getAllItems(pageParam),
     {
       getNextPageParam: currentPage => {
-        console.log(currentPage);
         const nextPage = currentPage?.pageInfo?.page + 1;
         return nextPage > currentPage?.pageInfo?.totalPages ? null : nextPage;
       },

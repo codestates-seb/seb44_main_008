@@ -35,7 +35,6 @@ const Detailcontent = (): JSX.Element => {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(dataItem.reviewBoardId);
   return (
     <DetailWrap>
       <div className="detailBox">
