@@ -84,7 +84,7 @@ public class ReviewBoardService {
         else {
             Random random = new Random();
             int offset = random.nextInt(6) + 1;
-            imageUrl = imageUtil.getThumbnailPath() + "/" + imageUtil.getDefaultThumbnail() + offset + ".jpg";
+            imageUrl = imageUtil.getDefaultThumbnail() + offset + ".jpg";
         }
         reviewBoard.setThumbnail(imageUrl);
 
@@ -96,8 +96,8 @@ public class ReviewBoardService {
         int age = UserUtils.getAge(user).getYears();
         int ageRange = age / 10;
 
-        MovieScorePerAge movieScorePerAge = movieScorePerAgeService.findMovieScorePerAgeByMovie(movie);
-        if(movieScorePerAge == null) movieScorePerAge = movieScorePerAgeService.createMovieScorePerAge(movie);
+//        MovieScorePerAge movieScorePerAge = movieScorePerAgeService.findMovieScorePerAgeByMovie(movie);
+//        if(movieScorePerAge == null) movieScorePerAge = movieScorePerAgeService.createMovieScorePerAge(movie);
         movieScorePerAgeService.addMovieScorePerAge(movie, ageRange);
 
         return reviewBoardRepository.save(reviewBoard);
@@ -207,12 +207,12 @@ public class ReviewBoardService {
                 LocalDateTime oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
                 ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt);
                 reviewBoardRecentVisitRepository.delete(oldestVisit);
-
-                //가장 최근 기록
-                visit.setUser(user);
-                visit.setReviewBoard(reviewBoard);
-                visit.setVisitedAt(LocalDateTime.now());
             }
+            //가장 최근 기록
+            visit = new ReviewBoardRecentVisit();
+            visit.setUser(user);
+            visit.setReviewBoard(reviewBoard);
+            visit.setVisitedAt(LocalDateTime.now());
         }
 
         //변경사항 저장
