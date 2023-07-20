@@ -5,44 +5,6 @@ import { FiFigma } from 'react-icons/fi';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #1c1d21;
-  color: white;
-  height: 10.9rem;
-  padding-left: 2.5rem;
-  padding-right: 0.5rem;
-`;
-const Front = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const Title = styled.p`
-  font-size: x-large;
-  margin-bottom: 1rem;
-  font-weight: 700;
-`;
-const Info = styled.p`
-  font-size: x-small;
-  opacity: 0.6;
-`;
-const Icons = styled.div`
-  display: flex;
-  width: 11.625rem;
-  justify-content: space-evenly;
-  font-size: x-large;
-`;
-const Git = styled(AiFillGithub)`
-  fill: var(--footer-icon-color);
-`;
-const Notion = styled(RxNotionLogo)`
-  color: var(--footer-icon-color);
-`;
-const Figma = styled(FiFigma)`
-  color: var(--footer-icon-color);
-`;
 const Footer = () => {
   return (
     <>
@@ -50,6 +12,7 @@ const Footer = () => {
         <Front>
           <Title>MoviePoP</Title>
           <Info>© 2023 codeStates Main-project Team, popcorns</Info>
+          <Member>FE: 정승현, 박영미, 장근실 BE: 오태호, 송현우, 권우혁</Member>
         </Front>
         <Icons>
           <Link
@@ -77,3 +40,47 @@ const Footer = () => {
 };
 
 export default Footer;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1c1d21;
+  color: white;
+  height: 8rem;
+  padding-left: 2.5rem;
+  padding-right: 0.5rem;
+`;
+const Front = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const Title = styled.p`
+  font-size: x-large;
+  margin-bottom: 1rem;
+  font-weight: 700;
+`;
+const Info = styled.p`
+  font-size: x-small;
+  opacity: 0.6;
+  margin-bottom: 1rem;
+`;
+const Member = styled.p`
+  font-size: x-small;
+  opacity: 0.6;
+`;
+const Icons = styled.div`
+  display: flex;
+  width: 11.625rem;
+  justify-content: space-evenly;
+  font-size: x-large;
+`;
+const Git = styled(AiFillGithub)`
+  fill: var(--footer-icon-color);
+`;
+const Notion = styled(RxNotionLogo)`
+  color: var(--footer-icon-color);
+`;
+const Figma = styled(FiFigma)`
+  color: var(--footer-icon-color);
+`;

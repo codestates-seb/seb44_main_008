@@ -1,21 +1,11 @@
 import { styled } from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Pagenation from '../Pagenation';
-// import { data } from './tabAB';
 import Poplike from '../../../Common/PopIcons/Poplike';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteTabA } from '../../../../api/user/userTab/userTab';
 import { useNavigate } from 'react-router-dom';
 
-// const getData = async () => {
-//   const response = await axios.get('/url/groups', {
-//     params: { page: page, size: limit },
-//   });
-//   setTotalElements(response.data.pageInfo.totalElements);
-// };
-// useEffect(() => {
-//   getData();
-// }, [page]);
 type tabAType = {
   data: {
     reviewBoardId: number;
@@ -34,7 +24,6 @@ const ContentA = ({ data }: tabAType) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [tabAPost, setAPost] = useState(data);
-  console.log('data1', data);
   const [like, setLike] = useState(true);
   const deletePostMutation = useMutation(DeleteTabA, {
     onSuccess: () => {
@@ -46,7 +35,6 @@ const ContentA = ({ data }: tabAType) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     reviewId: number,
   ) => {
-    // 이벤트 버블링을 막습니다.
     event.stopPropagation();
 
     const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
@@ -55,13 +43,7 @@ const ContentA = ({ data }: tabAType) => {
       alert('게시글이 찜 해제되었습니다.');
     }
   };
-  // const likeHandler = (reviewId: number) => {
-  //   const confirmed = window.confirm('정말 이 게시글을 찜 해제하시겠습니까?');
-  //   if (confirmed) {
-  //     deletePostMutation.mutate(reviewId);
-  //     alert('게시글이 찜 해제되었습니다.');
-  //   }
-  // };
+
   const moveHandler = (reviewId: number) => {
     navigate(`/detail/content/${reviewId}`);
   };

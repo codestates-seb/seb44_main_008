@@ -184,6 +184,7 @@ const Start = () => {
               responsive={responsive}
               autoPlay
               items={items}
+              autoPlayStrategy={'none'}
             />
           </div>
         </Section>
@@ -432,6 +433,7 @@ const LandingWrap = styled.div`
     justify-content: space-around;
     display: flex !important;
     overflow: hidden !important;
+
     & > h4 {
       margin-left: 4rem;
     }
@@ -523,4 +525,5 @@ const SpecialContainer = styled.div`
 `;
 const SliderContainer = styled.div`
   width: 100%;
+  pointer-events: none;
 `;

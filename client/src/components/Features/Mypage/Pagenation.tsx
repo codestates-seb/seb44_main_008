@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const visiblePages = 5; // 한 페이지에 보여줄 최대 버튼 개수
+  const visiblePages = 5;
   const startPage = Math.max(page - Math.floor(visiblePages / 2), 1);
   const endPage = Math.min(startPage + visiblePages - 1, numPages);
 
@@ -78,4 +78,3 @@ const StyledButton = styled.button`
     opacity: 0.7;
   }
 `;
-// export default Pagenation;

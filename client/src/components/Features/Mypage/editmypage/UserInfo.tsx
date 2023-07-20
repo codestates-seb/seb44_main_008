@@ -1,13 +1,13 @@
 import React, {
   ChangeEvent,
-  MouseEvent,
+  MouseEventHandler,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { styled } from 'styled-components';
-import { FileData, UserInfoType } from './type';
+import { FileData } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
 import Button from '../../../Common/Button/Button';
@@ -21,8 +21,6 @@ import {
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../../Common/Loading/Loading';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store/store';
 import { updateProfileImage } from '../../../../redux/reducers/user';
 
 const UserInfo = () => {
@@ -51,7 +49,8 @@ const UserInfo = () => {
   }, [data]);
 
   const [image, setImage] = useState<FileData | null>();
-  const fileInput = useRef(null);
+  const fileInput: React.RefObject<HTMLInputElement> =
+    useRef<HTMLInputElement>(null);
   const [nicknameMsg, setnickNameMsg] = useState<string>('');
   const [isnickName, setIsnickName] = useState(true);
 
@@ -91,22 +90,21 @@ const UserInfo = () => {
       dispatch(updateProfileImage(newFileUrl));
     }
   };
-  const onClickImg = (
-    event: React.MouseEvent<HTMLImageElement, MouseEvent>,
-  ) => {
+  const onClickImg: MouseEventHandler<HTMLImageElement> = event => {
     event?.preventDefault();
     if (fileInput.current) {
       fileInput.current.click();
     }
   };
 
-  const onClickTag = (
-    event: EditInfoType,
-  ): void | MouseEvent<HTMLButtonElement> | undefined => {
-    const element = document.getElementById(event.target.id)?.classList;
-    const newTagId: number = Number(event.target.id);
+  const onClickTag: MouseEventHandler<HTMLButtonElement> = event => {
+    const { target } = event as unknown as EditInfoType;
+    const element = document.getElementById(
+      target.id as unknown as string,
+    )?.classList;
+    const newTagId: number = Number(target.id);
 
-    const newTagName: string = event.target.name.substr(1);
+    const newTagName: string = target.name.substr(1);
     const tagIdArray = selectedTags.map(tagObject => tagObject.tagId);
     if (selectedTags.length === 1 && tagIdArray.indexOf(newTagId) !== -1) {
       alert('태그는 한개 이상 선택해야 합니다.');

@@ -64,6 +64,10 @@ const SignupForm = () => {
   const [isnickName, setIsnickName] = useState<boolean>(true);
   const [isBirth, setIsBirth] = useState<boolean>(true);
 
+  //이메일 유효성
+  const emailRegex =
+    /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
   // 2페이지로 넘어가는 버튼
   const ClickNextHandle = () => {
     if (!imgfile) {
@@ -72,6 +76,10 @@ const SignupForm = () => {
       setIsImg(true);
     }
     if (email.length === 0) {
+      setIsEmail(false);
+    }
+    if (!emailRegex.test(email)) {
+      setEmailMsg('이메일 형식이 틀렸습니다.');
       setIsEmail(false);
     }
     if (password.length === 0) {
@@ -83,18 +91,19 @@ const SignupForm = () => {
     if (
       imgfile &&
       email.length !== 0 &&
+      emailRegex.test(email) === true &&
       password.length !== 0 &&
       passwordConfirm.length !== 0
     ) {
       setPage(2);
+    } else if (emailRegex.test(email) === false) {
+      setEmailMsg('이메일 형식이 틀렸습니다.');
     }
   };
 
   //이메일 유효성검사
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const emailRegex =
-        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
       const emailCurrent = e.target.value;
       setEmail(emailCurrent);
       if (!emailRegex.test(emailCurrent)) {

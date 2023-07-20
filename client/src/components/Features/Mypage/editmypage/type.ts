@@ -9,11 +9,13 @@ type MapItem = {
   tagId: number;
 };
 
+// export type BtnEventHandler = MouseEventHandler<HTMLButtonElement>;
+
 export interface EditInfoType {
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
   target: {
-    id: number;
+    id: string;
     name: string;
   };
 
@@ -37,12 +39,7 @@ export interface UserInfoType {
     nickname: string;
     email: string;
     profileImage: string;
-    tags: {
-      tagId: number;
-      tagName: string;
-    }[];
-    myTags: {
-      tagId: number;
-    }[];
+    tags: Tag[];
+    myTags: Tag[];
   };
 }

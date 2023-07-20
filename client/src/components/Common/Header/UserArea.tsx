@@ -38,7 +38,7 @@ const UserArea = () => {
     dispatch(clearUser());
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-
+    alert('로그아웃 되었습니다.');
     setMyShow(false);
     navigate('/');
     location.reload();
@@ -90,18 +90,19 @@ const UserArea = () => {
         {hashShow && (
           <div className="hashBtns" ref={hashMenu}>
             <ul>
-              {tagData?.map(tag => {
-                return (
-                  <li key={tag.tagId}>
-                    <Button
-                      value={`#${tag.tagName}`}
-                      id={tag.tagId}
-                      width={'100%'}
-                      onClick={onClickTagButton}
-                    />
-                  </li>
-                );
-              })}
+              {tagData &&
+                tagData.map(tag => {
+                  return (
+                    <li key={tag.tagId}>
+                      <Button
+                        value={`#${tag.tagName}`}
+                        id={tag.tagId}
+                        width={'100%'}
+                        onClick={onClickTagButton}
+                      />
+                    </li>
+                  );
+                })}
             </ul>
           </div>
         )}
