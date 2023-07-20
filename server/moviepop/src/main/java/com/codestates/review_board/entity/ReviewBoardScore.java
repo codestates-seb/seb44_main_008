@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 public class ReviewBoardScore {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewBoardScoreId;
     @OneToOne
     @JoinColumn(name = "review_board_id")
