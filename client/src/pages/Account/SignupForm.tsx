@@ -8,6 +8,7 @@ import { AccountWrap } from './AccountStyle';
 import { useQuery } from '@tanstack/react-query';
 import { getAccountTags } from '../../api/tags/getTags';
 import { useLocation } from 'react-router-dom';
+import { AxiosError } from '../../assets/type/errorType';
 interface SignupType {
   userPostDto: {
     email: string;
@@ -295,7 +296,8 @@ const SignupForm = () => {
         alert('회원가입이 완료되었습니다.');
         navigate('/account/login');
       } catch (err) {
-        const errMsg = err.response.data.message;
+        const axiosError = err as AxiosError;
+        const errMsg = axiosError.response?.data.message;
         alert(errMsg);
         console.log('err', err);
       }
