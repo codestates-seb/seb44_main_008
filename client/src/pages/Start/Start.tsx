@@ -38,46 +38,67 @@ const Start = () => {
   const dummyData = [
     {
       reviewBoardId: 1,
-      title: '사용자 맞춤 추천 게시글',
+      title: '오랜만에 심장이 울었습니다..',
       thumbnail:
-        'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-      createdAt: '2023-06-30',
+        'https://res.heraldm.com/content/image/2023/05/30/20230530000795_0.jpg',
+      createdAt: '2023-07-02',
       user: {
         userId: 1,
-        nickname: '홍길동',
+        nickname: '장근실',
       },
     },
     {
       reviewBoardId: 2,
-      title: '사용자 맞춤 추천 게시글',
+      title: '범죄도시 1, 2를 봤다면...',
       thumbnail:
-        'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-      createdAt: '2023-06-30',
+        'https://file2.nocutnews.co.kr/newsroom/image/2023/04/29/202304291432372295_0.jpg',
+      createdAt: '2023-07-16',
       user: {
         userId: 1,
-        nickname: '홍길동',
+        nickname: '권우혁',
+      },
+    },
+    {
+      reviewBoardId: 6,
+      title: '이것은 갓작이다. 패.왕.별.희',
+      thumbnail:
+        'https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202003/17/newsen/20200317082302729eceb.jpg',
+      createdAt: '2023-07-16',
+      user: {
+        userId: 6,
+        nickname: '박영미',
       },
     },
     {
       reviewBoardId: 3,
-      title: '사용자 맞춤 추천 게시글',
-      thumbnail:
-        'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-      createdAt: '2023-06-30',
+      title: '이건 제 인생영화입니다.',
+      thumbnail: 'https://t1.daumcdn.net/cfile/tistory/202AAE264A1B8A52D4',
+      createdAt: '2023-07-13',
       user: {
-        userId: 1,
-        nickname: '홍길동',
+        userId: 3,
+        nickname: '정승현',
       },
     },
     {
       reviewBoardId: 4,
-      title: '사용자 맞춤 추천 게시글',
+      title: '톰 형님과의 의리로 봐야할 영화',
       thumbnail:
-        'https://cdn.pixabay.com/photo/2023/06/14/06/22/cat-8062388_1280.jpg',
-      createdAt: '2023-06-30',
+        'https://cdn.gametoc.co.kr/news/photo/202307/74257_230544_299.jpg',
+      createdAt: '2023-07-16',
       user: {
-        userId: 1,
-        nickname: '홍길동',
+        userId: 4,
+        nickname: '오태호',
+      },
+    },
+    {
+      reviewBoardId: 5,
+      title: '스파이더맨 홈커밍',
+      thumbnail:
+        'https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/171BC5F7EC137B12CDD33AA092A979A7184370E95DE757DAFAED487A6E55882D/scale?width=1200&aspectRatio=1.78&format=jpeg',
+      createdAt: '2023-07-03',
+      user: {
+        userId: 5,
+        nickname: '송현우',
       },
     },
   ];
@@ -177,74 +198,74 @@ const Start = () => {
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
+                  <h6>가디언즈 오브 갤럭시: Volume 3</h6>
+                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라! 🍺</p>
                   <span>9월 29일 저녁 8시 왓챠파티</span>
                 </div>
               </li>
               <li>
                 <div className="imgWrap">
                   <img
-                    src="https://img.wkorea.com/w/2022/12/style_639ae72b68d07.jpg"
+                    src="https://image.blip.kr/v1/file/d7ca01eac91e50d3491832db44b37228"
                     alt=""
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
-                  <span>9월 29일 저녁 8시 왓챠파티</span>
+                  <h6>나이트메어 앨리</h6>
+                  <p>같이 소통하면서 영화봐요 ✨</p>
+                  <span>8월 13일 저녁 6시 넷플릭스</span>
                 </div>
               </li>
               <li>
                 <div className="imgWrap">
                   <img
-                    src="https://img.wkorea.com/w/2022/12/style_639ae72b68d07.jpg"
+                    src="https://i.pinimg.com/236x/f2/c8/84/f2c884b9024d40a1a78c1051280c91d9.jpg"
                     alt=""
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
-                  <span>9월 29일 저녁 8시 왓챠파티</span>
+                  <h6>엘리멘탈</h6>
+                  <p>엘리멘탈 5번 정주행합니다 🔥 ❤️ 💦</p>
+                  <span>8월 1일 저녁 6시 홍대 CGV</span>
                 </div>
               </li>
               <li>
                 <div className="imgWrap">
                   <img
-                    src="https://img.wkorea.com/w/2022/12/style_639ae72b68d07.jpg"
+                    src="https://thumb.mtstarnews.com/06/2019/10/2019101115024034215_1.jpg"
                     alt=""
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
-                  <span>9월 29일 저녁 8시 왓챠파티</span>
+                  <h6>명탐정코난-흑철의 어영</h6>
+                  <p>같이 추리하면서 코난 즐기실 다섯분 모집합니다! 🕵🏻‍♀️</p>
+                  <span>7월 28일 1시 부평 CGV</span>
                 </div>
               </li>
               <li>
                 <div className="imgWrap">
                   <img
-                    src="https://img.wkorea.com/w/2022/12/style_639ae72b68d07.jpg"
+                    src="https://i.pinimg.com/736x/fe/70/81/fe7081518703a1df969ffc9302c989cb.jpg"
                     alt=""
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
-                  <span>9월 29일 저녁 8시 왓챠파티</span>
+                  <h6>미션 임파서블-데드 레코닝 PART ONE</h6>
+                  <p>톰 크루즈 보려고 봅니다. 팬심으로 모여라 ❤️</p>
+                  <span>8월 3일 3시 화곡 메가박스</span>
                 </div>
               </li>
               <li>
                 <div className="imgWrap">
                   <img
-                    src="https://img.wkorea.com/w/2022/12/style_639ae72b68d07.jpg"
+                    src="https://issuya.com/data/editor/2303/16791071613326.jpeg"
                     alt=""
                   />
                 </div>
                 <div>
-                  <h6>가디언즈 오브 갤럭시 3</h6>
-                  <p>평일 저녁 맥주 마시면서 같이 볼 직장인 모여라!</p>
-                  <span>9월 29일 저녁 8시 왓챠파티</span>
+                  <h6>인사이드 아웃</h6>
+                  <p>나랑 같이 놀 친구, 빙봉빙봉 🎵</p>
+                  <span>9월 10일 3시 디즈니플러스</span>
                 </div>
               </li>
             </ul>
@@ -408,7 +429,7 @@ const LandingWrap = styled.div`
   }
   .landinBox {
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     display: flex !important;
     overflow: hidden !important;
     & > h4 {
