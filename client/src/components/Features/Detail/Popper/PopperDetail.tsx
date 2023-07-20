@@ -12,6 +12,7 @@ import Button from '../../../Common/Button/Button';
 import Loading from '../../../Common/Loading/Loading';
 import { PopperBox } from './PopperStyle';
 import { PopperDetailData } from './popperType';
+import { AxiosError } from '../../../../assets/type/errorType';
 
 type PopperDetailProps = {
   reviewId: string;
@@ -70,8 +71,8 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
       setCurrentRender('List');
       alert('모집신청이 완료되었습니다.');
     },
-    onError(err) {
-      const errMsg = err.response.data.message;
+    onError(err: AxiosError) {
+      const errMsg = err.response?.data.message;
       alert(errMsg);
       console.log('err', err);
     },
