@@ -34,7 +34,7 @@ public class ReviewBoard extends Auditable {
     private String thumbnail;
     private boolean adulted;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
@@ -51,7 +51,7 @@ public class ReviewBoard extends Auditable {
     @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<MovieParty> parties = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @OrderBy("commentId desc")
     private Set<Comment> comments = new LinkedHashSet<>();
 

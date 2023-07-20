@@ -16,6 +16,8 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다"),
     CANNOT_UPDATE_COMMENT(403, "댓글 작성자가 아닙니다"),
     MOVIE_PARTY_NOT_FOUND(404, "영화 팟이 존재하지 않습니다"),
+    CANNOT_CREATE_MOVIE_PARTY(400, "미성년자는 영화 팟을 작성할 수 없습니다"),
+    CANNOT_PARTICIPATE_MOVIE_PARTY_SINCE_AGE(400, "미성년자는 해당 영화 팟을 참여할 수 없습니다"),
     CANNOT_UPDATE_MOVIE_PARTY(403, "영화 팟 작성자가 아닙니다"),
     CANNOT_SHOW_MOVIE_PARTY(400, "미성년자는 열람할 수 없는 영화 팟입니다"),
     OVER_MAX_PARTICIPANT(400, "최대 정원을 넘겼습니다"),
@@ -27,7 +29,8 @@ public enum ExceptionCode {
     ALREADY_LIKE_EXIST(409, "이미 좋아요가 되어있습니다"),
     LIKE_NOT_FOUND(404, "좋아요가 되어있지 않습니다"),
     TAG_NOT_FOUND(404, "해당 태그가 존재하지 않습니다"),
-    EXPIRED_ACCESS_TOKEN(498, "토큰이 만료되었습니다");
+    EXPIRED_ACCESS_TOKEN(498, "토큰이 만료되었습니다"),
+    REVIEW_BOARD_SCORE_NOT_FOUND(404, "게시글이 존재하지 않습니다");
 
     @Getter
     private int status;

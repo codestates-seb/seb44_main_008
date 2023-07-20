@@ -177,7 +177,7 @@ public interface ReviewBoardMapper {
         ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
                 .reviewBoardId(reviewBoard.getReviewBoardId())
                 .title(reviewBoard.getTitle())
-                .movieTitle(reviewBoard.getTitle())
+                .movieTitle(reviewBoard.getMovie().getTitle())
                 .user(user)
                 .build();
 
@@ -201,12 +201,12 @@ public interface ReviewBoardMapper {
 //                reviewBoardWish.getUser().getProfileImage()
 //        );
 
-        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoardWish.getUser(), imageUtil);
+        UserDto.ReviewBoardResponse user = userMapper.userToReviewBoardResponseDto(reviewBoardWish.getReviewBoard().getUser(), imageUtil);
 
         ReviewBoardDto.UserResponse userResponse = ReviewBoardDto.UserResponse.builder()
                 .reviewBoardId(reviewBoardWish.getReviewBoard().getReviewBoardId())
                 .title(reviewBoardWish.getReviewBoard().getTitle())
-                .movieTitle(reviewBoardWish.getReviewBoard().getTitle())
+                .movieTitle(reviewBoardWish.getReviewBoard().getMovie().getTitle())
                 .user(user)
                 .build();
 

@@ -28,6 +28,7 @@ import com.codestates.user.entity.UserTag;
 import com.codestates.user.repository.MoviePartyUserRepository;
 import com.codestates.user.repository.UserRepository;
 import com.codestates.utils.CustomBeanUtils;
+import com.codestates.utils.UserUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -190,6 +191,7 @@ public class UserService {
         if(findUser.getProfileImage() != null)
             storageService.deleteProfileImage(findUser);
 
+        findUser.setProfileImage(null);
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
         userRepository.save(findUser);
     }
@@ -207,7 +209,7 @@ public class UserService {
 
     public Map<String, String> login(Login login) {
         User user = userRepository.findByEmail(login.getEmail());
-        if(user.getUserStatus().equals(User.UserStatus.USER_WITHDRAW))
+        if(user == null || user.getUserStatus().equals(User.UserStatus.USER_WITHDRAW))
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         checkPassword(login.getPassword(), user.getPassword());
 
@@ -357,6 +359,9 @@ public class UserService {
         User user = findVerifiedUserByEmail(email);
         MovieParty movieParty = moviePartyService.findMovieParty(groupId, user);
 
+        int age = UserUtils.getAge(user).getYears();
+        if(age < 19 && movieParty.getReviewBoard().isAdulted())
+            throw new BusinessLogicException(ExceptionCode.CANNOT_PARTICIPATE_MOVIE_PARTY_SINCE_AGE);
         if(movieParty.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_PARTICIPATE_WRITER);
         if(movieParty.getMaxCapacity() <= movieParty.getCurrentParticipant())

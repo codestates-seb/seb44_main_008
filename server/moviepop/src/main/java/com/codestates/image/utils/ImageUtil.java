@@ -15,4 +15,7 @@ public class ImageUtil {
     @Value("${cloud.aws.s3.default-profile}")
     @Getter
     private String defaultProfileImage;
+    @Value("${cloud.aws.s3.thumbnail-path}")
+    @Getter
+    private String thumbnailPath;
 }
