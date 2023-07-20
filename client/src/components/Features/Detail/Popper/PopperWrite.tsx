@@ -6,6 +6,8 @@ import { getTodayDate } from '../../../../assets/commonts/common';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { PostPot, potData } from '../../../../api/pot/pot';
 
+import { AxiosError } from '../../../../assets/type/errorType';
+
 type PopperWriteProps = {
   setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
   reviewId: string;
@@ -70,8 +72,9 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setCurrentRender('List');
     },
-    onError: err => {
-      console.log(err);
+    onError(err: AxiosError) {
+      const errMsg = err.response?.data.message;
+      alert(errMsg);
     },
   });
 

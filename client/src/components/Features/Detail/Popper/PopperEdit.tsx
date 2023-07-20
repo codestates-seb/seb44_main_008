@@ -50,11 +50,11 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   });
   useEffect(() => {
     if (data) {
-      setTitle(data?.title);
-      setLocation(data.location);
-      setPerson(data.maxCapacity);
-      setMeeting(data.meetingDate);
-      setContent(data?.content);
+      setTitle(data.data.title);
+      setLocation(data.data.location);
+      setPerson(data.data.maxCapacity);
+      setMeeting(data.data.meetingDate);
+      setContent(data.data.content);
     }
   }, [data]);
 
@@ -107,6 +107,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   if (isLoading) {
     return <Loading />;
   }
+  console.log(data);
   if (isSuccess) {
     return (
       <PopperBox>
@@ -117,7 +118,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
           </h2>
           <div className="popperWrite">
             <Input
-              value={data.title}
+              value={data.data.title}
               placeholder="팟 모집글 제목을 입력하세요."
               id="title"
               onChange={titleChange}
@@ -135,7 +136,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
               />
             </div>
             <Input
-              value={data.location}
+              value={data.data.location}
               id="location"
               placeholder="장소를 입력하세요."
               onChange={locationChange}
@@ -145,7 +146,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
             <Input
               type="number"
               id="person"
-              value={data.maxCapacity}
+              value={data.data.maxCapacity}
               placeholder="모집 인원을 입력하세요."
               onChange={personChange}
               isvalid={true}

@@ -3,12 +3,14 @@ export type PopperData = {
   interface?: PageInfo;
 };
 export type PopperDetailData = {
-  groupId: number;
-  title: string;
-  meetingDate: string;
-  location: string;
-  maxCapacity: number;
-  content: string;
+  data: {
+    groupId: number;
+    title: string;
+    meetingDate: string;
+    location: string;
+    maxCapacity: number;
+    content: string;
+  };
 };
 
 export interface PopperGroup {

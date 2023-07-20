@@ -147,7 +147,7 @@ const Start = () => {
       <SectionsContainer {...options}>
         <Section className="page1 Section">
           <div className="landingHeader">
-            <Button value="Login" type="variant" onClick={clickHandler} />
+            <Button value="Login" theme="variant" onClick={clickHandler} />
           </div>
           <div className="titlebox">
             <h1 className="title">

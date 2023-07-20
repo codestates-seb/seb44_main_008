@@ -14,7 +14,7 @@ export const DeleteTabB = (postId: number) =>
   instance.delete(`/reviewBoards/${postId}`).then(res => res.data);
 
 export const GetTabCModal = (groupId: number): Promise<PopperDetailData> => {
-  return instance.get(`/groups/${groupId}`).then(res => res.data.data);
+  return instance.get(`/groups/${groupId}`).then(res => res.data);
 };
 
 export const PatchTabCModal = ({
