@@ -2,6 +2,7 @@ package com.codestates.movie_party.service;
 
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.movie.entity.Movie;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.repository.MoviePartyRepository;
 import com.codestates.review_board.entity.ReviewBoard;
@@ -33,6 +34,10 @@ public class MoviePartyService {
     }
 
     public MovieParty createMovieParty(User user, ReviewBoard reviewBoard, MovieParty movieParty) {
+        int age = UserUtils.getAge(user).getYears();
+        if(age < 19 && reviewBoard.isAdulted())
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MOVIE_PARTY);
+
         // user mapping
         user.addMovieParty(movieParty);
         movieParty.setUser(user);
@@ -53,7 +58,7 @@ public class MoviePartyService {
         reviewBoardScore.setUserCnt(reviewBoardScore.getUserCnt() + 1);
         reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
 
-        return moviePartyRepository.save(movieParty);
+        return newMovieParty;
     }
 
     public MovieParty updateMovieParty(String email, MovieParty movieParty) {
@@ -77,25 +82,32 @@ public class MoviePartyService {
 
     public MovieParty findMovieParty(long groupId, User user) {
         MovieParty movieParty = findVerifiedMoviePartyId(groupId);
-        Period age = UserUtils.getAge(user);
-
-        if(age.getYears() < 19 && movieParty.getReviewBoard().getMovie().isAdulted())
-            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_MOVIE_PARTY);
+//        Period age = UserUtils.getAge(user);
+//
+//        if(age.getYears() < 19 && movieParty.getReviewBoard().getMovie().isAdulted())
+//            throw new BusinessLogicException(ExceptionCode.CANNOT_SHOW_MOVIE_PARTY);
 
         return movieParty;
     }
 
     public Page<MovieParty> findMovieParties(int page, int size, User user) {
-        Period age = UserUtils.getAge(user);
+//        Period age = UserUtils.getAge(user);
+//
+//        if(age.getYears() >= 19)
+//            return moviePartyRepository.findAll(PageRequest.of(
+//                page - 1, size, Sort.by("moviePartyId").descending())
+//            );
+//        else
+//            return moviePartyRepository.findAllByAdulted(false, PageRequest.of(
+//                    page - 1, size, Sort.by("moviePartyId").descending()
+//            ));
 
-        if(age.getYears() >= 19)
-            return moviePartyRepository.findAll(PageRequest.of(
+        return moviePartyRepository.findAllByMeetingDateIsAfter(LocalDateTime.now(), PageRequest.of(
                 page - 1, size, Sort.by("moviePartyId").descending())
-            );
-        else
-            return moviePartyRepository.findAllByAdulted(false, PageRequest.of(
-                    page - 1, size, Sort.by("moviePartyId").descending()
-            ));
+        );
+//        return moviePartyRepository.findAll(PageRequest.of(
+//                page - 1, size, Sort.by("moviePartyId").descending())
+//        );
     }
 
     public void deleteMovieParty(String email, long moviePartyId) {
