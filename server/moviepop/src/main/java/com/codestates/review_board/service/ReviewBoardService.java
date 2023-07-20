@@ -214,7 +214,7 @@ public class ReviewBoardService {
             visit.setUser(user);
             visit.setReviewBoard(reviewBoard);
             visit.setVisitedAt(LocalDateTime.now());
-            reviewBoard.setReviewBoardRecentVisit(visit);
+            reviewBoard.addReviewBoardRecentVisit(visit);
         }
 
         //변경사항 저장
@@ -243,6 +243,9 @@ public class ReviewBoardService {
         reviewBoard.setThumbnail(null);
 
         movieScorePerAgeService.subtractMovieScorePerAge(reviewBoard.getMovie(), UserUtils.getAge(user).getYears() / 10);
+
+        ReviewBoardRecentVisit reviewBoardRecentVisit = reviewBoardRecentVisitRepository.findByUserAndReviewBoard(user, reviewBoard);
+        reviewBoard.getReviewBoardRecentVisits().remove(reviewBoardRecentVisit);
 
         reviewBoardRepository.delete(reviewBoard);
     }
