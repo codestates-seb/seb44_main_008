@@ -62,7 +62,6 @@ public class RecommendReviewBoardService {
         for(RecommendReviewBoard recommendReviewBoard : top300) {
             ReviewBoard reviewBoard = recommendReviewBoard.getReviewBoard();
             reviewBoard.setRecommendReviewBoard(recommendReviewBoard);
-            reviewBoardRepository.save(reviewBoard);
         }
 
         recommendReviewBoardRepository.saveAll(top300);
