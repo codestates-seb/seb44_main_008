@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MovieScorePerAgeRepository extends JpaRepository<MovieScorePerAge, Long> {
-    Optional<MovieScorePerAge> findByMovie(Movie movie);
+    MovieScorePerAge findByMovie(Movie movie);
 }
