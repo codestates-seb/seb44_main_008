@@ -65,7 +65,7 @@ public class UserController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}) // 회원가입
     public ResponseEntity postUser(@Valid @RequestPart UserDto.Post userPostDto,
-                                   @RequestPart MultipartFile profileImage) {
+                                   @RequestPart(required = false) MultipartFile profileImage) {
         User user = userMapper.userPostDtoToUser(userPostDto, tagMapper);
         User createUser = userService.createUser(user, profileImage);
 
