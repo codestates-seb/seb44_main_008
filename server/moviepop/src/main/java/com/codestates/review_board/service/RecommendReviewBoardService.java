@@ -4,6 +4,7 @@ import com.codestates.review_board.entity.RecommendReviewBoard;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.entity.ReviewBoardScore;
 import com.codestates.review_board.repository.RecommendReviewBoardRepository;
+import com.codestates.review_board.repository.ReviewBoardRepository;
 import com.codestates.user.entity.User;
 import com.codestates.utils.UserUtils;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,22 @@ import java.util.stream.Collectors;
 public class RecommendReviewBoardService {
     private final RecommendReviewBoardRepository recommendReviewBoardRepository;
     private final ReviewBoardScoreService reviewBoardScoreService;
+    private final ReviewBoardRepository reviewBoardRepository;
 
-    public RecommendReviewBoardService(RecommendReviewBoardRepository recommendReviewBoardRepository, ReviewBoardScoreService reviewBoardScoreService) {
+//    public RecommendReviewBoardService(RecommendReviewBoardRepository recommendReviewBoardRepository, ReviewBoardScoreService reviewBoardScoreService) {
+//        this.recommendReviewBoardRepository = recommendReviewBoardRepository;
+//        this.reviewBoardScoreService = reviewBoardScoreService;
+//    }
+
+    public RecommendReviewBoardService(RecommendReviewBoardRepository recommendReviewBoardRepository, ReviewBoardScoreService reviewBoardScoreService, ReviewBoardRepository reviewBoardRepository) {
         this.recommendReviewBoardRepository = recommendReviewBoardRepository;
         this.reviewBoardScoreService = reviewBoardScoreService;
+        this.reviewBoardRepository = reviewBoardRepository;
     }
 
     public void calculateTop300(List<ReviewBoard> reviewBoardList) {
         recommendReviewBoardRepository.deleteAll();
+        // auto increment 초기화
 
         // 전체 ReviewBoard 얻어오기
 //        List<ReviewBoard> reviewBoardList = reviewBoardService.findAllReviewBoardsAsList();
@@ -50,6 +59,11 @@ public class RecommendReviewBoardService {
         });
         // 300개 끊음
         List<RecommendReviewBoard> top300 = recommendReviewBoards.subList(0, Math.min(300, recommendReviewBoards.size()));
+        for(RecommendReviewBoard recommendReviewBoard : top300) {
+            ReviewBoard reviewBoard = recommendReviewBoard.getReviewBoard();
+            reviewBoard.setRecommendReviewBoard(recommendReviewBoard);
+            reviewBoardRepository.save(reviewBoard);
+        }
 
         recommendReviewBoardRepository.saveAll(top300);
     }
