@@ -91,7 +91,8 @@ public class ReviewBoardService {
         ReviewBoard newReviewBoard = reviewBoardRepository.save(reviewBoard);
         ReviewBoardScore reviewBoardScore = new ReviewBoardScore();
         reviewBoardScore.setReviewBoard(newReviewBoard);
-        reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
+        reviewBoardScore = reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
+        reviewBoard.setReviewBoardScore(reviewBoardScore);
 
         int age = UserUtils.getAge(user).getYears();
         int ageRange = age / 10;
@@ -213,6 +214,7 @@ public class ReviewBoardService {
             visit.setUser(user);
             visit.setReviewBoard(reviewBoard);
             visit.setVisitedAt(LocalDateTime.now());
+            reviewBoard.setReviewBoardRecentVisit(visit);
         }
 
         //변경사항 저장
