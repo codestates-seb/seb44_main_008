@@ -48,13 +48,13 @@ public class ReviewBoard extends Auditable {
     @JoinColumn(name = "MOVIE_ID")
     private Movie movie;
 
-    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private RecommendReviewBoard recommendReviewBoard;
 
-    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private ReviewBoardRecentVisit reviewBoardRecentVisit;
+    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<ReviewBoardRecentVisit> reviewBoardRecentVisits = new HashSet<>();
 
-    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private ReviewBoardScore reviewBoardScore;
 
     @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
@@ -70,5 +70,9 @@ public class ReviewBoard extends Auditable {
 
     public void addMovieParty(MovieParty movieParty) {
         this.parties.add(movieParty);
+    }
+
+    public void addReviewBoardRecentVisit(ReviewBoardRecentVisit reviewBoardRecentVisit) {
+        this.reviewBoardRecentVisits.add(reviewBoardRecentVisit);
     }
 }
