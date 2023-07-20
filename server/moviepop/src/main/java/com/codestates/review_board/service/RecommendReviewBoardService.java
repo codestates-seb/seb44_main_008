@@ -18,20 +18,18 @@ import java.util.stream.Collectors;
 @Transactional
 public class RecommendReviewBoardService {
     private final RecommendReviewBoardRepository recommendReviewBoardRepository;
-    private final ReviewBoardService reviewBoardService;
     private final ReviewBoardScoreService reviewBoardScoreService;
 
-    public RecommendReviewBoardService(RecommendReviewBoardRepository recommendReviewBoardRepository, ReviewBoardService reviewBoardService, ReviewBoardScoreService reviewBoardScoreService) {
+    public RecommendReviewBoardService(RecommendReviewBoardRepository recommendReviewBoardRepository, ReviewBoardScoreService reviewBoardScoreService) {
         this.recommendReviewBoardRepository = recommendReviewBoardRepository;
-        this.reviewBoardService = reviewBoardService;
         this.reviewBoardScoreService = reviewBoardScoreService;
     }
 
-    public void calculateTop300() {
+    public void calculateTop300(List<ReviewBoard> reviewBoardList) {
         recommendReviewBoardRepository.deleteAll();
 
         // 전체 ReviewBoard 얻어오기
-        List<ReviewBoard> reviewBoardList = reviewBoardService.findAllReviewBoardsAsList();
+//        List<ReviewBoard> reviewBoardList = reviewBoardService.findAllReviewBoardsAsList();
         // 점수 계산
         List<RecommendReviewBoard> recommendReviewBoards = reviewBoardList.stream()
                 .map(reviewBoard -> {
@@ -79,7 +77,7 @@ public class RecommendReviewBoardService {
     }
 
     public List<RecommendReviewBoard> findTop5MyReviewBoards(User user) { //내가 작성한 리뷰게시글 작성기준 top5
-        return recommendReviewBoardRepository.findTop5ByReviewBoardUserOrderByCreatedAtDesc(user);
+        return recommendReviewBoardRepository.findTop5ByReviewBoardUserOrderByReviewBoardCreatedAtDesc(user);
     }
 
     public List<RecommendReviewBoard> findRecommendReviewBoardsByAge(int startAge, int endAge) {
