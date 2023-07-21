@@ -61,15 +61,19 @@ const Li: React.FC<{
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
     },
   });
-  const ClickLike = (commentId: number) => {
-    if (liked === false) {
-      mutationLike.mutate(commentId);
-      setLikeCount(likeCount => likeCount + 1);
-    } else {
-      mutationUnLike.mutate(commentId);
-      setLikeCount(likeCount => likeCount - 1);
+  const ClickLike = async (commentId: number) => {
+    try {
+      if (liked === false) {
+        await mutationLike.mutateAsync(commentId);
+        setLikeCount(likeCount => likeCount + 1);
+      } else {
+        await mutationUnLike.mutate(commentId);
+        setLikeCount(likeCount => likeCount - 1);
+      }
+      setLiked(prev => !prev);
+    } catch (err) {
+      console.log('err', err);
     }
-    setLiked(prev => !prev);
   };
 
   const mutationDelete = useMutation(DeleteComment, {

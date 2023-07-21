@@ -1,5 +1,5 @@
 export type DetailData = {
-  reviewBoardId?: number;
+  reviewBoardId?: number | string | undefined;
   title?: string;
   review?: string;
   thumbnail?: string;
