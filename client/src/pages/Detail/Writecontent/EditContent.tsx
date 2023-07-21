@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { styled } from 'styled-components';
-import { WriteContentType, Props } from './type';
+import { Props } from './type';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 
@@ -118,33 +118,30 @@ const EditContent = () => {
   };
 
   const onClickSubmitButton = () => {
-    // 유효성 검사
-    if (title?.length === 0) {
-      setTitleErr(false);
-    }
-    if (selectedTags[0] === undefined) {
-      setTagErr(false);
-    }
-    if (content.length <= 10) {
-      setContentErr(false);
-    } else {
-      const confirmed = window.confirm('게시글을 수정하시겠습니까?');
+    title?.length === 0
+      ? setTitleErr(false)
+      : selectedTags[0] === undefined
+      ? setTagErr(false)
+      : content.length <= 10
+      ? setContentErr(false)
+      : (async () => {
+          const confirmed = window.confirm('게시글을 수정하시겠습니까?');
 
-      if (confirmed) {
-        const editData = {
-          reviewId: reviewId,
-          patch: {
-            title: title,
-            review: content,
-            tags: selectedTags,
-          },
-          thumbnail: file ? file[0] : undefined,
-        };
+          if (confirmed) {
+            const editData = {
+              reviewId: reviewId,
+              patch: {
+                title: title,
+                review: content,
+                tags: selectedTags,
+              },
+              thumbnail: file ? file[0] : undefined,
+            };
 
-        mutationPatch.mutate(editData);
-      }
-      alert('게시글이 수정되었습니다.');
-    }
+            await mutationPatch.mutateAsync(editData);
+          }
+          alert('게시글이 수정되었습니다.');
+        })();
   };
 
   const onClickMovieTitle = () => {
