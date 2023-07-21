@@ -37,7 +37,7 @@ public class RecommendReviewBoardService {
         List<RecommendReviewBoard> oldRecommendReviewBoards = recommendReviewBoardRepository.findAll();
         for(RecommendReviewBoard recommendReviewBoard : oldRecommendReviewBoards) {
             ReviewBoard reviewBoard = recommendReviewBoard.getReviewBoard();
-            reviewBoard = null;
+            reviewBoard.setRecommendReviewBoard(null);
             recommendReviewBoardRepository.deleteById(recommendReviewBoard.getRecommendReviewBoardId());
         }
         // auto increment 초기화
