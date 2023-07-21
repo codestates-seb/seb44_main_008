@@ -10,13 +10,21 @@ export interface data {
   content: string | undefined;
 }
 
-export interface potData extends data {
-  movieTitle: string;
+export interface potData {
+  reviewId: string;
+  data: {
+    title: string | undefined;
+    meetingDate: string | undefined;
+    location: string | undefined;
+    maxCapacity: number | undefined;
+    content: string | undefined;
+    movieTitle: string;
+  };
 }
 
-export const PostPot = (reviewId: string, data: potData) => {
+export const PostPot = (data: potData) => {
   return instance
-    .post(`/reviewBoards/${reviewId}/groups`, data)
+    .post(`/reviewBoards/${data.reviewId}/groups`, data.data)
     .then(res => res.data);
 };
 

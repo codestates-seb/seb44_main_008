@@ -13,7 +13,6 @@ type PopperBoxProps = {
 const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {
   const [currentRender, setCurrentRender] = useState('List');
   const [currentId, setCurrentID] = useState(0);
-  const [currentPage, setCurrentPage] = useState('');
 
   return (
     <>

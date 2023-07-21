@@ -4,7 +4,7 @@ import Input from '../../../Common/Input/Input';
 import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { PostPot, potData } from '../../../../api/pot/pot';
+import { PostPot } from '../../../../api/pot/pot';
 
 import { AxiosError } from '../../../../assets/type/errorType';
 
@@ -25,9 +25,6 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   const [location, setLocation] = useState<string>('');
   const [person, setPerson] = useState<number | undefined>();
   const [body, setBody] = useState<string>('');
-  const [checkTitle, setCheckTitle] = useState<boolean>(false);
-  const [checkLocation, setCheckLocation] = useState<boolean>(false);
-  const [checkPerson, setCheckPerson] = useState<boolean>(false);
   const today = getTodayDate();
   const [saleStartDate, setSaleStartDate] = useState(today);
 
@@ -38,17 +35,14 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   const [isBody, setIsBody] = useState<boolean>(true);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckTitle(false);
     setTitle(e.currentTarget.value);
     setIsTitle(true);
   };
   const locationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckLocation(false);
     setLocation(e.currentTarget.value);
     setIsLocation(true);
   };
   const personChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckPerson(false);
     const value = Number(e.target.value);
     if (isNaN(value)) return;
     setPerson(value);
@@ -58,16 +52,18 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
   };
 
   const submitData = {
-    title: title,
-    meetingDate: saleStartDate,
-    location: location,
-    maxCapacity: person,
-    content: body,
-    movieTitle: movie,
+    reviewId: reviewId,
+    data: {
+      title: title,
+      meetingDate: saleStartDate,
+      location: location,
+      maxCapacity: person,
+      content: body,
+      movieTitle: movie,
+    },
   };
 
-  const writeMutations = useMutation({
-    mutationFn: (data: potData) => PostPot(reviewId, submitData),
+  const writeMutations = useMutation(PostPot, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setCurrentRender('List');

@@ -25,13 +25,11 @@ const ContentD = ({ data2 }: tabDType) => {
   const { lockScroll, openScroll } = useBodyScrollLock();
   const [isOpen, setIsOpen] = useState(false);
   const [modalVisibleId, setModalVisibleId] = useState(0);
-  const [currentRender, setCurrentRender] = useState('DetailMine');
   const reverseData = data2.slice().reverse();
   const onModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
     setIsOpen(true);
     lockScroll();
-    setCurrentRender('DetailMine');
   };
   const offModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
@@ -49,7 +47,6 @@ const ContentD = ({ data2 }: tabDType) => {
             modalVisibleId={modalVisibleId}
             offModalHandler={offModalHandler}
             currentRender={'DetailMine'}
-            setCurrentRender={setCurrentRender}
           />
           <ListOnce onClick={() => onModalHandler(item.groupId)}>
             <ListHead>

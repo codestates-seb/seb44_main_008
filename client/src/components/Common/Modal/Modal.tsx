@@ -14,10 +14,9 @@ const Modal = ({
   setCurrentRender,
 }: ModalTypes) => {
   const [currentId, setCurrentID] = useState(id);
-  const [currentRenderPrev, setCurrentRenderPrev] = useState('');
+
   const prevStep = () => {
     offModalHandler(id);
-    setCurrentRenderPrev('Detail');
   };
 
   return (

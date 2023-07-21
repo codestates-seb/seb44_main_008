@@ -6,12 +6,10 @@ import { Login } from '../../api/auth/account/login';
 import Button from '../../components/Common/Button/Button';
 import Input from '../../components/Common/Input/Input';
 import { AccountWrap } from './AccountStyle';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/reducers/user';
 import axios from 'axios';
-import { instance } from '../../api/api';
-import { UserInfoType } from '../../components/Features/Mypage/editmypage/type';
 interface LoginType {
   email: string;
   password: string;
@@ -20,18 +18,13 @@ interface LoginType {
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginType>();
+  const { handleSubmit } = useForm<LoginType>();
   const [email, setEmail] = useState<string>('');
   const [emailMsg, setEmailMsg] = useState<string>('');
   const [isEmail, setIsEmail] = useState<boolean>(true);
 
   const [password, setPassword] = useState<string>('');
   const [isPassword, setIsPassword] = useState<boolean>(true);
-
-  const [userItem, setuserItem] = useState<UserInfoType>();
 
   //이메일 유효성검사
   const onChangeEmail = useCallback(
@@ -98,7 +91,6 @@ const LoginForm = () => {
                 Refresh: refreshToken,
               },
             });
-            setuserItem(response.data);
             dispatch(
               setUser({
                 isLoggedIn: true,

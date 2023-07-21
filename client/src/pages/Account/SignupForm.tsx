@@ -25,12 +25,7 @@ const SignupForm = () => {
   const location = useLocation();
   const [page, setPage] = useState(1);
 
-  const {
-    data: tagsArr,
-    isLoading,
-    error,
-    isSuccess,
-  } = useQuery(['tags'], () => getAccountTags());
+  const { data: tagsArr } = useQuery(['tags'], () => getAccountTags());
 
   const startEmail = location.state ? location.state.value : '';
   //상태 저장
@@ -280,15 +275,11 @@ const SignupForm = () => {
           formData.append('profileImage', imgfile);
         }
 
-        const result = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/users`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-        );
+        });
         alert('회원가입이 완료되었습니다.');
         navigate('/account/login');
       } catch (err) {

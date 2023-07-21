@@ -20,7 +20,6 @@ const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setBody('');
     },
-    onError(err) {},
   });
   const submitHandler = () => {
     setCheckBody(body === '');

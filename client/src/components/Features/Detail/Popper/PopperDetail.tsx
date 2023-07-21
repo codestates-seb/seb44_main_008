@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React from 'react';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
 import {
   DeleteCModal,
@@ -11,14 +11,13 @@ import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
 import Button from '../../../Common/Button/Button';
 import Loading from '../../../Common/Loading/Loading';
 import { PopperBox } from './PopperStyle';
-import { PopperDetailData } from './popperType';
 import { AxiosError } from '../../../../assets/type/errorType';
 
 type PopperDetailProps = {
   reviewId: string;
   currentId: number;
   setCurrentID: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>> | undefined;
   currentPage: string;
 };
 
@@ -69,14 +68,14 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
   };
 
   const clickEdit = () => {
-    setCurrentRender('Edit');
+    setCurrentRender && setCurrentRender('Edit');
     setCurrentID(id);
   };
 
   const mutationJoin = useMutation(JoinPot, {
     onSuccess: () => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
-      setCurrentRender('List');
+      setCurrentRender && setCurrentRender('List');
       alert('모집신청이 완료되었습니다.');
     },
     onError(err: AxiosError) {
@@ -128,7 +127,7 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
               <Button
                 value="↩"
                 onClick={() => {
-                  setCurrentRender('List');
+                  setCurrentRender && setCurrentRender('List');
                 }}
                 width="2.438rem"
               />

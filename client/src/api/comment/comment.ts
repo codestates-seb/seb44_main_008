@@ -1,5 +1,4 @@
 //댓글 등록, 수정, 특정 댓글 조회, 댓글 전체 조회, 댓글삭제
-import { promises } from 'dns';
 import { instance } from '../api';
 
 interface data {
