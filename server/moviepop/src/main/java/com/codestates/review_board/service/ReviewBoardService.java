@@ -91,7 +91,7 @@ public class ReviewBoardService {
         ReviewBoard newReviewBoard = reviewBoardRepository.save(reviewBoard);
         ReviewBoardScore reviewBoardScore = new ReviewBoardScore();
         reviewBoardScore.setReviewBoard(newReviewBoard);
-        reviewBoardScore = reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
+//        reviewBoardScore = reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
         reviewBoard.setReviewBoardScore(reviewBoardScore);
 
         int age = UserUtils.getAge(user).getYears();
@@ -207,7 +207,6 @@ public class ReviewBoardService {
             if(reviewBoardRecentVisits.size() >= 5) {
                 //가장 오래된 기록 삭제
                 ReviewBoardRecentVisit oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
-//                ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt.getVisitedAt());
                 if(oldestVisitedAt != null) {
                     reviewBoardRecentVisitRepository.deleteById(oldestVisitedAt.getReviewBoardRecentVisitId());
                     reviewBoard.getReviewBoardRecentVisits().remove(oldestVisitedAt);
