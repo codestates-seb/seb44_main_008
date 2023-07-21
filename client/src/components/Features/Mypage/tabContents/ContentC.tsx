@@ -3,6 +3,7 @@ import Pagenation from '../Pagenation';
 import { styled } from 'styled-components';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
+import { LIMIT } from '../../../../utils/const';
 
 type tabCType = {
   data2: {
@@ -17,15 +18,16 @@ type tabCType = {
 };
 
 const ContentC = ({ data2 }: tabCType) => {
-  const [totalElements, setTotalElements] = useState(data2.length);
-  const [limit, setLimit] = useState(5);
+  const tabCPost = data2;
+  const totalElements = tabCPost.length;
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * LIMIT;
 
   const { lockScroll, openScroll } = useBodyScrollLock();
   const [isOpen, setIsOpen] = useState(false);
   const [modalVisibleId, setModalVisibleId] = useState(0);
   const [currentRender, setCurrentRender] = useState('Detail');
+  const reverseData = data2.slice().reverse();
   const onModalHandler = (id: SetStateAction<number>) => {
     setModalVisibleId(id);
     setIsOpen(true);
@@ -40,7 +42,7 @@ const ContentC = ({ data2 }: tabCType) => {
 
   return (
     <>
-      {data2.slice(offset, offset + limit).map(item => (
+      {reverseData.slice(offset, offset + LIMIT).map(item => (
         <ListContainer key={item.groupId}>
           <Modal
             id={item.groupId}
@@ -72,7 +74,7 @@ const ContentC = ({ data2 }: tabCType) => {
       ))}
       <Pagenation
         total={totalElements}
-        limit={limit}
+        limit={LIMIT}
         page={page}
         setPage={setPage}
       />

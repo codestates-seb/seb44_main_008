@@ -42,15 +42,11 @@ const SignupForm = () => {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
-  const [profileImage, setProfileImage] = useState('');
-
-  const [selectedTags, setSelectedTags] = useState<Object[]>([]);
 
   //오류메시지 상태저장
   const [emailMsg, setEmailMsg] = useState<string>('');
   const [passwordMsg, setPasswordMsg] = useState<string>('');
   const [passwordConfirmMsg, setPasswordConfirmMsg] = useState<string>('');
-  const [tagMsg, setTagMsg] = useState<string>('');
   const [nameMsg, setNameMsg] = useState<string>('');
   const [nicknameMsg, setnickNameMsg] = useState<string>('');
   const [birthMsg, setBirthMsg] = useState<string>('');
