@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://${AWS_RDS_ENDPOINT}/mainproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ${MYSQL_ROOT_NAME}
     password: ${MYSQL_ROOT_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
