@@ -11,7 +11,7 @@ const DeleteMember = () => {
     if (confirmed) {
       mutationDelete.mutate();
       alert('회원 탈퇴가 정상적으로 완료되었습니다.');
-      navigate('/start');
+      navigate('/');
     }
   };
   return (

@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import LoginBtns from './LoginBtns';
 import UserArea from './UserArea';
 import SearchInput from './SearchInput';
-import { useEffect } from 'react';
+import TopButton from './TopButton';
 
 const Header = () => {
   const userCheck = useSelector((state: RootState) => state.user.isLoggedIn);
-  useEffect(() => {}, []);
+
   return (
     <HeaderWrapper>
       <div className="headerInner">
@@ -30,6 +30,7 @@ const Header = () => {
           <LoginBtns />
         )}
       </div>
+      {userCheck ? <TopButton /> : null}
     </HeaderWrapper>
   );
 };
