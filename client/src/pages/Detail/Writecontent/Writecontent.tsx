@@ -61,6 +61,8 @@ const Writecontent = () => {
     }
   };
 
+  console.log(file);
+
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.placeholder === '게시글 제목을 입력하세요.') {
       setTitle(event.target.value);

@@ -18,7 +18,7 @@ interface ModalData {
 
 type PoppeEditProps = {
   currentId: number;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentRender: React.Dispatch<React.SetStateAction<string>> | undefined;
   currentPage: string;
 };
 
@@ -36,16 +36,16 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   const [person, setPerson] = useState<number | undefined>(0);
   const [meeting, setMeeting] = useState<string | undefined>('');
   const [content, setContent] = useState<string | undefined>('');
-  const [checkTitle, setCheckTitle] = useState<boolean>(false);
-  const [checkLocation, setCheckLocation] = useState<boolean>(false);
-  const [checkPerson, setCheckPerson] = useState<boolean>(false);
-  const [checkContent, setCheckContent] = useState(false);
+  const [checkTitle, setCheckTitle] = useState<boolean>(true);
+  const [checkLocation, setCheckLocation] = useState<boolean>(true);
+  const [checkPerson, setCheckPerson] = useState<boolean>(true);
+  const [checkContent, setCheckContent] = useState(true);
   const queryClient = useQueryClient();
   const mutationPatch = useMutation({
     mutationFn: (modalData: ModalData) => PatchTabCModal(modalData),
     onSuccess: () => {
       queryClient.invalidateQueries(['modalContent', currentId]),
-        setCurrentRender('Detail');
+        setCurrentRender && setCurrentRender('Detail');
     },
   });
   useEffect(() => {
@@ -59,28 +59,28 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   }, [data]);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckTitle(false);
     setTitle(e.currentTarget.value);
+    setCheckTitle(true);
   };
 
   const locationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckLocation(false);
     setLocation(e.currentTarget.value);
+    setCheckLocation(true);
   };
 
   const personChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckPerson(false);
     const value = Number(e.target.value);
     if (isNaN(value)) return;
     setPerson(value);
+    setCheckPerson(true);
   };
 
   const dateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeeting(e.target.value);
   };
   const contentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCheckContent(false);
     setContent(e.target.value);
+    setCheckContent(true);
   };
 
   const modalData: data = {
@@ -94,11 +94,22 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    const confirmed = window.confirm('팟 정보를 수정하시겠습니까?');
-    if (confirmed) {
-      mutationPatch.mutate({ groupId: currentId, modalData: modalData });
-      alert('팟 정보가 수정되었습니다.');
-    }
+
+    title?.length === 0
+      ? setCheckTitle(false)
+      : location?.length === 0
+      ? setCheckLocation(false)
+      : person === undefined || person <= 1
+      ? setCheckPerson(false)
+      : content?.length === 0
+      ? setCheckContent(false)
+      : (() => {
+          const confirmed = window.confirm('팟 정보를 수정하시겠습니까?');
+          if (confirmed) {
+            mutationPatch.mutate({ groupId: currentId, modalData: modalData });
+            alert('팟 정보가 수정되었습니다.');
+          }
+        })();
   };
 
   if (error) {
@@ -121,7 +132,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
               placeholder="팟 모집글 제목을 입력하세요."
               id="title"
               onChange={titleChange}
-              isvalid={'true'}
+              isvalid={checkTitle}
               width="100%"
             />
             <div className="dateBox">
@@ -139,7 +150,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
               id="location"
               placeholder="장소를 입력하세요."
               onChange={locationChange}
-              isvalid={true}
+              isvalid={checkLocation}
               width="100%"
             />
             <Input
@@ -148,11 +159,11 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
               value={data.data.maxCapacity}
               placeholder="모집 인원을 입력하세요."
               onChange={personChange}
-              isvalid={true}
+              isvalid={checkPerson}
               width="100%"
             />
             <textarea
-              className="popTextArea"
+              className={`${checkContent ? 'popTextArea' : 'popTextArea on'}`}
               placeholder="간단한 팟 소개글을 작성해보세요!"
               value={content}
               onChange={contentChange}
@@ -165,7 +176,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
                   value="↩"
                   width="2.438rem"
                   onClick={() => {
-                    setCurrentRender('List');
+                    setCurrentRender && setCurrentRender('List');
                   }}
                 />
                 <Button
@@ -181,7 +192,7 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
                   value="↩"
                   width="2.438rem"
                   onClick={() => {
-                    setCurrentRender('Detail');
+                    setCurrentRender && setCurrentRender('Detail');
                   }}
                 />
                 <Button

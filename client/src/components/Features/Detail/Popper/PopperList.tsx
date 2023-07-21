@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
 import { Group } from '../../../../pages/Detail/Detailcontent/detailType';

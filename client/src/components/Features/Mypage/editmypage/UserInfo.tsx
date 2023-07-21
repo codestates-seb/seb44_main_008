@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import { styled } from 'styled-components';
-import { FileData } from './type';
 import editImage from '../../../../assets/images/user-info/editImage.svg';
 import Input from '../../../Common/Input/Input';
 import Button from '../../../Common/Button/Button';
@@ -48,7 +47,7 @@ const UserInfo = () => {
     }
   }, [data]);
 
-  const [image, setImage] = useState<FileData | null>();
+  const [image, setImage] = useState<File | null>();
   const fileInput: React.RefObject<HTMLInputElement> =
     useRef<HTMLInputElement>(null);
   const [nicknameMsg, setnickNameMsg] = useState<string>('');

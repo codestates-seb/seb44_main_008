@@ -1,8 +1,5 @@
 import axios from 'axios';
-import {
-  FileData,
-  UserInfoType,
-} from '../../../components/Features/Mypage/editmypage/type';
+import { UserInfoType } from '../../../components/Features/Mypage/editmypage/type';
 import { instance } from '../../api';
 
 export interface EditUserType {
@@ -10,7 +7,7 @@ export interface EditUserType {
     nickname: string | undefined;
     tags: { tagId: number }[];
   };
-  profileImage?: FileData | null | undefined;
+  profileImage: File | null | undefined;
 }
 export interface EditPasswordType {
   currentPw: string;

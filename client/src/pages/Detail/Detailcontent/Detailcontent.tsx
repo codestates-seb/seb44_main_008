@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { DetailData, Group } from './detailType';
 
 import styled from 'styled-components';
 import { getItem } from '../../../api/reviewItem/reviewItem';
@@ -18,7 +16,6 @@ const Detailcontent = (): JSX.Element => {
     data: dataItem,
     isLoading,
     error,
-    isSuccess,
   } = useQuery({
     queryKey: ['ReviewInfo', reviewId],
     queryFn: () => {

@@ -18,12 +18,7 @@ const UserArea = () => {
   const [hashShow, setHashShow] = useState(false);
   const [myShow, setMyShow] = useState(false);
 
-  const {
-    data: tagData,
-    isLoading,
-    error,
-    isSuccess,
-  } = useQuery(['tags'], () => getAllTags());
+  const { data: tagData, isSuccess } = useQuery(['tags'], () => getAllTags());
 
   const userImg = useSelector(
     (state: RootState) => state.user.userInfo.user_img,
@@ -33,7 +28,7 @@ const UserArea = () => {
     navigate('/mypage');
     setMyShow(false);
   }, []);
-  const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const BtnLogout = useCallback(() => {
     dispatch(clearUser());
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');

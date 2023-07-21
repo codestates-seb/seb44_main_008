@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
-import axios from 'axios';
-import { instance } from '../../../api/api';
 import { deleteLike, getLike } from '../../../api/like/detailLike';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
