@@ -28,7 +28,9 @@ public class ReviewBoard extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewBoardId;
+    @Column(length = 300)
     private String title;
+    @Column(length = 1000)
     private String review;
     private int wish;
     private String thumbnail;

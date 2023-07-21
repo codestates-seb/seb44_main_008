@@ -23,7 +23,7 @@ public class MovieParty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moviePartyId;
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 300)
     private String title;
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -34,7 +34,7 @@ public class MovieParty {
     private Integer maxCapacity;
     @Column(nullable = false)
     private Integer currentParticipant = 1;
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, length = 1000)
     private String content;
     @Column(nullable = false, length = 200)
     private String movieTitle;
