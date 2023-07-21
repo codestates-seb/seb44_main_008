@@ -18,7 +18,7 @@ public class RecommendReviewBoardController {
         this.reviewBoardService = reviewBoardService;
     }
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 59 22 * * *", zone = "Asia/Seoul")
     public void calculateScore() {
         List<ReviewBoard> reviewBoardList = reviewBoardService.findAllReviewBoardsAsList();
         recommendReviewBoardService.calculateTop300(reviewBoardList);
