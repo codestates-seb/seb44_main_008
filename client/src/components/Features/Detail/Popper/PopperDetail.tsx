@@ -83,7 +83,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
     onError(err: AxiosError) {
       const errMsg = err.response?.data.message;
       alert(errMsg);
-      console.log('err', err);
     },
   });
   const SubmitEvent = (groupId: number) => {

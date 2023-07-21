@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import React from 'react';
+import { VISIBLEPAGES } from '../../../utils/const';
 
 interface PaginationProps {
   total: number;
@@ -22,9 +23,8 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const visiblePages = 5;
-  const startPage = Math.max(page - Math.floor(visiblePages / 2), 1);
-  const endPage = Math.min(startPage + visiblePages - 1, numPages);
+  const startPage = Math.max(page - Math.floor(VISIBLEPAGES / 2), 1);
+  const endPage = Math.min(startPage + VISIBLEPAGES - 1, numPages);
 
   const pageButtons = [];
   for (let i = startPage; i <= endPage; i++) {

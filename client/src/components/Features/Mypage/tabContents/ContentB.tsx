@@ -5,6 +5,7 @@ import Button from '../../../Common/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { DeleteTabB } from '../../../../api/user/userTab/userTab';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { LIMIT } from '../../../../utils/const';
 
 type tabBType = {
   data: {
@@ -21,10 +22,10 @@ type tabBType = {
 const ContentB = ({ data }: tabBType) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [totalElements, setTotalElements] = useState(data.length);
-  const [limit, setLimit] = useState(5);
+  const tabBPost = data;
+  const totalElements = tabBPost.length;
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * LIMIT;
   const deletePostMutation = useMutation(DeleteTabB, {
     onSuccess: () => {
       queryClient.invalidateQueries(['TabUserInfo']);
@@ -58,7 +59,7 @@ const ContentB = ({ data }: tabBType) => {
   };
   return (
     <>
-      {reverseData.slice(offset, offset + limit).map(item => (
+      {reverseData.slice(offset, offset + LIMIT).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce onClick={() => moveHandler(item.reviewBoardId)}>
             <ListHead>
@@ -88,7 +89,7 @@ const ContentB = ({ data }: tabBType) => {
       ))}
       <Pagenation
         total={totalElements}
-        limit={limit}
+        limit={LIMIT}
         page={page}
         setPage={setPage}
       />

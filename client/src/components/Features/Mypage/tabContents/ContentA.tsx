@@ -5,6 +5,7 @@ import Poplike from '../../../Common/PopIcons/Poplike';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteTabA } from '../../../../api/user/userTab/userTab';
 import { useNavigate } from 'react-router-dom';
+import { LIMIT } from '../../../../utils/const';
 
 type tabAType = {
   data: {
@@ -23,12 +24,11 @@ type tabAType = {
 const ContentA = ({ data }: tabAType) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [tabAPost, setAPost] = useState(data);
-  const [like, setLike] = useState(true);
+  const tabAPost = data;
+  const like = true;
   const deletePostMutation = useMutation(DeleteTabA, {
     onSuccess: () => {
       queryClient.invalidateQueries(['TabUserInfo']);
-      location.reload();
     },
   });
   const likeHandler = (
@@ -47,15 +47,15 @@ const ContentA = ({ data }: tabAType) => {
   const moveHandler = (reviewId: number) => {
     navigate(`/detail/content/${reviewId}`);
   };
-
-  const [totalElements, setTotalElements] = useState(tabAPost.length);
-  const [limit, setLimit] = useState(5);
+  const totalElements = tabAPost.length;
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * LIMIT;
 
+  const reverseData = data.slice().reverse();
+  console.log(reverseData);
   return (
     <>
-      {tabAPost.slice(offset, offset + limit).map(item => (
+      {reverseData.slice(offset, offset + LIMIT).map(item => (
         <ListContainer key={item.reviewBoardId}>
           <ListOnce onClick={() => moveHandler(item.reviewBoardId)}>
             <ListHead>
@@ -79,7 +79,7 @@ const ContentA = ({ data }: tabAType) => {
       ))}
       <Pagenation
         total={totalElements}
-        limit={limit}
+        limit={LIMIT}
         page={page}
         setPage={setPage}
       />

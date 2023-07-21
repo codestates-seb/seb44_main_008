@@ -15,14 +15,12 @@ const CommentWrite: React.FC<{ reviewId: string }> = ({ reviewId }) => {
   };
 
   const writeMutations = useMutation({
-    mutationFn: postData => PostComment(reviewId, body),
-    onSuccess(data) {
+    mutationFn: () => PostComment(reviewId, body),
+    onSuccess() {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setBody('');
     },
-    onError(err) {
-      console.log(err);
-    },
+    onError(err) {},
   });
   const submitHandler = () => {
     setCheckBody(body === '');

@@ -13,9 +13,6 @@ import ErrorPage from '../../ErrorPage/ErrorPage';
 
 const Detailcontent = (): JSX.Element => {
   const { reviewId } = useParams();
-  const [data, setData] = useState<DetailData>({});
-
-  const [groups, setGroups] = useState<Group[]>([]);
 
   const {
     data: dataItem,

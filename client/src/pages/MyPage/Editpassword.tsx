@@ -5,6 +5,7 @@ import Button from '../../components/Common/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { PatchEditUserPassword } from '../../api/user/userInfo/editUserInfo';
+import { AxiosError } from '../../assets/type/errorType';
 
 const Editpassword = () => {
   const [currentPw, setCurrentPw] = useState('');
@@ -21,8 +22,9 @@ const Editpassword = () => {
       alert('비밀번호가 변경되었습니다.');
       navigate('/mypage');
     },
-    onError: err => {
-      alert(`현재 ${err.response.data.message}`);
+    onError(err: AxiosError) {
+      const errMsg = err.response?.data.message;
+      alert(errMsg);
     },
   });
 

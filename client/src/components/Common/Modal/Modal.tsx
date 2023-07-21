@@ -40,6 +40,7 @@ const Modal = ({
                     setCurrentID={setCurrentID}
                     setCurrentRender={setCurrentRender}
                     currentPage="myPageMyPop"
+                    reviewId={currentId.toString()}
                   />
                 )}
                 {currentRender === 'Edit' && (
@@ -55,6 +56,7 @@ const Modal = ({
                     setCurrentID={setCurrentID}
                     setCurrentRender={setCurrentRender}
                     currentPage="myPageOtherPop"
+                    reviewId={currentId.toString()}
                   />
                 )}
               </ModalPopperBox>

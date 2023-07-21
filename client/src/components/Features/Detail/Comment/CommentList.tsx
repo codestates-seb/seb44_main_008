@@ -44,7 +44,7 @@ const Li: React.FC<{
   userId: number;
   reviewId: string;
   commentId: number;
-}> = ({ answer, userId, reviewId, commentId }) => {
+}> = ({ answer, userId, reviewId }) => {
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(answer.liked);
   const [likeCount, setLikeCount] = useState<number>(

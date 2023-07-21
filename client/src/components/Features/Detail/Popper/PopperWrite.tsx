@@ -68,7 +68,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
 
   const writeMutations = useMutation({
     mutationFn: (data: potData) => PostPot(reviewId, submitData),
-    onSuccess(data) {
+    onSuccess: () => {
       queryClient.invalidateQueries(['ReviewInfo', reviewId]);
       setCurrentRender('List');
     },
