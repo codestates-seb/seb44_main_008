@@ -105,34 +105,33 @@ const Writecontent = () => {
 
   const onClickSubmitButton = () => {
     // 유효성 검사
-    {
-      title.length === 0
-        ? setTitleErr(false)
-        : movieTitle.length === 0
-        ? setMovieTitleErr(false)
-        : selectedTags[0] === undefined
-        ? setTagErr(false)
-        : content.length <= 10
-        ? setContentErr(false)
-        : (() => {
-            const confirmed = window.confirm('게시글을 등록하시겠습니까?');
 
-            if (confirmed) {
-              const submitData = {
-                post: {
-                  title: title,
-                  movieId: Number(movieId),
-                  review: content,
-                  tags: selectedTags,
-                },
-                thumbnail: file ? file[0] : undefined,
-              };
-              writeMutations.mutate(submitData);
-              alert('게시글이 등록되었습니다.');
-              navigate('/main');
-            }
-          })();
-    }
+    title.length === 0
+      ? setTitleErr(false)
+      : movieTitle.length === 0
+      ? setMovieTitleErr(false)
+      : selectedTags[0] === undefined
+      ? setTagErr(false)
+      : content.length <= 10
+      ? setContentErr(false)
+      : (async () => {
+          const confirmed = window.confirm('게시글을 등록하시겠습니까?');
+
+          if (confirmed) {
+            const submitData = {
+              post: {
+                title: title,
+                movieId: Number(movieId),
+                review: content,
+                tags: selectedTags,
+              },
+              thumbnail: file ? file[0] : undefined,
+            };
+            await writeMutations.mutateAsync(submitData);
+            alert('게시글이 등록되었습니다.');
+            navigate('/main');
+          }
+        })();
   };
 
   const onClickMovieTitle = () => {

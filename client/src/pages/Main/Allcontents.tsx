@@ -7,7 +7,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAllItems } from '../../api/reviewItem/reviewItem';
 import InfiniteScroll from 'react-infinite-scroller';
 import ErrorPage from '../ErrorPage/ErrorPage';
-import { PageType } from '../../api/reviewItem/reviewItem';
 
 const Allcontents = () => {
   const {
