@@ -24,7 +24,6 @@ const MypageMain = () => {
     queryKey: ['TabUserInfo'],
     queryFn: () => GetUser(),
   });
-  console.log(data);
 
   const tabContent: JSX.Element[] = [
     <Element0 data={data?.data.wishBoard} />,

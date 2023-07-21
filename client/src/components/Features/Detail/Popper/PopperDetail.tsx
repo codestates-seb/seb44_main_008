@@ -59,7 +59,6 @@ const PopperDetail: React.FC<PopperDetailProps> = ({
       alert(
         "'내가 모집중인 팟'이기 때문에 '내가 모집중인 팟'에서 삭제해야합니다.",
       );
-      location.reload();
     },
   });
   const deletePartyHandler = (groupId: number) => {

@@ -107,7 +107,6 @@ const PopperEdit: React.FC<PoppeEditProps> = ({
   if (isLoading) {
     return <Loading />;
   }
-  console.log(data);
   if (isSuccess) {
     return (
       <PopperBox>

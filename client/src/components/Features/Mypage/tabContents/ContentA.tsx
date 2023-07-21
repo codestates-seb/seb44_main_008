@@ -52,7 +52,6 @@ const ContentA = ({ data }: tabAType) => {
   const offset = (page - 1) * LIMIT;
 
   const reverseData = data.slice().reverse();
-  console.log(reverseData);
   return (
     <>
       {reverseData.slice(offset, offset + LIMIT).map(item => (
