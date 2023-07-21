@@ -188,6 +188,17 @@ public class UserService {
         if(findUser.getUserStatus() == User.UserStatus.USER_WITHDRAW)
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
 
+        Set<MoviePartyUser> moviePartyUsers = findUser.getMoviePartyUsers();
+        for(MoviePartyUser moviePartyUser : moviePartyUsers) {
+            MovieParty movieParty = moviePartyUser.getMovieParty();
+            movieParty.setCurrentParticipant(movieParty.getCurrentParticipant() - 1);
+            movieParty.getMoviePartyUsers().remove(moviePartyUser);
+        }
+        moviePartyUsers.clear();
+
+        List<MovieParty> parties = findUser.getParties();
+        parties.clear();
+
         findUser.getReviewBoardRecentVisits().clear();
         if(findUser.getProfileImage() != null)
             storageService.deleteProfileImage(findUser);
