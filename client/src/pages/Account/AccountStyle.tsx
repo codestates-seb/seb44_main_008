@@ -7,7 +7,7 @@ export const AccountWrap = styled.div`
   flex-direction: column;
   max-width: 31.25rem;
   margin: 0 auto;
-  min-height: calc(100vh - 10.9rem);
+  min-height: calc(100vh - 8rem);
   form {
     width: 100%;
     display: flex;

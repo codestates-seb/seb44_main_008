@@ -25,15 +25,19 @@ const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
     },
   });
 
-  const ClickLike = (Id: string) => {
-    if (liked === false) {
-      mutationLike.mutate(Id);
-      setLikeCount(likeCount => likeCount + 1);
-    } else {
-      mutationUnLike.mutate(Id);
-      setLikeCount(likeCount => likeCount - 1);
+  const ClickLike = async (Id: string) => {
+    try {
+      if (liked === false) {
+        await mutationLike.mutateAsync(Id);
+        setLikeCount(likeCount => likeCount + 1);
+      } else {
+        await mutationUnLike.mutate(Id);
+        setLikeCount(likeCount => likeCount - 1);
+      }
+      setLiked(prev => !prev);
+    } catch (err) {
+      console.log('err', err);
     }
-    setLiked(prev => !prev);
   };
 
   const date = data.createdAt;
@@ -53,7 +57,7 @@ const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
       <div className="writeInfo">
         <div>
           <Popunlike
-            onClick={() => ClickLike(data.reviewBoardId)}
+            onClick={() => ClickLike(data.reviewBoardId as string)}
             like={liked}
           />
           <span>{likeCount}</span>
