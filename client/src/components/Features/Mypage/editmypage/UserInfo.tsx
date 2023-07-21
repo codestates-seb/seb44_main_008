@@ -79,6 +79,7 @@ const UserInfo = () => {
         profileImage: image,
       });
       alert('회원정보가 저장되었습니다.');
+      dispatch(updateProfileImage(tempImg));
     }
   };
 
@@ -87,7 +88,6 @@ const UserInfo = () => {
       setImage(event.target.files[0]);
       const newFileUrl = URL.createObjectURL(event.target.files[0]);
       setTempImg(newFileUrl);
-      dispatch(updateProfileImage(newFileUrl));
     }
   };
   const onClickImg: MouseEventHandler<HTMLImageElement> = event => {

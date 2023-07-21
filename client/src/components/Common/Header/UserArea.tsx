@@ -32,7 +32,6 @@ const UserArea = () => {
   const btnMypage = useCallback(() => {
     navigate('/mypage');
     setMyShow(false);
-    //location.reload();
   }, []);
   const BtnLogout = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(clearUser());
@@ -41,7 +40,6 @@ const UserArea = () => {
     alert('로그아웃 되었습니다.');
     setMyShow(false);
     navigate('/');
-    location.reload();
   }, []);
 
   const onClickTagButton = (e: React.MouseEvent<HTMLButtonElement>) => {
