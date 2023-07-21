@@ -168,8 +168,7 @@ public class ReviewBoardService {
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
-        LocalDateTime now = LocalDateTime.now().plusHours(9);
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, now), userMapper, imageUtil);
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, LocalDateTime.now()), userMapper, imageUtil);
 
         String thumbnail = reviewBoard.getThumbnail();
         if(thumbnail == null)
@@ -243,7 +242,7 @@ public class ReviewBoardService {
         if(reviewBoard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
 
-        if(reviewBoard.getThumbnail() != null)
+        if(reviewBoard.getThumbnail() != null && !reviewBoard.getThumbnail().startsWith(imageUtil.getDefaultThumbnail()))
             storageService.deleteThumbnailImage(reviewBoard);
         reviewBoard.setThumbnail(null);
 
