@@ -34,7 +34,12 @@ public class RecommendReviewBoardService {
     }
 
     public void calculateTop300(List<ReviewBoard> reviewBoardList) {
-        recommendReviewBoardRepository.deleteAll();
+        List<RecommendReviewBoard> oldRecommendReviewBoards = recommendReviewBoardRepository.findAll();
+        for(RecommendReviewBoard recommendReviewBoard : oldRecommendReviewBoards) {
+            ReviewBoard reviewBoard = recommendReviewBoard.getReviewBoard();
+            reviewBoard = null;
+            recommendReviewBoardRepository.deleteById(recommendReviewBoard.getRecommendReviewBoardId());
+        }
         // auto increment 초기화
 
         // 전체 ReviewBoard 얻어오기
