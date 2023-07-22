@@ -3,6 +3,7 @@ package com.codestates.advice;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.response.ErrorResponse;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -60,7 +61,7 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleFileSizeLimitExceededException(FileSizeLimitExceededException exception) {
+    public ErrorResponse handleFileSizeLimitExceededException(SizeLimitExceededException exception) {
         final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "해당 파일이 최대 사이즈를 초과하였습니다.");
         return errorResponse;
     }
