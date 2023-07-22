@@ -40,7 +40,7 @@ export default SingleItem;
 // Styled-Component
 const SingleItemDiv = styled.div<SingleItemType>`
   width: ${props => (props.isMain ? '27rem' : '25rem')};
-  @media (max-width: 1450px) {
+  @media (max-width: 1500px) {
     width: ${props => (props.isMain ? '19rem' : '19rem')};
   }
   @media (max-width: 1200px) {
@@ -53,7 +53,7 @@ const SingleItemDiv = styled.div<SingleItemType>`
 
 const ImgDiv = styled.div<SingleItemType>`
   height: ${props => (props.isMain ? '18rem' : '20rem')};
-  @media (max-width: 1450px) {
+  @media (max-width: 1500px) {
     height: ${props => (props.isMain ? '15rem' : '17rem')};
   }
   @media (max-width: 1200px) {
@@ -82,7 +82,7 @@ const SingleItemMeta = styled.div<SingleItemType>`
   color: white;
   & > h1 {
     font-size: ${props => (props.isMain ? '1.3rem' : '1.3rem')};
-    @media (max-width: 1450px) {
+    @media (max-width: 1500px) {
       font-size: ${props => (props.isMain ? '1rem' : '1rem')};
     }
     font-weight: 600;

@@ -121,7 +121,7 @@ const StaticContainer = styled.div`
   width: 100%;
   padding: 1rem;
   gap: 4rem 2.5rem;
-  @media (max-width: 1450px) {
+  @media (max-width: 150px) {
     gap: 3rem 1rem;
   }
 `;
