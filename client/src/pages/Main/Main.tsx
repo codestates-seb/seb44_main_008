@@ -32,7 +32,10 @@ const Main = () => {
       items: 3,
     },
     976: {
-      items: 4,
+      items: 4.5,
+    },
+    1600: {
+      items: 4.5,
     },
   };
 
@@ -170,15 +173,15 @@ const MainWrapper = styled.div`
   background-color: #17191c;
 `;
 const SpecialContainer = styled.div`
-  width: 120%;
+  width: 100%;
   margin-top: 2rem;
-
   position: relative;
+  overflow: hidden;
 
   & > h1 {
     font-size: 1.5rem;
     font-weight: 700;
-    padding-left: 10rem;
+    padding-left: 3rem;
     color: white;
   }
 
@@ -187,11 +190,14 @@ const SpecialContainer = styled.div`
       background-color: #f20000;
     }
   }
+  .alice-carousel {
+    width: 120%;
+    margin-left: -10%;
+  }
 `;
 const DefaultContainer = styled.div`
   display: flex;
   flex-direction: column;
-
   width: 100%;
   margin-top: 4rem;
 
@@ -219,7 +225,10 @@ const StaticContainer = styled.div`
 
   width: 100%;
   padding: 1rem;
-  gap: 2.5rem;
+  gap: 4rem 2.5rem;
+  @media (max-width: 1450px) {
+    gap: 3rem 1rem;
+  }
 `;
 
 const SliderContainer = styled.div`
