@@ -39,15 +39,26 @@ export default SingleItem;
 
 // Styled-Component
 const SingleItemDiv = styled.div<SingleItemType>`
-  width: ${props => (props.isMain ? '17rem' : '20rem')};
+  width: ${props => (props.isMain ? '27rem' : '25rem')};
+  @media (max-width: 1450px) {
+    width: ${props => (props.isMain ? '19rem' : '19rem')};
+  }
+  @media (max-width: 1200px) {
+    width: ${props => (props.isMain ? '15rem' : '15rem')};
+  }
   display: flex;
   flex-direction: column;
-
   cursor: pointer;
 `;
 
 const ImgDiv = styled.div<SingleItemType>`
-  height: ${props => (props.isMain ? '15rem' : '15rem')};
+  height: ${props => (props.isMain ? '18rem' : '20rem')};
+  @media (max-width: 1450px) {
+    height: ${props => (props.isMain ? '15rem' : '17rem')};
+  }
+  @media (max-width: 1200px) {
+    height: ${props => (props.isMain ? '13rem' : '15rem')};
+  }
   overflow: hidden;
   border-radius: 1rem;
 `;
@@ -67,11 +78,18 @@ const SingleItemImg = styled.img<SingleItemType>`
 const SingleItemMeta = styled.div<SingleItemType>`
   width: 100%;
   height: 10%;
-  padding: 0.3rem 0.7rem 0rem 0.7rem;
+  padding: 1rem 0.7rem 0rem 0.7rem;
   color: white;
   & > h1 {
-    font-size: ${props => (props.isMain ? '1rem' : '1.3rem')};
+    font-size: ${props => (props.isMain ? '1.3rem' : '1.3rem')};
+    @media (max-width: 1450px) {
+      font-size: ${props => (props.isMain ? '1rem' : '1rem')};
+    }
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
   }
   & > div {
     width: 100%;

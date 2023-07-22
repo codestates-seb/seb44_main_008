@@ -77,7 +77,7 @@ const TotalContainer = styled.div`
 `;
 
 const TopContainer = styled.div`
-  width: 52rem;
+  width: 34rem;
   height: 9.32431rem;
   margin: auto;
   display: flex;
