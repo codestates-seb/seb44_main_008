@@ -30,8 +30,7 @@ const UserArea = () => {
   }, []);
   const BtnLogout = useCallback(() => {
     dispatch(clearUser());
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
+    localStorage.clear();
     alert('로그아웃 되었습니다.');
     setMyShow(false);
     navigate('/');
