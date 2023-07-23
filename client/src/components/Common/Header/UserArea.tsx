@@ -7,6 +7,7 @@ import Button from '../Button/Button';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '../../../api/tags/getTags';
 import { clearUser } from '../../../redux/reducers/user';
+import { BsPencilSquare } from 'react-icons/bs';
 
 const UserArea = () => {
   const hashMenu = useRef<HTMLDivElement>(null);
@@ -99,7 +100,9 @@ const UserArea = () => {
         )}
       </div>
       <Link to="/detail/write" className="headerWriteBtn">
-        리뷰 작성
+        <p>
+          <BsPencilSquare />
+        </p>
       </Link>
       <div className="myArea">
         <button ref={myRef} onClick={clickMy}>
@@ -190,13 +193,28 @@ const UserAreaWrap = styled.div`
     line-height: 100%;
     border-radius: 50px;
     background-color: var(--main-gray-color);
-    color: var(--white-color);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 1rem;
     transition: all 0.2s;
     margin: 0 1rem;
+    p {
+      display: none;
+      color: var(--white-color);
+    }
+    &:before {
+      content: '리뷰작성';
+      color: var(--white-color);
+    }
+    @media (max-width: 1100px) {
+      &:before {
+        display: none;
+      }
+      p {
+        display: block;
+      }
+    }
     &:hover {
       background-color: var(--theme-hover-color);
     }
