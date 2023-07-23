@@ -125,6 +125,10 @@ const Titles = styled.div`
     font-weight: 700;
     font-size: 1.15rem;
     margin-bottom: 0.6rem;
+    width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .mvTitle {
     font-size: 0.8rem;
@@ -153,7 +157,7 @@ const AuthorInfo = styled.div`
 
 const ListTail = styled.div`
   display: flex;
-  width: 8.7rem;
+  width: 9rem;
   justify-content: space-between;
 `;
 
