@@ -7,6 +7,7 @@ import popbg from '../../assets/images/pop-icons/popbg.jpg';
 import { SectionsContainer, Section } from 'react-fullpage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { TfiArrowCircleDown } from 'react-icons/tfi';
 
 const Start = () => {
   const navigate = useNavigate();
@@ -166,6 +167,10 @@ const Start = () => {
             />
             <Button value="시작하기" theme="variant" onClick={getEmail} />
           </form>
+          <ScrollDown>
+            <p></p>
+            <span>SCROLL</span>
+          </ScrollDown>
         </Section>
         <Section className="page2 Section landinBox">
           <h4 className="slideTxt">
@@ -518,10 +523,63 @@ const SpecialContainer = styled.div`
     font-size: 1.5rem;
     font-weight: 700;
     padding-left: 10rem;
-    color: white;
+    color: var(--white-color);
   }
 `;
 const SliderContainer = styled.div`
   width: 100%;
   pointer-events: none;
+`;
+const ScrollDown = styled.div`
+  margin-top: 150px;
+  text-align: center;
+  position: relative;
+  span {
+    opacity: 0.5;
+    color: var(--white-color);
+    position: absolute;
+    bottom: -70px;
+    left: 50%;
+    transform: translateX(-50%);
+    letter-spacing: 1px;
+  }
+  p {
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
+    border-left: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: sdb 1.5s infinite;
+    animation: sdb 1.5s infinite;
+    box-sizing: border-box;
+  }
+
+  @-webkit-keyframes sdb {
+    0% {
+      -webkit-transform: rotate(-45deg) translate(0, 0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: rotate(-45deg) translate(-20px, 20px);
+      opacity: 0;
+    }
+  }
+  @keyframes sdb {
+    0% {
+      transform: rotate(-45deg) translate(0, 0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(-45deg) translate(-20px, 20px);
+      opacity: 0;
+    }
+  }
 `;
