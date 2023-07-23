@@ -208,6 +208,7 @@ const UserAreaWrap = styled.div`
       color: var(--white-color);
     }
     @media (max-width: 1100px) {
+      width: 3.3rem;
       &:before {
         display: none;
       }

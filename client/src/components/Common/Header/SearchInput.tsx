@@ -30,6 +30,7 @@ const SearchInputBox = styled.form`
   width: 40rem;
   height: 3.4rem;
   position: relative;
+  margin-right: 0.6rem;
   input {
     width: 100%;
     height: 100%;
