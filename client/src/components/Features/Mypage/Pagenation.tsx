@@ -9,6 +9,34 @@ interface PaginationProps {
   setPage: (page: number) => void;
 }
 
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+`;
+
+const StyledButton = styled.button`
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: var(--ghost-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--white-color);
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &[aria-current='page'] {
+    background-color: var(--theme-color);
+    color: #fff;
+    &:hover {
+      background-color: var(--theme-hover-color);
+    }
+  }
+`;
+
 const Pagination: React.FC<PaginationProps> = ({
   total,
   limit,
@@ -59,22 +87,3 @@ const Pagination: React.FC<PaginationProps> = ({
 };
 
 export default Pagination;
-
-const PaginationContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 4rem;
-`;
-const StyledButton = styled.button`
-  width: 1.8rem;
-  height: 1.8rem;
-  background-color: var(--ghost-color);
-  border-radius: 4px;
-  font-size: 0.9rem;
-  color: var(--white-color);
-  &:hover {
-    opacity: 0.7;
-  }
-`;
