@@ -58,6 +58,7 @@ const Logo = styled.h1`
     color: #fff;
     font-size: 1.8rem;
     letter-spacing: 1px;
+    padding-right: 0.6rem;
   }
 `;
 
