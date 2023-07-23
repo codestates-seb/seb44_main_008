@@ -1,4 +1,3 @@
-import { ReactComponent as IcoGoogle } from '@/assets/images/account/icoGoogle.svg';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -139,9 +138,7 @@ const LoginForm = () => {
         </div>
         <Button value="로그인" width="100%" type="submit" theme="variant" />
       </form>
-      <button type="button" className="snsButton">
-        <IcoGoogle /> <span>Sign in with Google</span>
-      </button>
+      <button type="button" className="snsButton"></button>
     </AccountWrap>
   );
 };
