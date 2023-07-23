@@ -219,3 +219,29 @@
 ![GIF 이미지](readmeImg/팟모집글%20수정.gif)
 
 </details>
+
+</br>
+
+# Project Docs
+
+<h3>
+<a href="https://docs.google.com/spreadsheets/d/1Slfum1zWdXpBSOvOxEtNilgL92MbPYO04idsWfmvpDc/edit#gid=0" target="_blank">사용자 요구사항 정의서</a>
+</h3>
+
+<h3>
+<a href="https://docs.google.com/spreadsheets/d/1Slfum1zWdXpBSOvOxEtNilgL92MbPYO04idsWfmvpDc/edit#gid=817701079" target="_blank">API 명세서</a>
+</h3>
+
+<h3>
+<a href="https://docs.google.com/spreadsheets/d/1Slfum1zWdXpBSOvOxEtNilgL92MbPYO04idsWfmvpDc/edit#gid=120528146" target="_blank">테이블 명세서</a>
+</h3>
+
+<h3>
+<a href="https://www.figma.com/file/maARXS3UetvMalzTyq5YrL/MoviePop?type=design&node-id=0%3A1&mode=design&t=FQ0hRk4QYqURYGbA-1" target="_blank">FIGMA</a>
+</h3>
+
+<h3>
+ ERD
+</h3>
+
+![ERD](readmeImg/MoviePop.png)
