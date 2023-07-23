@@ -32,10 +32,10 @@ const Main = () => {
       items: 3,
     },
     976: {
-      items: 4.5,
+      items: 4,
     },
     1600: {
-      items: 4.5,
+      items: 5,
     },
   };
 
