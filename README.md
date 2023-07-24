@@ -242,4 +242,4 @@
  ERD
 </h3>
 
-![ERD](readmeImg/MoviePop.png)
+![ERD](readmeImg/ERD.png)
