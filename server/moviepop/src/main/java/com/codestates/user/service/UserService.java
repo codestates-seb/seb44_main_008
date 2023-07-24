@@ -363,7 +363,8 @@ public class UserService {
 
         comment.setLikes(comment.getLikes() - 1);
 
-        user.deleteCommentLike(commentLike);
+        comment.getCommentLikes().remove(commentLike);
+        user.getCommentLikes().remove(commentLike);
 
         return comment;
     }
