@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -22,12 +21,10 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ReviewBoardService reviewBoardService;
-    private final CommentLikeService commentLikeService;
 
-    public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService, CommentLikeService commentLikeService) {
+    public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService) {
         this.commentRepository = commentRepository;
         this.reviewBoardService = reviewBoardService;
-        this.commentLikeService = commentLikeService;
     }
 
     public Comment createComment(long reviewId, User user, Comment comment) {
@@ -65,7 +62,7 @@ public class CommentService {
         if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
-        commentLikeService.deleteByComment(comment);
+        comment.getCommentLikes().clear();
 
         ReviewBoard reviewBoard = comment.getReviewBoard();
         reviewBoard.getComments().remove(comment);
