@@ -77,7 +77,7 @@ public class User extends Auditable {
     private List<ReviewBoardWish> reviewBoardWishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentLike> commentLikes = new ArrayList<>();
+    private Set<CommentLike> commentLikes = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
