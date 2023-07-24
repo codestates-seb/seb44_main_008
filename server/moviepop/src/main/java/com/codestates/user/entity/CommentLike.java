@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -24,4 +25,16 @@ public class CommentLike {
     @JoinColumn(name = "COMMENT_ID")
     private Comment comment;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentLike that = (CommentLike) o;
+        return commentLikeId == that.commentLikeId && Objects.equals(user, that.user) && Objects.equals(comment, that.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commentLikeId, user, comment);
+    }
 }
