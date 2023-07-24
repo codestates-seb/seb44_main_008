@@ -7,7 +7,7 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.user.entity.User;
-import com.codestates.utils.UserUtils;
+import com.codestates.user.service.CommentLikeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,15 +22,12 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ReviewBoardService reviewBoardService;
+    private final CommentLikeService commentLikeService;
 
-//    public CommentService(CommentRepository commentRepository) {
-//        this.commentRepository = commentRepository;
-//    }
-
-
-    public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService) {
+    public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService, CommentLikeService commentLikeService) {
         this.commentRepository = commentRepository;
         this.reviewBoardService = reviewBoardService;
+        this.commentLikeService = commentLikeService;
     }
 
     public Comment createComment(long reviewId, User user, Comment comment) {
@@ -67,6 +64,8 @@ public class CommentService {
         Comment comment = findVerifiedCommentId(commentId);
         if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
+
+        commentLikeService.deleteByComment(comment);
 
         ReviewBoard reviewBoard = comment.getReviewBoard();
         reviewBoard.getComments().remove(comment);
