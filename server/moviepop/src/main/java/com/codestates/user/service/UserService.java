@@ -345,6 +345,8 @@ public class UserService {
         commentLike.setUser(user);
         commentLike.setComment(comment);
 
+        commentLike = commentLikeService.createCommentLike(commentLike);
+
         comment.addCommentLike(commentLike);
         user.addCommentLike(commentLike);
 
