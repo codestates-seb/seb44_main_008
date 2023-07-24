@@ -345,6 +345,9 @@ public class UserService {
         commentLike.setUser(user);
         commentLike.setComment(comment);
 
+        commentLike = commentLikeService.createCommentLike(commentLike);
+
+        comment.addCommentLike(commentLike);
         user.addCommentLike(commentLike);
 
         userRepository.save(user);
@@ -362,7 +365,8 @@ public class UserService {
 
         comment.setLikes(comment.getLikes() - 1);
 
-        user.deleteCommentLike(commentLike);
+        comment.getCommentLikes().remove(commentLike);
+        user.getCommentLikes().remove(commentLike);
 
         return comment;
     }

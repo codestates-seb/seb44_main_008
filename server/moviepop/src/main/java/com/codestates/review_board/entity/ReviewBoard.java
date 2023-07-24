@@ -50,19 +50,19 @@ public class ReviewBoard extends Auditable {
     @JoinColumn(name = "MOVIE_ID")
     private Movie movie;
 
-    @OneToOne(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private RecommendReviewBoard recommendReviewBoard;
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReviewBoardRecentVisit> reviewBoardRecentVisits = new HashSet<>();
 
-    @OneToOne(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private ReviewBoardScore reviewBoardScore;
 
-    @OneToMany(mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieParty> parties = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reviewBoard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reviewBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("commentId desc")
     private Set<Comment> comments = new LinkedHashSet<>();
 

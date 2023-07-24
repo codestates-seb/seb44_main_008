@@ -7,14 +7,13 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.review_board.entity.ReviewBoard;
 import com.codestates.review_board.service.ReviewBoardService;
 import com.codestates.user.entity.User;
-import com.codestates.utils.UserUtils;
+import com.codestates.user.service.CommentLikeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -22,11 +21,6 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ReviewBoardService reviewBoardService;
-
-//    public CommentService(CommentRepository commentRepository) {
-//        this.commentRepository = commentRepository;
-//    }
-
 
     public CommentService(CommentRepository commentRepository, ReviewBoardService reviewBoardService) {
         this.commentRepository = commentRepository;
@@ -67,6 +61,8 @@ public class CommentService {
         Comment comment = findVerifiedCommentId(commentId);
         if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
+
+        comment.getCommentLikes().clear();
 
         ReviewBoard reviewBoard = comment.getReviewBoard();
         reviewBoard.getComments().remove(comment);

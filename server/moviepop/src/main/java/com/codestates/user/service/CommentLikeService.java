@@ -16,11 +16,19 @@ public class CommentLikeService {
         this.commentLikeRepository = commentLikeRepository;
     }
 
+    public CommentLike createCommentLike(CommentLike commentLike) {
+        return commentLikeRepository.save(commentLike);
+    }
+
     CommentLike findByCommentAndUser(Comment comment, User user) {
         return commentLikeRepository.findByCommentAndUser(comment, user);
     }
     boolean existsByCommentAndUser(Comment comment, User user) {
         return commentLikeRepository.existsByCommentAndUser(comment,user);
+    }
+
+    public void deleteByComment(Comment comment) {
+        commentLikeRepository.deleteByComment(comment);
     }
 
 //    public void deleteCommentLike(long commentLikeId) {
