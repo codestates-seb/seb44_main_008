@@ -1,4 +1,4 @@
-![Group_157_1](https://github.com/codestates-seb/seb44_main_008/assets/120915990/aa53d3a9-7da6-4c92-81d3-9bfa09709932)
+![로고](readmeImg/Group_158.png)
 <br>
 <br>
 
