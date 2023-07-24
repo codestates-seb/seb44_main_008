@@ -91,7 +91,7 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Authority> authorities = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReviewBoardRecentVisit> reviewBoardRecentVisits = new HashSet<>();
 
     public User changeUserInfo(User sourceUser, CustomBeanUtils<User> beanUtils) {

@@ -45,7 +45,7 @@ public class MovieParty {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "movieParty", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "movieParty", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MoviePartyUser> moviePartyUsers = new HashSet<>();
 
     public void addMoviePartyUser(MoviePartyUser moviePartyUser) {
