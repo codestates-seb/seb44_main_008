@@ -9,6 +9,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'GongGothicMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   font-family: 'Pretendard-Regular', sans-serif;
   box-sizing: border-box;
@@ -99,6 +107,7 @@ video {
 
 body {
   line-height: 1;
+  background-color: #000;
 }
 
 article,
@@ -203,4 +212,5 @@ button {
   border: 0;
   margin: 0;
   padding: 0;
+  cursor: pointer;
 }

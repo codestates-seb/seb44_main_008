@@ -1,4 +1,5 @@
 ![로고](readmeImg/Group_158.png)
+
 <br>
 <br>
 
@@ -19,16 +20,19 @@
 
 # ❤️ Team List ❤️
 
+
 | ![정승현](readmeImg/circle_pororo.png) | ![박영미](readmeImg/circle_petty.png)  | ![장근실](readmeImg/circle_loppy.png) |  ![오태호](readmeImg/circle_poby.png)   | ![권우혁](readmeImg/circle_eddy.png) | ![송현우](readmeImg/circle_crong.png) |
 | :------------------------------------: | :------------------------------------: | :-----------------------------------: | :-------------------------------------: | :----------------------------------: | :-----------------------------------: |
 |   [정승현](https://github.com/plla2)   | [박영미](https://github.com/suemeeeee) | [장근실](https://github.com/sirigogo) | [오태호](https://github.com/OhTaeHo-97) | [권우혁](https://github.com/44Kwon)  | [송현우](https://github.com/song4529) |
 |                FE 팀장                 |                   FE                   |                  FE                   |                BE 부팀장                |                  BE                  |                  BE                   |
+
 
 <br>
 
 # Stacks
 
 ![stack](readmeImg/stack.png)
+
 
 <br>
 
