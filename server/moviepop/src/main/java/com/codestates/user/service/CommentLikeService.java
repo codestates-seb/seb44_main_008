@@ -16,6 +16,10 @@ public class CommentLikeService {
         this.commentLikeRepository = commentLikeRepository;
     }
 
+    public CommentLike createCommentLike(CommentLike commentLike) {
+        return commentLikeRepository.save(commentLike);
+    }
+
     CommentLike findByCommentAndUser(Comment comment, User user) {
         return commentLikeRepository.findByCommentAndUser(comment, user);
     }
