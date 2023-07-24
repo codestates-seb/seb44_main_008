@@ -30,11 +30,11 @@ public class CommentLike {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CommentLike that = (CommentLike) o;
-        return commentLikeId == that.commentLikeId && Objects.equals(user, that.user) && Objects.equals(comment, that.comment);
+        return commentLikeId == that.commentLikeId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentLikeId, user, comment);
+        return Objects.hash(commentLikeId);
     }
 }
