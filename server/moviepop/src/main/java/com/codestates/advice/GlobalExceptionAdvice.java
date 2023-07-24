@@ -61,8 +61,15 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleFileSizeLimitExceededException(SizeLimitExceededException exception) {
-        final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "해당 파일이 최대 사이즈를 초과하였습니다.");
+    public ErrorResponse handleFileSizeLimitExceededException(FileSizeLimitExceededException exception) {
+        final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "최대 500자까지 작성 가능합니다.");
+        return errorResponse;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleSizeLimitExceededException(SizeLimitExceededException exception) {
+        final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "이미지는 최대 5MB까지 업로드 가능합니다.");
         return errorResponse;
     }
 }
