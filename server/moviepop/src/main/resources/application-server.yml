@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${AWS_RDS_ENDPOINT}/mainproject?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${MYSQL_ROOT_NAME}
+    password: ${MYSQL_ROOT_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+config:
+  domain: ${AWS_S3_ENDPOINT}
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  secret: ${JWT_SECRET_KEY}
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+      profile-path: ${S3_PROFILE_IMAGE_PATH}
+      thumbnail-path: ${S3_THUMBNAIL_IMAGE_PATH}
+      url: ${S3_URL}
+      default-profile: ${S3_DEFAULT_PROFILE_IMAGE}
+      default-thumbnail : ${S3_DEFAULT_THUMBNAIL}
+aws:
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
