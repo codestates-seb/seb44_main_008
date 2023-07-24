@@ -19,7 +19,7 @@ public class Comment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, length = 1000)
     private String content;
     @Column(nullable = false)
     private Integer likes = 0;

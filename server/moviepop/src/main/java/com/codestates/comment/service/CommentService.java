@@ -68,6 +68,12 @@ public class CommentService {
         if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
+        ReviewBoard reviewBoard = comment.getReviewBoard();
+        reviewBoard.getComments().remove(comment);
+
+        User user = comment.getUser();
+        user.getComments().remove(comment);
+
         commentRepository.deleteById(commentId);
     }
 

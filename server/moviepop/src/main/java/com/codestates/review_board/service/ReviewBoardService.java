@@ -91,7 +91,7 @@ public class ReviewBoardService {
         ReviewBoard newReviewBoard = reviewBoardRepository.save(reviewBoard);
         ReviewBoardScore reviewBoardScore = new ReviewBoardScore();
         reviewBoardScore.setReviewBoard(newReviewBoard);
-        reviewBoardScore = reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
+//        reviewBoardScore = reviewBoardScoreService.createReviewBoardScore(reviewBoardScore);
         reviewBoard.setReviewBoardScore(reviewBoardScore);
 
         int age = UserUtils.getAge(user).getYears();
@@ -168,8 +168,7 @@ public class ReviewBoardService {
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
-        LocalDateTime now = LocalDateTime.now().plusHours(9);
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, now), userMapper, imageUtil);
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, LocalDateTime.now()), userMapper, imageUtil);
 
         String thumbnail = reviewBoard.getThumbnail();
         if(thumbnail == null)
@@ -203,12 +202,15 @@ public class ReviewBoardService {
         if(visit != null) {
             visit.setVisitedAt(LocalDateTime.now());
         } else {
-            if(reviewBoardRecentVisitRepository.findByUser(user).size() >= 5) {
+            List<ReviewBoardRecentVisit> reviewBoardRecentVisits = reviewBoardRecentVisitRepository.findByUser(user);
+            if(reviewBoardRecentVisits.size() >= 5) {
                 //가장 오래된 기록 삭제
                 ReviewBoardRecentVisit oldestVisitedAt = reviewBoardRecentVisitRepository.findFirstByUserOrderByVisitedAtAsc(user);
-//                ReviewBoardRecentVisit oldestVisit = reviewBoardRecentVisitRepository.findByUserAndVisitedAt(user, oldestVisitedAt.getVisitedAt());
-                if(oldestVisitedAt != null)
-                    reviewBoardRecentVisitRepository.delete(oldestVisitedAt);
+                if(oldestVisitedAt != null) {
+                    reviewBoardRecentVisitRepository.deleteById(oldestVisitedAt.getReviewBoardRecentVisitId());
+                    reviewBoard.getReviewBoardRecentVisits().remove(oldestVisitedAt);
+                    user.getReviewBoardRecentVisits().remove(oldestVisitedAt);
+                }
             }
             //가장 최근 기록
             visit = new ReviewBoardRecentVisit();
@@ -240,7 +242,7 @@ public class ReviewBoardService {
         if(reviewBoard.getUser().getUserId() != user.getUserId())
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_REVIEW_BOARD);
 
-        if(reviewBoard.getThumbnail() != null)
+        if(reviewBoard.getThumbnail() != null && !reviewBoard.getThumbnail().startsWith(imageUtil.getDefaultThumbnail()))
             storageService.deleteThumbnailImage(reviewBoard);
         reviewBoard.setThumbnail(null);
 
