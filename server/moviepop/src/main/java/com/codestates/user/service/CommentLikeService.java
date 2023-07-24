@@ -23,6 +23,10 @@ public class CommentLikeService {
         return commentLikeRepository.existsByCommentAndUser(comment,user);
     }
 
+    public void deleteByComment(Comment comment) {
+        commentLikeRepository.deleteByComment(comment);
+    }
+
 //    public void deleteCommentLike(long commentLikeId) {
 //        commentLikeRepository.deleteById(commentLikeId);
 //    }
