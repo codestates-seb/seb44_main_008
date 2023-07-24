@@ -4,12 +4,15 @@ import Popunlike from '../../Common/PopIcons/Poplike';
 import { DetailData } from '../../../pages/Detail/Detailcontent/detailType';
 import { deleteLike, getLike } from '../../../api/like/detailLike';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ToastNotification from '../../Common/Toast/ToastNotification';
 
 const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
   data,
   reviewId,
 }) => {
   const queryClient = useQueryClient();
+  const [toastState, setToastState] = useState(false);
+  const [toastAnimation, setToastAnimation] = useState('toast-alert');
   const [liked, setLiked] = useState(data.wished);
   const [likeCount, setLikeCount] = useState<number>(data.wish ? data.wish : 0);
   const mutationLike = useMutation(getLike, {
@@ -32,6 +35,7 @@ const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
         await mutationUnLike.mutate(Id);
         setLikeCount(likeCount => likeCount - 1);
       }
+      setToastState(true);
       setLiked(prev => !prev);
     } catch (err) {
       console.log('err', err);
@@ -43,6 +47,18 @@ const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
 
   return (
     <DetailSection>
+      {toastState === true ? (
+        <ToastNotification
+          setToastState={setToastState}
+          text={
+            liked
+              ? '해당 게시글을 찜하였습니다.'
+              : '해당 게시글을 찜 해제하였습니다.'
+          }
+          toastAnimation={toastAnimation}
+          setToastAnimation={setToastAnimation}
+        />
+      ) : null}
       <h4>{data.title}</h4>
       <div className="movieInfo">
         <p>{data.movie?.title}</p>
