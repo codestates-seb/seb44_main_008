@@ -77,16 +77,23 @@ const TotalContainer = styled.div`
 `;
 
 const TopContainer = styled.div`
-  width: 34rem;
+  width: 29rem;
   height: 9.32431rem;
   margin: auto;
   display: flex;
+  @media (max-width: 500px) {
+    width: 26rem;
+    justify-content: center;
+  }
 `;
 const UserTopContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 500px) {
+    width: 23rem;
+  }
 `;
 const User = styled.div`
   display: flex;
@@ -96,12 +103,19 @@ const User = styled.div`
     margin-left: 3rem;
     text-align: center;
     font-size: 1.4rem;
+    @media (max-width: 500px) {
+      font-size: 1.2rem;
+    }
   }
   img {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
+    @media (max-width: 500px) {
+      width: 60px;
+      height: 60px;
+    }
   }
 `;
 const BotContainer = styled.div`
@@ -109,8 +123,11 @@ const BotContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 52rem;
+  width: 70%;
   margin: auto;
+  @media (max-width: 500px) {
+    width: 26rem;
+  }
 `;
 
 const UserBotContainer = styled.div`
@@ -119,6 +136,11 @@ const UserBotContainer = styled.div`
   margin-top: 3rem;
   font-size: large;
   border-bottom: 2px solid var(--ghost-color);
+  @media (max-width: 500px) {
+    width: 20rem;
+    padding: 1rem 0;
+    font-size: small;
+  }
 `;
 const UserInfo = styled.div`
   color: var(--mypage-font-color);
