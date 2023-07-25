@@ -75,7 +75,7 @@ const StyledContainer = styled.div`
   color: var(--white-color);
   display: flex;
   width: 100%;
-  justify-content: flex-start;
+  justify-content: center;
 `;
 const StyledInnerContainer = styled.div`
   display: flex;
