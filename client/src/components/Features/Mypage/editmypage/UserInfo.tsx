@@ -326,6 +326,20 @@ const ImgContainer = styled.div`
     clip: rect(0, 0, 0, 0);
     border: 0;
   }
+  @media (max-width: 500px) {
+    .editCover {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+    .editImage {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+    .userImage {
+      width: 6rem;
+      height: 6rem;
+    }
+  }
 `;
 const EditInputContainer = styled.div`
   padding-top: 1.8rem;
@@ -335,12 +349,24 @@ const NicknameContainer = styled.div`
   align-items: center;
   text-align: center;
   margin: 0.5rem 0 1rem 0;
+  width: 30rem;
   p {
     font-size: 1rem;
     color: #cfcfcf;
-    width: 100%;
     margin-top: 0.3rem;
     padding-right: 1.5rem;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+    input {
+      width: 100%;
+    }
+    p {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      width: 35%;
+      padding-right: 0.7rem;
+    }
   }
 `;
 
