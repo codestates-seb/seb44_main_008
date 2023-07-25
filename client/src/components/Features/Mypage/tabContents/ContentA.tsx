@@ -102,6 +102,9 @@ const ListOnce = styled.div`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  @media (max-width: 500px) {
+    padding: 1rem 1rem;
+  }
 `;
 const ListHead = styled.div`
   display: flex;
@@ -121,6 +124,19 @@ const Titles = styled.div`
     color: var(--mypage-font-color);
     margin-bottom: 0.25rem;
   }
+  @media (max-width: 500px) {
+    .title {
+      font-weight: 500;
+      font-size: 0.9rem;
+      width: 70%;
+    }
+    .mvTitle {
+      font-weight: 500;
+      font-size: 0.6rem;
+      width: 7rem;
+      justify-content: flex-start;
+    }
+  }
 `;
 const AuthorInfo = styled.div`
   display: flex;
@@ -136,6 +152,15 @@ const AuthorInfo = styled.div`
     opacity: 0.7;
     font-size: 0.8rem;
     justify-content: start;
+  }
+  @media (max-width: 500px) {
+    img {
+      width: 1rem;
+      height: 1rem;
+    }
+    .author {
+      font-size: 0.6rem;
+    }
   }
 `;
 const ListTail = styled.div`

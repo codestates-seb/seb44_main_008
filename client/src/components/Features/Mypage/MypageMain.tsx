@@ -75,7 +75,7 @@ const StyledContainer = styled.div`
   color: var(--white-color);
   display: flex;
   width: 100%;
-  justify-content: flex-start;
+  justify-content: center;
 `;
 const StyledInnerContainer = styled.div`
   display: flex;
@@ -84,6 +84,9 @@ const StyledInnerContainer = styled.div`
   align-items: flex-start;
   margin: 0 auto;
   width: 43rem;
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 const TabList = styled.div`
   width: 100%;
