@@ -104,7 +104,7 @@ const User = styled.div`
     text-align: center;
     font-size: 1.4rem;
     @media (max-width: 500px) {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
   }
   img {
@@ -113,8 +113,8 @@ const User = styled.div`
     border-radius: 50%;
     object-fit: cover;
     @media (max-width: 500px) {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
     }
   }
 `;
