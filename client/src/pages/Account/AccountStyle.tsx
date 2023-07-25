@@ -80,4 +80,22 @@ export const AccountWrap = styled.div`
       color: var(--white-color);
     }
   }
+  @media (max-width: 1100px) {
+  }
+  @media (max-width: 500px) {
+    margin-top: 40px;
+    padding: 5rem 0;
+    max-width: 90%;
+    .inputBox {
+      margin-bottom: 1rem;
+      &.imgBox {
+        span {
+          padding-top: 0.5rem;
+        }
+      }
+      & > span {
+        font-size: 0.8rem;
+      }
+    }
+  }
 `;
