@@ -30,7 +30,7 @@ const Start = () => {
       items: 2,
     },
     512: {
-      items: 3,
+      items: 2,
     },
   };
 
@@ -346,7 +346,6 @@ const LandingWrap = styled.div`
           animation-delay: 4.2s;
         }
         &:last-child {
-          color: $secondary-color;
           animation-delay: 4s;
         }
       }
@@ -514,6 +513,126 @@ const LandingWrap = styled.div`
       }
     }
   }
+
+  @media (max-width: 1100px) {
+    .landingHeader {
+      padding: 1rem;
+    }
+    .titlebox {
+      h1,
+      h2 {
+        font-size: 3rem;
+      }
+    }
+    .pointtxt {
+      font-size: 1.6rem;
+      margin: 1.5rem 0;
+    }
+    form {
+      input[type='text'] {
+        width: 25.5rem;
+      }
+    }
+    .slideTxt {
+      font-size: 1.5rem;
+      line-height: 2.3rem;
+    }
+    .scrollbox {
+      .imgWrap {
+        width: 4rem;
+        height: 4rem;
+      }
+      li {
+        padding: 1.2rem;
+        h6 {
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+        p {
+          font-size: 1rem;
+          line-height: 2rem;
+        }
+        span {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+  @media (max-width: 500px) {
+    .landingHeader {
+      padding: 1rem;
+    }
+    .titlebox {
+      h1,
+      h2 {
+        font-size: 1.8rem;
+      }
+    }
+    .pointtxt {
+      font-size: 1.2rem;
+      margin: 1.5rem 0;
+    }
+    form {
+      input[type='text'] {
+        width: 90%;
+        margin-bottom: 15px;
+        margin-right: 0;
+      }
+    }
+
+    .landinBox {
+      flex-direction: column;
+      justify-content: center;
+      & > h4 {
+        margin-left: 0;
+        margin-bottom: 30px;
+      }
+      .sliedWrap {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+    .slideTxt {
+      font-size: 1.2rem;
+      line-height: 2rem;
+    }
+    .landingSlide {
+      flex-direction: column-reverse;
+      padding: 0;
+    }
+    .scrollBoxslide {
+      width: 80%;
+      height: 300px;
+    }
+    .scrollbox {
+      .imgWrap {
+        width: 3rem;
+        height: 3rem;
+      }
+      li {
+        & > div:nth-child(2) {
+          width: calc(100% - 4rem);
+        }
+        padding: 0.7rem;
+        h6 {
+          font-size: 1rem;
+          font-weight: 600;
+        }
+        p {
+          font-size: 0.8rem;
+          line-height: 2rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline-block;
+          width: 100%;
+        }
+        span {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
 `;
 const SpecialContainer = styled.div`
   width: 120%;
@@ -580,6 +699,19 @@ const ScrollDown = styled.div`
     100% {
       transform: rotate(-45deg) translate(-20px, 20px);
       opacity: 0;
+    }
+  }
+  @media (max-width: 1100px) {
+    span {
+      bottom: -60px;
+      font-size: 0.8rem;
+    }
+  }
+  @media (max-width: 500px) {
+    margin-top: 80px;
+    span {
+      bottom: -50px;
+      font-size: 0.8rem;
     }
   }
 `;
