@@ -93,6 +93,11 @@ const TabList = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 2.2rem;
+  @media (max-width: 500px) {
+    button {
+      margin: 0 3px;
+    }
+  }
 `;
 const StyledContent = styled.section`
   width: 100%;
