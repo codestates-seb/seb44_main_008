@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
 
-const SearchInput = () => {
+type InputType = {
+  isToggle?: boolean;
+  setIsToggle?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+};
+
+const SearchInput: React.FC<InputType> = ({ isToggle, setIsToggle }) => {
   const [thisText, setThisText] = useState('');
   const navigate = useNavigate();
   const onChangeThis = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,20 +18,28 @@ const SearchInput = () => {
     navigate(`/main/search/${thisText}`);
   };
   return (
-    <SearchInputBox>
-      <input
-        type="text"
-        placeholder="지금, 관심있는 영화를 검색해 보세요."
-        value={thisText}
-        onChange={onChangeThis}
-      />
-      <button onClick={submitQuery}>
-        <GrSearch />
-      </button>
-    </SearchInputBox>
+    <>
+      <SearchInputBox isToggle={isToggle}>
+        <div
+          className="InputBg"
+          onClick={() => {
+            setIsToggle?.(false);
+          }}
+        ></div>
+        <input
+          type="text"
+          placeholder="지금, 관심있는 영화를 검색해 보세요."
+          value={thisText}
+          onChange={onChangeThis}
+        />
+        <button onClick={submitQuery}>
+          <GrSearch />
+        </button>
+      </SearchInputBox>
+    </>
   );
 };
-const SearchInputBox = styled.form`
+const SearchInputBox = styled.form<InputType>`
   width: 40rem;
   height: 3.4rem;
   position: relative;
@@ -56,5 +69,39 @@ const SearchInputBox = styled.form`
       stroke: #9f9f9f;
     }
   }
+
+  @media (max-width: 850px) {
+    height: 2.5rem;
+  }
+  @media (max-width: 500px) {
+    display: ${props => (props.isToggle ? 'block' : 'none')};
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    position: fixed;
+    margin-right: 0;
+    left: 0;
+    top: 0;
+    input {
+      height: 3rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+    }
+    button {
+      right: 3.4rem;
+    }
+    .InputBg {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+    }
+  }
 `;
+
 export default SearchInput;
