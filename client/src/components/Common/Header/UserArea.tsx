@@ -220,6 +220,64 @@ const UserAreaWrap = styled.div`
       background-color: var(--theme-hover-color);
     }
   }
+
+  @media (max-width: 850px) {
+    .hashArea {
+      > button {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+    .headerWriteBtn {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin: 0 0.5rem;
+    }
+    .myArea {
+      > button {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+    .myArea {
+      .myBtns {
+        width: 8.5rem;
+        button {
+          font-size: 0.8rem;
+          line-height: 2.5rem;
+        }
+      }
+    }
+  }
+  @media (max-width: 500px) {
+    .hashArea {
+      > button {
+        width: 2.2rem;
+        height: 2.2rem;
+        font-size: 1.2rem;
+      }
+    }
+    .headerWriteBtn {
+      width: 2.2rem;
+      height: 2.2rem;
+      margin: 0 0.5rem;
+    }
+    .myArea {
+      > button {
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+    }
+    .myArea {
+      .myBtns {
+        width: 8.5rem;
+        button {
+          font-size: 0.8rem;
+          line-height: 2.5rem;
+        }
+      }
+    }
+  }
 `;
 
 export default UserArea;
