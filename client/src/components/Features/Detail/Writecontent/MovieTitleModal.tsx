@@ -132,6 +132,24 @@ const ModalContainer = styled.div`
     align-items: center;
     width: 100%;
   }
+
+  @media (max-width: 500px) {
+    width: 80%;
+    height: 50%;
+    & > .result--section {
+      width: 100%;
+      height: 75%;
+    }
+  }
+
+  @media (max-width: 850px) {
+    width: 75%;
+    height: 50%;
+    & > .result--section {
+      width: 100%;
+      height: 75%;
+    }
+  }
 `;
 
 const SearchResultContainer = styled.ul`
@@ -156,6 +174,9 @@ const SearchResultContainer = styled.ul`
     background-color: rgba(255, 255, 255, 0.2);
     background-clip: padding-box;
     border-left: 5px solid transparent;
+  }
+
+  @media (max-width: 500px) {
   }
 `;
 
