@@ -262,7 +262,7 @@ const ButtonList = styled.ul`
   width: 100%;
   padding-bottom: 5rem;
   & > li {
-    width: 15.5%;
+    width: 30%;
   }
   li .clicked {
     background-color: var(--theme-color);

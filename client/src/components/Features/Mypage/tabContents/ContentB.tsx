@@ -121,6 +121,7 @@ const ListOnce = styled.div`
 const ListHead = styled.div`
   display: flex;
   flex-direction: column;
+  width: calc(100% - 9rem);
 `;
 const Titles = styled.div`
   display: flex;
@@ -144,12 +145,12 @@ const Titles = styled.div`
     .title {
       font-weight: 500;
       font-size: 0.9rem;
-      width: 60%;
+      width: 90%;
     }
     .mvTitle {
       font-weight: 500;
       font-size: 0.6rem;
-      width: 30%;
+      width: 50%;
       justify-content: flex-start;
     }
   }
@@ -187,9 +188,6 @@ const ListTail = styled.div`
   justify-content: flex-end;
   button:last-child {
     margin-left: 7px;
-  }
-  @media (max-width: 500px) {
-    width: 9rem;
   }
 `;
 
