@@ -84,6 +84,9 @@ const StyledInnerContainer = styled.div`
   align-items: flex-start;
   margin: 0 auto;
   width: 43rem;
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 const TabList = styled.div`
   width: 100%;

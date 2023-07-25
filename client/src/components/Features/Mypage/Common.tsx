@@ -82,7 +82,7 @@ const TopContainer = styled.div`
   margin: auto;
   display: flex;
   @media (max-width: 500px) {
-    width: 26rem;
+    width: 80%;
     justify-content: center;
   }
 `;
@@ -92,7 +92,7 @@ const UserTopContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   @media (max-width: 500px) {
-    width: 23rem;
+    width: 100%;
   }
 `;
 const User = styled.div`
@@ -126,7 +126,7 @@ const BotContainer = styled.div`
   width: 70%;
   margin: auto;
   @media (max-width: 500px) {
-    width: 26rem;
+    width: 30%;
   }
 `;
 
@@ -137,7 +137,7 @@ const UserBotContainer = styled.div`
   font-size: large;
   border-bottom: 2px solid var(--ghost-color);
   @media (max-width: 500px) {
-    width: 20rem;
+    width: 18rem;
     padding: 1rem 0;
     font-size: small;
   }
@@ -152,6 +152,14 @@ const UserInfo = styled.div`
   }
   .last-desc {
     margin-left: 9rem;
+  }
+  @media (max-width: 500px) {
+    .desc {
+      margin-left: 5rem;
+    }
+    .last-desc {
+      margin-left: 5.9rem;
+    }
   }
 `;
 

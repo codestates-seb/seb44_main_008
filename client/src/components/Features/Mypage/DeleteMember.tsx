@@ -41,5 +41,8 @@ const DeleteButton = styled.button`
   background-color: var(--main-gray-color);
   border-radius: 7px;
   color: var(--footer-icon-color);
+  @media (max-width: 500px) {
+    width: 70%;
+  }
 `;
 export default DeleteMember;
