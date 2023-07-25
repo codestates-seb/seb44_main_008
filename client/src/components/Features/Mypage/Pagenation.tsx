@@ -35,6 +35,11 @@ const StyledButton = styled.button`
       background-color: var(--theme-hover-color);
     }
   }
+  @media (max-width: 500px) {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.6rem;
+  }
 `;
 
 const Pagination: React.FC<PaginationProps> = ({

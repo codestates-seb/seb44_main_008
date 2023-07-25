@@ -115,11 +115,13 @@ const ListOnce = styled.div`
   cursor: pointer;
   @media (max-width: 500px) {
     padding: 1rem 1rem;
+    margin-bottom: 1.5rem;
   }
 `;
 const ListHead = styled.div`
   display: flex;
   flex-direction: column;
+  width: calc(100% - 9rem);
 `;
 const Titles = styled.div`
   display: flex;
@@ -143,12 +145,12 @@ const Titles = styled.div`
     .title {
       font-weight: 500;
       font-size: 0.9rem;
-      width: 70%;
+      width: 90%;
     }
     .mvTitle {
       font-weight: 500;
       font-size: 0.6rem;
-      width: 7rem;
+      width: 50%;
       justify-content: flex-start;
     }
   }
@@ -183,9 +185,9 @@ const AuthorInfo = styled.div`
 const ListTail = styled.div`
   display: flex;
   width: 9rem;
-  justify-content: space-between;
-  @media (max-width: 500px) {
-    width: 100%;
+  justify-content: flex-end;
+  button:last-child {
+    margin-left: 7px;
   }
 `;
 

@@ -135,6 +135,12 @@ const InputWrapper = styled.div`
   flex-direction: column;
   height: 20rem;
   justify-content: space-around;
+  @media (max-width: 500px) {
+    input {
+      width: 100%;
+    }
+    width: 100%;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -142,5 +148,8 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
   width: 55%;
   padding: 4rem 0;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 export default Editpassword;

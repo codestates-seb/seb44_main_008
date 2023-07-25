@@ -104,6 +104,7 @@ const ListOnce = styled.div`
   cursor: pointer;
   @media (max-width: 500px) {
     padding: 1rem 1rem;
+    margin-bottom: 1.5rem;
   }
 `;
 const ListHead = styled.div`
