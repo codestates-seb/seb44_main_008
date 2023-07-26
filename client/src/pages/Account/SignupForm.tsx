@@ -59,37 +59,44 @@ const SignupForm = () => {
   //이메일 유효성
   const emailRegex =
     /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+  //비밀번호 유효성
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
   // 2페이지로 넘어가는 버튼
   const ClickNextHandle = () => {
-    if (!imgfile) {
-      setIsImg(false);
-    } else {
-      setIsImg(true);
-    }
     if (email.length === 0) {
       setIsEmail(false);
-    }
-    if (!emailRegex.test(email)) {
+    } else if (!emailRegex.test(email)) {
       setEmailMsg('이메일 형식이 틀렸습니다.');
       setIsEmail(false);
+    } else {
+      setIsEmail(true);
     }
     if (password.length === 0) {
       setIsPassword(false);
+    } else if (passwordRegex.test(password) === false) {
+      setPasswordMsg('숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요.');
+      setIsPassword(false);
+    } else {
+      setIsPassword(true);
     }
     if (passwordConfirm.length === 0) {
       setIsPasswordConfirm(false);
+    } else if (password !== passwordConfirm) {
+      setPasswordConfirmMsg('비밀번호가 다릅니다. 확인해주세요.');
+      setIsPasswordConfirm(false);
+    } else {
+      setIsPasswordConfirm(true);
     }
     if (
-      imgfile &&
       email.length !== 0 &&
       emailRegex.test(email) === true &&
       password.length !== 0 &&
-      passwordConfirm.length !== 0
+      passwordRegex.test(password) === true &&
+      passwordConfirm.length !== 0 &&
+      password === passwordConfirm
     ) {
       setPage(2);
-    } else if (emailRegex.test(email) === false) {
-      setEmailMsg('이메일 형식이 틀렸습니다.');
     }
   };
 
@@ -98,12 +105,6 @@ const SignupForm = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const emailCurrent = e.target.value;
       setEmail(emailCurrent);
-      if (!emailRegex.test(emailCurrent)) {
-        setEmailMsg('이메일 형식이 틀렸습니다.');
-        setIsEmail(false);
-      } else {
-        setIsEmail(true);
-      }
     },
     [],
   );
@@ -111,18 +112,8 @@ const SignupForm = () => {
   //비밀번호 유효성검사
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const passwordRegex =
-        /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
       const passwordCurrent = e.target.value;
       setPassword(passwordCurrent);
-      if (!passwordRegex.test(passwordCurrent)) {
-        setPasswordMsg(
-          '숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요.',
-        );
-        setIsPassword(false);
-      } else {
-        setIsPassword(true);
-      }
     },
     [],
   );
@@ -132,15 +123,8 @@ const SignupForm = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const passwordConfirmCurrent = e.target.value;
       setPasswordConfirm(passwordConfirmCurrent);
-
-      if (password === passwordConfirmCurrent) {
-        setIsPasswordConfirm(true);
-      } else {
-        setPasswordConfirmMsg('비밀번호가 다릅니다. 확인해주세요.');
-        setIsPasswordConfirm(false);
-      }
     },
-    [password],
+    [],
   );
 
   const onClickTag = useCallback(
@@ -408,7 +392,8 @@ const SignupForm = () => {
                 <span>{nicknameMsg}</span>
               ) : null}
             </div>
-            <div className="inputBox">
+            <div className="inputBox birthInput">
+              <p className="birthtxt">생년월일</p>
               <Input
                 id="birth"
                 type="date"
