@@ -84,6 +84,7 @@ const TopContainer = styled.div`
   @media (max-width: 500px) {
     width: 80%;
     justify-content: center;
+    height: 4rem;
   }
 `;
 const UserTopContainer = styled.div`
@@ -140,6 +141,7 @@ const UserBotContainer = styled.div`
     width: 18rem;
     padding: 1rem 0;
     font-size: small;
+    margin-top: 0.5rem;
   }
 `;
 const UserInfo = styled.div`
