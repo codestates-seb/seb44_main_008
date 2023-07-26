@@ -4,11 +4,11 @@ import { GrSearch } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
 
 type InputType = {
-  isToggle?: boolean;
+  istoggle?: boolean | string;
   setIsToggle?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
 };
 
-const SearchInput: React.FC<InputType> = ({ isToggle, setIsToggle }) => {
+const SearchInput: React.FC<InputType> = ({ istoggle, setIsToggle }) => {
   const [thisText, setThisText] = useState('');
   const navigate = useNavigate();
   const onChangeThis = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +19,7 @@ const SearchInput: React.FC<InputType> = ({ isToggle, setIsToggle }) => {
   };
   return (
     <>
-      <SearchInputBox isToggle={isToggle}>
+      <SearchInputBox istoggle={istoggle?.toString()}>
         <div
           className="InputBg"
           onClick={() => {
@@ -74,7 +74,7 @@ const SearchInputBox = styled.form<InputType>`
     height: 2.5rem;
   }
   @media (max-width: 500px) {
-    display: ${props => (props.isToggle ? 'block' : 'none')};
+    display: ${props => (props.istoggle === 'true' ? 'block' : 'none')};
     width: 100%;
     height: 100%;
     z-index: 100;
