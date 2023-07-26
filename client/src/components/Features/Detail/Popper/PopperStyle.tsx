@@ -63,6 +63,8 @@ export const PopperBox = styled.div`
                 margin-left: -5px;
                 img {
                   width: 100%;
+                  height: 100%;
+                  object-fit: cover;
                 }
               }
             }
@@ -162,6 +164,84 @@ export const PopperBox = styled.div`
     button {
       display: flex;
       justify-content: center;
+    }
+  }
+
+  @media (max-width: 850px) {
+    background-color: rgba(255, 255, 255, 1);
+    .popperTitle {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 1.1rem;
+      line-height: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .popperWrite {
+      padding: 1rem;
+    }
+    .popperDetail {
+      padding: 1.2rem;
+      h4 {
+        font-size: 1.1rem;
+      }
+      ol {
+        margin: 0.8rem 0;
+        li {
+          font-size: 0.9rem;
+          line-height: 1.2rem;
+        }
+      }
+    }
+  }
+  @media (max-width: 500px) {
+    padding: 1.2rem 0.8rem;
+    .popperList {
+      ul {
+        & > li {
+          padding: 0.8rem;
+          button {
+            li {
+              font-size: 0.7rem;
+              line-height: 1.1rem;
+            }
+            & > div {
+              .profileImgWrap {
+                .imgBox {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .popperTitle {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 1.1rem;
+      line-height: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .popperWrite {
+      padding: 1rem;
+    }
+    .popperDetail {
+      padding: 1rem;
+      h4 {
+        font-size: 1rem;
+      }
+      ol {
+        margin: 0.6rem 0;
+        li {
+          font-size: 0.8rem;
+          line-height: 1.1rem;
+        }
+      }
+      p {
+        font-size: 0.8rem;
+      }
+    }
+    .popperButtonWrap {
+      margin-top: 1rem;
     }
   }
 `;

@@ -134,6 +134,8 @@ const DetailSection = styled.div`
         margin: 0 0.6rem 0 1.2rem;
         img {
           width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
     }
@@ -159,6 +161,57 @@ const DetailSection = styled.div`
   .detailContent {
     color: var(--white-color);
     line-height: 1.5rem;
+  }
+  @media (max-width: 850px) {
+    h4 {
+      font-size: 1.7rem;
+    }
+    .movieInfo {
+      margin: 0.6rem 0;
+      p {
+        font-size: 1.1rem;
+      }
+    }
+    .detailContent {
+      line-height: 1.3rem;
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 500px) {
+    h4 {
+      font-size: 1.2rem;
+    }
+    .movieInfo {
+      margin: 0.6rem 0;
+      p {
+        font-size: 1rem;
+      }
+    }
+    .detailContent {
+      line-height: 1.1rem;
+      font-size: 0.7rem;
+    }
+    .movieInfo {
+      ul {
+        li {
+          padding: 0.4rem 0.6rem;
+          font-size: 0.4rem;
+        }
+      }
+    }
+    .writeInfo {
+      & > div:first-child {
+        svg {
+          width: 1.5rem;
+        }
+        span {
+          margin-bottom: 8px;
+        }
+      }
+    }
+    div {
+      font-size: 0.8rem;
+    }
   }
 `;
 export default Detail;
