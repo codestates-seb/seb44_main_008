@@ -10,7 +10,7 @@ import { GrSearch } from 'react-icons/gr';
 import { useState } from 'react';
 
 const Header = () => {
-  const [isToggle, setIsToggle] = useState<boolean>(false);
+  const [istoggle, setIsToggle] = useState<boolean>(false);
 
   const userCheck = useSelector((state: RootState) => state.user.isLoggedIn);
 
@@ -27,11 +27,11 @@ const Header = () => {
 
         {userCheck ? (
           <ButtonAlign>
-            <SearchInput isToggle={isToggle} setIsToggle={setIsToggle} />
+            <SearchInput istoggle={istoggle} setIsToggle={setIsToggle} />
             <button
               className="seachButton"
               onClick={() => {
-                setIsToggle(!isToggle);
+                setIsToggle(!istoggle);
               }}
             >
               <GrSearch />

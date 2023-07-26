@@ -256,6 +256,10 @@ const UserAreaWrap = styled.div`
         height: 2.2rem;
         font-size: 1.2rem;
       }
+      .hashBtns {
+        width: 100%;
+        box-sizing: border-box;
+      }
     }
     .headerWriteBtn {
       width: 2.2rem;
