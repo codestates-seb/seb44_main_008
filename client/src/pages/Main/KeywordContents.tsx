@@ -4,10 +4,11 @@ import isPropValid from '@emotion/is-prop-valid';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
-import ErrorPage from '../ErrorPage/ErrorPage';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getKeywordSearchItems } from '../../api/reviewItem/searchItem';
+import SearchErrorPage from '../ErrorPage/SearchErrorPage';
+import Loading from '../../components/Common/Loading/Loading';
 
 const KeywordContents = () => {
   const { keywordParam } = useParams<{ keywordParam: string }>();
@@ -33,7 +34,21 @@ const KeywordContents = () => {
   );
 
   if (error) {
-    return <ErrorPage />;
+    return <SearchErrorPage />;
+  }
+
+  if (
+    isSuccess &&
+    (!keywordSearchItems || keywordSearchItems.pages.length === 0)
+  ) {
+    return (
+      <>
+        <SearchErrorPage />
+      </>
+    );
+  }
+  if (isLoading) {
+    return <Loading />;
   }
   if (isSuccess) {
     return (
