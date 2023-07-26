@@ -118,7 +118,7 @@ const Titles = styled.div`
     .title {
       font-weight: 500;
       font-size: 0.9rem;
-      width: 70%;
+      width: 100%;
     }
   }
 `;
