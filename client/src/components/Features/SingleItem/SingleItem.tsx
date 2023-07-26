@@ -127,5 +127,8 @@ const SingleItemMeta = styled.div<SingleItemType>`
     & > h1 {
       font-size: 0.9rem;
     }
+    & > div {
+      font-size: 0.7rem;
+    }
   }
 `;

@@ -267,7 +267,7 @@ const WriteWrapper = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: 90%;
+    width: 100%;
 
     & > button {
       margin-top: 2rem;
@@ -279,6 +279,18 @@ const WriteWrapper = styled.div`
       & > .movie--title--div {
         width: 100%;
         margin-top: 1rem;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    & > div {
+      & > button {
+        margin-top: 1.5rem;
+      }
+
+      & > .input--wrapper {
+        width: 75%;
       }
     }
   }
@@ -307,6 +319,12 @@ const WriteImgDiv = styled.div`
   & > input {
     display: none;
   }
+
+  @media (max-width: 500px) {
+    width: 80%;
+    height: 13rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const TagContainer = styled.div`
@@ -314,6 +332,11 @@ const TagContainer = styled.div`
 
   width: 80%;
   margin-top: 2rem;
+
+  @media (max-width: 500px) {
+    width: 85%;
+    margin-top: 1rem;
+  }
 `;
 
 const WriteTagMeta = styled.div<Props>`
@@ -336,6 +359,10 @@ const WriteTagMeta = styled.div<Props>`
     padding-top: 0.5rem;
     font-size: 0.8rem;
   }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const WriteTagList = styled.ul`
@@ -348,6 +375,21 @@ const WriteTagList = styled.ul`
 
   & > li {
     width: 15.5%;
+  }
+  @media (max-width: 500px) {
+    justify-content: center;
+    width: 100%;
+    padding-left: 0;
+
+    & > li {
+      width: 25%;
+    }
+  }
+
+  @media (max-width: 850px) {
+    & > li {
+      width: 30%;
+    }
   }
 `;
 
@@ -369,5 +411,10 @@ const WriteContentInput = styled.textarea<Props>`
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 1rem;
+    min-height: 20rem;
   }
 `;
