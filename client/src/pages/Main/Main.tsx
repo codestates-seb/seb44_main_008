@@ -25,10 +25,10 @@ const Main = () => {
     0: {
       items: 1,
     },
-    550: {
+    360: {
       items: 2,
     },
-    750: {
+    620: {
       items: 3,
     },
     976: {
@@ -184,6 +184,12 @@ const SpecialContainer = styled.div`
     padding-left: 3rem;
     color: white;
   }
+  @media (max-width: 500px) {
+    & > h1 {
+      font-size: 1.2rem;
+      padding-left: 1rem;
+    }
+  }
 
   & .alice-carousel__dots {
     & > .__active {
@@ -213,6 +219,14 @@ const DefaultContainer = styled.div`
     & > a {
       color: white;
       padding-right: 2rem;
+    }
+  }
+  @media (max-width: 500px) {
+    & > div {
+      & > h1 {
+        font-size: 1.2rem;
+        padding-left: 1rem;
+      }
     }
   }
 `;

@@ -40,11 +40,27 @@ export default SingleItem;
 // Styled-Component
 const SingleItemDiv = styled.div<SingleItemType>`
   width: ${props => (props.isMain ? '27rem' : '25rem')};
-  @media (max-width: 1500px) {
+
+  @media (max-width: 1100px) {
     width: ${props => (props.isMain ? '19rem' : '19rem')};
   }
-  @media (max-width: 1200px) {
-    width: ${props => (props.isMain ? '15rem' : '15rem')};
+  @media (max-width: 850px) {
+    width: ${props => (props.isMain ? '15rem' : '18rem')};
+  }
+  @media (max-width: 800px) {
+    width: ${props => (props.isMain ? '14rem' : '18rem')};
+  }
+  @media (max-width: 730px) {
+    width: ${props => (props.isMain ? '13rem' : '17rem')};
+  }
+  @media (max-width: 500px) {
+    width: ${props => (props.isMain ? '13.5rem' : '14.5rem')};
+  }
+  @media (max-width: 475px) {
+    width: ${props => (props.isMain ? '11rem' : '14.5rem')};
+  }
+  @media (max-width: 390px) {
+    width: ${props => (props.isMain ? '9.5rem' : '12.5rem')};
   }
   display: flex;
   flex-direction: column;
@@ -53,11 +69,18 @@ const SingleItemDiv = styled.div<SingleItemType>`
 
 const ImgDiv = styled.div<SingleItemType>`
   height: ${props => (props.isMain ? '18rem' : '20rem')};
-  @media (max-width: 1500px) {
+
+  @media (max-width: 1100px) {
     height: ${props => (props.isMain ? '15rem' : '17rem')};
   }
-  @media (max-width: 1200px) {
+  @media (max-width: 850px) {
     height: ${props => (props.isMain ? '13rem' : '15rem')};
+  }
+  @media (max-width: 500px) {
+    height: ${props => (props.isMain ? '11rem' : '11rem')};
+  }
+  @media (max-width: 390px) {
+    height: ${props => (props.isMain ? '9.5rem' : '11.5rem')};
   }
   overflow: hidden;
   border-radius: 1rem;
@@ -85,6 +108,9 @@ const SingleItemMeta = styled.div<SingleItemType>`
     @media (max-width: 1500px) {
       font-size: ${props => (props.isMain ? '1rem' : '1rem')};
     }
+    @media (max-width: 500px) {
+      font-size: ${props => (props.isMain ? '1rem' : '1rem')};
+    }
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -96,5 +122,10 @@ const SingleItemMeta = styled.div<SingleItemType>`
     padding-top: 0.5rem;
     display: flex;
     justify-content: space-between;
+  }
+  @media (max-width: 500px) {
+    & > h1 {
+      font-size: 0.9rem;
+    }
   }
 `;

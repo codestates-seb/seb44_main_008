@@ -105,6 +105,14 @@ const DefaultContainer = styled.div`
       padding-right: 2rem;
     }
   }
+  @media (max-width: 500px) {
+    & > div {
+      & > h1 {
+        font-size: 1.2rem;
+        padding-left: 1.2rem;
+      }
+    }
+  }
 `;
 
 const StaticContainer = styled.div`
@@ -116,6 +124,11 @@ const StaticContainer = styled.div`
   width: 100%;
   padding: 1rem;
   gap: 2.5rem;
+
+  @media (max-width: 500px) {
+    padding: 0.5rem;
+    gap: 1.5rem;
+  }
 `;
 
 const Loader = styled.div`
