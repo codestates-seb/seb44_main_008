@@ -93,9 +93,21 @@ const TabList = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: 2.2rem;
+  @media (max-width: 600px) {
+    button {
+      margin: 0 3px;
+      width: 23%;
+    }
+  }
   @media (max-width: 500px) {
     button {
       margin: 0 3px;
+      font-size: 0.3rem;
+    }
+  }
+  @media (max-width: 395px) {
+    button {
+      width: 30%;
     }
   }
 `;
