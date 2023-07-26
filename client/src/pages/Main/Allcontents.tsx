@@ -129,6 +129,10 @@ const StaticContainer = styled.div`
     padding: 0.5rem;
     gap: 1.5rem;
   }
+  @media (max-width: 850px) {
+    padding: 0.3rem;
+    gap: 1.9rem;
+  }
 `;
 
 const Loader = styled.div`

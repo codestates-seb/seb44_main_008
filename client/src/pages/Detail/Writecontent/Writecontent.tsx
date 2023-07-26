@@ -313,7 +313,7 @@ const TagContainer = styled.div`
   margin-top: 2rem;
 
   @media (max-width: 500px) {
-    width: 100%;
+    width: 85%;
     margin-top: 1rem;
   }
 `;

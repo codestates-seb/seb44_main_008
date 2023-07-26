@@ -31,7 +31,7 @@ const Main = () => {
     620: {
       items: 3,
     },
-    976: {
+    1050: {
       items: 4,
     },
     1600: {
@@ -183,6 +183,12 @@ const SpecialContainer = styled.div`
     font-weight: 700;
     padding-left: 3rem;
     color: white;
+  }
+  @media (max-width: 1100px) {
+    & > h1 {
+      font-size: 1.6rem;
+      padding-left: 1.3rem;
+    }
   }
   @media (max-width: 500px) {
     & > h1 {
