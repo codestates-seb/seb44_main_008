@@ -15,7 +15,11 @@ const SearchInput: React.FC<InputType> = ({ istoggle, setIsToggle }) => {
     setThisText(e.currentTarget.value);
   };
   const submitQuery = () => {
-    navigate(`/main/search/${thisText}`);
+    if (thisText === '') {
+      return;
+    } else {
+      navigate(`/main/search/${thisText}`);
+    }
   };
   return (
     <>
