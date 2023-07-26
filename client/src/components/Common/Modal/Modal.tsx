@@ -103,9 +103,15 @@ const ModalView = styled.div`
     svg {
       font-size: 1.2rem;
       path {
-        stroke: var(--white-color);
+        stroke: var(--main-dark-color);
       }
     }
+  }
+  @media (max-width: 850px) {
+    width: 60%;
+  }
+  @media (max-width: 500px) {
+    width: 70%;
   }
 `;
 const ModalPopperBox = styled.div`

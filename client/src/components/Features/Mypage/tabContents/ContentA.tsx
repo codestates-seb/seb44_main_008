@@ -174,6 +174,14 @@ const ListTail = styled.div`
       height: 1.5rem;
     }
   }
+  @media (max-width: 500px) {
+    button {
+      > svg {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+  }
 `;
 
 export default ContentA;
