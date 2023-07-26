@@ -79,6 +79,18 @@ export const AccountWrap = styled.div`
     & > span {
       color: var(--white-color);
     }
+    &.birthInput {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        color: var(--white-color);
+        opacity: 0.8;
+      }
+      > div {
+        width: 80%;
+      }
+    }
   }
   @media (max-width: 1100px) {
   }

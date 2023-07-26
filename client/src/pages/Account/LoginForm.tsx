@@ -25,20 +25,17 @@ const LoginForm = () => {
   const [password, setPassword] = useState<string>('');
   const [isPassword, setIsPassword] = useState<boolean>(true);
 
+  //이메일 유효성
+  const emailRegex =
+    /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+  //비밀번호 유효성
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
   //이메일 유효성검사
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const emailRegex =
-        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
       const emailCurrent = e.target.value;
       setEmail(emailCurrent);
-      if (!emailRegex.test(emailCurrent)) {
-        setEmailMsg('이메일 형식이 틀렸습니다.');
-        setIsEmail(false);
-      } else {
-        setEmailMsg('');
-        setIsEmail(true); // 유효성 검사 통과 시 true로 설정
-      }
     },
     [],
   );
@@ -52,22 +49,31 @@ const LoginForm = () => {
   );
 
   const onSubmit: SubmitHandler<LoginType> = () => {
-    if (email.length === 0 || emailMsg) {
+    if (email.length === 0) {
       setIsEmail(false);
-      return;
+    } else if (!emailRegex.test(email)) {
+      setEmailMsg('이메일 형식이 틀렸습니다.');
+      setIsEmail(false);
     } else {
       setIsEmail(true);
     }
     if (password.length === 0) {
       setIsPassword(false);
-      return;
+    } else if (passwordRegex.test(password) === false) {
+      setIsPassword(false);
     } else {
       setIsPassword(true);
     }
-    SubmitEvent.mutate({
-      email: email,
-      password: password,
-    });
+    if (
+      email.length !== 0 &&
+      emailRegex.test(email) === true &&
+      password.length !== 0
+    ) {
+      SubmitEvent.mutate({
+        email: email,
+        password: password,
+      });
+    }
   };
 
   const SubmitEvent = useMutation({

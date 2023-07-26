@@ -145,11 +145,11 @@ const Start = () => {
 
   return (
     <LandingWrap style={{ backgroundImage: `url(${popbg})` }}>
+      <LandingHead>
+        <Button value="Login" theme="variant" onClick={clickHandler} />
+      </LandingHead>
       <SectionsContainer {...options}>
         <Section className="page1 Section">
-          <div className="landingHeader">
-            <Button value="Login" theme="variant" onClick={clickHandler} />
-          </div>
           <div className="titlebox">
             <h1 className="title">
               <span>We are POPCORNS</span>
@@ -287,6 +287,16 @@ const Start = () => {
 
 export default Start;
 
+const LandingHead = styled.div`
+  width: 100%;
+  padding: 1.25rem;
+  text-align: right;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+`;
+
 const LandingWrap = styled.div`
   background-position: center;
   background-size: cover;
@@ -294,16 +304,12 @@ const LandingWrap = styled.div`
   background-attachment: fixed;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: multiply;
-  .landingHeader {
-    width: 100%;
-    padding: 1.25rem;
-    text-align: right;
-  }
+
   .titlebox {
     width: 100%;
     position: relative;
     text-align: center;
-    margin-top: 10rem;
+    margin-top: 12rem;
     h1,
     h2 {
       font-size: 4rem;
@@ -517,6 +523,10 @@ const LandingWrap = styled.div`
   @media (max-width: 1100px) {
     .landingHeader {
       padding: 1rem;
+      position: fixed;
+      width: 100%;
+      left: 0;
+      top: 0;
     }
     .titlebox {
       h1,
@@ -559,9 +569,6 @@ const LandingWrap = styled.div`
     }
   }
   @media (max-width: 500px) {
-    .landingHeader {
-      padding: 1rem;
-    }
     .titlebox {
       h1,
       h2 {
