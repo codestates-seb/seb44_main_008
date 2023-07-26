@@ -83,7 +83,7 @@ const PopperWrite: React.FC<PopperWriteProps> = ({
     }
     if (person === undefined || person <= 1) {
       setIsPerson(false);
-      alert('모집인원은 1명이상이여야 합니다.');
+      alert('모집인원은 2명이상이여야 합니다.');
     }
     if (body.length === 0) {
       setIsBody(false);

@@ -178,13 +178,14 @@ const Writecontent = () => {
               width="100%"
             ></Input>
             <div className="movie--title--div" onClick={onClickMovieTitle}>
-              <Input
+              <InputStyled
                 value={movieTitle}
-                placeholder="영화 제목을 입력하세요."
-                isvalid={movieTitleErr}
                 onChange={onChangeInput}
+                placeholder="영화 제목을 입력하세요."
+                isvalid={movieTitleErr.toString()}
                 width="100%"
-              ></Input>
+                readOnly
+              />
             </div>
           </div>
 
@@ -395,5 +396,32 @@ const WriteContentInput = styled.textarea<Props>`
   @media (max-width: 500px) {
     font-size: 1rem;
     min-height: 20rem;
+  }
+`;
+
+const InputStyled = styled.input<Props>`
+  background-color: transparent;
+  color: var(--white-color);
+  position: relative;
+  width: ${({ width }) => (width ? width : '25rem')};
+  border: none;
+  padding: 0.7rem;
+  font-size: large;
+  &:focus {
+    outline: none;
+  }
+  border-bottom: ${({ isvalid }) =>
+    isvalid === 'true'
+      ? '2px solid var(--ghost-color)'
+      : '2px solid var(--theme-color)'};
+  animation: ${({ isvalid }) =>
+    isvalid === 'false' ? 'vibration 0.1s 4' : ''};
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
   }
 `;
