@@ -142,6 +142,8 @@ const CommentListWrap = styled.ul`
           margin-right: 0.8rem;
           img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
         }
         p {
@@ -186,6 +188,42 @@ const CommentListWrap = styled.ul`
         align-items: center;
         color: #fff;
         font-size: 0.7rem;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    li {
+      padding: 0.9rem 0.6rem;
+      margin-top: 1rem;
+      div {
+        .userBox {
+          .useImg {
+            width: 2.2rem;
+            height: 2.2rem;
+            margin-right: 0.6rem;
+          }
+          p {
+            span {
+              font-size: 0.8rem;
+            }
+            span:first-child {
+              font-size: 1rem;
+              margin-bottom: 0.5rem;
+            }
+          }
+        }
+      }
+      .commetTxt {
+        p {
+          font-size: 0.9rem;
+          line-height: 1.3rem;
+        }
+        .buttonWrap {
+          svg {
+            width: 1.6rem;
+          }
+        }
       }
     }
   }
