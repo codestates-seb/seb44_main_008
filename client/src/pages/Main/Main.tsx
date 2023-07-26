@@ -104,7 +104,6 @@ const Main = () => {
             mouseTracking
             infinite={true}
             animationDuration={2000}
-            disableButtonsControls
             controlsStrategy="alternate"
             responsive={responsive}
             autoPlay
@@ -119,7 +118,6 @@ const Main = () => {
             infinite={true}
             animationDuration={2000}
             controlsStrategy="alternate"
-            disableButtonsControls
             responsive={responsive}
             autoPlay
             items={popularItems}
@@ -215,7 +213,7 @@ const DefaultContainer = styled.div`
 
   & > div {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     & > h1 {
       font-size: 1.5rem;
       font-weight: 700;
