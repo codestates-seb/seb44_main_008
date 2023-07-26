@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import isPropValid from '@emotion/is-prop-valid';
-
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
 
 import ErrorPage from '../ErrorPage/ErrorPage';
@@ -182,19 +181,6 @@ const SpecialContainer = styled.div`
     padding-left: 3rem;
     color: white;
   }
-  @media (max-width: 1100px) {
-    & > h1 {
-      font-size: 1.6rem;
-      padding-left: 1.3rem;
-    }
-  }
-  @media (max-width: 500px) {
-    & > h1 {
-      font-size: 1.2rem;
-      padding-left: 1rem;
-    }
-  }
-
   & .alice-carousel__dots {
     & > .__active {
       background-color: #f20000;
@@ -203,6 +189,54 @@ const SpecialContainer = styled.div`
   .alice-carousel {
     width: 120%;
     margin-left: -10%;
+    .alice-carousel__prev-btn {
+      position: absolute;
+      font-size: 27px;
+      bottom: -18px;
+      text-align: right;
+      right: 56.54%;
+      width: 50%;
+    }
+    .alice-carousel__next-btn {
+      position: absolute;
+      font-size: 27px;
+      bottom: -18px;
+      text-align: left;
+      left: 56.54%;
+      width: 50%;
+    }
+    .alice-carousel__prev-btn-item,
+    .alice-carousel__next-btn-item {
+      color: #fff;
+    }
+  }
+  @media (max-width: 1100px) {
+    & > h1 {
+      font-size: 1.6rem;
+      padding-left: 1.3rem;
+    }
+    .alice-carousel {
+      .alice-carousel__prev-btn {
+        right: 60%;
+      }
+      .alice-carousel__next-btn {
+        left: 60%;
+      }
+    }
+  }
+  @media (max-width: 500px) {
+    & > h1 {
+      font-size: 1.2rem;
+      padding-left: 1rem;
+    }
+    .alice-carousel {
+      .alice-carousel__prev-btn {
+        right: 70%;
+      }
+      .alice-carousel__next-btn {
+        left: 70%;
+      }
+    }
   }
 `;
 const DefaultContainer = styled.div`
@@ -214,6 +248,9 @@ const DefaultContainer = styled.div`
   & > div {
     display: flex;
     justify-content: space-evenly;
+    &:first-child {
+      justify-content: space-between;
+    }
     & > h1 {
       font-size: 1.5rem;
       font-weight: 700;

@@ -16,9 +16,13 @@ import Editpassword from '../MyPage/Editpassword';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import TagContents from '../Main/TagContents';
 import KeywordContents from '../Main/KeywordContents';
+import { RootState } from '../../redux/store/store';
+import { useSelector } from 'react-redux';
 
 const Routers = () => {
   const hideNavbar = ['/', '/start', '', '/#page1'];
+
+  const userCheck = useSelector((state: RootState) => state.user.isLoggedIn);
 
   const [isLayout, setIsLayout] = useState(
     hideNavbar.includes(window.location.pathname),
@@ -32,8 +36,13 @@ const Routers = () => {
       {!isLayout && <Header />}
       <Routes>
         <Route path="/" element={<Start />} />
-        <Route path="/account/signup" element={<Signup />} />
-        <Route path="/account/login" element={<Login />} />
+        {!userCheck && (
+          <>
+            <Route path="/account/signup" element={<Signup />} />
+            <Route path="/account/login" element={<Login />} />
+          </>
+        )}
+
         <Route path="/main" element={<Main />} />
         <Route path="/main/contents" element={<Allcontents />} />
         <Route path="/main/contents/:tagIdParam" element={<TagContents />} />
