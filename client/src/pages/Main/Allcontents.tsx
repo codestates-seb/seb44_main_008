@@ -89,7 +89,10 @@ const DefaultContainer = styled.div`
   flex-direction: column;
 
   width: 100%;
-  margin-top: 6.5rem;
+  padding-top: 6.5rem;
+
+  min-height: calc(100% - 8rem);
+  box-sizing: border-box;
 
   & > div {
     display: flex;
