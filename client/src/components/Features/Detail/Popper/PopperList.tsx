@@ -20,12 +20,13 @@ const PopperList: React.FC<PopperListProps> = ({
     setCurrentRender('Detail');
     setCurrentID(value);
   }, []);
+  const reverseGroup = groups.slice().reverse();
   return (
     <PopperBox>
       <h2 className="popperTitle">지금 이 영화를 같이 보고 싶어하는 팝퍼🍿</h2>
       <div className="popperList">
         <ul>
-          {groups.map(item => {
+          {reverseGroup.map(item => {
             return (
               <li key={item.groupId}>
                 <button onClick={clickList} value={item.groupId}>
