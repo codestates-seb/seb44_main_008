@@ -39,8 +39,8 @@ const ToastNotification = ({
 
 const Container = styled.div`
   z-index: 99;
-  background-color: rgba(255, 127, 80, 0.8);
-  border: 1px solid rgba(255, 127, 80, 0.1);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   height: 3rem;
@@ -50,8 +50,8 @@ const Container = styled.div`
   font-weight: bold;
   color: black;
   position: fixed;
-  top: 13%;
-  right: 7%;
+  bottom: 30px;
+  right: 30px;
   img {
     width: 25px;
     height: auto;
@@ -59,25 +59,25 @@ const Container = styled.div`
   }
   @keyframes slideIn {
     from {
-      transform: translateX(-100%);
+      transform: translateY(100px);
     }
     to {
-      transform: translateX(0%);
+      transform: translateY(0);
     }
   }
   @keyframes slideOut {
     from {
-      transform: translateX(0%);
+      transform: translateY(0);
     }
     to {
-      transform: translateX(-300%);
+      transform: translateY(100px);
     }
   }
-  .openAnimation {
+  &.openAnimation {
     animation: slideIn 0.5s ease-in-out 0s 1 normal forwards;
   }
-  .closeAnimation {
-    animation: slideOut 0.5s ease-in-out 0s 1 normal forwards;
+  &.closeAnimation {
+    animation: slideIn 0.5s ease-in-out 0s 1 normal forwards;
   }
 `;
 
