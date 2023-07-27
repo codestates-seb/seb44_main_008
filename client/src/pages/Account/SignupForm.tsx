@@ -47,7 +47,6 @@ const SignupForm = () => {
   const [birthMsg, setBirthMsg] = useState<string>('');
 
   // 유효성 검사
-  const [isImg, setIsImg] = useState<boolean>(true);
   const [isEmail, setIsEmail] = useState<boolean>(true);
   const [isPassword, setIsPassword] = useState<boolean>(true);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(true);
@@ -294,7 +293,6 @@ const SignupForm = () => {
                   readOnly
                 />
               </div>
-              {!isImg && <span>이미지는 필수 입력입니다.</span>}
             </div>
 
             <div className="inputBox">
