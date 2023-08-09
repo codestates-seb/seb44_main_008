@@ -1,100 +1,11 @@
 import axios from 'axios';
 import { instance } from '../api';
-
-type PostItemType = {
-  post: {
-    title: string;
-    movieId: number;
-    review: string;
-    tags: { tagId: number; tagName: string }[];
-  };
-  thumbnail: File | undefined;
-};
-
-type EditItemType = {
-  reviewId: string | undefined;
-  patch: {
-    title: string | undefined;
-    review: string;
-    tags: Object[];
-  };
-  thumbnail: File | undefined;
-};
-
-type ReviewType = {
-  recommendBoards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-    };
-  }[];
-  popularBoards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-    };
-  }[];
-  boards: {
-    reviewBoardId: number;
-    title: string;
-    thumbnail: string;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-    };
-  }[];
-};
-
-export type PageType = {
-  data: [
-    {
-      createdAt: string;
-      reviewBoardId: number;
-      thumbnail: string;
-      title: string;
-      user: {
-        nickname: string;
-        userId: number;
-      };
-    },
-  ];
-  pageInfo: {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalElements: number;
-  };
-};
-
-type AllItemType = {
-  data: [
-    {
-      createdAt: string;
-      reviewBoardId: number;
-      thumbnail: string;
-      title: string;
-      user: {
-        nickname: string;
-        userId: number;
-      };
-    },
-  ];
-  pageInfo: {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalElements: number;
-  };
-};
+import {
+  AllItemType,
+  EditItemType,
+  PostItemType,
+  ReviewType,
+} from './itemsType';
 
 export const getMainItems = (): Promise<ReviewType> =>
   instance.get('/reviewBoards/main').then(res => res.data.data);

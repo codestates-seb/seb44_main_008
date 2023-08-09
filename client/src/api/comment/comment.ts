@@ -1,33 +1,6 @@
 //댓글 등록, 수정, 특정 댓글 조회, 댓글 전체 조회, 댓글삭제
 import { instance } from '../api';
-
-interface data {
-  commentId: number;
-  content: string;
-}
-
-interface CommentData extends data {
-  like: number;
-  createdAt: string;
-  user: {
-    userId: number;
-    nickname: string;
-  };
-}
-
-interface CommentDatas {
-  comments: {
-    commentId: number;
-    content: string;
-    like: number;
-    createdAt: string;
-    user: {
-      userId: number;
-      nickname: string;
-      profileImage: string;
-    };
-  }[];
-}
+import { CommentData, CommentDatas, data } from './commentType';
 
 export const PostComment = (
   reviewId: string | number | undefined,

@@ -83,18 +83,20 @@ const UserArea = () => {
           <div className="hashBtns" ref={hashMenu}>
             <ul>
               {isSuccess &&
-                tagData.map(tag => {
-                  return (
-                    <li key={tag.tagId}>
-                      <Button
-                        value={`#${tag.tagName}`}
-                        id={tag.tagId}
-                        width={'100%'}
-                        onClick={onClickTagButton}
-                      />
-                    </li>
-                  );
-                })}
+                tagData.map(
+                  (tag: { tagId: number | undefined; tagName: any }) => {
+                    return (
+                      <li key={tag.tagId}>
+                        <Button
+                          value={`#${tag.tagName}`}
+                          id={tag.tagId}
+                          width={'100%'}
+                          onClick={onClickTagButton}
+                        />
+                      </li>
+                    );
+                  },
+                )}
             </ul>
           </div>
         )}
