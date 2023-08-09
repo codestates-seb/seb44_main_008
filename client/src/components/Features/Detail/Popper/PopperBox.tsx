@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import { Group } from '../../../../pages/Detail/Detailcontent/detailType';
 import PopperList from './PopperList';
 import PopperDetail from './PopperDetail';
 import PopperWrite from './PopperWrite';
 import PopperEdit from './PopperEdit';
+import { PopperBoxProps } from './popperType';
 
-type PopperBoxProps = {
-  groups: Group[];
-  reviewId: string;
-  movie: string;
-};
-const PopperBox: React.FC<PopperBoxProps> = ({ groups, reviewId, movie }) => {
+const PopperBox = ({ groups, reviewId, movie }: PopperBoxProps) => {
   const [currentRender, setCurrentRender] = useState('List');
   const [currentId, setCurrentID] = useState(0);
 

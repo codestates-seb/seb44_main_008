@@ -5,20 +5,14 @@ import { PopperBox } from './PopperStyle';
 import { getTodayDate } from '../../../../assets/commonts/common';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { PostPot } from '../../../../api/pot/pot';
-
 import { AxiosError } from '../../../../assets/type/errorType';
+import { PopperWriteProps } from './popperType';
 
-type PopperWriteProps = {
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
-  reviewId: string;
-  movie: string;
-};
-
-const PopperWrite: React.FC<PopperWriteProps> = ({
+const PopperWrite = ({
   setCurrentRender,
   reviewId,
   movie,
-}) => {
+}: PopperWriteProps) => {
   const queryClient = useQueryClient();
 
   const [title, setTitle] = useState<string>('');

@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React from 'react';
 import { GetPotItem, JoinPot } from '../../../../api/pot/pot';
 import {
   DeleteCModal,
@@ -12,22 +11,15 @@ import Button from '../../../Common/Button/Button';
 import Loading from '../../../Common/Loading/Loading';
 import { PopperBox } from './PopperStyle';
 import { AxiosError } from '../../../../assets/type/errorType';
+import { PopperDetailProps } from './popperType';
 
-type PopperDetailProps = {
-  reviewId: string;
-  currentId: number;
-  setCurrentID: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>> | undefined;
-  currentPage: string;
-};
-
-const PopperDetail: React.FC<PopperDetailProps> = ({
+const PopperDetail = ({
   reviewId,
   currentId,
   setCurrentID,
   setCurrentRender,
   currentPage,
-}) => {
+}: PopperDetailProps) => {
   const id = currentId;
   const queryClient = useQueryClient();
   const { openScroll } = useBodyScrollLock();

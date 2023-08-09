@@ -9,24 +9,14 @@ import {
 } from '../../../../api/user/userTab/userTab';
 import Loading from '../../../Common/Loading/Loading';
 import ErrorPage from '../../../../pages/ErrorPage/ErrorPage';
-import { data } from '../../../../api/pot/pot';
+import { data } from '../../../../api/pot/potType';
+import { ModalData, PoppeEditProps } from './popperType';
 
-interface ModalData {
-  groupId: number;
-  modalData: data;
-}
-
-type PoppeEditProps = {
-  currentId: number;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>> | undefined;
-  currentPage: string;
-};
-
-const PopperEdit: React.FC<PoppeEditProps> = ({
+const PopperEdit = ({
   currentId,
   setCurrentRender,
   currentPage,
-}) => {
+}: PoppeEditProps) => {
   const { data, isLoading, isSuccess, error } = useQuery({
     queryKey: ['modalContent', currentId],
     queryFn: () => GetTabCModal(currentId),
