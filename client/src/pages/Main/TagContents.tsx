@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { StyleSheetManager } from 'styled-components';
-
 import isPropValid from '@emotion/is-prop-valid';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getTagSearchItems } from '../../api/reviewItem/searchItem';
 import InfiniteScroll from 'react-infinite-scroller';
-
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
 import ErrorPage from '../ErrorPage/ErrorPage';
 

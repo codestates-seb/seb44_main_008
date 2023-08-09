@@ -4,10 +4,8 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import isPropValid from '@emotion/is-prop-valid';
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
-
 import ErrorPage from '../ErrorPage/ErrorPage';
 import Loading from '../../components/Common/Loading/Loading';
-
 import { getMainItems } from '../../api/reviewItem/reviewItem';
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';

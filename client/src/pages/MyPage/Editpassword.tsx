@@ -11,7 +11,6 @@ const Editpassword = () => {
   const [currentPw, setCurrentPw] = useState('');
   const [editPw, setEditPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
-
   const [currentPwErr, setCurrentPwErr] = useState(true);
   const [editPwErr, setEditPwErr] = useState(true);
   const [confirmPwErr, setConfirmPwErr] = useState(true);

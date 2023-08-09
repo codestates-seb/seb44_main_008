@@ -4,18 +4,7 @@ import { styled } from 'styled-components';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 import { LIMIT } from '../../../../utils/const';
-
-type tabCType = {
-  data2: {
-    groupId: number;
-    title: string;
-    location: string;
-    maxCapacity: number;
-    currentParticipant: number;
-    meetingDate: string;
-    movieTitle: string;
-  }[];
-};
+import { tabCType } from './type';
 
 const ContentC = ({ data2 }: tabCType) => {
   const tabCPost = data2;

@@ -2,9 +2,7 @@ import { useParams } from 'react-router-dom';
 import styled, { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
 import InfiniteScroll from 'react-infinite-scroller';
-
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
-
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getKeywordSearchItems } from '../../api/reviewItem/searchItem';
 import SearchErrorPage from '../ErrorPage/SearchErrorPage';

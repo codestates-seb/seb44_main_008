@@ -2,7 +2,6 @@ import isPropValid from '@emotion/is-prop-valid';
 import React, { useRef, useState } from 'react';
 import { StyleSheetManager, styled } from 'styled-components';
 import { Props } from './type';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { postNewReview } from '../../../api/reviewItem/reviewItem';
@@ -10,22 +9,18 @@ import { getAllTags } from '../../../api/tags/getTags';
 import Button from '../../../components/Common/Button/Button';
 import Input from '../../../components/Common/Input/Input';
 import MovieTitleModal from '../../../components/Features/Detail/Writecontent/MovieTitleModal';
+import { tagItemType } from '../../../api/tags/tagsType';
 
 const Writecontent = () => {
   const [fileURL, setFileURL] = useState<string>('');
   const [file, setFile] = useState<FileList | null>();
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
-
   const [title, setTitle] = useState<string>('');
   const [movieTitle, setMovieTitle] = useState<string>('');
   const [movieId, setMovieId] = useState<number>(0);
-  const [selectedTags, setSelectedTags] = useState<
-    { tagId: number; tagName: string }[]
-  >([]);
+  const [selectedTags, setSelectedTags] = useState<tagItemType[]>([]);
   const [content, setContent] = useState<string>('');
-
   const [modalOn, setModalOn] = useState<boolean>(false);
-
   const [titleErr, setTitleErr] = useState<boolean>(true);
   const [movieTitleErr, setMovieTitleErr] = useState<boolean>(true);
   const [TagErr, setTagErr] = useState<boolean>(true);
@@ -196,7 +191,7 @@ const Writecontent = () => {
             </WriteTagMeta>
             <WriteTagList>
               {isSuccess &&
-                tagData?.map((tag, idx) => {
+                tagData?.map((tag: tagItemType, idx: number) => {
                   return (
                     <li key={idx}>
                       <Button

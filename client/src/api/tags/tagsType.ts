@@ -5,3 +5,8 @@ export interface tagType {
     tagName: string;
   }[];
 }
+
+export interface tagItemType {
+  tagId: number;
+  tagName: string;
+}

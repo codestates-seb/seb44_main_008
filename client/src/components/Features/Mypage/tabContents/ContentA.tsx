@@ -6,20 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteTabA } from '../../../../api/user/userTab/userTab';
 import { useNavigate } from 'react-router-dom';
 import { LIMIT } from '../../../../utils/const';
-
-type tabAType = {
-  data: {
-    reviewBoardId: number;
-    title: string;
-    movieTitle: string;
-    liked: boolean;
-    user: {
-      userId: number;
-      nickname: string;
-      profileImage: string;
-    };
-  }[];
-};
+import { tabAType } from './type';
 
 const ContentA = ({ data }: tabAType) => {
   const queryClient = useQueryClient();

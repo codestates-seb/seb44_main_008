@@ -5,9 +5,9 @@ export interface FileData {
   type: string;
 }
 
-type MapItem = {
+interface MapItem {
   tagId: number;
-};
+}
 
 export interface EditInfoType {
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
