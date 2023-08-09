@@ -6,19 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { DeleteTabB } from '../../../../api/user/userTab/userTab';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LIMIT } from '../../../../utils/const';
+import { tabBType } from './type';
 
-type tabBType = {
-  data: {
-    reviewBoardId: number;
-    title: string;
-    movieTitle: string;
-    user: {
-      userId: number;
-      nickname: string;
-      profileImage: string;
-    };
-  }[];
-};
 const ContentB = ({ data }: tabBType) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();

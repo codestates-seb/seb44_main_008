@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-
-interface useIntersectionObserverProps {
-  root?: null;
-  rootMargin?: string;
-  threshold?: number;
-  onIntersect: IntersectionObserverCallback;
-}
+import { useIntersectionObserverProps } from './observerType';
 
 const useIntersectionObserver = ({
   root,

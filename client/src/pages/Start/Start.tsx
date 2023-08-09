@@ -7,7 +7,6 @@ import popbg from '../../assets/images/pop-icons/popbg.jpg';
 import { SectionsContainer, Section } from 'react-fullpage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { TfiArrowCircleDown } from 'react-icons/tfi';
 
 const Start = () => {
   const navigate = useNavigate();

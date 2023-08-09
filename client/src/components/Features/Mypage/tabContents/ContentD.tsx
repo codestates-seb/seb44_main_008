@@ -4,18 +4,7 @@ import { styled } from 'styled-components';
 import Modal from '../../../Common/Modal/Modal';
 import { useBodyScrollLock } from '../../../../hooks/useBodyScrollLock';
 import { LIMIT } from '../../../../utils/const';
-
-type tabDType = {
-  data2: {
-    groupId: number;
-    title: string;
-    location: string;
-    maxCapacity: number;
-    currentParticipant: number;
-    meetingDate: string;
-    movieTitle: string;
-  }[];
-};
+import { tabDType } from './type';
 
 const ContentD = ({ data2 }: tabDType) => {
   const totalElements = data2.length;

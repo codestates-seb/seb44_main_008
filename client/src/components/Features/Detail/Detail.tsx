@@ -6,10 +6,7 @@ import { deleteLike, getLike } from '../../../api/like/detailLike';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ToastNotification from '../../Common/Toast/ToastNotification';
 
-const Detail: React.FC<{ data: DetailData; reviewId: string }> = ({
-  data,
-  reviewId,
-}) => {
+const Detail = ({ data, reviewId }: { data: DetailData; reviewId: string }) => {
   const queryClient = useQueryClient();
   const [toastState, setToastState] = useState(false);
   const [toastAnimation, setToastAnimation] = useState('toast-alert');

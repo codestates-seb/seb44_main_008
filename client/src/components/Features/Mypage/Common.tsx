@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { GetUser } from '../../../api/user/userInfo/userInfo';
 import ErrorPage from '../../../pages/ErrorPage/ErrorPage';
 import Loading from '../../Common/Loading/Loading';
-import { Key } from 'react';
+import { tagItemType } from '../../../api/tags/tagsType';
 
 const Common = () => {
   const navigate = useNavigate();
@@ -56,11 +56,9 @@ const Common = () => {
               <UserInfo>
                 <span className="title">태그</span>
                 <span className="last-desc">
-                  {data.data.myTags.map(
-                    (tag: { tagId: Key | null | undefined; tagName: any }) => (
-                      <span key={tag.tagId}>{`#${tag.tagName} `}</span>
-                    ),
-                  )}
+                  {data.data.myTags.map((tag: tagItemType) => (
+                    <span key={tag.tagId}>{`#${tag.tagName} `}</span>
+                  ))}
                 </span>
               </UserInfo>
             </UserBotContainer>

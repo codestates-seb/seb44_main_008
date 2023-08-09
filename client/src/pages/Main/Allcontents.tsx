@@ -1,7 +1,5 @@
 import styled, { StyleSheetManager } from 'styled-components';
-
 import SingleItem from '../../components/Features/SingleItem/SingleItem';
-
 import isPropValid from '@emotion/is-prop-valid';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAllItems } from '../../api/reviewItem/reviewItem';

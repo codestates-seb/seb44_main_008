@@ -9,10 +9,7 @@ import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/reducers/user';
 import axios from 'axios';
-interface LoginType {
-  email: string;
-  password: string;
-}
+import { LoginType } from './accountType';
 
 const LoginForm = () => {
   const navigate = useNavigate();

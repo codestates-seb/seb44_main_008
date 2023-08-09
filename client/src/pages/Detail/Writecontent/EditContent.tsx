@@ -3,17 +3,16 @@ import { styled } from 'styled-components';
 import { Props } from './type';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
-
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
 import Loading from '../../../components/Common/Loading/Loading';
 import ErrorPage from '../../ErrorPage/ErrorPage';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editReview } from '../../../api/reviewItem/reviewItem';
 import { getAllTags } from '../../../api/tags/getTags';
 import { getItem } from '../../../api/reviewItem/reviewItem';
 import { useNavigate, useParams } from 'react-router-dom';
+import { tagItemType } from '../../../api/tags/tagsType';
 
 const EditContent = () => {
   const navigate = useNavigate();
@@ -200,7 +199,7 @@ const EditContent = () => {
                 <p>최소 1개 이상의 태그를 선택해 주세요.</p>
               </WriteTagMeta>
               <WriteTagList>
-                {tagData?.map(tag => {
+                {tagData?.map((tag: tagItemType) => {
                   const isMyTag = selectedTags?.some(
                     myTag => myTag.tagId === tag.tagId,
                   );

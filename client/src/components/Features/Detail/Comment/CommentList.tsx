@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { GrClose } from 'react-icons/gr';
 import Poplike from '../../../Common/PopIcons/Poplike';
-import { Comments } from '../../../../pages/Detail/Detailcontent/detailType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,14 +11,9 @@ import {
   deleteCommentLike,
   getCommentLike,
 } from '../../../../api/like/commentLike';
+import { commentListType, commentType } from './commentType';
 
-const CommentList = ({
-  data,
-  reviewId,
-}: {
-  data: Comments[];
-  reviewId: string;
-}) => {
+const CommentList = ({ data, reviewId }: commentType) => {
   const userId = useSelector((state: RootState) => state.user.userInfo.id);
 
   return (
@@ -39,12 +33,7 @@ const CommentList = ({
     </CommentListWrap>
   );
 };
-const Li: React.FC<{
-  answer: Comments;
-  userId: number;
-  reviewId: string;
-  commentId: number;
-}> = ({ answer, userId, reviewId }) => {
+const Li = ({ answer, userId, reviewId }: commentListType) => {
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(answer.liked);
   const [likeCount, setLikeCount] = useState<number>(

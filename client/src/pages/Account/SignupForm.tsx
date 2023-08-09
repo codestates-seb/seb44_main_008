@@ -9,16 +9,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getAccountTags } from '../../api/tags/getTags';
 import { useLocation } from 'react-router-dom';
 import { AxiosError } from '../../assets/type/errorType';
-interface SignupType {
-  userPostDto: {
-    email: string;
-    password: string;
-    tags: { tagId: number }[];
-    name: string;
-    nickname: string;
-    birth: string;
-  };
-}
+import { SignupType } from './accountType';
+import { tagItemType } from '../../api/tags/tagsType';
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -47,7 +39,7 @@ const SignupForm = () => {
   const [birthMsg, setBirthMsg] = useState<string>('');
 
   // 유효성 검사
-  const [isImg, setIsImg] = useState<boolean>(true);
+  const isImg = true;
   const [isEmail, setIsEmail] = useState<boolean>(true);
   const [isPassword, setIsPassword] = useState<boolean>(true);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(true);
@@ -348,7 +340,7 @@ const SignupForm = () => {
           <div>
             <div className="tagBtnWrap inputBox">
               <ul>
-                {tagsArr?.map(tagItem => {
+                {tagsArr?.map((tagItem: tagItemType) => {
                   const selected = tag.includes(tagItem.tagId);
                   return (
                     <li key={tagItem.tagId}>

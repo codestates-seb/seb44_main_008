@@ -1,19 +1,14 @@
 import React, { useCallback } from 'react';
 import { PopperBox } from './PopperStyle';
 import Button from '../../../Common/Button/Button';
-import { Group } from '../../../../pages/Detail/Detailcontent/detailType';
 import { getDate } from '../../../../assets/commonts/common';
+import { PopperListProps } from './popperType';
 
-type PopperListProps = {
-  groups: Group[];
-  setCurrentID: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentRender: React.Dispatch<React.SetStateAction<string>>;
-};
-const PopperList: React.FC<PopperListProps> = ({
+const PopperList = ({
   groups,
   setCurrentID,
   setCurrentRender,
-}) => {
+}: PopperListProps) => {
   const clickList = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     const { currentTarget } = e;
     const value = parseInt(currentTarget.value);

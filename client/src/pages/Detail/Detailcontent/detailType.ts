@@ -1,4 +1,4 @@
-export type DetailData = {
+export interface DetailData {
   reviewBoardId?: number | string | undefined;
   title?: string;
   review?: string;
@@ -11,7 +11,7 @@ export type DetailData = {
   user?: User1;
   comments?: Comments[];
   groups?: Group[];
-};
+}
 
 interface Movie {
   movieId: number;
