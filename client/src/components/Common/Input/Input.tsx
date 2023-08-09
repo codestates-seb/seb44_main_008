@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { InputChangeEvent, InputValue, Props } from './type';
+import { InputChangeEvent, InputValue, Props } from './inputType';
 import { useState, useEffect } from 'react';
 import '../../../root.css';
 import { StyleSheetManager } from 'styled-components';

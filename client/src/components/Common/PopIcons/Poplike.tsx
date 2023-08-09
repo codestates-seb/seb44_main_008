@@ -1,6 +1,7 @@
 import { ReactComponent as PopEmpty } from '@/assets/images/pop-icons/pop-empty.svg';
 import { ReactComponent as PopFill } from '@/assets/images/pop-icons/pop-fill.svg';
 import styled from 'styled-components';
+import { LikePop } from './poplikeType';
 
 const PopButton = styled.button`
   &:hover {
@@ -17,11 +18,6 @@ const PopButton = styled.button`
     }
   }
 `;
-
-type LikePop = {
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  like?: boolean;
-};
 
 const Poplike: React.FC<LikePop> = ({ onClick, like }) => {
   return (

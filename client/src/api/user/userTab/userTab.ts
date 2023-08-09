@@ -1,7 +1,7 @@
 import { PopperDetailData } from '../../../components/Features/Detail/Popper/popperType';
 import { instance } from '../../api';
-import { data } from '../../pot/pot';
-import { UserType } from '../userInfo/userInfo';
+import { data } from '../../pot/potType';
+import { UserType } from '../userInfo/userInfoType';
 
 export const GetTabA = (): Promise<UserType> => {
   return instance.get('/users').then(res => res.data.data);

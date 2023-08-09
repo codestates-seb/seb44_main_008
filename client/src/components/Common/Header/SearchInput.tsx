@@ -2,11 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
 import { useNavigate } from 'react-router-dom';
-
-type InputType = {
-  istoggle?: boolean | string;
-  setIsToggle?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
-};
+import { InputType } from './HeaderType';
 
 const SearchInput: React.FC<InputType> = ({ istoggle, setIsToggle }) => {
   const [thisText, setThisText] = useState('');

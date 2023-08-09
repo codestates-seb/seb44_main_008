@@ -1,13 +1,7 @@
 import { styled } from 'styled-components';
 import popIcon from '../../../assets/images/toast-img/popcorn_PNG2 2.png';
-import React, { useEffect } from 'react';
-
-export interface Props {
-  text: string;
-  setToastState: React.Dispatch<React.SetStateAction<boolean>>;
-  setToastAnimation: React.Dispatch<React.SetStateAction<string>>;
-  toastAnimation: string;
-}
+import { useEffect } from 'react';
+import { Props } from './toastType';
 
 const ToastNotification = ({
   text,

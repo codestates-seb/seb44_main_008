@@ -1,9 +1,5 @@
 import { instance } from '../api';
-
-type likeType = {
-  reviewBoardId: number;
-  wish: number;
-};
+import { likeType } from './likesType';
 
 export const getLike = (reviewId: string): Promise<likeType> => {
   return instance.post(`/users/reviewBoards/${reviewId}`).then(res => res.data);

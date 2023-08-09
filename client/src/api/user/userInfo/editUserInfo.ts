@@ -1,18 +1,7 @@
 import axios from 'axios';
 import { UserInfoType } from '../../../components/Features/Mypage/editmypage/type';
 import { instance } from '../../api';
-
-export interface EditUserType {
-  userPatchDto: {
-    nickname: string | undefined;
-    tags: { tagId: number }[];
-  };
-  profileImage: File | null | undefined;
-}
-export interface EditPasswordType {
-  currentPw: string;
-  newPw: string;
-}
+import { EditPasswordType, EditUserType } from './userInfoType';
 
 export const getEditUser = (): Promise<UserInfoType> =>
   instance.get('/users/brief').then(res => res.data);

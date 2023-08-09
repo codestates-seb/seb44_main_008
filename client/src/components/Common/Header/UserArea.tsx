@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '../../../api/tags/getTags';
 import { clearUser } from '../../../redux/reducers/user';
 import { BsPencilSquare } from 'react-icons/bs';
+import { tagType } from '../../../api/tags/tagsType';
 
 const UserArea = () => {
   const hashMenu = useRef<HTMLDivElement>(null);
@@ -83,7 +84,7 @@ const UserArea = () => {
           <div className="hashBtns" ref={hashMenu}>
             <ul>
               {isSuccess &&
-                tagData.map(tag => {
+                tagData.map((tag: tagType) => {
                   return (
                     <li key={tag.tagId}>
                       <Button

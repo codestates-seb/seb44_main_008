@@ -1,47 +1,6 @@
 import { instance } from '../api';
+import { KeywordSearchResultType, TagSearchResultType } from './itemsType';
 
-type TagSearchResultType = {
-  data: {
-    tagName: string;
-    boards: [
-      {
-        createdAt: string;
-        reviewBoardId: number;
-        thumbnail: string;
-        title: string;
-        user: {
-          nickname: string;
-          userId: number;
-        };
-      },
-    ];
-  };
-  pageInfo: {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalElements: number;
-  };
-};
-
-type KeywordSearchResultType = {
-  data: {
-    createdAt: string;
-    reviewBoardId: number;
-    thumbnail: string;
-    title: string;
-    user: {
-      nickname: string;
-      userId: number;
-    };
-  }[];
-  pageInfo: {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalElements: number;
-  };
-};
 export const getTagSearchItems = async (
   pageParam: number,
   tagIdParam: string | undefined,

@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { ModalTypes } from './type';
+import { ModalTypes } from './modalType';
 import { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import PopperDetail from '../../Features/Detail/Popper/PopperDetail';

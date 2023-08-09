@@ -1,26 +1,7 @@
 //팟 모집글 등록, 수정, 특정 모집글 조회, 전체 모집글 검색, 삭제
 import { instance } from '../api';
 import { PopperDetailData } from '../../components/Features/Detail/Popper/popperType';
-
-export interface data {
-  title: string | undefined;
-  meetingDate: string | undefined;
-  location: string | undefined;
-  maxCapacity: number | undefined;
-  content: string | undefined;
-}
-
-export interface potData {
-  reviewId: string;
-  data: {
-    title: string | undefined;
-    meetingDate: string | undefined;
-    location: string | undefined;
-    maxCapacity: number | undefined;
-    content: string | undefined;
-    movieTitle: string;
-  };
-}
+import { potData } from './potType';
 
 export const PostPot = (data: potData) => {
   return instance
