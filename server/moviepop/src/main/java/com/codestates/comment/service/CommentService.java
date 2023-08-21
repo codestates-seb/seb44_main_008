@@ -62,8 +62,9 @@ public class CommentService {
         if(!comment.getUser().getEmail().equals(email))
             throw new BusinessLogicException(ExceptionCode.CANNOT_UPDATE_COMMENT);
 
-        comment.getCommentLikes().clear();
+//        comment.getCommentLikes().clear();
 
+        // 나중에 확인(지웠을 때 잘 동작하는지)
         ReviewBoard reviewBoard = comment.getReviewBoard();
         reviewBoard.getComments().remove(comment);
 
@@ -71,11 +72,6 @@ public class CommentService {
         user.getComments().remove(comment);
 
         commentRepository.deleteById(commentId);
-    }
-
-    public void verifyCommentId(long commentId) {
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
     private Comment findVerifiedCommentId(long commentId) {
