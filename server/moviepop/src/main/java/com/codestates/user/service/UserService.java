@@ -4,6 +4,7 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.service.CommentService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.helper.event.UserRegistrationApplicationEvent;
 import com.codestates.image.service.StorageService;
 import com.codestates.movie_party.entity.MovieParty;
 import com.codestates.movie_party.service.MoviePartyService;
@@ -20,16 +21,17 @@ import com.codestates.security.utils.CustomAuthorityUtils;
 import com.codestates.security.utils.JwtExpirationEnums;
 import com.codestates.security.vo.Login;
 import com.codestates.security.vo.Token;
-import com.codestates.user.entity.CommentLike;
-import com.codestates.user.entity.MoviePartyUser;
-import com.codestates.user.entity.ReviewBoardWish;
-import com.codestates.user.entity.User;
-import com.codestates.user.entity.UserTag;
+import com.codestates.user.entity.*;
+import com.codestates.user.repository.FindPasswordVerificationTokenRepository;
 import com.codestates.user.repository.MoviePartyUserRepository;
 import com.codestates.user.repository.UserRepository;
+import com.codestates.user.repository.VerificationCodeRepository;
 import com.codestates.utils.CustomBeanUtils;
 import com.codestates.utils.UserUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +49,7 @@ import static com.codestates.security.utils.JwtExpirationEnums.REFRESH_TOKEN_EXP
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final CustomBeanUtils<User> beanUtils;
@@ -61,34 +65,9 @@ public class UserService {
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
     private final CustomAuthorityUtils authorityUtils;
     private final StorageService storageService;
-
-//    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils,
-//                       ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService) {
-//        this.userRepository = userRepository;
-//        this.beanUtils = beanUtils;
-//        this.reviewBoardWishService = reviewBoardWishService;
-//        this.reviewBoardService = reviewBoardService;
-//        this.commentService = commentService;
-//        this.commentLikeService = commentLikeService;
-//    }
-
-
-    public UserService(UserRepository userRepository, CustomBeanUtils<User> beanUtils, ReviewBoardWishService reviewBoardWishService, ReviewBoardService reviewBoardService, CommentService commentService, CommentLikeService commentLikeService, MoviePartyService moviePartyService, MoviePartyUserRepository moviePartyUserRepository, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder, RefreshTokenRedisRepository refreshTokenRedisRepository, LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository, CustomAuthorityUtils authorityUtils, StorageService storageService) {
-        this.userRepository = userRepository;
-        this.beanUtils = beanUtils;
-        this.reviewBoardWishService = reviewBoardWishService;
-        this.reviewBoardService = reviewBoardService;
-        this.commentService = commentService;
-        this.commentLikeService = commentLikeService;
-        this.moviePartyService = moviePartyService;
-        this.moviePartyUserRepository = moviePartyUserRepository;
-        this.jwtTokenizer = jwtTokenizer;
-        this.passwordEncoder = passwordEncoder;
-        this.refreshTokenRedisRepository = refreshTokenRedisRepository;
-        this.logoutAccessTokenRedisRepository = logoutAccessTokenRedisRepository;
-        this.authorityUtils = authorityUtils;
-        this.storageService = storageService;
-    }
+    private final ApplicationEventPublisher publisher;
+    private final VerificationCodeRepository verificationCodeRepository;
+    private final FindPasswordVerificationTokenRepository findPasswordVerificationTokenRepository;
 
     public User createUser(User user, MultipartFile profileImage) {
         if(!verifyEmail(user))
@@ -118,7 +97,14 @@ public class UserService {
             user.setProfileImage(imageUrl);
         }
 
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("title", "회원가입해주셔서 감사합니다!");
+        variables.put("message", newUser.getName() + "님, MoviePop 회원가입이 완료되었습니다!<br>앞으로 저희 서비스 많이 사용해주세요!");
+        publisher.publishEvent(new UserRegistrationApplicationEvent(this, newUser, "MoviePop 회원가입 완료", variables));
+
+        return newUser;
     }
 
     private boolean verifyEmail(User user) {
@@ -178,6 +164,74 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
+    public String findId(String name, LocalDate birth) {
+        User user = userRepository.findByNameAndBirth(name, birth);
+//        if(user == null) throw new BusinessLogicException();
+        if (user == null) throw new IllegalArgumentException();
+        return user.getEmail();
+    }
+
+    public void sendVerificationCode(String name, String email) {
+        User user = userRepository.findByEmailAndName(email, name);
+        if(user == null) throw new IllegalArgumentException();
+
+        String verificationCode = makeVerificationCode();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("title", "비밀번호 찾기");
+        variables.put("message", name + "님, 비밀번호 변경을 위한 인증번호 입니다. 아래 인증번호 확인 후 이메일 인증을 완료해주세요.!<br>" +
+                "<div style='text-align:center;'>인증번호 : " + verificationCode + "</div>");
+
+        publisher.publishEvent(new UserRegistrationApplicationEvent(this, user, "MoviePop 인증번호 안내", variables));
+
+        // redis 저장
+        // key -> email, value -> 인증번호,일 만료시간 -> 3분
+        VerificationCode verificationCodeObject = VerificationCode.of(email, verificationCode, 180);
+        verificationCodeRepository.save(verificationCodeObject);
+    }
+
+    private String makeVerificationCode() {
+        String verificationCode = "";
+        Random random = new Random();
+        for(int idx = 0; idx < 6; idx++)
+            verificationCode += random.nextInt(10);
+
+        return verificationCode;
+    }
+
+    public String verifyVerificationCode(String email, String verificationCode) {
+        // Redis에서 email을 키로 하여 인증번호 갖고 오기
+        String correctVerificationCode = verificationCodeRepository.findById(email).orElseThrow(() -> new IllegalArgumentException()).getVerificationCode();
+
+        if(verificationCode.equals(correctVerificationCode)) {
+            // 값을 내보냄(토큰값)
+            String token = jwtTokenizer.generateAccessToken(email);
+
+            // token값 -> key, 만료시간 -> ?분 Redis 저장(이후 새로운 비밀번호 설정 시에 사용하기 위함)
+            findPasswordVerificationTokenRepository.save(FindPasswordVerificationToken.of(
+                    token,
+                    600
+            ));
+
+            return token;
+        } else
+            throw new IllegalArgumentException();
+    }
+
+    public void updateNewPassword(String token, String newPassword) {
+        findPasswordVerificationTokenRepository.findById(token).orElseThrow(() -> new IllegalArgumentException());
+
+        // Redis에서 토큰이 있다면
+        token = resolveToken(token);
+        String email = jwtTokenizer.getEmail(token);
+
+        User user = userRepository.findByEmail(email);
+
+        user.setPassword(newPassword);
+
+        userRepository.save(user);
+    }
+
     @Transactional(readOnly = true)
     public User findUser(long userId) {
         return verifyUserId(userId);
@@ -205,7 +259,12 @@ public class UserService {
 
         findUser.setProfileImage(null);
         findUser.setUserStatus(User.UserStatus.USER_WITHDRAW);
-        userRepository.save(findUser);
+        User deleteUser = userRepository.save(findUser);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("title", "회원 탈퇴가 완료되었습니다.");
+        variables.put("message", deleteUser.getName() + "님의 회원 탈퇴가 완료되었습니다.<br/>저희 서비스를 이용해주셔서 감사합니다.");
+        publisher.publishEvent(new UserRegistrationApplicationEvent(this, deleteUser, "회원 탈퇴 알림 메일", variables));
     }
 
     private User verifyUserId(long userId) {
