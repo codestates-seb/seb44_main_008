@@ -32,14 +32,6 @@ public class CommentController {
         this.imageUtil = imageUtil;
     }
 
-    //    @PostMapping
-//    public ResponseEntity postComment(@RequestBody @Valid CommentDto.Post requestBody) {
-//        Comment comment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
-//        URI location = UriComponent.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
-//
-//        return ResponseEntity.created(location).build();
-//    }
-
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
                                        @RequestBody @Valid CommentDto.Patch requestBody) {
