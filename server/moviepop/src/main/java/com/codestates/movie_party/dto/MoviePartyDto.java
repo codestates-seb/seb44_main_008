@@ -74,6 +74,7 @@ public class MoviePartyDto {
         private int currentParticipant;
         private List<UserDto.MoviePartyResponse> users;
         // userId, profileImage
+        private boolean isMyMovieParty;
     }
 
     @Getter
