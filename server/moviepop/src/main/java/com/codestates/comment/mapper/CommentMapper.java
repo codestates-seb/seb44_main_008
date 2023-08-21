@@ -12,11 +12,12 @@ import java.util.List;
 public interface CommentMapper {
     Comment commentPostDtoToComment(CommentDto.Post postDto);
     Comment commentPatchDtoToComment(CommentDto.Patch patchDto);
-    CommentDto.PatchResponse commentToCommentPatchResponseDto(Comment comment);
+    CommentDto.CommentUpdateResponse commentToCommentPatchResponseDto(Comment comment);
     default CommentDto.Response commentToCommentResponseDto(Comment comment, ImageUtil imageUtil) {
         String profileImage = comment.getUser().getProfileImage();
         if(profileImage == null) profileImage = imageUtil.getUrl() + imageUtil.getDefaultProfileImage();
         else profileImage = imageUtil.getUrl() + profileImage;
+
         UserDto.ReviewBoardResponse userResponse = new UserDto.ReviewBoardResponse(comment.getUser().getUserId(), comment.getUser().getNickname(), profileImage);
         CommentDto.Response response = CommentDto.Response.builder()
                 .commentId(comment.getCommentId())
@@ -29,5 +30,5 @@ public interface CommentMapper {
         return response;
     }
     List<CommentDto.Response> commentsToCommentResponseDtos(List<Comment> comments);
-    CommentDto.likeResponse commentToCommentLikeResponse(Comment comment);
+    CommentDto.LikeResponse commentToCommentLikeResponse(Comment comment);
 }
