@@ -23,12 +23,6 @@ public class MovieController {
     private final MovieMapper mapper;
     private final UserService userService;
 
-//    public MovieController(MovieService movieService, MovieMapper mapper) {
-//        this.movieService = movieService;
-//        this.mapper = mapper;
-//    }
-
-
     public MovieController(MovieService movieService, MovieMapper mapper, UserService userService) {
         this.movieService = movieService;
         this.mapper = mapper;
