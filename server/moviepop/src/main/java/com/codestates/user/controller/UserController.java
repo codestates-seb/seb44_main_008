@@ -199,8 +199,9 @@ public class UserController {
     }
 
     @PatchMapping("/new-password")
-    public ResponseEntity patchNewPassword(@Valid @RequestBody UserDto.NewPassword newPassword) {
-        userService.updateNewPassword(newPassword.getToken(), newPassword.getNewPassword());
+    public ResponseEntity patchNewPassword(@RequestHeader("Authorization") String token,
+                                           @RequestBody UserDto.NewPassword newPassword) {
+        userService.updateNewPassword(token, newPassword.getNewPassword());
         return new ResponseEntity(HttpStatus.OK);
     }
 
