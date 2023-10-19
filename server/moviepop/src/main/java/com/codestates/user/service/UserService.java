@@ -29,7 +29,6 @@ import com.codestates.user.repository.VerificationCodeRepository;
 import com.codestates.utils.CustomBeanUtils;
 import com.codestates.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
@@ -219,7 +218,7 @@ public class UserService {
     }
 
     public void updateNewPassword(String token, String newPassword) {
-        findPasswordVerificationTokenRepository.findById(token).orElseThrow(() -> new IllegalArgumentException());
+        findPasswordVerificationTokenRepository.findById(resolveToken(token)).orElseThrow(() -> new IllegalArgumentException());
 
         // Redis에서 토큰이 있다면
         token = resolveToken(token);
