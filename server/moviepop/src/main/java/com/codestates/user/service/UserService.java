@@ -218,7 +218,7 @@ public class UserService {
     }
 
     public void updateNewPassword(String token, String newPassword) {
-        findPasswordVerificationTokenRepository.findById(resolveToken(token)).orElseThrow(() -> new IllegalArgumentException());
+        findPasswordVerificationTokenRepository.findById(token).orElseThrow(() -> new IllegalArgumentException());
 
         // Redis에서 토큰이 있다면
         token = resolveToken(token);
