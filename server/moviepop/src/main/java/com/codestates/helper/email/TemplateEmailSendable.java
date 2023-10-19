@@ -15,7 +15,7 @@ public class TemplateEmailSendable implements EmailSendable {
     private final TemplateEngine templateEngine;
     private final Context context;
 
-    @Value("${mail.template.name.user.join}")
+    @Value("${mail.smtp.template.name.user.join}")
     private String templateName;
 
     public TemplateEmailSendable(JavaMailSender javaMailSender, TemplateEngine templateEngine, Context context) {
