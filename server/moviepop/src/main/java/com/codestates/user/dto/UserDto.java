@@ -119,7 +119,7 @@ public class UserDto {
     public static class FindId {
         @NotBlank
         private String name;
-        @NotBlank
+        @NotNull
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDate birth;
     }
