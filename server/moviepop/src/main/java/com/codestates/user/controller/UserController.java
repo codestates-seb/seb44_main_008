@@ -178,19 +178,19 @@ public class UserController {
     }
 
     @PostMapping("/find-id")
-    public ResponseEntity findId(@Valid UserDto.FindId findIdDto) {
+    public ResponseEntity findId(@Valid @RequestBody UserDto.FindId findIdDto) {
         String email = userService.findId(findIdDto.getName(), findIdDto.getBirth());
         return new ResponseEntity(email, HttpStatus.OK);
     }
 
     @PostMapping("/verification-code")
-    public ResponseEntity sendVerificationCode(@Valid UserDto.VerificationCode verificationCode) {
+    public ResponseEntity sendVerificationCode(@Valid @RequestBody UserDto.VerificationCode verificationCode) {
         userService.sendVerificationCode(verificationCode.getName(), verificationCode.getEmail());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/verification")
-    public ResponseEntity verificare(@Valid UserDto.Verification verification) { // 이메일, 인증번호
+    public ResponseEntity verificare(@Valid @RequestBody UserDto.Verification verification) { // 이메일, 인증번호
         // 값이 하나 나가야 함 -> 랜덤값, 토큰값, ....
         // redis에 저장 -> 랜덤값, 토큰값, ....
 
@@ -199,7 +199,7 @@ public class UserController {
     }
 
     @PatchMapping("/new-password")
-    public ResponseEntity patchNewPassword(@Valid UserDto.NewPassword newPassword) {
+    public ResponseEntity patchNewPassword(@Valid @RequestBody UserDto.NewPassword newPassword) {
         userService.updateNewPassword(newPassword.getToken(), newPassword.getNewPassword());
         return new ResponseEntity(HttpStatus.OK);
     }
