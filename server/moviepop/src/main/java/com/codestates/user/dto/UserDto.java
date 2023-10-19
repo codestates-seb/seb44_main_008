@@ -145,8 +145,8 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     public static class NewPassword {
-        @NotBlank
-        private String token;
+//        @NotBlank
+//        private String token;
         @NotBlank
         private String newPassword;
     }
