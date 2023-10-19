@@ -1,10 +1,9 @@
 package com.codestates.user.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
-
-import javax.persistence.Id;
 
 @AllArgsConstructor
 @Getter
