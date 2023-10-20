@@ -200,8 +200,8 @@ public class UserController {
 
     @PatchMapping("/new-password")
     public ResponseEntity patchNewPassword(@RequestHeader("Authorization") String token,
-                                           @RequestBody UserDto.NewPassword newPassword) {
-        userService.updateNewPassword(token, newPassword.getNewPassword());
+                                           @RequestBody Map<String, String> newPasswordMap) {
+        userService.updateNewPassword(token, newPasswordMap.get("newPassword"));
         return new ResponseEntity(HttpStatus.OK);
     }
 
