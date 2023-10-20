@@ -113,4 +113,32 @@ public class UserDto {
         private long userId;
         private String profileImage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class FindId {
+        @NotBlank
+        private String name;
+        @NotNull
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private LocalDate birth;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class VerificationCode {
+        @NotBlank
+        private String name;
+        @NotBlank
+        private String email;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Verification {
+        @NotBlank
+        private String email;
+        @NotBlank
+        private String verificationCode;
+    }
 }

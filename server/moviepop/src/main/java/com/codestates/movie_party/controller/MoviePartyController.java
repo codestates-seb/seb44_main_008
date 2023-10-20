@@ -29,26 +29,11 @@ public class MoviePartyController {
     private final MoviePartyMapper mapper;
     private final UserService userService;
 
-//    public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper) {
-//        this.moviePartyService = moviePartyService;
-//        this.mapper = mapper;
-//    }
-
     public MoviePartyController(MoviePartyService moviePartyService, MoviePartyMapper mapper, UserService userService) {
         this.moviePartyService = moviePartyService;
         this.mapper = mapper;
         this.userService = userService;
     }
-
-
-//    @PostMapping
-//    public ResponseEntity postMovieParty(@RequestBody @Valid MoviePartyDto.Post requestBody) {
-//        MovieParty movieParty = moviePartyService.createGroup(mapper.moviePartyPostDtoToMovieParty(requestBody));
-//
-//        URI location = UriComponent.createUri(MOVIE_PARTY_DEFAULT_URI, movieParty.getMoviePartyId());
-//
-//        return ResponseEntity.created(location).build();
-//    }
 
     @PatchMapping("/{movie-party-id}")
     public ResponseEntity patchMovieParty(@PathVariable("movie-party-id") @Positive long moviePartyId,

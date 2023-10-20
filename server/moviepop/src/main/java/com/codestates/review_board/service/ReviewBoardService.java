@@ -9,7 +9,6 @@ import com.codestates.image.service.StorageService;
 import com.codestates.image.utils.ImageUtil;
 import com.codestates.movie.dto.MovieDto;
 import com.codestates.movie.entity.Movie;
-import com.codestates.movie.entity.MovieScorePerAge;
 import com.codestates.movie.service.MovieScorePerAgeService;
 import com.codestates.movie.service.MovieService;
 import com.codestates.movie_party.dto.MoviePartyDto;
@@ -39,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -168,7 +166,7 @@ public class ReviewBoardService {
                 .map(reviewBoardTag -> tagMapper.tagToResponse(reviewBoardTag.getTag()))
                 .collect(Collectors.toList());
 
-        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, LocalDateTime.now()), userMapper, imageUtil);
+        List<MoviePartyDto.EntireResponse> groups = moviePartyMapper.moviePartiesToEntireResponseDtos(moviePartyRepository.findAllByReviewBoardAndMeetingDateIsAfter(reviewBoard, LocalDateTime.now()), user, userMapper, imageUtil);
 
         String thumbnail = reviewBoard.getThumbnail();
         if(thumbnail == null)

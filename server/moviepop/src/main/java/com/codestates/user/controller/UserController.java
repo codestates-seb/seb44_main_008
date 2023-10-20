@@ -177,6 +177,34 @@ public class UserController {
         return accessToken.substring(7);
     }
 
+    @PostMapping("/find-id")
+    public ResponseEntity findId(@Valid @RequestBody UserDto.FindId findIdDto) {
+        String email = userService.findId(findIdDto.getName(), findIdDto.getBirth());
+        return new ResponseEntity(email, HttpStatus.OK);
+    }
+
+    @PostMapping("/verification-code")
+    public ResponseEntity sendVerificationCode(@Valid @RequestBody UserDto.VerificationCode verificationCode) {
+        userService.sendVerificationCode(verificationCode.getName(), verificationCode.getEmail());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/verification")
+    public ResponseEntity verificare(@Valid @RequestBody UserDto.Verification verification) { // 이메일, 인증번호
+        // 값이 하나 나가야 함 -> 랜덤값, 토큰값, ....
+        // redis에 저장 -> 랜덤값, 토큰값, ....
+
+        String token = userService.verifyVerificationCode(verification.getEmail(), verification.getVerificationCode());
+        return new ResponseEntity(token, HttpStatus.OK);
+    }
+
+    @PatchMapping("/new-password")
+    public ResponseEntity patchNewPassword(@RequestHeader("Authorization") String token,
+                                           @RequestBody Map<String, String> newPasswordMap) {
+        userService.updateNewPassword(token, newPasswordMap.get("newPassword"));
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @PostMapping("/reviewBoards/{review-id}") // 게시글 찜 등록
     public ResponseEntity postUserWish(@PathVariable("review-id") @Positive long reviewId) {
         String email = JwtParseInterceptor.getAuthenticatedUsername();

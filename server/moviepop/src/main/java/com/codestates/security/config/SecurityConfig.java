@@ -5,7 +5,6 @@ import com.codestates.security.handler.JwtEntryPoint;
 import com.codestates.security.interceptor.JwtParseInterceptor;
 import com.codestates.security.userdetails.CustomUserDetailService;
 import com.codestates.security.utils.JwtUtils;
-import com.codestates.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,6 +69,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.POST, "/users/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/tags").permitAll()
                 .antMatchers(HttpMethod.GET, "/health").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/find-id").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/verification-code").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/verification").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/users/new-password").permitAll()
                 .anyRequest().hasRole("USER")
                 .and()
                 .exceptionHandling()

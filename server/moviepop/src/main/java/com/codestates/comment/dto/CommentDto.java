@@ -20,15 +20,8 @@ public class CommentDto {
     @AllArgsConstructor
     public static class Patch {
         @Setter
-        long commentId;
-        @NotBlank
-        private String content;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class PatchResponse {
         private long commentId;
+        @NotBlank
         private String content;
     }
 
@@ -49,9 +42,15 @@ public class CommentDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class likeResponse {
+    public static class LikeResponse {
         private long commentId;
         private int likes;
-//        private boolean liked;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CommentUpdateResponse {
+        private long commentId;
+        private String content;
     }
 }

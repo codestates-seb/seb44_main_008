@@ -6,8 +6,8 @@ spring:
     password: ${MYSQL_ROOT_PASSWORD}
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: 10MB
+      max-request-size: 10MB
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -36,6 +36,18 @@ server:
 mail:
   address:
     admin: admin@gmail.com
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    auth: true
+    starttls:
+      enable: true
+    template:
+      name:
+        user:
+          join: email-registration-member
 jwt:
   secret: ${JWT_SECRET_KEY}
 cloud:

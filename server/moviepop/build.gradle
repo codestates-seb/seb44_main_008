@@ -61,6 +61,11 @@ dependencies {
 
 	// s3
 	implementation 'software.amazon.awssdk:s3:2.17.41'
+
+	// mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 dependencyManagement {

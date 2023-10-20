@@ -13,10 +13,10 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class StorageConfiguration {
     private static final String REGION = "ap-northeast-2";
 
-    @Value("${aws.accessKeyId}")
-    private String ACCESS_KEY;
-    @Value("${aws.secretAccessKey}")
-    private String SECRET_ACCESS_KEY;
+//    @Value("${aws.accessKeyId}")
+//    private String ACCESS_KEY;
+//    @Value("${aws.secretAccessKey}")
+//    private String SECRET_ACCESS_KEY;
 
     @Bean
     public StorageService s3StorageService() {
