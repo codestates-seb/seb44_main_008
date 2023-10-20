@@ -212,16 +212,16 @@ public class UserService {
                     600
             ));
 
-            return token;
+            return "Bearer " + token;
         } else
             throw new IllegalArgumentException();
     }
 
     public void updateNewPassword(String token, String newPassword) {
+        token = resolveToken(token);
         findPasswordVerificationTokenRepository.findById(token).orElseThrow(() -> new IllegalArgumentException());
 
         // Redis에서 토큰이 있다면
-        token = resolveToken(token);
         String email = jwtTokenizer.getEmail(token);
 
         User user = userRepository.findByEmail(email);
