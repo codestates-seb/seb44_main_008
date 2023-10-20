@@ -226,7 +226,8 @@ public class UserService {
 
         User user = userRepository.findByEmail(email);
 
-        user.setPassword(newPassword);
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encryptedPassword);
 
         userRepository.save(user);
     }
